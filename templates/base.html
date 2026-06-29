@@ -161,6 +161,8 @@ STRUKTUR:
             flex: 1;
             overflow-y: auto;
             padding: 20px;
+            background: #ffffff;
+            color: #333333;
         }
 
         {# FOOTER #}
@@ -188,34 +190,45 @@ STRUKTUR:
                 display: none;
             }
 
+            .rdp-layout__wrapper {
+                position: relative;
+            }
+
             .rdp-sidebar {
                 position: fixed;
                 left: 0;
                 top: var(--navbar-height);
+                width: var(--sidebar-width);
                 height: calc(100vh - var(--navbar-height));
+                background: #f8f9fa;
+                border-right: 1px solid #e0e0e0;
                 transform: translateX(-100%);
-                box-shadow: 2px 0 8px rgba(0,0,0,0.1);
-                z-index: 50;
+                box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+                z-index: 999;
+                overflow-y: auto;
+                transition: transform var(--transition-duration) ease;
             }
 
             .rdp-sidebar--open {
                 transform: translateX(0);
             }
 
-            {# Overlay backdrop #}
-            .rdp-sidebar--open::before {
+            {# Overlay backdrop — click to close sidebar #}
+            .rdp-sidebar--open::after {
                 content: '';
                 position: fixed;
-                top: var(--navbar-height);
+                top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0,0,0,0.3);
-                z-index: 40;
+                background: rgba(0,0,0,0.4);
+                z-index: 998;
+                cursor: pointer;
             }
 
             .rdp-layout__content {
                 padding: 16px;
+                background: #ffffff;
             }
         }
 
@@ -264,9 +277,22 @@ STRUKTUR:
                     if (saved !== null) {
                         this.sidebarOpen = JSON.parse(saved);
                     }
+                    {# Close sidebar otomatis saat window resize ke desktop #}
+                    window.addEventListener('resize', () => {
+                        if (window.innerWidth >= 768 && !this.sidebarOpen) {
+                            this.sidebarOpen = true;
+                        } else if (window.innerWidth < 768 && this.sidebarOpen && window.innerWidth < 768) {
+                            {# Don't force close on mobile #}
+                        }
+                    });
                 },
                 watch_sidebarOpen(value) {
                     localStorage.setItem('sidebarOpen', JSON.stringify(value));
+                },
+                closeSidebar() {
+                    if (window.innerWidth < 768) {
+                        this.sidebarOpen = false;
+                    }
                 }
             };
         }
@@ -305,11 +331,11 @@ STRUKTUR:
         {# ============================================================ #}
         {# SIDEBAR + CONTENT WRAPPER — 2-column layout #}
         {# ============================================================ #}
-        <div class="rdp-layout__wrapper">
+        <div class="rdp-layout__wrapper" @click="if (window.innerWidth < 768 && sidebarOpen && event.target.closest('.rdp-sidebar') === null) closeSidebar()">
 
             {# Sidebar — collapsible di mobile via Alpine.js #}
             {% block sidebar_block %}
-                <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }">
+                <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" @click.stop>
                     <div class="rdp-sidebar__nav">
                         <div class="rdp-sidebar__section-title">Navigation</div>
                         <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
