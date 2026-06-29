@@ -61,14 +61,14 @@ STRUKTUR:
             position: sticky;
             top: 0;
             height: var(--navbar-height);
-            background: var(--color-bg, #ffffff);
-            border-bottom: 1px solid var(--color-border, #e0e0e0);
+            background: linear-gradient(135deg, #0066cc 0%, #004a99 100%);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .rdp-topnav__brand {
@@ -77,15 +77,22 @@ STRUKTUR:
             gap: 12px;
             font-weight: 600;
             font-size: 1.1rem;
+            color: #ffffff;
         }
 
         .rdp-topnav__toggle {
             display: none;
-            background: none;
-            border: none;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
             cursor: pointer;
-            padding: 4px;
-            color: var(--color-text, #333);
+            padding: 6px 8px;
+            color: #ffffff;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .rdp-topnav__toggle:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         .rdp-topnav__links {
@@ -95,13 +102,13 @@ STRUKTUR:
 
         .rdp-topnav__links a {
             text-decoration: none;
-            color: var(--color-text, #333);
+            color: #ffffff;
             font-size: 0.95rem;
-            transition: color 0.2s;
+            transition: opacity 0.2s;
         }
 
         .rdp-topnav__links a:hover {
-            color: var(--color-primary, #0066cc);
+            opacity: 0.8;
         }
 
         {# LAYOUT WRAPPER — sidebar + content #}
@@ -114,8 +121,8 @@ STRUKTUR:
         {# SIDEBAR #}
         .rdp-sidebar {
             width: var(--sidebar-width);
-            background: var(--color-bg-secondary, #f9f9f9);
-            border-right: 1px solid var(--color-border, #e0e0e0);
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
             overflow-y: auto;
             flex-shrink: 0;
             transition: transform var(--transition-duration) ease;
@@ -130,22 +137,23 @@ STRUKTUR:
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            color: var(--color-text-secondary, #999);
+            color: #999999;
             margin-bottom: 8px;
         }
 
         .rdp-sidebar__link {
             display: block;
             padding: 10px 16px;
-            color: var(--color-text, #333);
+            color: #333333;
             text-decoration: none;
-            transition: background 0.2s;
+            transition: all 0.2s;
             border-left: 3px solid transparent;
         }
 
         .rdp-sidebar__link:hover {
-            background: var(--color-bg, #ffffff);
-            border-left-color: var(--color-primary, #0066cc);
+            background: #ffffff;
+            border-left-color: #0066cc;
+            color: #0066cc;
         }
 
         {# CONTENT AREA #}
@@ -157,13 +165,17 @@ STRUKTUR:
 
         {# FOOTER #}
         .rdp-footer {
-            background: var(--color-bg-secondary, #f9f9f9);
-            border-top: 1px solid var(--color-border, #e0e0e0);
+            background: linear-gradient(135deg, #0066cc 0%, #004a99 100%);
+            border-top: 1px solid rgba(0,0,0,0.1);
             padding: 16px 20px;
             text-align: center;
             font-size: 0.9rem;
-            color: var(--color-text-secondary, #666);
+            color: rgba(255,255,255,0.9);
             margin-top: auto;
+        }
+
+        .rdp-footer p {
+            margin: 0;
         }
 
         {# MOBILE RESPONSIVE — <768px #}
@@ -209,11 +221,32 @@ STRUKTUR:
 
         {# DARK MODE — automatic via RDP-UI variables #}
         @media (prefers-color-scheme: dark) {
-            .rdp-topnav,
-            .rdp-sidebar,
-            .rdp-footer {
-                background: var(--color-bg, #1a1a1a);
-                border-color: var(--color-border, #333);
+            body,
+            .rdp-layout {
+                background: #1a1a1a;
+                color: #f0f0f0;
+            }
+
+            .rdp-sidebar {
+                background: #2a2a2a;
+                border-right-color: #444;
+            }
+
+            .rdp-sidebar__link {
+                color: #f0f0f0;
+            }
+
+            .rdp-sidebar__link:hover {
+                background: #333333;
+            }
+
+            .rdp-sidebar__section-title {
+                color: #888888;
+            }
+
+            .rdp-layout__content {
+                background: #1a1a1a;
+                color: #f0f0f0;
             }
         }
     </style>
