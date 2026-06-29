@@ -75,9 +75,9 @@ pytest.ini (atau pyproject.toml) # US-017
 
 | Story | Judul | Estimasi | Status |
 |---|---|---|---|
-| US-010 | Layout dasar (navbar, sidebar, dashboard) | 5 | [ ] |
-| US-011 | Komponen UI dasar | 5 | [ ] |
-| US-015 | Error pages kustom (403, 404, 500) | 2 | [ ] |
+| US-010 | Layout dasar (navbar, sidebar, dashboard) | 5 | [x] |
+| US-011 | Komponen UI dasar | 5 | [x] |
+| US-015 | Error pages kustom (403, 404, 500) | 2 | [x] |
 
 **Urutan yang disarankan**: US-010 → US-011 → US-015
 

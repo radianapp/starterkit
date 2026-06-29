@@ -1,10 +1,92 @@
 {% extends "base.html" %}
-{# 403 Forbidden error page - US-015: Error pages kustom #}
+{# US-015: Error pages kustom (403, 404, 500) #}
+{# 403 Forbidden error page - Permission Denied #}
 
 {% block title %}403 - Permission Denied{% endblock %}
 
 {% block content %}
-<h1>403 - Permission Denied</h1>
-<p>You don't have permission to access this resource.</p>
-<a href="/">Go back to home</a>
+<div class="error-page">
+  <div class="error-container">
+    <c-rdp.card>
+      <div class="rdp-card__body error-content">
+        <div class="error-icon">🔒</div>
+        <h1 class="error-title">403 — Permission Denied</h1>
+        <p class="error-message">
+          {% if user.is_authenticated %}
+            You don't have permission to access this resource.
+            {% if user.username %}
+              You are logged in as <strong>{{ user.username }}</strong>.
+            {% endif %}
+          {% else %}
+            You need to be logged in to access this resource.
+          {% endif %}
+        </p>
+
+        <div class="error-actions">
+          <c-rdp.button variant="primary" onclick="window.location.href='/'">
+            ← Go back to home
+          </c-rdp.button>
+          {% if not user.is_authenticated %}
+            <c-rdp.button variant="secondary" onclick="window.location.href='/accounts/login/'">
+              Login
+            </c-rdp.button>
+          {% else %}
+            <c-rdp.button variant="secondary" onclick="window.location.href='/dashboard/'">
+              Go to Dashboard
+            </c-rdp.button>
+          {% endif %}
+        </div>
+      </div>
+    </c-rdp.card>
+  </div>
+</div>
+
+<style>
+  .error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 20px;
+  }
+
+  .error-container {
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .error-content {
+    text-align: center;
+  }
+
+  .error-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+
+  .error-title {
+    font-size: 2rem;
+    margin: 20px 0 10px 0;
+    color: var(--color-text, #333);
+  }
+
+  .error-message {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary, #666);
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .error-actions c-rdp.button {
+    flex: 1;
+    min-width: 150px;
+  }
+</style>
 {% endblock %}
