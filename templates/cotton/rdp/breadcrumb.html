@@ -44,10 +44,9 @@ CATATAN:
             {% endif %}
           </li>
         {% endfor %}
-      {% else %}
-        {# Custom items from slot #}
-        <c-slot name="default"></c-slot>
       {% endif %}
+      {# Custom items from slot — always render #}
+      <c-slot name="default"></c-slot>
     </ol>
   </nav>
 </template>

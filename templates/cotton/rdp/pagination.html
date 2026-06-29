@@ -22,9 +22,10 @@ CATATAN:
 #}
 
 <template>
-  {% if page_obj.has_other_pages %}
-    <nav class="rdp-pagination" {{ attrs }}>
-      <ul class="rdp-pagination__list">
+  <nav class="rdp-pagination" {{ attrs }}>
+    <ul class="rdp-pagination__list">
+      {% if page_obj %}
+        {% if page_obj.has_other_pages %}
         {# Previous button #}
         {% if page_obj.has_previous %}
           <li class="rdp-pagination__item">
@@ -74,9 +75,9 @@ CATATAN:
             <span class="rdp-pagination__link">Next →</span>
           </li>
         {% endif %}
+        {% endif %}
       </ul>
     </nav>
-  {% endif %}
 </template>
 
 <style>

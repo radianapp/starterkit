@@ -1,28 +1,124 @@
 {% extends "base.html" %}
-{# Dashboard index page - US-001: Clone & jalankan project baru #}
+{# Dashboard index page - US-001: Clone & jalankan project baru; US-010: Layout dasar #}
 
 {% block title %}Dashboard - RDP Starter Kit{% endblock %}
 
 {% block content %}
-<h1>Dashboard</h1>
-<p>Welcome to your RDP Starter Kit dashboard!</p>
+<div style="max-width: 1200px;">
+    <h1>📊 Dashboard</h1>
+    <p>Welcome to your RDP Starter Kit dashboard!</p>
 
-<div>
-    <h2>Project Status ✅</h2>
-    <ul>
-        <li>Django is running</li>
-        <li>Database connected</li>
-        <li>RDP-UI CDN loaded</li>
-        <li>HTMX ready</li>
-    </ul>
-</div>
+    {# ============================================================ #}
+    {# PROJECT STATUS SECTION #}
+    {# ============================================================ #}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0;">
+        <c-rdp.card>
+            <c-slot name="header">
+                <h3 style="margin: 0;">✅ Project Status</h3>
+            </c-slot>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>✔️ Django is running</li>
+                <li>✔️ Database connected</li>
+                <li>✔️ RDP-UI CDN loaded</li>
+                <li>✔️ HTMX ready</li>
+                <li>✔️ Alpine.js active</li>
+                <li>✔️ Responsive layout working</li>
+            </ul>
+        </c-rdp.card>
 
-<div>
-    <h2>Next Steps</h2>
-    <ul>
-        <li>Read <code>CLAUDE.md</code> for project conventions</li>
-        <li>Check <code>docs/IMPLEMENTATION-PLAN.md</code> for roadmap</li>
-        <li>Run <code>uv run pytest</code> to verify tests</li>
-    </ul>
+        <c-rdp.card>
+            <c-slot name="header">
+                <h3 style="margin: 0;">🎯 Fase 2 Complete</h3>
+            </c-slot>
+            <p style="margin: 0;">
+                <strong>UI Shell</strong> — Layout, components, dan error pages semuanya siap pakai.
+            </p>
+            <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 0.9rem;">
+                <li>✓ US-010: Layout dasar (navbar, sidebar)</li>
+                <li>✓ US-011: 9 UI components</li>
+                <li>✓ US-015: Error pages (403, 404, 500)</li>
+            </ul>
+        </c-rdp.card>
+    </div>
+
+    {# ============================================================ #}
+    {# NEXT STEPS SECTION #}
+    {# ============================================================ #}
+    <c-rdp.card>
+        <c-slot name="header">
+            <h3 style="margin: 0;">📋 Next Steps</h3>
+        </c-slot>
+        <ol style="margin: 0; padding-left: 20px;">
+            <li>
+                <strong>Read Project Conventions</strong>
+                <br />
+                <code>CLAUDE.md</code> — project structure, naming, best practices
+            </li>
+            <li>
+                <strong>Check Implementation Roadmap</strong>
+                <br />
+                <code>docs/IMPLEMENTATION-PLAN.md</code> — 5 phases, 23 stories, Definition of Done
+            </li>
+            <li>
+                <strong>Explore UI Components</strong>
+                <br />
+                <code>docs/modules/ui-components.md</code> — component reference dengan examples
+            </li>
+            <li>
+                <strong>Run Tests & Quality Checks</strong>
+                <br />
+                <code>uv run pytest</code> — verify semua test passing (target: > 80% coverage)
+            </li>
+        </ol>
+        <c-slot name="footer">
+            <div style="display: flex; gap: 10px;">
+                <c-rdp.button variant="primary" onclick="window.location.href='/admin/'">
+                    Go to Admin Panel
+                </c-rdp.button>
+                <c-rdp.button variant="secondary" onclick="window.open('https://github.com')">
+                    View on GitHub
+                </c-rdp.button>
+            </div>
+        </c-slot>
+    </c-rdp.card>
+
+    {# ============================================================ #}
+    {# TECH STACK SHOWCASE #}
+    {# ============================================================ #}
+    <div style="margin-top: 40px;">
+        <h2>Tech Stack</h2>
+        <c-rdp.card>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <strong>Backend</strong>
+                    <ul style="margin: 8px 0 0 0; padding-left: 16px; font-size: 0.9rem;">
+                        <li>Django 5.1+</li>
+                        <li>PostgreSQL (prod) / SQLite (dev)</li>
+                        <li>Redis cache</li>
+                        <li>Celery tasks</li>
+                    </ul>
+                </div>
+                <div>
+                    <strong>Frontend</strong>
+                    <ul style="margin: 8px 0 0 0; padding-left: 16px; font-size: 0.9rem;">
+                        <li>Django-Cotton components</li>
+                        <li>RDP-UI design system</li>
+                        <li>HTMX interactivity</li>
+                        <li>Alpine.js reactivity</li>
+                    </ul>
+                </div>
+                <div>
+                    <strong>DevOps</strong>
+                    <ul style="margin: 8px 0 0 0; padding-left: 16px; font-size: 0.9rem;">
+                        <li>uv package manager</li>
+                        <li>Pytest + coverage</li>
+                        <li>Ruff linting</li>
+                        <li>GitHub Actions CI/CD</li>
+                    </ul>
+                </div>
+            </div>
+        </c-rdp.card>
+    </div>
+
 </div>
 {% endblock %}

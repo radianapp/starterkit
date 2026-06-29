@@ -55,33 +55,29 @@ CATATAN:
         {{ attrs }}>
 
         {# Modal header #}
-        {% if title or has_slot 'header' %}
-          <div class="rdp-modal__header">
-            {% if has_slot 'header' %}
-              <c-slot name="header"></c-slot>
-            {% else %}
-              <h2 class="rdp-modal__title">{{ title }}</h2>
-            {% endif %}
-            <button
-              @click="modalOpen = false"
-              class="rdp-modal__close"
-              aria-label="Close modal">
-              ✕
-            </button>
-          </div>
-        {% endif %}
+    <div class="rdp-modal__header">
+      <div class="rdp-modal__title">
+        <c-slot name="header">
+          {{ title|default:'Modal' }}
+        </c-slot>
+      </div>
+      <button
+        @click="modalOpen = false"
+        class="rdp-modal__close"
+        aria-label="Close modal">
+        ✕
+      </button>
+    </div>
 
-        {# Modal body #}
-        <div class="rdp-modal__body">
-          <c-slot name="default"></c-slot>
-        </div>
+    {# Modal body #}
+    <div class="rdp-modal__body">
+      <c-slot name="default"></c-slot>
+    </div>
 
-        {# Modal footer — optional #}
-        {% if has_slot 'footer' %}
-          <div class="rdp-modal__footer">
-            <c-slot name="footer"></c-slot>
-          </div>
-        {% endif %}
+    {# Modal footer #}
+    <div class="rdp-modal__footer">
+      <c-slot name="footer"></c-slot>
+    </div>
       </div>
     </div>
   </div>

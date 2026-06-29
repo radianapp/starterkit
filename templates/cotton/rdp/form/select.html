@@ -42,13 +42,9 @@ CATATAN:
 
 <template>
   <div class="rdp-form-field">
-    {% if label or has_slot 'label' %}
+    {% if label %}
       <label for="{{ name }}" class="rdp-form-field__label">
-        {% if has_slot 'label' %}
-          <c-slot name="label"></c-slot>
-        {% else %}
-          {{ label }}
-        {% endif %}
+        <c-slot name="label">{{ label }}</c-slot>
         {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
       </label>
     {% endif %}
@@ -65,30 +61,26 @@ CATATAN:
         <option value="">{{ placeholder }}</option>
       {% endif %}
 
-      {% if has_slot 'default' %}
-        {# Custom options from slot #}
-        <c-slot name="default"></c-slot>
-      {% elif options %}
-        {# Auto-generate options dari dict #}
-        {% for value, label in options.items %}
-          <option value="{{ value }}" {% if value == selected_value %}selected{% endif %}>
-            {{ label }}
-          </option>
-        {% endfor %}
-      {% endif %}
+      {# Custom options from slot #}
+      <c-slot name="default">
+        {# Auto-generate options dari dict jika ada #}
+        {% if options %}
+          {% for value, label in options.items %}
+            <option value="{{ value }}" {% if value == selected_value %}selected{% endif %}>
+              {{ label }}
+            </option>
+          {% endfor %}
+        {% endif %}
+      </c-slot>
     </select>
 
     {% if error %}
       <div class="rdp-form-field__error">{{ error }}</div>
     {% endif %}
 
-    {% if help_text or has_slot 'help' %}
+    {% if help_text %}
       <small class="rdp-form-field__help">
-        {% if has_slot 'help' %}
-          <c-slot name="help"></c-slot>
-        {% else %}
-          {{ help_text }}
-        {% endif %}
+        <c-slot name="help">{{ help_text }}</c-slot>
       </small>
     {% endif %}
   </div>
