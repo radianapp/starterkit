@@ -1,0 +1,99 @@
+{# US-010: Komponen sidebar — left navigation panel #}
+{#
+TUJUAN: Sidebar component yang collapsible di mobile, responsive, dan terintegrasi dengan layout state.
+Menggunakan RDP-UI CSS class + Alpine.js untuk toggle behavior.
+
+PARAMETER:
+- title (optional): Judul section sidebar — default "Navigation"
+- collapsible (optional): Enable/disable collapse di mobile — default true
+
+SLOT:
+- default: Navigation items (gunakan <a> atau custom link element)
+
+STRUKTUR MINIMAL:
+<c-rdp.layout.sidebar>
+  <a href="/dashboard/" class="rdp-sidebar__link">Dashboard</a>
+  <a href="/admin/" class="rdp-sidebar__link">Admin</a>
+</c-rdp.layout.sidebar>
+
+CATATAN:
+- Sidebar width: ~200px di desktop, full width + overlay di mobile
+- State sidebarOpen dikelola di parent (base.html) via Alpine.js
+- Close sidebar otomatis saat user click link di mobile
+- Dark mode via RDP-UI CSS variable
+#}
+
+<template>
+  <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" {{ attrs }}>
+    <div class="rdp-sidebar__nav">
+      {% if title %}
+        <div class="rdp-sidebar__section-title">{{ title }}</div>
+      {% else %}
+        <div class="rdp-sidebar__section-title">{{ 'Navigation' }}</div>
+      {% endif %}
+
+      {# Navigation items — user content #}
+      <c-slot name="default">
+        {# Default navigation items jika tidak ada content #}
+        <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
+          📊 Dashboard
+        </a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'admin:index' %}" class="rdp-sidebar__link">
+            ⚙️ Admin
+          </a>
+          <a href="#" class="rdp-sidebar__link">
+            👤 Profile
+          </a>
+        {% else %}
+          <a href="#" class="rdp-sidebar__link">
+            🔐 Login
+          </a>
+        {% endif %}
+      </c-slot>
+    </div>
+  </aside>
+</template>
+
+<style>
+  {# ⚡ PERFORMA: CSS untuk sidebar behavior — minimal, rely RDP-UI untuk styling utama #}
+  .rdp-sidebar {
+    /* Desktop: sidebar visible, left-aligned */
+    position: relative;
+    width: 200px;
+    height: auto;
+    border-right: 1px solid var(--color-border, #e0e0e0);
+  }
+
+  @media (max-width: 767px) {
+    .rdp-sidebar {
+      /* Mobile: sidebar hidden by default, overlay ketika open */
+      position: fixed;
+      left: -200px;
+      top: 0;
+      height: 100vh;
+      width: 200px;
+      z-index: 999;
+      background: var(--color-bg, white);
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      transition: left 0.3s ease;
+      padding-top: 60px; {# Account for navbar height #}
+    }
+
+    .rdp-sidebar--open {
+      left: 0;
+    }
+
+    {# Overlay backdrop di mobile saat sidebar open #}
+    .rdp-sidebar--open::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: -1;
+    }
+  }
+</style>

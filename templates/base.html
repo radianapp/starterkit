@@ -3,7 +3,15 @@ Base template untuk RDP Starter Kit.
 US-010: Layout dasar (navbar, sidebar, dashboard)
 US-001: Clone & jalankan project baru
 
-TUJUAN: Base template yang di-extend oleh semua halaman. Load RDP-UI CDN, HTMX, Alpine.js.
+TUJUAN: Base template yang di-extend oleh semua halaman dengan proper block structure.
+Load RDP-UI CDN, HTMX, Alpine.js. Layout: navbar + sidebar + content (3-column flexible).
+
+STRUKTUR:
+- navbar_block: Top navigation bar dengan responsive hamburger menu
+- sidebar_block: Left sidebar dengan navigation items (collapsible di mobile)
+- content_block: Main content area (fleksibel, dapat di-customize per page)
+- footer_block: Footer area
+- extra_css, extra_js: Hook untuk CSS/JS tambahan di child template
 {% endcomment %}
 
 <!DOCTYPE html>
@@ -13,40 +21,131 @@ TUJUAN: Base template yang di-extend oleh semua halaman. Load RDP-UI CDN, HTMX, 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}RDP Starter Kit{% endblock %}</title>
 
-    {# RDP-UI Design System CDN #}
+    {# ⚙️ KONFIGURASI: RDP-UI Design System CDN #}
+    {# Load CSS sebelum JS agar styling langsung apply #}
     <link rel="stylesheet" href="https://cdn.radian.web.id/assets/rdp.css">
 
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    {# Navigation #}
-    <nav>
-        <ul>
-            <li><strong>RDP Starter Kit</strong></li>
-        </ul>
-        <ul>
-            <li><a href="/admin/">Admin</a></li>
-            <li><a href="/dashboard/">Dashboard</a></li>
-        </ul>
-    </nav>
+    {# Layout wrapper dengan Alpine.js untuk sidebar state management #}
+    <div x-data="layoutState()" @keydown.escape="sidebarOpen = false" class="rdp-layout">
 
-    {# Main Content #}
-    <main class="container">
-        {% block content %}
-        <h1>Welcome to RDP Starter Kit</h1>
-        <p>Project initialized successfully!</p>
+        {# ============================================================ #}
+        {# NAVBAR — Top navigation bar #}
+        {# ============================================================ #}
+        {% block navbar_block %}
+            <nav class="rdp-topnav">
+                <div class="rdp-topnav__brand">
+                    <button @click="sidebarOpen = !sidebarOpen" class="rdp-topnav__toggle">
+                        {# Hamburger menu — visible hanya di mobile #}
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <strong>RDP Starter Kit</strong>
+                </div>
+
+                <div class="rdp-topnav__links">
+                    <a href="{% url 'dashboard:index' %}">Dashboard</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'admin:index' %}">Admin</a>
+                    {% endif %}
+                </div>
+            </nav>
         {% endblock %}
-    </main>
 
-    {# Footer #}
-    <footer>
-        <p>© 2026 Radian Data Platform. All rights reserved.</p>
-    </footer>
+        {# ============================================================ #}
+        {# SIDEBAR + CONTENT WRAPPER — 2-column layout #}
+        {# ============================================================ #}
+        <div class="rdp-layout__wrapper">
 
-    {# JavaScript: HTMX + Alpine.js + RDP-UI #}
+            {# Sidebar — collapsible di mobile via Alpine.js #}
+            {% block sidebar_block %}
+                <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }">
+                    <div class="rdp-sidebar__nav">
+                        <div class="rdp-sidebar__section-title">Navigation</div>
+                        <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
+                            📊 Dashboard
+                        </a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'admin:index' %}" class="rdp-sidebar__link">
+                                ⚙️ Admin
+                            </a>
+                            <a href="#" class="rdp-sidebar__link">
+                                👤 Profile
+                            </a>
+                        {% else %}
+                            <a href="#" class="rdp-sidebar__link">
+                                🔐 Login
+                            </a>
+                        {% endif %}
+                    </div>
+                </aside>
+            {% endblock %}
+
+            {# Main content area — flex grow untuk responsive layout #}
+            {% block content_wrapper_block %}
+                <main class="rdp-layout__content">
+                    {% block content %}
+                        <div class="rdp-card">
+                            <div class="rdp-card__body">
+                                <h1>Welcome to RDP Starter Kit</h1>
+                                <p>Project initialized successfully!</p>
+                            </div>
+                        </div>
+                    {% endblock %}
+                </main>
+            {% endblock %}
+        </div>
+
+        {# ============================================================ #}
+        {# FOOTER #}
+        {# ============================================================ #}
+        {% block footer_block %}
+            <footer class="rdp-footer">
+                <p>© 2026 Radian Data Platform. All rights reserved.</p>
+            </footer>
+        {% endblock %}
+    </div>
+
+    {# ============================================================ #}
+    {# JAVASCRIPT — Load order penting: Alpine.js sebelum script kami #}
+    {# ============================================================ #}
+    {# HTMX untuk interactivity — load dari CDN #}
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    {# Alpine.js untuk reactive components (sidebar toggle, dll) #}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    {# RDP-UI JavaScript module #}
     <script type="module" src="https://cdn.radian.web.id/assets/rdp.js" defer></script>
+
+    {# Inline Alpine.js component untuk layout state #}
+    <script>
+        {# CARA KERJA: Alpine.js component untuk manage sidebar open/close state #}
+        {# - sidebarOpen: boolean state untuk sidebar visibility #}
+        {# - Close sidebar ketika user click outside (escape key) #}
+        {# - Sidebar state persist di localStorage untuk UX yang lebih baik #}
+        function layoutState() {
+            return {
+                sidebarOpen: window.innerWidth >= 768, {# Desktop: sidebar open by default #}
+                init() {
+                    {# Load sidebar state dari localStorage #}
+                    const saved = localStorage.getItem('sidebarOpen');
+                    if (saved !== null) {
+                        this.sidebarOpen = JSON.parse(saved);
+                    }
+                },
+                watch_sidebarOpen(value) {
+                    {# Persist sidebar state ke localStorage #}
+                    localStorage.setItem('sidebarOpen', JSON.stringify(value));
+                }
+            };
+        }
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

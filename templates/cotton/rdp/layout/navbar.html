@@ -1,0 +1,54 @@
+{# US-010: Komponen navbar — top navigation bar #}
+{#
+TUJUAN: Navbar component yang responsive, mendukung dark mode, dan terintegrasi dengan sidebar toggle.
+Menggunakan RDP-UI CSS class untuk styling konsisten.
+
+PARAMETER:
+- brand_text (optional): Brand/logo text — default "RDP Starter Kit"
+- brand_url (optional): Link untuk brand — default "/"
+
+SLOT:
+- default: Custom content di tengah navbar (setelah brand)
+- right: Content di right side navbar (user menu, notifications, dll)
+
+CATATAN:
+- Navbar sticky di top
+- Hamburger toggle button hanya visible di mobile (<768px)
+- Dark mode mengikuti RDP-UI CSS variable otomatis
+#}
+
+<template>
+  <nav class="rdp-topnav" {{ attrs }}>
+    <div class="rdp-topnav__brand">
+      <button
+        @click="$parent.sidebarOpen = !$parent.sidebarOpen"
+        class="rdp-topnav__toggle"
+        title="Toggle sidebar"
+        aria-label="Toggle navigation menu">
+        {# Hamburger icon #}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <a href="{{ brand_url|default:'/' }}" class="rdp-topnav__brand-text">
+        <strong>{{ brand_text|default:'RDP Starter Kit' }}</strong>
+      </a>
+    </div>
+
+    {# Center content (optional custom slot) #}
+    <c-slot name="default"></c-slot>
+
+    {# Right side navigation/menu #}
+    <div class="rdp-topnav__links">
+      <c-slot name="right">
+        {# Default navigation items #}
+        <a href="{% url 'dashboard:index' %}">Dashboard</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'admin:index' %}">Admin</a>
+        {% endif %}
+      </c-slot>
+    </div>
+  </nav>
+</template>
