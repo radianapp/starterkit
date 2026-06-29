@@ -298,8 +298,7 @@ CSRF_COOKIE_SECURE=True
 - django-debug-toolbar
 
 **UI/UX**:
-- RDP-UI Design System (CDN)
-- PicoCSS
+- RDP-UI Design System (CDN: https://cdn.radian.web.id/assets/rdp.css)
 - HTMX
 - Alpine.js
 - django-cotton (components)

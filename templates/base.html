@@ -13,9 +13,8 @@ TUJUAN: Base template yang di-extend oleh semua halaman. Load RDP-UI CDN, HTMX, 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}RDP Starter Kit{% endblock %}</title>
 
-    {# RDP-UI Design System CDN + PicoCSS #}
-    <link rel="stylesheet" href="https://cdn.radian.web.id/pico/v2/pico.min.css">
-    <link rel="stylesheet" href="https://cdn.radian.web.id/rdp-ui/v1/rdp-ui.min.css">
+    {# RDP-UI Design System CDN #}
+    <link rel="stylesheet" href="https://cdn.radian.web.id/assets/rdp.css">
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -44,10 +43,10 @@ TUJUAN: Base template yang di-extend oleh semua halaman. Load RDP-UI CDN, HTMX, 
         <p>© 2026 Radian Data Platform. All rights reserved.</p>
     </footer>
 
-    {# JavaScript: HTMX + Alpine.js #}
+    {# JavaScript: HTMX + Alpine.js + RDP-UI #}
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.radian.web.id/rdp-ui/v1/rdp-ui.min.js"></script>
+    <script type="module" src="https://cdn.radian.web.id/assets/rdp.js" defer></script>
 
     {% block extra_js %}{% endblock %}
 </body>
