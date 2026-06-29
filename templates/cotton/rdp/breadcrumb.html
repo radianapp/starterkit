@@ -1,0 +1,96 @@
+{# US-011: Komponen breadcrumb — navigation trail showing page location #}
+{#
+TUJUAN: Reusable breadcrumb component untuk menunjukkan navigation hierarchy.
+Support custom items atau auto-generate dari page title.
+
+PARAMETER:
+- items (optional): List of dicts [{url, label}, ...] untuk breadcrumb items
+
+SLOT:
+- default: Custom breadcrumb items
+
+CONTOH:
+<c-rdp.breadcrumb items="[
+  {'url': '/', 'label': 'Home'},
+  {'url': '/items/', 'label': 'Items'},
+  {'url': '', 'label': 'Detail'}
+]" />
+
+<c-rdp.breadcrumb>
+  <li><a href="/">Home</a></li>
+  <li><a href="/items/">Items</a></li>
+  <li>Detail</li>
+</c-rdp.breadcrumb>
+
+CATATAN:
+- Last item tidak link (current page)
+- Responsive: hide intermediate items di mobile
+- CSS class: rdp-breadcrumb, rdp-breadcrumb__item, rdp-breadcrumb__link
+- Dark mode via RDP-UI CSS variable
+#}
+
+<template>
+  <nav class="rdp-breadcrumb" aria-label="Breadcrumb" {{ attrs }}>
+    <ol class="rdp-breadcrumb__list">
+      {% if items %}
+        {% for item in items %}
+          <li class="rdp-breadcrumb__item">
+            {% if item.url %}
+              <a href="{{ item.url }}" class="rdp-breadcrumb__link">
+                {{ item.label }}
+              </a>
+            {% else %}
+              <span class="rdp-breadcrumb__text">{{ item.label }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% else %}
+        {# Custom items from slot #}
+        <c-slot name="default"></c-slot>
+      {% endif %}
+    </ol>
+  </nav>
+</template>
+
+<style>
+  .rdp-breadcrumb__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+
+  .rdp-breadcrumb__item {
+    display: flex;
+    align-items: center;
+  }
+
+  .rdp-breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    margin: 0 8px;
+    color: var(--color-text-secondary, #999);
+  }
+
+  .rdp-breadcrumb__link {
+    color: var(--color-primary, #0066cc);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .rdp-breadcrumb__link:hover {
+    text-decoration: underline;
+  }
+
+  .rdp-breadcrumb__text {
+    color: var(--color-text, #333);
+  }
+
+  @media (max-width: 600px) {
+    .rdp-breadcrumb__item:nth-child(n+2):not(:last-child) {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,51 @@
+{# US-011: Komponen card — container untuk grouped content #}
+{#
+TUJUAN: Reusable card component dengan header, body, footer sections.
+Support named slots untuk fleksibilitas maksimal dalam layout.
+
+PARAMETER:
+- variant (optional): "primary" | "secondary" — untuk accent border — default none
+- clickable (optional): true | false — add hover effect
+
+SLOT:
+- default | body: Main content area
+- header: Card header (optional)
+- footer: Card footer (optional)
+
+CONTOH:
+<c-rdp.card>
+  <c-slot name="header">
+    <h3>Card Title</h3>
+  </c-slot>
+  <p>Card body content goes here.</p>
+  <c-slot name="footer">
+    <button>Action</button>
+  </c-slot>
+</c-rdp.card>
+
+CATATAN:
+- Header, body, footer adalah semantic divisions
+- Card padding dan shadow dari RDP-UI CSS class
+- Responsive width: full-width mobile, auto desktop
+- Dark mode via RDP-UI
+#}
+
+<template>
+  <div class="rdp-card {% if variant %}rdp-card--{{ variant }}{% endif %} {% if clickable %}rdp-card--clickable{% endif %}" {{ attrs }}>
+    {% if has_slot 'header' %}
+      <div class="rdp-card__header">
+        <c-slot name="header"></c-slot>
+      </div>
+    {% endif %}
+
+    <div class="rdp-card__body">
+      <c-slot name="default"></c-slot>
+    </div>
+
+    {% if has_slot 'footer' %}
+      <div class="rdp-card__footer">
+        <c-slot name="footer"></c-slot>
+      </div>
+    {% endif %}
+  </div>
+</template>

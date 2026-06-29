@@ -1,0 +1,126 @@
+{# US-011: Komponen pagination — page navigation dengan HTMX support #}
+{#
+TUJUAN: Reusable pagination component untuk list views dengan HTMX support.
+Render prev/next buttons dan page number links.
+
+PARAMETER:
+- page_obj (required): Django paginator page object
+- url_pattern (optional): URL pattern untuk pagination links — default "#"
+- query_params (optional): Additional query params (dict)
+
+SLOT:
+- default: Custom pagination content
+
+CONTOH:
+<c-rdp.pagination page_obj="{{ page_obj }}" url_pattern="/items/?page=" />
+
+CATATAN:
+- Integrates dengan Django paginator (page_obj.number, page_obj.paginator.num_pages, dst)
+- HTMX support: links bisa pakai hx-get untuk partial page refresh
+- CSS class: rdp-pagination, rdp-pagination__item, rdp-pagination__link
+- Dark mode via RDP-UI CSS variable
+#}
+
+<template>
+  {% if page_obj.has_other_pages %}
+    <nav class="rdp-pagination" {{ attrs }}>
+      <ul class="rdp-pagination__list">
+        {# Previous button #}
+        {% if page_obj.has_previous %}
+          <li class="rdp-pagination__item">
+            <a href="{{ url_pattern|default:'#' }}{{ page_obj.previous_page_number }}{{ query_string }}"
+               class="rdp-pagination__link"
+               hx-get="{{ url_pattern|default:'#' }}{{ page_obj.previous_page_number }}{{ query_string }}"
+               hx-target="#page-content">
+              ← Previous
+            </a>
+          </li>
+        {% else %}
+          <li class="rdp-pagination__item rdp-pagination__item--disabled">
+            <span class="rdp-pagination__link">← Previous</span>
+          </li>
+        {% endif %}
+
+        {# Page numbers #}
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <li class="rdp-pagination__item rdp-pagination__item--active">
+              <span class="rdp-pagination__link">{{ num }}</span>
+            </li>
+          {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'3' %}
+            <li class="rdp-pagination__item">
+              <a href="{{ url_pattern|default:'#' }}{{ num }}{{ query_string }}"
+                 class="rdp-pagination__link"
+                 hx-get="{{ url_pattern|default:'#' }}{{ num }}{{ query_string }}"
+                 hx-target="#page-content">
+                {{ num }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {# Next button #}
+        {% if page_obj.has_next %}
+          <li class="rdp-pagination__item">
+            <a href="{{ url_pattern|default:'#' }}{{ page_obj.next_page_number }}{{ query_string }}"
+               class="rdp-pagination__link"
+               hx-get="{{ url_pattern|default:'#' }}{{ page_obj.next_page_number }}{{ query_string }}"
+               hx-target="#page-content">
+              Next →
+            </a>
+          </li>
+        {% else %}
+          <li class="rdp-pagination__item rdp-pagination__item--disabled">
+            <span class="rdp-pagination__link">Next →</span>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+</template>
+
+<style>
+  .rdp-pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .rdp-pagination__list {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .rdp-pagination__item {
+    display: inline;
+  }
+
+  .rdp-pagination__link {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--color-primary, #0066cc);
+    transition: all 0.2s;
+  }
+
+  .rdp-pagination__link:hover {
+    background: var(--color-bg-secondary, #f5f5f5);
+  }
+
+  .rdp-pagination__item--active .rdp-pagination__link {
+    background: var(--color-primary, #0066cc);
+    color: white;
+    border-color: var(--color-primary, #0066cc);
+  }
+
+  .rdp-pagination__item--disabled .rdp-pagination__link {
+    color: var(--color-text-secondary, #999);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+</style>

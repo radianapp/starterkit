@@ -1,0 +1,61 @@
+{# US-011: Komponen alert — inline message dengan tipe (success, error, warning, info) #}
+{#
+TUJUAN: Reusable alert component dengan visual distinction per tipe.
+Support auto-dismiss dan dismissible button (optional).
+
+PARAMETER:
+- type (required): "success" | "error" | "warning" | "info" — default "info"
+- dismissible (optional): true | false — show close button
+- title (optional): Alert title/heading
+
+SLOT:
+- default: Alert message content
+
+CONTOH:
+<c-rdp.alert type="success" title="Saved!">
+  Your changes have been saved successfully.
+</c-rdp.alert>
+
+<c-rdp.alert type="error" dismissible>
+  Something went wrong. Please try again.
+</c-rdp.alert>
+
+CATATAN:
+- Icon color dan styling dari RDP-UI berdasarkan type class
+- Dismissible: gunakan Alpine.js untuk toggle visibility
+- CSS class: rdp-alert, rdp-alert--{type}
+- Responsive: full-width mobile, auto desktop
+- Dark mode via RDP-UI CSS variable
+#}
+
+<template>
+  <div
+    class="rdp-alert rdp-alert--{{ type|default:'info' }}"
+    {% if dismissible %}
+      x-data="{ show: true }"
+      x-show="show"
+      @click.away="show = false"
+    {% endif %}
+    {{ attrs }}>
+
+    {# Alert body — title + message #}
+    <div class="rdp-alert__content">
+      {% if title %}
+        <strong class="rdp-alert__title">{{ title }}</strong>
+      {% endif %}
+      <p class="rdp-alert__message">
+        <c-slot name="default"></c-slot>
+      </p>
+    </div>
+
+    {# Close button — optional #}
+    {% if dismissible %}
+      <button
+        @click="show = false"
+        class="rdp-alert__close"
+        aria-label="Dismiss alert">
+        ✕
+      </button>
+    {% endif %}
+  </div>
+</template>

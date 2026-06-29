@@ -1,0 +1,33 @@
+{# US-011: Komponen button — call-to-action button dengan variant styling #}
+{#
+TUJUAN: Reusable button component dengan berbagai variant (primary, secondary, danger, ghost).
+Support HTMX attributes (hx-post, hx-target, dll) dan semua HTML button attributes.
+
+PARAMETER:
+- variant (optional): "primary" | "secondary" | "danger" | "ghost" — default "primary"
+- size (optional): "xs" | "sm" | "md" | "lg" — default "md"
+- disabled (optional): true | false — disable button
+- {{ attrs }}: Semua atribut HTML lainnya (hx-*, aria-*, data-*, dll)
+
+SLOT:
+- default: Button text/content
+
+CONTOH:
+<c-rdp.button variant="primary" hx-post="/action/">Save Changes</c-rdp.button>
+<c-rdp.button variant="danger" disabled>Delete</c-rdp.button>
+<c-rdp.button variant="secondary" size="sm">Cancel</c-rdp.button>
+
+CATATAN:
+- HTMX attributes pass-through langsung ke <button> element
+- CSS class mapping via RDP-UI: rdp-btn, rdp-btn--{variant}, rdp-btn--{size}
+- Dark mode support via RDP-UI CSS variable
+#}
+
+<template>
+  <button
+    class="rdp-btn rdp-btn--{{ variant|default:'primary' }} rdp-btn--{{ size|default:'md' }}"
+    {% if disabled %}disabled{% endif %}
+    {{ attrs }}>
+    <c-slot name="default"></c-slot>
+  </button>
+</template>
