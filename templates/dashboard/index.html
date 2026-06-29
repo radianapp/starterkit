@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{# Dashboard index page - US-001: Clone & jalankan project baru #}
+
+{% block title %}Dashboard - RDP Starter Kit{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<p>Welcome to your RDP Starter Kit dashboard!</p>
+
+<div>
+    <h2>Project Status ✅</h2>
+    <ul>
+        <li>Django is running</li>
+        <li>Database connected</li>
+        <li>RDP-UI CDN loaded</li>
+        <li>HTMX ready</li>
+    </ul>
+</div>
+
+<div>
+    <h2>Next Steps</h2>
+    <ul>
+        <li>Read <code>CLAUDE.md</code> for project conventions</li>
+        <li>Check <code>docs/IMPLEMENTATION-PLAN.md</code> for roadmap</li>
+        <li>Run <code>uv run pytest</code> to verify tests</li>
+    </ul>
+</div>
+{% endblock %}

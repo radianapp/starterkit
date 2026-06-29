@@ -1,0 +1,114 @@
+[project]
+name = "rdp-starter-kit"
+version = "0.1.0"
+description = "Production-ready Django starter template for Radian Data Platform (RDP)"
+requires-python = ">=3.11"
+license = "MIT"
+
+dependencies = [
+    "Django>=4.2,<5.2",
+    "python-dotenv>=1.0.0",
+    "Pillow>=10.0.0",
+    "whitenoise>=6.6.0",
+    "psycopg[binary]>=3.1.0",
+    "redis>=5.0.0",
+    "celery>=5.3.0",
+    "django-cotton>=2.0.0",
+    "django-cors-headers>=4.3.0",
+    "djangorestframework>=3.14.0",
+    "python-dateutil>=2.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-django>=4.7.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "black>=23.9.0",
+    "isort>=5.12.0",
+    "django-debug-toolbar>=4.1.0",
+    "django-extensions>=3.2.0",
+    "faker>=19.0.0",  # Generate fake data for testing
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-django>=4.7.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "black>=23.9.0",
+    "isort>=5.12.0",
+    "django-debug-toolbar>=4.1.0",
+    "django-extensions>=3.2.0",
+    "faker>=19.0.0",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.dev"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["tests"]
+addopts = "--cov=apps --cov-report=html --cov-report=term-missing --strict-markers"
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration tests",
+    "smoke: marks tests as smoke tests",
+]
+
+[tool.coverage.run]
+source = ["apps"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/__init__.py",
+    "*/apps.py",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "migrations",
+    ".pytest_cache",
+    ".ruff_cache",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "C",      # flake8-comprehensions
+    "B",      # flake8-bugbear
+    "UP",     # pyupgrade
+    "A",      # flake8-builtins
+    "RUF",    # Ruff-specific rules
+]
+ignore = [
+    "E501",   # Line too long
+    "B008",   # Do not perform function calls in argument defaults
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config"]
+
+[tool.setuptools]
+packages = ["config", "apps"]
+
+[tool.setuptools.package-data]
+config = ["settings/*.py", "*.py"]
+apps = ["**/*.py"]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

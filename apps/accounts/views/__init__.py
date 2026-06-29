@@ -1,0 +1,3 @@
+"""
+Views untuk accounts app.
+"""

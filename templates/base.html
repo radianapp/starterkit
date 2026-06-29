@@ -1,0 +1,54 @@
+{% comment %}
+Base template untuk RDP Starter Kit.
+US-010: Layout dasar (navbar, sidebar, dashboard)
+US-001: Clone & jalankan project baru
+
+TUJUAN: Base template yang di-extend oleh semua halaman. Load RDP-UI CDN, HTMX, Alpine.js.
+{% endcomment %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RDP Starter Kit{% endblock %}</title>
+
+    {# RDP-UI Design System CDN + PicoCSS #}
+    <link rel="stylesheet" href="https://cdn.radian.web.id/pico/v2/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.radian.web.id/rdp-ui/v1/rdp-ui.min.css">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {# Navigation #}
+    <nav>
+        <ul>
+            <li><strong>RDP Starter Kit</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/admin/">Admin</a></li>
+            <li><a href="/dashboard/">Dashboard</a></li>
+        </ul>
+    </nav>
+
+    {# Main Content #}
+    <main class="container">
+        {% block content %}
+        <h1>Welcome to RDP Starter Kit</h1>
+        <p>Project initialized successfully!</p>
+        {% endblock %}
+    </main>
+
+    {# Footer #}
+    <footer>
+        <p>© 2026 Radian Data Platform. All rights reserved.</p>
+    </footer>
+
+    {# JavaScript: HTMX + Alpine.js #}
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.radian.web.id/rdp-ui/v1/rdp-ui.min.js"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
