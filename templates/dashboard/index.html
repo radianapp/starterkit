@@ -2,203 +2,208 @@
 {% load static %}
 {% load cotton %}
 
-
 {% block title %}Dashboard - RDP Starter Kit{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 {% endblock %}
 
-{% block content %}
-<div class="dashboard-container">
-    
-    
-    
-    <div class="dashboard-header">
-        <h1>📊 Dashboard</h1>
-        <p class="dashboard-subtitle">Selamat datang di RDP Starter Kit</p>
-    </div>
-
-    
-    
-    
-    <div class="dashboard-overview">
-        <c-rdp.card>
-            <div class="dashboard-metric">
-                <div class="dashboard-metric-value">2</div>
-                <div class="dashboard-metric-label">Fase Completed</div>
-                <div class="dashboard-metric-trend">↑ On track</div>
-            </div>
-        </c-rdp.card>
-
-        <c-rdp.card>
-            <div class="dashboard-metric">
-                <div class="dashboard-metric-value">14</div>
-                <div class="dashboard-metric-label">User Stories</div>
-                <div class="dashboard-metric-trend">Implemented</div>
-            </div>
-        </c-rdp.card>
-
-        <c-rdp.card>
-            <div class="dashboard-metric">
-                <div class="dashboard-metric-value">100%</div>
-                <div class="dashboard-metric-label">Layout Ready</div>
-                <div class="dashboard-metric-trend">✓ Complete</div>
-            </div>
-        </c-rdp.card>
-
-        <c-rdp.card>
-            <div class="dashboard-metric">
-                <div class="dashboard-metric-value">9</div>
-                <div class="dashboard-metric-label">Components</div>
-                <div class="dashboard-metric-trend">UI Shell</div>
-            </div>
-        </c-rdp.card>
-    </div>
-
-    
-    
-    
-    <div class="dashboard-grid">
-        <c-rdp.card>
-            <c-slot name="header">
-                <h3>🎯 Fase 2 Complete: UI Shell</h3>
-            </c-slot>
-            <p>
-                Layout, components, dan error pages semuanya siap pakai dengan RDP-UI design system.
-            </p>
-            <ul class="dashboard-checklist">
-                <li>✓ US-010: Layout dasar (navbar, sidebar, responsive)</li>
-                <li>✓ US-011: 9 UI components (button, card, form, table, modal, dll)</li>
-                <li>✓ US-015: Error pages (403, 404, 500) dengan styling</li>
-            </ul>
-        </c-rdp.card>
-
-        <c-rdp.card>
-            <c-slot name="header">
-                <h3>✅ Project Status</h3>
-            </c-slot>
-            <ul class="dashboard-checklist">
-                <li>✔️ Django 5.1+ running</li>
-                <li>✔️ Database connected (SQLite dev, PostgreSQL prod)</li>
-                <li>✔️ RDP-UI CDN loaded</li>
-                <li>✔️ HTMX ready for interactivity</li>
-                <li>✔️ Alpine.js for reactivity</li>
-                <li>✔️ Responsive layout (mobile, tablet, desktop)</li>
-            </ul>
-        </c-rdp.card>
-    </div>
-
-    
-    
-    
-    <c-rdp.card>
-        <c-slot name="header">
-            <h3>📋 Next Steps</h3>
-        </c-slot>
-        <div class="dashboard-steps">
-            <div class="dashboard-step">
-                <strong>1. Read Project Conventions</strong>
-                <p><code>CLAUDE.md</code> — aturan project, struktur folder, naming conventions, best practices</p>
-            </div>
-            <div class="dashboard-step">
-                <strong>2. Check Implementation Roadmap</strong>
-                <p><code>docs/IMPLEMENTATION-PLAN.md</code> — 5 phases, 23 user stories, Definition of Done per fase</p>
-            </div>
-            <div class="dashboard-step">
-                <strong>3. Explore UI Components</strong>
-                <p><code>docs/modules/ui-components.md</code> — reference semua Cotton components dengan examples</p>
-            </div>
-            <div class="dashboard-step">
-                <strong>4. Read Frontend SOP</strong>
-                <p><code>docs/SOP-FRONTEND-STRUCTURE.md</code> — CSS/JS extraction, naming, mobile-first workflow</p>
-            </div>
-            <div class="dashboard-step">
-                <strong>5. Run Tests & Quality Checks</strong>
-                <p><code>uv run pytest</code> — verify semua test passing (target coverage: > 80%)</p>
-            </div>
-        </div>
-        <c-slot name="footer">
-            <div class="dashboard-actions">
-                <c-rdp.button variant="primary" onclick="window.location.href='/admin/'">
-                    📱 Go to Admin Panel
-                </c-rdp.button>
-                <c-rdp.button variant="secondary" onclick="window.location.href='https://github.com'">
-                    🔗 View on GitHub
-                </c-rdp.button>
-            </div>
-        </c-slot>
-    </c-rdp.card>
-
-    
-    
-    
-    <div class="dashboard-techstack-section">
-        <h2>⚙️ Tech Stack</h2>
-        <c-rdp.card>
-            <div class="dashboard-techstack-grid">
-                <div class="dashboard-techstack-column">
-                    <strong>🖥️ Backend</strong>
-                    <ul>
-                        <li>Django 5.1+</li>
-                        <li>PostgreSQL (prod)</li>
-                        <li>SQLite (dev/test)</li>
-                        <li>Redis cache</li>
-                        <li>Celery tasks</li>
-                    </ul>
-                </div>
-                <div class="dashboard-techstack-column">
-                    <strong>🎨 Frontend</strong>
-                    <ul>
-                        <li>Django-Cotton components</li>
-                        <li>RDP-UI design system</li>
-                        <li>PicoCSS framework</li>
-                        <li>HTMX interactivity</li>
-                        <li>Alpine.js reactivity</li>
-                    </ul>
-                </div>
-                <div class="dashboard-techstack-column">
-                    <strong>🚀 DevOps & Tools</strong>
-                    <ul>
-                        <li>uv package manager</li>
-                        <li>Pytest + pytest-cov</li>
-                        <li>Ruff linting/format</li>
-                        <li>GitHub Actions CI/CD</li>
-                        <li>WhiteNoise static files</li>
-                    </ul>
-                </div>
-            </div>
-        </c-rdp.card>
-    </div>
-
-    
-    
-    
-    <div class="dashboard-docs-section">
-        <h2>📚 Documentation</h2>
-        <div class="dashboard-docs-grid">
-            <c-rdp.card>
-                <strong>Architecture & Decisions</strong>
-                <ul style="margin-top: 12px; padding-left: 20px;">
-                    <li><a href="/docs/architecture/">Database ERD</a></li>
-                    <li><a href="/docs/decisions/">Architecture Decision Records</a></li>
-                </ul>
-            </c-rdp.card>
-            <c-rdp.card>
-                <strong>PRD & User Stories</strong>
-                <ul style="margin-top: 12px; padding-left: 20px;">
-                    <li><a href="/docs/prd/user-stories/">All User Stories (23 total)</a></li>
-                    <li><a href="/docs/IMPLEMENTATION-PLAN.md">Implementation Plan</a></li>
-                </ul>
-            </c-rdp.card>
-            <c-rdp.card>
-                <strong>Development Guides</strong>
-                <ul style="margin-top: 12px; padding-left: 20px;">
-                    <li><a href="/docs/SOP-FRONTEND-STRUCTURE.md">Frontend SOP</a></li>
-                    <li><a href="/docs/FRONTEND-CHECKLIST.md">Pre-commit Checklist</a></li>
-                </ul>
-            </c-rdp.card>
+{% block navbar_block %}
+<div class="rdp-dashboard-topbar">
+    <button class="rdp-dashboard-topbar__toggle" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle sidebar">☰</button>
+    <h1 class="rdp-dashboard-topbar__title">Dashboard</h1>
+    <div class="rdp-dashboard-topbar__actions">
+        <button class="rdp-btn rdp-btn--sm rdp-btn--ghost" title="Toggle dark mode">🌙</button>
+        <button class="rdp-btn rdp-btn--sm rdp-btn--ghost">🔔</button>
+        <div class="rdp-avatar rdp-avatar--sm">
+            <span class="rdp-avatar__initials">RD</span>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block sidebar_block %}
+<aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" @click.stop>
+    <a href="/" class="rdp-sidebar__brand">
+        <span style="font-size: 1.5rem;">⬡</span>
+        <span class="rdp-sidebar__brand-text">RDP Kit</span>
+    </a>
+
+    <nav class="rdp-sidebar__nav">
+        <div class="rdp-sidebar__section">
+            <div class="rdp-sidebar__section-title">Menu Utama</div>
+            <a href="/" class="rdp-sidebar__link active" aria-current="page">
+                <span class="rdp-sidebar__link-icon">📊</span>
+                <span class="rdp-sidebar__link-text">Dashboard</span>
+            </a>
+            <a href="#" class="rdp-sidebar__link">
+                <span class="rdp-sidebar__link-icon">📁</span>
+                <span class="rdp-sidebar__link-text">Proyek</span>
+                <span class="rdp-sidebar__badge">2</span>
+            </a>
+            <a href="#" class="rdp-sidebar__link">
+                <span class="rdp-sidebar__link-icon">📈</span>
+                <span class="rdp-sidebar__link-text">Analisis</span>
+            </a>
+        </div>
+
+        <div class="rdp-sidebar__section">
+            <div class="rdp-sidebar__section-title">Development</div>
+            <a href="#" class="rdp-sidebar__link">
+                <span class="rdp-sidebar__link-icon">💻</span>
+                <span class="rdp-sidebar__link-text">API</span>
+            </a>
+            <a href="#" class="rdp-sidebar__link">
+                <span class="rdp-sidebar__link-icon">🧪</span>
+                <span class="rdp-sidebar__link-text">Testing</span>
+            </a>
+        </div>
+
+        <div class="rdp-sidebar__section">
+            <div class="rdp-sidebar__section-title">Pengaturan</div>
+            <a href="#" class="rdp-sidebar__link">
+                <span class="rdp-sidebar__link-icon">👥</span>
+                <span class="rdp-sidebar__link-text">Tim</span>
+            </a>
+            <a href="#" class="rdp-sidebar__link">
+                <span class="rdp-sidebar__link-icon">⚙️</span>
+                <span class="rdp-sidebar__link-text">Pengaturan</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="rdp-sidebar__footer">
+        <a href="#" class="rdp-sidebar__link">
+            <div class="rdp-avatar rdp-avatar--sm" style="background: var(--color-primary-light, #e8f4ff);">
+                <span class="rdp-avatar__initials">RD</span>
+            </div>
+            <span class="rdp-sidebar__link-text">Rahadi</span>
+        </a>
+    </div>
+</aside>
+{% endblock %}
+
+{% block content_wrapper_block %}
+<main class="rdp-layout__content">
+    <nav aria-label="Breadcrumb" class="rdp-dashboard-breadcrumb">
+        <ul class="rdp-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Dashboard</a></li>
+            <li>Overview</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-dashboard-content">
+        <div class="rdp-page-header">
+            <h2 class="rdp-page-header__title">Selamat Datang di RDP Starter Kit</h2>
+            <div class="rdp-page-header__actions">
+                <c-rdp.button variant="secondary" onclick="window.location.href='/docs/'">Baca Docs</c-rdp.button>
+                <c-rdp.button variant="primary" onclick="window.location.href='/admin/'">Admin Panel</c-rdp.button>
+            </div>
+        </div>
+
+        <div class="rdp-dashboard-stats">
+            <article class="rdp-card rdp-card--stats">
+                <div class="rdp-card__value" style="color: #0066cc;">2</div>
+                <div class="rdp-card__label">Fase Completed</div>
+                <div class="rdp-card__change rdp-card__change--up">↑ On track</div>
+            </article>
+            <article class="rdp-card rdp-card--stats">
+                <div class="rdp-card__value" style="color: #00b365;">14</div>
+                <div class="rdp-card__label">User Stories</div>
+                <div class="rdp-card__change rdp-card__change--up">↑ Implemented</div>
+            </article>
+            <article class="rdp-card rdp-card--stats">
+                <div class="rdp-card__value" style="color: #ff9800;">9</div>
+                <div class="rdp-card__label">UI Components</div>
+                <div class="rdp-card__change rdp-card__change--up">↑ Complete</div>
+            </article>
+            <article class="rdp-card rdp-card--stats">
+                <div class="rdp-card__value" style="color: #2196f3;">100%</div>
+                <div class="rdp-card__label">Layout Ready</div>
+                <div class="rdp-card__change rdp-card__change--up">✓ Done</div>
+            </article>
+        </div>
+
+        <div class="rdp-alert rdp-alert--info rdp-alert--dismissible" role="alert">
+            <div class="rdp-alert__content">
+                <strong>Tip:</strong> Baca <code>CLAUDE.md</code> untuk conventions dan <code>docs/SOP-FRONTEND-STRUCTURE.md</code> untuk frontend workflow.
+            </div>
+            <button class="rdp-alert__close" aria-label="Tutup">&times;</button>
+        </div>
+
+        <div class="rdp-dashboard-grid">
+            <c-rdp.card>
+                <c-slot name="header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="margin: 0;">Aktivitas Terbaru</h3>
+                        <a href="#" style="font-size: 0.85rem; text-decoration: none;">Lihat semua</a>
+                    </div>
+                </c-slot>
+                <div class="rdp-dashboard-activity">
+                    <div class="rdp-activity-item">
+                        <div class="rdp-avatar rdp-avatar--sm" style="background: #e8f4ff;">
+                            <span class="rdp-avatar__initials">US</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500;">US-010: Layout dasar completed</div>
+                            <div style="font-size: 0.85rem; color: #666;">Layout navbar, sidebar, responsive</div>
+                        </div>
+                        <span class="rdp-badge" style="background: #e8f5e9; color: #2e7d32;">Selesai</span>
+                    </div>
+                    <div class="rdp-activity-item">
+                        <div class="rdp-avatar rdp-avatar--sm" style="background: #fff3e0;">
+                            <span class="rdp-avatar__initials">US</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500;">US-011: Components implemented</div>
+                            <div style="font-size: 0.85rem; color: #666;">9 UI components dengan Cotton</div>
+                        </div>
+                        <span class="rdp-badge" style="background: #fff3e0; color: #f57f17;">Proses</span>
+                    </div>
+                    <div class="rdp-activity-item">
+                        <div class="rdp-avatar rdp-avatar--sm" style="background: #f3e5f5;">
+                            <span class="rdp-avatar__initials">US</span>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500;">Frontend SOP documented</div>
+                            <div style="font-size: 0.85rem; color: #666;">CSS/JS extraction rules</div>
+                        </div>
+                        <span class="rdp-badge" style="background: #f3e5f5; color: #7b1fa2;">Review</span>
+                    </div>
+                </div>
+            </c-rdp.card>
+
+            <c-rdp.card>
+                <c-slot name="header">
+                    <h3 style="margin: 0;">Tech Stack</h3>
+                </c-slot>
+                <div class="rdp-techstack">
+                    <div class="rdp-techstack-group">
+                        <strong style="display: block; margin-bottom: 8px;">🖥️ Backend</strong>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                            <li>Django 5.1+</li>
+                            <li>PostgreSQL / SQLite</li>
+                            <li>Redis Cache</li>
+                            <li>Celery Tasks</li>
+                        </ul>
+                    </div>
+                    <div class="rdp-techstack-group">
+                        <strong style="display: block; margin-bottom: 8px;">🎨 Frontend</strong>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+                            <li>Django-Cotton</li>
+                            <li>RDP-UI CDN</li>
+                            <li>HTMX</li>
+                            <li>Alpine.js</li>
+                        </ul>
+                    </div>
+                </div>
+            </c-rdp.card>
+        </div>
+    </div>
+
+    <footer class="rdp-dashboard-footer">
+        RDP Starter Kit v0.1.0 · © 2026 Radian Data Platform · <a href="#">Lihat Changelog</a>
+    </footer>
+</main>
 {% endblock %}
