@@ -21,13 +21,17 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - **US-021**: Cache (Redis / Local Memory) — support locmem:// & redis://
 - **US-022**: Email (SMTP / Console / Mailpit) — support console, mailpit, SMTP backend
 - **US-013**: Static & media files — WhiteNoise + django storage
+- **SOP & Checklist**: Frontend code organization — SOP-FRONTEND-STRUCTURE.md + FRONTEND-CHECKLIST.md untuk CSS/JS extraction & mobile-first design
 
 ### Changed
 - **base.html**: Refactor dengan clear block structure (navbar_block, sidebar_block, content_block, footer_block), Alpine.js layoutState() untuk sidebar management
 - **Error pages**: Extend base.html, add Cotton component styling (card, button), emoji icon, responsive centered layout
+- **static/ structure**: Extract CSS (dashboard.css, errors.css) & JS (base.js, layout-state.js) dari inline dalam template — no more inline styles/scripts
 
 ### Documentation
 - README.md — Quick start, project structure, conventions
+- **docs/SOP-FRONTEND-STRUCTURE.md** — Frontend code organization: CSS/JS separation, naming conventions, mobile-first design, workflow
+- **docs/FRONTEND-CHECKLIST.md** — Pre-commit checklist untuk template/CSS/JS/komponen validation
 - CLAUDE.md — AI assistant instructions (sudah ada, di-verify)
 - IMPLEMENTATION-PLAN.md — 5 phases, 23 stories, Definition of Done (sudah ada)
 - docs/modules/ui-components.md — Complete component reference dengan examples & best practices
