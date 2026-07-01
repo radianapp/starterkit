@@ -13,6 +13,7 @@ STRUKTUR:
 - footer_block: Footer area
 - extra_css, extra_js: Hook untuk CSS/JS tambahan di child template
 {% endcomment %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="id">
@@ -26,7 +27,7 @@ STRUKTUR:
     <link rel="stylesheet" href="https://cdn.radian.web.id/assets/rdp.css">
 
     {# Base layout CSS — responsive 3-column layout (extracted to static/css/base.css) #}
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     {% block extra_css %}{% endblock %}
 

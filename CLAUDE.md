@@ -120,7 +120,7 @@ class User(AbstractUser):
 ```html
 {# templates/account/login.html #}
 {# US-005: Login #}
-{% extends "base.html" %}
+<c-layout.base>
 ```
 
 Format: `US: US-{nomor} — {judul story}` — singkat, di baris pertama docstring atau sebagai komentar di atas class/function.
@@ -250,6 +250,12 @@ Lihat `docs/IMPLEMENTATION-PLAN.md` untuk:
 | `docs/prd/user-stories/rdp-starter-kit.md` | 23 user stories dengan acceptance criteria |
 
 ---
+
+## Hal yang Wajib
+- Selalu menggunakan sintak Django-Cotton <c-layout.base with title="Halaman depan">, jangan menggunakan {% %}
+- Selalu memisahkan inline-css ke file stylesheet (css). Misal aplikasi dashboard/, simpan di css/dashboard.css atau menurut fungsi/class yang sedang dikerjakan, misalnya pass CRUD css/dashboard-crud.css.
+- Selalu pisahkan template menjadi komponen kecil yang bisa dipakai kembali (reuseable). Termasuk untuk tampilan mobile, tablet, desktop, dan large display. Jangan di-hardcode di views, pisahkan ke folder terpisah. Contoh Sidebar, card yang berulang, dll. Simpan dalam folder partials/. Prioritaskan tampilan mobile terlebih dahulu.
+- Selalu memisahkan inline-javascript ke file javascript. Misal aplikasi dashboard/, simpan di js/dashboard.js. Kalau ada fungsi yang reuseable/general, pisahkan ke folder utils atau folder khusus lainnya.
 
 ## Hal yang TIDAK Boleh Dilakukan
 

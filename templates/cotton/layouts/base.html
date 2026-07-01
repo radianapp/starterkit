@@ -1,6 +1,6 @@
+<!--
 {# US-010: Cotton Layout Component — Base layout untuk semua halaman #}
-{#
-TUJUAN: Layout dasar Django-Cotton yang menggantikan {% extends %} pattern.
+{# TUJUAN: Layout dasar Django-Cotton yang menggantikan { % extends % } pattern.
 Support responsive navbar, sidebar, content, footer dengan Alpine.js state management.
 
 PARAMETER:
@@ -19,7 +19,8 @@ SLOT:
 - default: Main content area
 - footer: Footer content (default: copyright)
 #}
-
+-->
+{% load static %}
 <c-vars title="RDP Starter Kit" navbar_brand="RDP Starter Kit" />
 
 <!DOCTYPE html>
@@ -33,23 +34,16 @@ SLOT:
     <link rel="stylesheet" href="https://cdn.radian.web.id/assets/rdp.css">
 
     {# Base layout CSS — extracted dari inline styles #}
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     {# CSRF token untuk HTMX #}
     <meta name="csrf-token" content="{{ csrf_token }}">
-
-    {# HTMX configuration #}
-    <script>
-        document.addEventListener("htmx:configRequest", (e) => {
-            e.detail.headers["X-CSRFToken"] =
-                document.querySelector("meta[name=csrf-token]").content;
-        });
-    </script>
 
     {# Custom head slot — untuk additional CSS/meta tags #}
     <c-slot name="head"></c-slot>
 </head>
 <body>
+    
     {# Layout wrapper dengan Alpine.js untuk sidebar state management #}
     <div x-data="layoutState()" @keydown.escape="sidebarOpen = false" class="rdp-layout">
 
@@ -150,40 +144,11 @@ SLOT:
     {# RDP-UI JavaScript module #}
     <script type="module" src="https://cdn.radian.web.id/assets/rdp.js" defer></script>
 
-    {# Inline Alpine.js component untuk layout state #}
-    <script>
-        {# CARA KERJA: Alpine.js component untuk manage sidebar open/close state #}
-        {# - sidebarOpen: boolean state untuk sidebar visibility #}
-        {# - Close sidebar ketika user click outside (escape key) #}
-        {# - Sidebar state persist di localStorage untuk UX yang lebih baik #}
-        function layoutState() {
-            return {
-                sidebarOpen: window.innerWidth >= 768,
-                init() {
-                    const saved = localStorage.getItem('sidebarOpen');
-                    if (saved !== null) {
-                        this.sidebarOpen = JSON.parse(saved);
-                    }
-                    {# Close sidebar otomatis saat window resize ke desktop #}
-                    window.addEventListener('resize', () => {
-                        if (window.innerWidth >= 768 && !this.sidebarOpen) {
-                            this.sidebarOpen = true;
-                        } else if (window.innerWidth < 768 && this.sidebarOpen && window.innerWidth < 768) {
-                            {# Don't force close on mobile #}
-                        }
-                    });
-                },
-                watch_sidebarOpen(value) {
-                    localStorage.setItem('sidebarOpen', JSON.stringify(value));
-                },
-                closeSidebar() {
-                    if (window.innerWidth < 768) {
-                        this.sidebarOpen = false;
-                    }
-                }
-            };
-        }
-    </script>
+    {# Base utilities — CSRF token setup untuk HTMX #}
+    <script src="{% static 'js/base.js' %}"></script>
+
+    {# Layout state — Alpine.js sidebar management #}
+    <script src="{% static 'js/layout-state.js' %}"></script>
 
     {# Custom JS slot #}
     <c-slot name="extra_js"></c-slot>

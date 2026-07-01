@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 {# US-015: Error pages kustom (403, 404, 500) #}
 {# 403 Forbidden error page - Permission Denied #}
 
 {% block title %}403 - Permission Denied{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="error-page">
@@ -40,53 +45,4 @@
     </c-rdp.card>
   </div>
 </div>
-
-<style>
-  .error-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 70vh;
-    padding: 20px;
-  }
-
-  .error-container {
-    max-width: 500px;
-    width: 100%;
-  }
-
-  .error-content {
-    text-align: center;
-  }
-
-  .error-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-  }
-
-  .error-title {
-    font-size: 2rem;
-    margin: 20px 0 10px 0;
-    color: var(--color-text, #333);
-  }
-
-  .error-message {
-    font-size: 1.1rem;
-    color: var(--color-text-secondary, #666);
-    margin-bottom: 30px;
-    line-height: 1.6;
-  }
-
-  .error-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .error-actions c-rdp.button {
-    flex: 1;
-    min-width: 150px;
-  }
-</style>
 {% endblock %}
