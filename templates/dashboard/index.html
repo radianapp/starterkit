@@ -1,83 +1,125 @@
 {% load static %}
-<c-layouts.base with title="Dashboard - RDP Starter Kit">
 {# Dashboard index page - US-001: Clone & jalankan project baru; US-010: Layout dasar #}
+<c-layouts.base>
 <c-slot name="head">
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </c-slot>
 
 <div class="dashboard-container">
-    <h1>📊 Dashboard</h1>
-    <p>Welcome to your RDP Starter Kit dashboard!</p>
+    {# ============================================================ #}
+    {# PAGE HEADER #}
+    {# ============================================================ #}
+    <div class="dashboard-header">
+        <h1>📊 Dashboard</h1>
+        <p class="dashboard-subtitle">Selamat datang di RDP Starter Kit</p>
+    </div>
 
     {# ============================================================ #}
-    {# PROJECT STATUS SECTION #}
+    {# OVERVIEW CARDS — Key metrics #}
     {# ============================================================ #}
-    <div class="dashboard-cards-grid">
+    <div class="dashboard-overview">
+        <c-rdp.card>
+            <div class="dashboard-metric">
+                <div class="dashboard-metric-value">2</div>
+                <div class="dashboard-metric-label">Fase Completed</div>
+                <div class="dashboard-metric-trend">↑ On track</div>
+            </div>
+        </c-rdp.card>
+
+        <c-rdp.card>
+            <div class="dashboard-metric">
+                <div class="dashboard-metric-value">14</div>
+                <div class="dashboard-metric-label">User Stories</div>
+                <div class="dashboard-metric-trend">Implemented</div>
+            </div>
+        </c-rdp.card>
+
+        <c-rdp.card>
+            <div class="dashboard-metric">
+                <div class="dashboard-metric-value">100%</div>
+                <div class="dashboard-metric-label">Layout Ready</div>
+                <div class="dashboard-metric-trend">✓ Complete</div>
+            </div>
+        </c-rdp.card>
+
+        <c-rdp.card>
+            <div class="dashboard-metric">
+                <div class="dashboard-metric-value">9</div>
+                <div class="dashboard-metric-label">Components</div>
+                <div class="dashboard-metric-trend">UI Shell</div>
+            </div>
+        </c-rdp.card>
+    </div>
+
+    {# ============================================================ #}
+    {# PROGRESS SECTION #}
+    {# ============================================================ #}
+    <div class="dashboard-grid">
         <c-rdp.card>
             <c-slot name="header">
-                <h3 class="dashboard-card-title">✅ Project Status</h3>
+                <h3>🎯 Fase 2 Complete: UI Shell</h3>
             </c-slot>
-            <ul class="dashboard-card-content">
-                <li>✔️ Django is running</li>
-                <li>✔️ Database connected</li>
-                <li>✔️ RDP-UI CDN loaded</li>
-                <li>✔️ HTMX ready</li>
-                <li>✔️ Alpine.js active</li>
-                <li>✔️ Responsive layout working</li>
+            <p>
+                Layout, components, dan error pages semuanya siap pakai dengan RDP-UI design system.
+            </p>
+            <ul class="dashboard-checklist">
+                <li>✓ US-010: Layout dasar (navbar, sidebar, responsive)</li>
+                <li>✓ US-011: 9 UI components (button, card, form, table, modal, dll)</li>
+                <li>✓ US-015: Error pages (403, 404, 500) dengan styling</li>
             </ul>
         </c-rdp.card>
 
         <c-rdp.card>
             <c-slot name="header">
-                <h3 class="dashboard-card-title">🎯 Fase 2 Complete</h3>
+                <h3>✅ Project Status</h3>
             </c-slot>
-            <p class="dashboard-card-content">
-                <strong>UI Shell</strong> — Layout, components, dan error pages semuanya siap pakai.
-            </p>
-            <ul class="dashboard-card-content">
-                <li>✓ US-010: Layout dasar (navbar, sidebar)</li>
-                <li>✓ US-011: 9 UI components</li>
-                <li>✓ US-015: Error pages (403, 404, 500)</li>
+            <ul class="dashboard-checklist">
+                <li>✔️ Django 5.1+ running</li>
+                <li>✔️ Database connected (SQLite dev, PostgreSQL prod)</li>
+                <li>✔️ RDP-UI CDN loaded</li>
+                <li>✔️ HTMX ready for interactivity</li>
+                <li>✔️ Alpine.js for reactivity</li>
+                <li>✔️ Responsive layout (mobile, tablet, desktop)</li>
             </ul>
         </c-rdp.card>
     </div>
 
     {# ============================================================ #}
-    {# NEXT STEPS SECTION #}
+    {# NEXT STEPS — Call to action #}
     {# ============================================================ #}
     <c-rdp.card>
         <c-slot name="header">
-            <h3 class="dashboard-card-title">📋 Next Steps</h3>
+            <h3>📋 Next Steps</h3>
         </c-slot>
-        <ol class="dashboard-next-steps">
-            <li>
-                <strong>Read Project Conventions</strong>
-                <br />
-                <code>CLAUDE.md</code> — project structure, naming, best practices
-            </li>
-            <li>
-                <strong>Check Implementation Roadmap</strong>
-                <br />
-                <code>docs/IMPLEMENTATION-PLAN.md</code> — 5 phases, 23 stories, Definition of Done
-            </li>
-            <li>
-                <strong>Explore UI Components</strong>
-                <br />
-                <code>docs/modules/ui-components.md</code> — component reference dengan examples
-            </li>
-            <li>
-                <strong>Run Tests & Quality Checks</strong>
-                <br />
-                <code>uv run pytest</code> — verify semua test passing (target: > 80% coverage)
-            </li>
-        </ol>
+        <div class="dashboard-steps">
+            <div class="dashboard-step">
+                <strong>1. Read Project Conventions</strong>
+                <p><code>CLAUDE.md</code> — aturan project, struktur folder, naming conventions, best practices</p>
+            </div>
+            <div class="dashboard-step">
+                <strong>2. Check Implementation Roadmap</strong>
+                <p><code>docs/IMPLEMENTATION-PLAN.md</code> — 5 phases, 23 user stories, Definition of Done per fase</p>
+            </div>
+            <div class="dashboard-step">
+                <strong>3. Explore UI Components</strong>
+                <p><code>docs/modules/ui-components.md</code> — reference semua Cotton components dengan examples</p>
+            </div>
+            <div class="dashboard-step">
+                <strong>4. Read Frontend SOP</strong>
+                <p><code>docs/SOP-FRONTEND-STRUCTURE.md</code> — CSS/JS extraction, naming, mobile-first workflow</p>
+            </div>
+            <div class="dashboard-step">
+                <strong>5. Run Tests & Quality Checks</strong>
+                <p><code>uv run pytest</code> — verify semua test passing (target coverage: > 80%)</p>
+            </div>
+        </div>
         <c-slot name="footer">
-            <div class="dashboard-footer-buttons">
+            <div class="dashboard-actions">
                 <c-rdp.button variant="primary" onclick="window.location.href='/admin/'">
-                    Go to Admin Panel
+                    📱 Go to Admin Panel
                 </c-rdp.button>
-                <c-rdp.button variant="secondary" onclick="window.open('https://github.com')">
-                    View on GitHub
+                <c-rdp.button variant="secondary" onclick="window.location.href='https://github.com'">
+                    🔗 View on GitHub
                 </c-rdp.button>
             </div>
         </c-slot>
@@ -87,40 +129,72 @@
     {# TECH STACK SHOWCASE #}
     {# ============================================================ #}
     <div class="dashboard-techstack-section">
-        <h2>Tech Stack</h2>
+        <h2>⚙️ Tech Stack</h2>
         <c-rdp.card>
             <div class="dashboard-techstack-grid">
                 <div class="dashboard-techstack-column">
-                    <strong>Backend</strong>
+                    <strong>🖥️ Backend</strong>
                     <ul>
                         <li>Django 5.1+</li>
-                        <li>PostgreSQL (prod) / SQLite (dev)</li>
+                        <li>PostgreSQL (prod)</li>
+                        <li>SQLite (dev/test)</li>
                         <li>Redis cache</li>
                         <li>Celery tasks</li>
                     </ul>
                 </div>
                 <div class="dashboard-techstack-column">
-                    <strong>Frontend</strong>
+                    <strong>🎨 Frontend</strong>
                     <ul>
                         <li>Django-Cotton components</li>
                         <li>RDP-UI design system</li>
+                        <li>PicoCSS framework</li>
                         <li>HTMX interactivity</li>
                         <li>Alpine.js reactivity</li>
                     </ul>
                 </div>
                 <div class="dashboard-techstack-column">
-                    <strong>DevOps</strong>
+                    <strong>🚀 DevOps & Tools</strong>
                     <ul>
                         <li>uv package manager</li>
-                        <li>Pytest + coverage</li>
-                        <li>Ruff linting</li>
+                        <li>Pytest + pytest-cov</li>
+                        <li>Ruff linting/format</li>
                         <li>GitHub Actions CI/CD</li>
+                        <li>WhiteNoise static files</li>
                     </ul>
                 </div>
             </div>
         </c-rdp.card>
     </div>
 
+    {# ============================================================ #}
+    {# DOCUMENTATION LINKS #}
+    {# ============================================================ #}
+    <div class="dashboard-docs-section">
+        <h2>📚 Documentation</h2>
+        <div class="dashboard-docs-grid">
+            <c-rdp.card>
+                <strong>Architecture & Decisions</strong>
+                <ul style="margin-top: 12px; padding-left: 20px;">
+                    <li><a href="/docs/architecture/">Database ERD</a></li>
+                    <li><a href="/docs/decisions/">Architecture Decision Records</a></li>
+                </ul>
+            </c-rdp.card>
+            <c-rdp.card>
+                <strong>PRD & User Stories</strong>
+                <ul style="margin-top: 12px; padding-left: 20px;">
+                    <li><a href="/docs/prd/user-stories/">All User Stories (23 total)</a></li>
+                    <li><a href="/docs/IMPLEMENTATION-PLAN.md">Implementation Plan</a></li>
+                </ul>
+            </c-rdp.card>
+            <c-rdp.card>
+                <strong>Development Guides</strong>
+                <ul style="margin-top: 12px; padding-left: 20px;">
+                    <li><a href="/docs/SOP-FRONTEND-STRUCTURE.md">Frontend SOP</a></li>
+                    <li><a href="/docs/FRONTEND-CHECKLIST.md">Pre-commit Checklist</a></li>
+                </ul>
+            </c-rdp.card>
+        </div>
+    </div>
 </div>
 
 </c-layouts.base>
