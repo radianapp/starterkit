@@ -1,10 +1,15 @@
+{% extends "xbase.html" %}
 {% load static %}
+{% load cotton %}
 {# Dashboard index page - US-001: Clone & jalankan project baru; US-010: Layout dasar #}
-<c-layouts.base>
-<c-slot name="head">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-</c-slot>
 
+{% block title %}Dashboard - RDP Starter Kit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
 <div class="dashboard-container">
     {# ============================================================ #}
     {# PAGE HEADER #}
@@ -196,5 +201,4 @@
         </div>
     </div>
 </div>
-
-</c-layouts.base>
+{% endblock %}
