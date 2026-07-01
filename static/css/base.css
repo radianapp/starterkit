@@ -1,10 +1,12 @@
-/* US-010: Layout dasar CSS — extracted dari base.html inline styles */
-/* Responsive 3-column layout: navbar (top) + sidebar (left) + content (flex) + footer (bottom) */
+/* US-010: Layout dasar CSS — RDP-UI dashboard pattern */
+/* Responsive 3-section layout: topbar (top) + [sidebar (left) + content (right)] + footer (bottom) */
 
 :root {
-  --navbar-height: 60px;
-  --sidebar-width: 240px;
+  --topbar-height: 60px;
+  --sidebar-width: 280px;
   --transition-duration: 0.3s;
+  --color-sidebar-bg: #f8f9fa;
+  --color-sidebar-border: #e0e0e0;
 }
 
 * {
@@ -22,15 +24,16 @@ body {
   flex-direction: column;
   background: var(--color-bg, #ffffff);
   color: var(--color-text, #333333);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
 
 /* ============================================================ */
-/* NAVBAR — sticky top */
+/* TOPBAR / NAVBAR — sticky top #}
 /* ============================================================ */
 .rdp-topnav {
   position: sticky;
   top: 0;
-  height: var(--navbar-height);
+  height: var(--topbar-height);
   background: linear-gradient(135deg, #0066cc 0%, #004a99 100%);
   border-bottom: 1px solid rgba(0,0,0,0.1);
   display: flex;
@@ -39,6 +42,7 @@ body {
   padding: 0 20px;
   z-index: 100;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-shrink: 0;
 }
 
 .rdp-topnav__brand {
@@ -52,17 +56,18 @@ body {
 
 .rdp-topnav__toggle {
   display: none;
-  background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.3);
+  background: transparent;
+  border: none;
   cursor: pointer;
-  padding: 6px 8px;
+  padding: 8px 8px;
   color: #ffffff;
+  font-size: 1.5rem;
   border-radius: 4px;
   transition: background 0.2s;
 }
 
 .rdp-topnav__toggle:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
 }
 
 .rdp-topnav__links {
@@ -82,34 +87,63 @@ body {
 }
 
 /* ============================================================ */
-/* LAYOUT WRAPPER — sidebar + content */
+/* MAIN LAYOUT — sidebar + content wrapper */
 /* ============================================================ */
 .rdp-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
 }
 
 .rdp-layout__wrapper {
   display: flex;
   flex: 1;
-  overflow: hidden;
+  width: 100%;
+  overflow: visible;
+  position: relative;
 }
 
 /* ============================================================ */
-/* SIDEBAR */
+/* SIDEBAR — fixed width, scrollable */
 /* ============================================================ */
 .rdp-sidebar {
   width: var(--sidebar-width);
-  background: #f8f9fa;
-  border-right: 1px solid #e0e0e0;
+  background: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-sidebar-border);
   overflow-y: auto;
   flex-shrink: 0;
   transition: transform var(--transition-duration) ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.rdp-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--color-sidebar-border);
+  flex-shrink: 0;
+}
+
+.rdp-sidebar__brand-text {
+  font-weight: 700;
 }
 
 .rdp-sidebar__nav {
+  flex: 1;
   padding: 16px 0;
+  overflow-y: auto;
+}
+
+.rdp-sidebar__section {
+  margin-bottom: 20px;
 }
 
 .rdp-sidebar__section-title {
@@ -119,15 +153,19 @@ body {
   text-transform: uppercase;
   color: #999999;
   margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 .rdp-sidebar__link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 10px 16px;
   color: #333333;
   text-decoration: none;
   transition: all 0.2s;
   border-left: 3px solid transparent;
+  position: relative;
 }
 
 .rdp-sidebar__link:hover {
@@ -136,20 +174,159 @@ body {
   color: #0066cc;
 }
 
+.rdp-sidebar__link.active {
+  background: #ffffff;
+  border-left-color: #0066cc;
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.rdp-sidebar__link-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.rdp-sidebar__link-text {
+  flex: 1;
+}
+
+.rdp-sidebar__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #0066cc;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.rdp-sidebar__footer {
+  padding: 16px 0;
+  border-top: 1px solid var(--color-sidebar-border);
+  flex-shrink: 0;
+}
+
+.rdp-sidebar__footer .rdp-sidebar__link {
+  padding: 10px 16px;
+  margin: 0;
+  border-left: none;
+}
+
 /* ============================================================ */
-/* CONTENT AREA */
+/* CONTENT AREA — flex-grow */
 /* ============================================================ */
 .rdp-layout__content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
   background: #ffffff;
   color: #333333;
 }
 
 /* ============================================================ */
+/* DASHBOARD TOPBAR (inside content) */
+/* ============================================================ */
+.rdp-dashboard-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.rdp-dashboard-topbar__toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0;
+  color: #333;
+}
+
+.rdp-dashboard-topbar__title {
+  flex: 1;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.rdp-dashboard-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rdp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: #333;
+}
+
+.rdp-btn:hover {
+  background: #f0f0f0;
+  border-color: #ccc;
+}
+
+.rdp-btn--ghost {
+  border: none;
+  background: transparent;
+  padding: 8px;
+}
+
+.rdp-btn--ghost:hover {
+  background: #f0f0f0;
+}
+
+.rdp-btn--sm {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+/* ============================================================ */
 /* FOOTER */
 /* ============================================================ */
+.rdp-dashboard-footer {
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #999;
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.rdp-dashboard-footer a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.rdp-dashboard-footer a:hover {
+  text-decoration: underline;
+}
+
 .rdp-footer {
   background: linear-gradient(135deg, #0066cc 0%, #004a99 100%);
   border-top: 1px solid rgba(0,0,0,0.1);
@@ -165,9 +342,46 @@ body {
 }
 
 /* ============================================================ */
-/* MOBILE RESPONSIVE — <768px */
+/* BREADCRUMB */
+/* ============================================================ */
+.rdp-breadcrumb {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 12px 20px;
+  gap: 8px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.rdp-breadcrumb li {
+  display: flex;
+  align-items: center;
+}
+
+.rdp-breadcrumb li:not(:last-child)::after {
+  content: '/';
+  margin-left: 8px;
+  color: #ccc;
+}
+
+.rdp-breadcrumb a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.rdp-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================ */
+/* RESPONSIVE — Mobile (<768px) */
 /* ============================================================ */
 @media (max-width: 767px) {
+  :root {
+    --sidebar-width: 240px;
+  }
+
   .rdp-topnav__toggle {
     display: block;
   }
@@ -176,61 +390,81 @@ body {
     display: none;
   }
 
-  .rdp-layout__wrapper {
-    position: relative;
-  }
-
   .rdp-sidebar {
     position: fixed;
     left: 0;
-    top: var(--navbar-height);
+    top: var(--topbar-height);
+    height: calc(100vh - var(--topbar-height));
     width: var(--sidebar-width);
-    height: calc(100vh - var(--navbar-height));
-    background: #f8f9fa;
-    border-right: 1px solid #e0e0e0;
     transform: translateX(-100%);
     box-shadow: 2px 0 8px rgba(0,0,0,0.15);
     z-index: 999;
-    overflow-y: auto;
-    transition: transform var(--transition-duration) ease;
+    border-right: 1px solid var(--color-sidebar-border);
   }
 
   .rdp-sidebar--open {
     transform: translateX(0);
   }
 
-  /* Overlay backdrop — click to close sidebar */
-  .rdp-sidebar--open::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 998;
-    cursor: pointer;
+  .rdp-dashboard-topbar__toggle {
+    display: block;
+  }
+
+  .rdp-dashboard-topbar__title {
+    font-size: 1rem;
   }
 
   .rdp-layout__content {
-    padding: 16px;
-    background: #ffffff;
+    padding: 0;
   }
 }
 
 /* ============================================================ */
-/* DARK MODE — automatic via RDP-UI variables */
+/* RESPONSIVE — Small mobile (<480px) */
+/* ============================================================ */
+@media (max-width: 479px) {
+  :root {
+    --sidebar-width: 200px;
+  }
+
+  .rdp-sidebar__brand-text {
+    display: none;
+  }
+
+  .rdp-sidebar__link-text {
+    display: none;
+  }
+
+  .rdp-sidebar {
+    width: 60px;
+  }
+
+  .rdp-sidebar--open {
+    width: var(--sidebar-width);
+  }
+
+  .rdp-sidebar--open .rdp-sidebar__link-text {
+    display: inline;
+  }
+}
+
+/* ============================================================ */
+/* DARK MODE */
 /* ============================================================ */
 @media (prefers-color-scheme: dark) {
-  body,
-  .rdp-layout {
+  :root {
+    --color-sidebar-bg: #2a2a2a;
+    --color-sidebar-border: #444;
+  }
+
+  body {
     background: #1a1a1a;
     color: #f0f0f0;
   }
 
   .rdp-sidebar {
-    background: #2a2a2a;
-    border-right-color: #444;
+    background: var(--color-sidebar-bg);
+    border-right-color: var(--color-sidebar-border);
   }
 
   .rdp-sidebar__link {
@@ -241,8 +475,8 @@ body {
     background: #333333;
   }
 
-  .rdp-sidebar__section-title {
-    color: #888888;
+  .rdp-sidebar__link-icon {
+    color: #f0f0f0;
   }
 
   .rdp-layout__content {
