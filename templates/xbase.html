@@ -22,59 +22,22 @@ STRUKTUR:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}RDP Starter Kit{% endblock %}</title>
 
-    {# ⚙️ KONFIGURASI: RDP-UI Design System CDN #}
-    {# Load CSS sebelum JS agar styling langsung apply #}
+    
+    
     <link rel="stylesheet" href="https://cdn.radian.web.id/assets/rdp.css">
 
-    {# Base layout CSS — responsive 3-column layout (extracted to static/css/base.css) #}
+    
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
     {% block extra_css %}{% endblock %}
 
-    {# Inline script untuk layoutState sebelum Alpine.js load #}
-    <script>
-        {# Define layoutState BEFORE Alpine.js defer loads #}
-        function layoutState() {
-            return {
-                sidebarOpen: window.innerWidth >= 768,
-                init() {
-                    const saved = localStorage.getItem('sidebarOpen');
-                    if (saved !== null) {
-                        this.sidebarOpen = JSON.parse(saved);
-                    }
-                    {# Close sidebar otomatis saat window resize ke desktop #}
-                    window.addEventListener('resize', () => {
-                        if (window.innerWidth >= 768 && !this.sidebarOpen) {
-                            this.sidebarOpen = true;
-                        } else if (window.innerWidth < 768 && this.sidebarOpen && window.innerWidth < 768) {
-                            {# Don't force close on mobile #}
-                        }
-                    });
-                },
-                watch_sidebarOpen(value) {
-                    localStorage.setItem('sidebarOpen', JSON.stringify(value));
-                },
-                closeSidebar() {
-                    if (window.innerWidth < 768) {
-                        this.sidebarOpen = false;
-                    }
-                }
-            };
-        }
-    </script>
 </head>
 <body>
-    {# Layout wrapper dengan Alpine.js untuk sidebar state management #}
     <div x-data="layoutState()" @keydown.escape="sidebarOpen = false" class="rdp-layout">
-
-        {# ============================================================ #}
-        {# NAVBAR — Top navigation bar #}
-        {# ============================================================ #}
         {% block navbar_block %}
             <nav class="rdp-topnav">
                 <div class="rdp-topnav__brand">
                     <button @click="sidebarOpen = !sidebarOpen" class="rdp-topnav__toggle">
-                        {# Hamburger menu — visible hanya di mobile #}
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -93,12 +56,7 @@ STRUKTUR:
             </nav>
         {% endblock %}
 
-        {# ============================================================ #}
-        {# SIDEBAR + CONTENT WRAPPER — 2-column layout #}
-        {# ============================================================ #}
         <div class="rdp-layout__wrapper" @click="if (window.innerWidth < 768 && sidebarOpen && event.target.closest('.rdp-sidebar') === null) closeSidebar()">
-
-            {# Sidebar — collapsible di mobile via Alpine.js #}
             {% block sidebar_block %}
                 <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" @click.stop>
                     <div class="rdp-sidebar__nav">
@@ -122,7 +80,6 @@ STRUKTUR:
                 </aside>
             {% endblock %}
 
-            {# Main content area — flex grow untuk responsive layout #}
             {% block content_wrapper_block %}
                 <main class="rdp-layout__content">
                     {% block content %}
@@ -137,9 +94,9 @@ STRUKTUR:
             {% endblock %}
         </div>
 
-        {# ============================================================ #}
-        {# FOOTER #}
-        {# ============================================================ #}
+        
+        
+        
         {% block footer_block %}
             <footer class="rdp-footer">
                 <p>© 2026 Radian Data Platform. All rights reserved.</p>
@@ -147,17 +104,21 @@ STRUKTUR:
         {% endblock %}
     </div>
 
-    {# ============================================================ #}
-    {# JAVASCRIPT — Load order penting: Alpine.js sebelum script kami #}
-    {# ============================================================ #}
-    {# HTMX untuk interactivity — load dari CDN #}
+    
+    
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
-    {# Alpine.js untuk reactive components (sidebar toggle, dll) #}
+    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    {# RDP-UI JavaScript module #}
+    
     <script type="module" src="https://cdn.radian.web.id/assets/rdp.js" defer></script>
+
+    
+    <script src="{% static 'js/base.js' %}"></script>
+
+    
+    <script src="{% static 'js/layout-state.js' %}"></script>
 
     {% block extra_js %}{% endblock %}
 </body>

@@ -1,5 +1,5 @@
 <!--
-{# US-010: Cotton Layout Component — Base layout untuk semua halaman #}
+
 {# TUJUAN: Layout dasar Django-Cotton yang menggantikan { % extends % } pattern.
 Support responsive navbar, sidebar, content, footer dengan Alpine.js state management.
 
@@ -30,30 +30,23 @@ SLOT:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if title != "RDP Starter Kit" %}{{ title }} — {% endif %}{{ navbar_brand }}</title>
 
-    {# RDP-UI Design System CDN #}
+    
     <link rel="stylesheet" href="https://cdn.radian.web.id/assets/rdp.css">
 
-    {# Base layout CSS — extracted dari inline styles #}
+    
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 
-    {# CSRF token untuk HTMX #}
+    
     <meta name="csrf-token" content="{{ csrf_token }}">
 
-    {# Custom head slot — untuk additional CSS/meta tags #}
+    
     <c-slot name="head"></c-slot>
 </head>
 <body>
-    
-    {# Layout wrapper dengan Alpine.js untuk sidebar state management #}
     <div x-data="layoutState()" @keydown.escape="sidebarOpen = false" class="rdp-layout">
-
-        {# ============================================================ #}
-        {# NAVBAR #}
-        {# ============================================================ #}
         <nav class="rdp-topnav">
             <div class="rdp-topnav__brand">
                 <button @click="sidebarOpen = !sidebarOpen" class="rdp-topnav__toggle" title="Toggle sidebar">
-                    {# Hamburger icon #}
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -65,7 +58,7 @@ SLOT:
 
             <div class="rdp-topnav__links">
                 <c-slot name="navbar">
-                    {# Default navbar links #}
+                    
                     <a href="{% url 'dashboard:index' %}">Dashboard</a>
                     {% if user.is_authenticated %}
                         <a href="{% url 'admin:index' %}">Admin</a>
@@ -74,16 +67,16 @@ SLOT:
             </div>
         </nav>
 
-        {# ============================================================ #}
-        {# SIDEBAR + CONTENT WRAPPER #}
-        {# ============================================================ #}
+        
+        
+        
         <div class="rdp-layout__wrapper" @click="if (window.innerWidth < 768 && sidebarOpen && event.target.closest('.rdp-sidebar') === null) closeSidebar()">
 
-            {# Sidebar #}
+            
             <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" @click.stop>
                 <div class="rdp-sidebar__nav">
                     <c-slot name="sidebar">
-                        {# Default sidebar navigation #}
+                        
                         <div class="rdp-sidebar__section-title">Navigation</div>
                         <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
                             📊 Dashboard
@@ -104,14 +97,14 @@ SLOT:
                 </div>
             </aside>
 
-            {# Main content area #}
+            
             <main class="rdp-layout__content">
-                {# Optional topbar — sebelum main content #}
+                
                 <c-slot name="topbar"></c-slot>
 
-                {# Main content #}
+                
                 <c-slot name="default">
-                    {# Default welcome card #}
+                    
                     <div class="rdp-card">
                         <div class="rdp-card__body">
                             <h1>Welcome to RDP Starter Kit</h1>
@@ -122,9 +115,9 @@ SLOT:
             </main>
         </div>
 
-        {# ============================================================ #}
-        {# FOOTER #}
-        {# ============================================================ #}
+        
+        
+        
         <footer class="rdp-footer">
             <c-slot name="footer">
                 <p>© 2026 Radian Data Platform. All rights reserved.</p>
@@ -132,25 +125,25 @@ SLOT:
         </footer>
     </div>
 
-    {# ============================================================ #}
-    {# JAVASCRIPT #}
-    {# ============================================================ #}
-    {# HTMX untuk interactivity #}
+    
+    
+    
+    
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
-    {# Alpine.js untuk reactive components #}
+    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    {# RDP-UI JavaScript module #}
+    
     <script type="module" src="https://cdn.radian.web.id/assets/rdp.js" defer></script>
 
-    {# Base utilities — CSRF token setup untuk HTMX #}
+    
     <script src="{% static 'js/base.js' %}"></script>
 
-    {# Layout state — Alpine.js sidebar management #}
+    
     <script src="{% static 'js/layout-state.js' %}"></script>
 
-    {# Custom JS slot #}
+    
     <c-slot name="extra_js"></c-slot>
 </body>
 </html>

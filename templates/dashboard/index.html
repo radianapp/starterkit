@@ -1,7 +1,7 @@
 {% extends "xbase.html" %}
 {% load static %}
 {% load cotton %}
-{# Dashboard index page - US-001: Clone & jalankan project baru; US-010: Layout dasar #}
+
 
 {% block title %}Dashboard - RDP Starter Kit{% endblock %}
 
@@ -11,17 +11,17 @@
 
 {% block content %}
 <div class="dashboard-container">
-    {# ============================================================ #}
-    {# PAGE HEADER #}
-    {# ============================================================ #}
+    
+    
+    
     <div class="dashboard-header">
         <h1>📊 Dashboard</h1>
         <p class="dashboard-subtitle">Selamat datang di RDP Starter Kit</p>
     </div>
 
-    {# ============================================================ #}
-    {# OVERVIEW CARDS — Key metrics #}
-    {# ============================================================ #}
+    
+    
+    
     <div class="dashboard-overview">
         <c-rdp.card>
             <div class="dashboard-metric">
@@ -56,9 +56,9 @@
         </c-rdp.card>
     </div>
 
-    {# ============================================================ #}
-    {# PROGRESS SECTION #}
-    {# ============================================================ #}
+    
+    
+    
     <div class="dashboard-grid">
         <c-rdp.card>
             <c-slot name="header">
@@ -89,9 +89,9 @@
         </c-rdp.card>
     </div>
 
-    {# ============================================================ #}
-    {# NEXT STEPS — Call to action #}
-    {# ============================================================ #}
+    
+    
+    
     <c-rdp.card>
         <c-slot name="header">
             <h3>📋 Next Steps</h3>
@@ -130,9 +130,9 @@
         </c-slot>
     </c-rdp.card>
 
-    {# ============================================================ #}
-    {# TECH STACK SHOWCASE #}
-    {# ============================================================ #}
+    
+    
+    
     <div class="dashboard-techstack-section">
         <h2>⚙️ Tech Stack</h2>
         <c-rdp.card>
@@ -171,9 +171,9 @@
         </c-rdp.card>
     </div>
 
-    {# ============================================================ #}
-    {# DOCUMENTATION LINKS #}
-    {# ============================================================ #}
+    
+    
+    
     <div class="dashboard-docs-section">
         <h2>📚 Documentation</h2>
         <div class="dashboard-docs-grid">
