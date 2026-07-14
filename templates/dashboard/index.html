@@ -1,209 +1,239 @@
-{% extends "xbase.html" %}
+{# US-010, US-001: Dashboard page — menggunakan <c-layout.base> Cotton component #}
 {% load static %}
 {% load cotton %}
 
-{% block title %}Dashboard - RDP Starter Kit{% endblock %}
+<c-layout.app title="Dashboard" navbar_brand="Dashboard">
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-{% endblock %}
+    {# Extra CSS untuk halaman dashboard #}
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    </c-slot>
 
-{% block navbar_block %}
-<div class="rdp-dashboard-topbar">
-    <button class="rdp-dashboard-topbar__toggle" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle sidebar">☰</button>
-    <h1 class="rdp-dashboard-topbar__title">Dashboard</h1>
-    <div class="rdp-dashboard-topbar__actions">
-        <button class="rdp-btn rdp-btn--sm rdp-btn--ghost" title="Toggle dark mode">🌙</button>
-        <button class="rdp-btn rdp-btn--sm rdp-btn--ghost">🔔</button>
-        <div class="rdp-avatar rdp-avatar--sm">
+    {# Kanan navbar: dark mode toggle, notifikasi, avatar user #}
+    <c-slot name="navbar_actions">
+        <button
+            class="rdp-btn rdp-btn--sm rdp-btn--ghost rdp-topnav__action-btn"
+            @click="toggleDarkMode()"
+            :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+            aria-label="Toggle dark mode">
+            <span x-text="darkMode ? '☀️' : '🌙'">🌙</span>
+        </button>
+        <button
+            class="rdp-btn rdp-btn--sm rdp-btn--ghost rdp-topnav__action-btn"
+            title="Notifikasi"
+            aria-label="Notifikasi">
+            🔔
+        </button>
+        <div class="rdp-avatar rdp-avatar--sm" title="{{ user.get_full_name|default:user.username|default:'User' }}">
             <span class="rdp-avatar__initials">RD</span>
         </div>
-    </div>
-</div>
-{% endblock %}
+    </c-slot>
 
-{% block sidebar_block %}
-<aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" @click.stop>
-    <a href="/" class="rdp-sidebar__brand">
-        <span style="font-size: 1.5rem;">⬡</span>
-        <span class="rdp-sidebar__brand-text">RDP Kit</span>
-    </a>
-
-    <nav class="rdp-sidebar__nav">
-        <div class="rdp-sidebar__section">
-            <div class="rdp-sidebar__section-title">Menu Utama</div>
-            <a href="/" class="rdp-sidebar__link active" aria-current="page">
-                <span class="rdp-sidebar__link-icon">📊</span>
-                <span class="rdp-sidebar__link-text">Dashboard</span>
-            </a>
-            <a href="#" class="rdp-sidebar__link">
-                <span class="rdp-sidebar__link-icon">📁</span>
-                <span class="rdp-sidebar__link-text">Proyek</span>
-                <span class="rdp-sidebar__badge">2</span>
-            </a>
-            <a href="#" class="rdp-sidebar__link">
-                <span class="rdp-sidebar__link-icon">📈</span>
-                <span class="rdp-sidebar__link-text">Analisis</span>
-            </a>
-        </div>
-
-        <div class="rdp-sidebar__section">
-            <div class="rdp-sidebar__section-title">Development</div>
-            <a href="#" class="rdp-sidebar__link">
-                <span class="rdp-sidebar__link-icon">💻</span>
-                <span class="rdp-sidebar__link-text">API</span>
-            </a>
-            <a href="#" class="rdp-sidebar__link">
-                <span class="rdp-sidebar__link-icon">🧪</span>
-                <span class="rdp-sidebar__link-text">Testing</span>
-            </a>
-        </div>
-
-        <div class="rdp-sidebar__section">
-            <div class="rdp-sidebar__section-title">Pengaturan</div>
-            <a href="#" class="rdp-sidebar__link">
-                <span class="rdp-sidebar__link-icon">👥</span>
-                <span class="rdp-sidebar__link-text">Tim</span>
-            </a>
-            <a href="#" class="rdp-sidebar__link">
-                <span class="rdp-sidebar__link-icon">⚙️</span>
-                <span class="rdp-sidebar__link-text">Pengaturan</span>
-            </a>
-        </div>
-    </nav>
-
-    <div class="rdp-sidebar__footer">
-        <a href="#" class="rdp-sidebar__link">
-            <div class="rdp-avatar rdp-avatar--sm" style="background: var(--color-primary-light, #e8f4ff);">
-                <span class="rdp-avatar__initials">RD</span>
-            </div>
-            <span class="rdp-sidebar__link-text">Rahadi</span>
+    {# Sidebar: brand + navigasi + footer user #}
+    <c-slot name="sidebar">
+        <a href="/" class="rdp-sidebar__brand">
+            <span class="rdp-sidebar__brand-icon">⬡</span>
+            <span class="rdp-sidebar__brand-text">{{ APP_BRAND_SHORT }}</span>
         </a>
-    </div>
-</aside>
-{% endblock %}
 
-{% block content_wrapper_block %}
-<main class="rdp-layout__content">
+        <nav class="rdp-sidebar__nav" aria-label="Main navigation">
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Menu Utama</div>
+                <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link active" aria-current="page">
+                    <span class="rdp-sidebar__link-icon">📊</span>
+                    <span class="rdp-sidebar__link-text">Dashboard</span>
+                </a>
+                <a href="#" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">📁</span>
+                    <span class="rdp-sidebar__link-text">Proyek</span>
+                    <span class="rdp-sidebar__badge">2</span>
+                </a>
+                <a href="#" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">📈</span>
+                    <span class="rdp-sidebar__link-text">Analisis</span>
+                </a>
+            </div>
+
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Development</div>
+                <a href="#" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">💻</span>
+                    <span class="rdp-sidebar__link-text">API</span>
+                </a>
+                <a href="#" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">🧪</span>
+                    <span class="rdp-sidebar__link-text">Testing</span>
+                </a>
+            </div>
+
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Pengaturan</div>
+                <a href="#" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">👥</span>
+                    <span class="rdp-sidebar__link-text">Tim</span>
+                </a>
+                <a href="#" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">⚙️</span>
+                    <span class="rdp-sidebar__link-text">Pengaturan</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="rdp-sidebar__footer" x-data="{ open: false }" @click.away="open = false">
+            {# Tombol trigger popup user menu #}
+            <button
+                type="button"
+                class="rdp-sidebar__link rdp-sidebar__user-btn"
+                @click="open = !open"
+                :aria-expanded="open"
+                aria-haspopup="true"
+            >
+                <div class="rdp-avatar rdp-avatar--sm rdp-sidebar__footer-avatar">
+                    <span class="rdp-avatar__initials">{{ user.get_full_name|default:user.email|slice:":2"|upper }}</span>
+                </div>
+                <span class="rdp-sidebar__link-text">{{ user.get_full_name|default:user.email }}</span>
+                <span class="rdp-sidebar__user-chevron" :class="{ 'is-open': open }">▲</span>
+            </button>
+
+            {# Popup menu — muncul di atas tombol #}
+            <div
+                x-show="open"
+                x-transition:enter="rdp-user-menu--enter"
+                x-transition:enter-start="rdp-user-menu--enter-start"
+                x-transition:enter-end="rdp-user-menu--enter-end"
+                class="rdp-user-menu"
+                role="menu"
+            >
+                <a href="{% url 'accounts:profile' %}" class="rdp-user-menu__item" role="menuitem">
+                    <span class="rdp-user-menu__icon">👤</span> Profil
+                </a>
+                <a href="#" class="rdp-user-menu__item" role="menuitem">
+                    <span class="rdp-user-menu__icon">⚙️</span> Pengaturan
+                </a>
+                <div class="rdp-user-menu__divider" role="separator"></div>
+                <form method="post" action="{% url 'accounts:logout' %}" style="margin:0">
+                    {% csrf_token %}
+                    <button type="submit" class="rdp-user-menu__item rdp-user-menu__item--danger" role="menuitem">
+                        <span class="rdp-user-menu__icon">🚪</span> Keluar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </c-slot>
+
+    {# ========== Main content (default slot) ========== #}
+
     <nav aria-label="Breadcrumb" class="rdp-dashboard-breadcrumb">
         <ul class="rdp-breadcrumb">
             <li><a href="/">Home</a></li>
-            <li><a href="/">Dashboard</a></li>
+            <li><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
             <li>Overview</li>
         </ul>
     </nav>
 
     <div class="rdp-dashboard-content">
         <div class="rdp-page-header">
-            <h2 class="rdp-page-header__title">Selamat Datang di RDP Starter Kit</h2>
+            <h2 class="rdp-page-header__title">Selamat Datang di {{ SITE_NAME }}</h2>
             <div class="rdp-page-header__actions">
                 <c-rdp.button variant="secondary" onclick="window.location.href='/docs/'">Baca Docs</c-rdp.button>
                 <c-rdp.button variant="primary" onclick="window.location.href='/admin/'">Admin Panel</c-rdp.button>
             </div>
         </div>
 
-        <div class="rdp-dashboard-stats">
-            <article class="rdp-card rdp-card--stats">
-                <div class="rdp-card__value" style="color: #0066cc;">2</div>
-                <div class="rdp-card__label">Fase Completed</div>
-                <div class="rdp-card__change rdp-card__change--up">↑ On track</div>
-            </article>
-            <article class="rdp-card rdp-card--stats">
-                <div class="rdp-card__value" style="color: #00b365;">14</div>
-                <div class="rdp-card__label">User Stories</div>
-                <div class="rdp-card__change rdp-card__change--up">↑ Implemented</div>
-            </article>
-            <article class="rdp-card rdp-card--stats">
-                <div class="rdp-card__value" style="color: #ff9800;">9</div>
-                <div class="rdp-card__label">UI Components</div>
-                <div class="rdp-card__change rdp-card__change--up">↑ Complete</div>
-            </article>
-            <article class="rdp-card rdp-card--stats">
-                <div class="rdp-card__value" style="color: #2196f3;">100%</div>
-                <div class="rdp-card__label">Layout Ready</div>
-                <div class="rdp-card__change rdp-card__change--up">✓ Done</div>
-            </article>
+        <div class="rdp-dashboard-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 24px;">
+            <c-rdp.stat_card label="Total Pengguna" value="{{ total_users }}" trend="+100%" trend_up="true" />
+            <c-rdp.stat_card label="Total Aktivitas" value="{{ total_activities }}" trend="+25%" trend_up="true" />
+            <c-rdp.stat_card label="Total Pendapatan" value="Rp {{ total_revenue|floatformat:0 }}" trend="+15%" trend_up="true" />
+            <c-rdp.stat_card label="Aktivitas Tertunda" value="{{ pending_activities }}" trend="-" trend_up="false" />
         </div>
 
-        <div class="rdp-alert rdp-alert--info rdp-alert--dismissible" role="alert">
+        <div class="rdp-alert rdp-alert--info" role="alert" x-data="{ show: true }" x-show="show">
             <div class="rdp-alert__content">
                 <strong>Tip:</strong> Baca <code>CLAUDE.md</code> untuk conventions dan <code>docs/SOP-FRONTEND-STRUCTURE.md</code> untuk frontend workflow.
             </div>
-            <button class="rdp-alert__close" aria-label="Tutup">&times;</button>
+            <button class="rdp-alert__close" @click="show = false" aria-label="Tutup">&times;</button>
         </div>
 
-        <div class="rdp-dashboard-grid">
+        <div class="rdp-dashboard-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+            <!-- Aktivitas Terbaru dengan HTMX Pagination -->
             <c-rdp.card>
                 <c-slot name="header">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3 style="margin: 0;">Aktivitas Terbaru</h3>
-                        <a href="#" style="font-size: 0.85rem; text-decoration: none;">Lihat semua</a>
+                    <div class="rdp-dashboard-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="rdp-dashboard-header__title" style="margin: 0;">Aktivitas Terbaru</h3>
+                        <span style="font-size: 0.85rem; color: var(--pico-muted-color);">Terupdate otomatis</span>
                     </div>
                 </c-slot>
-                <div class="rdp-dashboard-activity">
-                    <div class="rdp-activity-item">
-                        <div class="rdp-avatar rdp-avatar--sm" style="background: #e8f4ff;">
-                            <span class="rdp-avatar__initials">US</span>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 500;">US-010: Layout dasar completed</div>
-                            <div style="font-size: 0.85rem; color: #666;">Layout navbar, sidebar, responsive</div>
-                        </div>
-                        <span class="rdp-badge" style="background: #e8f5e9; color: #2e7d32;">Selesai</span>
-                    </div>
-                    <div class="rdp-activity-item">
-                        <div class="rdp-avatar rdp-avatar--sm" style="background: #fff3e0;">
-                            <span class="rdp-avatar__initials">US</span>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 500;">US-011: Components implemented</div>
-                            <div style="font-size: 0.85rem; color: #666;">9 UI components dengan Cotton</div>
-                        </div>
-                        <span class="rdp-badge" style="background: #fff3e0; color: #f57f17;">Proses</span>
-                    </div>
-                    <div class="rdp-activity-item">
-                        <div class="rdp-avatar rdp-avatar--sm" style="background: #f3e5f5;">
-                            <span class="rdp-avatar__initials">US</span>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 500;">Frontend SOP documented</div>
-                            <div style="font-size: 0.85rem; color: #666;">CSS/JS extraction rules</div>
-                        </div>
-                        <span class="rdp-badge" style="background: #f3e5f5; color: #7b1fa2;">Review</span>
-                    </div>
+                <div id="page-content">
+                    {% include "dashboard/partials/activity_table.html" %}
                 </div>
             </c-rdp.card>
 
-            <c-rdp.card>
-                <c-slot name="header">
-                    <h3 style="margin: 0;">Tech Stack</h3>
-                </c-slot>
-                <div class="rdp-techstack">
-                    <div class="rdp-techstack-group">
-                        <strong style="display: block; margin-bottom: 8px;">🖥️ Backend</strong>
-                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
-                            <li>Django 5.1+</li>
-                            <li>PostgreSQL / SQLite</li>
-                            <li>Redis Cache</li>
-                            <li>Celery Tasks</li>
-                        </ul>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                <!-- Tren Transaksi Chart -->
+                <c-rdp.card>
+                    <c-slot name="header">
+                        <h3 class="rdp-dashboard-header__title" style="margin: 0;">Tren Transaksi (Revenue)</h3>
+                    </c-slot>
+                    <div class="chart-container" style="padding: 16px 0;">
+                        <!-- Beautiful SVG Area Chart -->
+                        <svg viewBox="0 0 500 200" style="width: 100%; height: auto; display: block;">
+                            <defs>
+                                <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="var(--pico-primary)" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="var(--pico-primary)" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Grid Lines -->
+                            <line x1="0" y1="50" x2="500" y2="50" stroke="#f1f5f9" stroke-width="1" />
+                            <line x1="0" y1="100" x2="500" y2="100" stroke="#f1f5f9" stroke-width="1" />
+                            <line x1="0" y1="150" x2="500" y2="150" stroke="#f1f5f9" stroke-width="1" />
+                            <!-- Area -->
+                            <path d="M 0 180 Q 80 140 150 120 T 300 80 T 450 60 L 500 50 L 500 200 L 0 200 Z" fill="url(#chart-grad)" />
+                            <!-- Line -->
+                            <path d="M 0 180 Q 80 140 150 120 T 300 80 T 450 60 L 500 50" fill="none" stroke="var(--pico-primary)" stroke-width="3" />
+                            <!-- Dots -->
+                            <circle cx="150" cy="120" r="5" fill="var(--pico-primary)" />
+                            <circle cx="300" cy="80" r="5" fill="var(--pico-primary)" />
+                            <circle cx="500" cy="50" r="5" fill="var(--pico-primary)" />
+                        </svg>
+                        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: var(--pico-muted-color);">
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>Mei</span>
+                            <span>Jun</span>
+                        </div>
                     </div>
-                    <div class="rdp-techstack-group">
-                        <strong style="display: block; margin-bottom: 8px;">🎨 Frontend</strong>
-                        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
-                            <li>Django-Cotton</li>
-                            <li>RDP-UI CDN</li>
-                            <li>HTMX</li>
-                            <li>Alpine.js</li>
-                        </ul>
+                </c-rdp.card>
+
+                <!-- Tech Stack Info -->
+                <c-rdp.card>
+                    <c-slot name="header">
+                        <h3 class="rdp-techstack__title" style="margin: 0;">Tech Stack</h3>
+                    </c-slot>
+                    <div class="rdp-techstack" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="rdp-techstack-group">
+                            <strong class="rdp-techstack__group-title">🖥️ Backend</strong>
+                            <ul class="rdp-techstack__list" style="padding-left: 20px; margin: 8px 0 0 0;">
+                                <li>Django 5.1+</li>
+                                <li>PostgreSQL / SQLite</li>
+                                <li>Redis Cache</li>
+                                <li>Celery Tasks</li>
+                            </ul>
+                        </div>
+                        <div class="rdp-techstack-group">
+                            <strong class="rdp-techstack__group-title">🎨 Frontend</strong>
+                            <ul class="rdp-techstack__list" style="padding-left: 20px; margin: 8px 0 0 0;">
+                                <li>Django-Cotton</li>
+                                <li>RDP-UI CDN</li>
+                                <li>HTMX</li>
+                                <li>Alpine.js</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </c-rdp.card>
-        </div>
+                </c-rdp.card>
+            </div>
     </div>
 
-    <footer class="rdp-dashboard-footer">
-        RDP Starter Kit v0.1.0 · © 2026 Radian Data Platform · <a href="#">Lihat Changelog</a>
-    </footer>
-</main>
-{% endblock %}
+</c-layout.app>

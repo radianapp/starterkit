@@ -1,0 +1,25 @@
+{% comment %}
+Component Timeline Item RDP (Extras)
+Tujuan: Item individu dalam linimasa vertikal.
+Parameter:
+- title: Judul kejadian/aktivitas
+- time (optional): Waktu/tanggal kejadian
+- icon (optional): Emoji atau HTML icon untuk penanda — default bulatan kosong
+- variant (optional): "primary" | "success" | "warning" | "danger" | "neutral" — default "primary"
+Slot:
+- default: Deskripsi detail atau konten tambahan
+{% endcomment %}<c-vars title="" time="" icon="" variant="primary" active=False />
+<li class="rdp-timeline-item rdp-timeline-item--{{ variant }}" {{ attrs }}>
+  <span class="rdp-timeline-item__dot {% if active %}rdp-timeline-item__dot--active{% endif %}">
+    {{ icon }}
+  </span>
+  <div class="rdp-timeline-item__content">
+    <h5 class="rdp-timeline-item__title">{{ title }}</h5>
+    {% if time %}
+      <time class="rdp-timeline-item__time">{{ time }}</time>
+    {% endif %}
+    {% if slot %}
+      <p class="rdp-timeline-item__desc">{{ slot }}</p>
+    {% endif %}
+  </div>
+</li>

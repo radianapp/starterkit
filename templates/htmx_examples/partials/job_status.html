@@ -1,0 +1,28 @@
+{# US-036: HTMX Job Status Polling Partial #}
+<div id="job-polling-container" 
+     style="border: 1px solid var(--pico-border-color); padding: 16px; border-radius: 8px; background: var(--pico-card-background-color);"
+     {% if progress > 0 and progress < 100 %}
+        hx-get="{% url 'htmx-polling' %}" 
+        hx-trigger="every 2s" 
+        hx-target="#job-polling-container" 
+        hx-swap="outerHTML"
+     {% endif %}>
+    
+    <h5 style="margin-top: 0; margin-bottom: 12px;">Pekerjaan Latar Belakang (Background Job)</h5>
+    
+    {% if progress == 0 %}
+        <p style="color: var(--pico-muted-color); font-size: 0.9rem;">Belum ada pekerjaan yang berjalan.</p>
+        <c-rdp.button hx-get="{% url 'htmx-polling' %}?action=start" hx-target="#job-polling-container" hx-swap="outerHTML" variant="primary">Mulai Pekerjaan</c-rdp.button>
+    {% elif progress < 100 %}
+        <p style="font-size: 0.9rem; margin-bottom: 8px;">⏳ Memproses... <strong style="float: right;">{{ progress }}%</strong></p>
+        <c-rdp.progress value="{{ progress }}" max="100" />
+        <small style="color: var(--pico-muted-color); display: block; margin-top: 8px;">Memperbarui status otomatis setiap 2 detik...</small>
+    {% else %}
+        <p style="font-size: 0.9rem; margin-bottom: 8px; color: var(--pico-success-color);">✅ Selesai! <strong style="float: right;">100%</strong></p>
+        <c-rdp.progress value="100" max="100" />
+        <div style="margin-top: 12px; display: flex; gap: 8px;">
+            <c-rdp.button hx-get="{% url 'htmx-polling' %}?action=start" hx-target="#job-polling-container" hx-swap="outerHTML" variant="secondary" style="font-size: 0.8rem; padding: 4px 8px;">Jalankan Ulang</c-rdp.button>
+            <span style="font-size: 0.8rem; align-self: center; color: var(--pico-muted-color);" hx-get="{% url 'htmx-polling' %}" hx-trigger="load" hx-target="#job-polling-container" hx-swap="outerHTML" hx-headers='{"HX-Request": "true"}'>Toast status...</span>
+        </div>
+    {% endif %}
+</div>

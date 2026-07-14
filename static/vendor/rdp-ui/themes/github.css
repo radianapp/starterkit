@@ -1,0 +1,53 @@
+/* RDP UI — Theme: GitHub (Canonical GitHub Light Palette) */
+[data-rdp-theme="github"] {
+  --rdp-primary:        #0969DA;
+  --rdp-primary-hover:  #0758C0;
+  --rdp-primary-soft:   #DDF4FF;
+  --rdp-on-primary:     #FFFFFF;
+
+  --rdp-background:     #F6F8FA;
+  --rdp-surface:        #FFFFFF;
+  --rdp-surface-raised: #FFFFFF;
+  --rdp-surface-sunken: #EAEEF2;
+
+  --rdp-text:           #1F2328;
+  --rdp-text-muted:     #636C76;
+
+  --rdp-border:         #D0D7DE;
+  --rdp-border-strong:  #A9B4BF;
+  --rdp-focus:          #0969DA;
+
+  --rdp-success:        #1A7F37;
+  --rdp-success-soft:   #DAFBE1;
+  --rdp-warning:        #9A6700;
+  --rdp-warning-soft:   #FFF8C5;
+  --rdp-danger:         #CF222E;
+  --rdp-danger-soft:    #FFEBE9;
+  --rdp-info:           #0550AE;
+  --rdp-info-soft:      #DDF4FF;
+
+  --rdp-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  --rdp-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* compat */
+  --rdp-bg: var(--rdp-surface);
+  --rdp-bg-secondary: var(--rdp-background);
+  --rdp-bg-tertiary:  var(--rdp-surface-sunken);
+  --rdp-border-light: var(--rdp-border);
+  --rdp-text-secondary: var(--rdp-text-muted);
+  --rdp-text-inverse: var(--rdp-on-primary);
+  --rdp-cream:      var(--rdp-background);
+  --rdp-cream-dark: var(--rdp-surface-sunken);
+  --pico-primary:            var(--rdp-primary);
+  --pico-primary-hover:      var(--rdp-primary-hover);
+  --pico-primary-inverse:    var(--rdp-on-primary);
+  --pico-background-color:   var(--rdp-surface);
+  --pico-color:              var(--rdp-text);
+  --pico-muted-color:        var(--rdp-text-muted);
+  --pico-muted-border-color: var(--rdp-border);
+  --pico-card-background-color: var(--rdp-surface);
+  --pico-card-border-color:     var(--rdp-border);
+  --pico-form-element-background-color: var(--rdp-background);
+  --pico-form-element-border-color:     var(--rdp-border);
+  --pico-form-element-focus-color:      var(--rdp-primary);
+}

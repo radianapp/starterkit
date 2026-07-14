@@ -1,5 +1,5 @@
 {# US-011: Komponen table — responsive data table dengan striped rows #}
-{#
+{% comment %}
 TUJUAN: Reusable table component untuk menampilkan tabular data.
 Support responsive wrapping, striped rows, header styling.
 
@@ -33,52 +33,12 @@ CATATAN:
 - Responsive: horizontal scroll di mobile, normal di desktop
 - CSS class: rdp-table, rdp-table--striped, rdp-table--hover, rdp-table--bordered
 - Dark mode via RDP-UI CSS variable
-#}
+{% endcomment %}
 
-<template>
-  <div class="rdp-table-wrapper">
-    <table
-      class="rdp-table {% if striped %}rdp-table--striped{% endif %} {% if hover %}rdp-table--hover{% endif %} {% if bordered %}rdp-table--bordered{% endif %}"
-      {{ attrs }}>
-      <c-slot name="default"></c-slot>
-    </table>
-  </div>
-</template>
-
-<style>
-  .rdp-table-wrapper {
-    overflow-x: auto;
-  }
-
-  .rdp-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-
-  .rdp-table th {
-    background: var(--color-bg-secondary, #f5f5f5);
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 600;
-    border-bottom: 2px solid var(--color-border, #e0e0e0);
-  }
-
-  .rdp-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--color-border, #e0e0e0);
-  }
-
-  .rdp-table--striped tbody tr:nth-child(odd) {
-    background: var(--color-bg-secondary, #f9f9f9);
-  }
-
-  .rdp-table--hover tbody tr:hover {
-    background: var(--color-bg-tertiary, #efefef);
-  }
-
-  .rdp-table--bordered td,
-  .rdp-table--bordered th {
-    border: 1px solid var(--color-border, #e0e0e0);
-  }
-</style>
+<div class="rdp-table-wrapper">
+  <table
+    class="rdp-table {% if striped %}rdp-table--striped{% endif %} {% if hover %}rdp-table--hover{% endif %} {% if bordered %}rdp-table--bordered{% endif %}"
+    {{ attrs }}>
+    {{ slot }}
+  </table>
+</div>

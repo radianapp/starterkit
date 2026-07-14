@@ -1,0 +1,38 @@
+{# US-034: Komponen steps/wizard indicator #}
+{% comment %}
+TUJUAN: Wizard step progress tracker indicator untuk form multi-langkah.
+- items (required): List of string untuk label langkah (contoh: "Langkah 1", "Langkah 2")
+- current (optional): Langkah aktif saat ini (1-indexed) — default 1
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<div
+  class="rdp-steps"
+  {{ attrs }}>
+  
+  {% for item in items %}
+    {% with index=forloop.counter %}
+      <div class="rdp-steps__item 
+        {% if index < current|add:0 %}
+          rdp-steps__item--completed
+        {% elif index == current|add:0 %}
+          rdp-steps__item--active
+        {% endif %}">
+        
+        <div class="rdp-steps__indicator">
+          {% if index < current|add:0 %}
+            ✓
+          {% else %}
+            {{ index }}
+          {% endif %}
+        </div>
+        
+        <span class="rdp-steps__label">{{ item }}</span>
+        
+        {% if not forloop.last %}
+          <div class="rdp-steps__line"></div>
+        {% endif %}
+      </div>
+    {% endwith %}
+  {% endfor %}
+</div>

@@ -1,0 +1,54 @@
+{# US-032: Partial table untuk aktivitas terpaginasi via HTMX #}
+<c-rdp.table striped hover>
+    <thead>
+        <tr>
+            <th>Tanggal</th>
+            <th>Aktivitas</th>
+            <th>Pengguna</th>
+            <th>Status</th>
+            <th style="text-align: right;">Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for activity in page_obj %}
+            <tr>
+                <td>{{ activity.created_at|date:"d M Y H:i" }}</td>
+                <td>
+                    <strong>{{ activity.title }}</strong>
+                    {% if activity.description %}
+                        <br><small style="color: var(--pico-muted-color);">{{ activity.description }}</small>
+                    {% endif %}
+                </td>
+                <td>{{ activity.user.get_full_name|default:activity.user.email }}</td>
+                <td>
+                    {% if activity.status == "completed" %}
+                        <c-rdp.badge variant="success">Selesai</c-rdp.badge>
+                    {% elif activity.status == "pending" %}
+                        <c-rdp.badge variant="warning">Pending</c-rdp.badge>
+                    {% else %}
+                        <c-rdp.badge variant="danger">Gagal</c-rdp.badge>
+                    {% endif %}
+                </td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600;">
+                    {% if activity.amount > 0 %}
+                        Rp {{ activity.amount|floatformat:2 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 24px;">
+                    <c-rdp.empty_state icon="📭" title="Belum ada aktivitas" />
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</c-rdp.table>
+
+{% if page_obj.has_other_pages %}
+    <div style="margin-top: 16px;">
+        <c-rdp.pagination page_obj="{{ page_obj }}" url_pattern="/dashboard/?page=" />
+    </div>
+{% endif %}

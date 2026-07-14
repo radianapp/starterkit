@@ -1,0 +1,305 @@
+/* ==========================================================================
+   Sidebar Navigation Component (app.html / dashboard.html)
+   ========================================================================== */
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 36px;
+    padding: 0 10px;
+    margin: 0;           /* reset PicoCSS default margin pada <a> */
+    border-radius: 8px;
+    color: #55514A;
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+    box-sizing: border-box;
+}
+
+.sidebar-link:hover {
+    background: #F2F0EC;
+    color: #1C1B18;
+}
+
+.sidebar-link.active {
+    background: #EDF4F0;
+    color: #10513F;
+    font-weight: 600;
+}
+
+.sidebar-link .icon-square {
+    width: 16px; height: 16px; border: 1.75px solid #8A857C; border-radius: 4px;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.sidebar-link.active .icon-square { border-color: #10513F; }
+
+.sidebar-link .icon-circle {
+    width: 16px; height: 16px; border: 1.75px solid #8A857C; border-radius: 99px;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.sidebar-link.active .icon-circle { border-color: #10513F; }
+
+.sidebar-link .icon-diamond {
+    width: 16px; height: 16px; border: 1.75px solid #8A857C; border-radius: 4px; transform: rotate(45deg);
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.sidebar-link.active .icon-diamond { border-color: #10513F; }
+
+/* Dark mode variations for sidebar-link */
+[data-rdp-theme="dark"] .sidebar-link,
+[data-rdp-theme="midnight"] .sidebar-link,
+[data-rdp-theme="terminal"] .sidebar-link,
+[data-rdp-theme="nord"] .sidebar-link,
+[data-rdp-theme="dracula"] .sidebar-link {
+    color: #A1A1AA;
+}
+[data-rdp-theme="dark"] .sidebar-link:hover,
+[data-rdp-theme="midnight"] .sidebar-link:hover,
+[data-rdp-theme="terminal"] .sidebar-link:hover,
+[data-rdp-theme="nord"] .sidebar-link:hover,
+[data-rdp-theme="dracula"] .sidebar-link:hover {
+    background: rgba(255,255,255,0.08);
+    color: #F4F4F5;
+}
+[data-rdp-theme="dark"] .sidebar-link.active,
+[data-rdp-theme="midnight"] .sidebar-link.active,
+[data-rdp-theme="terminal"] .sidebar-link.active,
+[data-rdp-theme="nord"] .sidebar-link.active,
+[data-rdp-theme="dracula"] .sidebar-link.active {
+    background: rgba(16, 81, 63, 0.3);
+    color: #34D399;
+}
+[data-rdp-theme="dark"] .sidebar-link .icon-square,
+[data-rdp-theme="dark"] .sidebar-link .icon-circle,
+[data-rdp-theme="dark"] .sidebar-link .icon-diamond,
+[data-rdp-theme="midnight"] .sidebar-link .icon-square,
+[data-rdp-theme="midnight"] .sidebar-link .icon-circle,
+[data-rdp-theme="midnight"] .sidebar-link .icon-diamond,
+[data-rdp-theme="terminal"] .sidebar-link .icon-square,
+[data-rdp-theme="terminal"] .sidebar-link .icon-circle,
+[data-rdp-theme="terminal"] .sidebar-link .icon-diamond,
+[data-rdp-theme="nord"] .sidebar-link .icon-square,
+[data-rdp-theme="nord"] .sidebar-link .icon-circle,
+[data-rdp-theme="nord"] .sidebar-link .icon-diamond,
+[data-rdp-theme="dracula"] .sidebar-link .icon-square,
+[data-rdp-theme="dracula"] .sidebar-link .icon-circle,
+[data-rdp-theme="dracula"] .sidebar-link .icon-diamond {
+    border-color: #71717A;
+}
+
+/* ==========================================================================
+   Topnav hamburger — always visible, rdp.css hides it above 768px.
+   We override to show it on ALL breakpoints except where sidebar is visible.
+   ========================================================================== */
+.rdp-topnav__toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--rdp-text);
+    flex-shrink: 0;
+}
+/* Hide hamburger on Tablet and Desktop (>= 768px) where sidebar is always visible */
+@media (min-width: 768px) {
+    .rdp-topnav__toggle {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   Search Box — Navbar search field
+   ========================================================================== */
+.app-search-box {
+    flex: 0 0 320px;
+    max-width: 100%;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: var(--rdp-surface-sunken, #F2F0EC);
+    border-radius: 8px;
+    color: #8A857C;
+    font-size: 13px;
+    border: 1px solid var(--rdp-border);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.app-search-box:focus-within {
+    border-color: var(--rdp-primary);
+    box-shadow: 0 0 0 2px var(--rdp-primary-soft);
+}
+
+.app-search-box input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 13px !important;
+    color: inherit !important;
+    flex: 1;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+}
+
+.app-search-box input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.app-search-badge {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    border: 1px solid var(--rdp-border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    background: var(--rdp-surface);
+    flex-shrink: 0;
+}
+
+/* Sidebar search box (visible only on mobile, inside drawer) */
+.sidebar-search {
+    display: none;
+    margin: 10px;
+    height: 34px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: var(--rdp-surface-sunken, #F2F0EC);
+    border-radius: 8px;
+    color: #8A857C;
+    font-size: 13px;
+    border: 1px solid var(--rdp-border);
+}
+.sidebar-search input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 13px !important;
+    color: inherit !important;
+    flex: 1;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+}
+
+/* Mobile profile avatar shown only on mobile in navbar */
+.app-mobile-avatar {
+    display: none;
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 99px;
+    background: #D6E7DF;
+    color: #10513F;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   Scrim / Overlay — mobile drawer backdrop
+   ========================================================================== */
+.rdp-shell__scrim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: calc(var(--rdp-z-fixed, 100) - 1);
+    cursor: pointer;
+    backdrop-filter: blur(1px);
+}
+
+/* Only show scrim on mobile */
+@media (max-width: 767px) {
+    .rdp-shell__scrim {
+        display: block;
+    }
+}
+
+/* ==========================================================================
+   Mobile Layout (< 768px)
+   ========================================================================== */
+@media (max-width: 767px) {
+    /* Hide desktop search box from navbar */
+    .app-search-box {
+        display: none !important;
+    }
+    /* Show search inside sidebar drawer */
+    .sidebar-search {
+        display: flex !important;
+    }
+    /* Show mobile profile avatar in navbar */
+    .app-mobile-avatar {
+        display: inline-flex !important;
+    }
+    /* Hide full right nav on mobile */
+    .app-desktop-only {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   Tablet Layout (768px - 1023px) — same as desktop, sidebar always visible
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Override rdp.css vendor rule that shrinks sidebar to 64px on tablet */
+    .rdp-shell__sidebar {
+        flex: 0 0 224px !important;
+        width: 224px !important;
+    }
+
+    /* Ensure search box remains reasonable width on tablet */
+    .app-search-box {
+        flex: 0 0 260px;
+    }
+
+    /* Hide Collapse button on tablet — no hamburger to reopen it */
+    .collapse-btn {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   Desktop Sidebar Manual-Collapse Logic (>= 1024px)
+   ========================================================================== */
+@media (min-width: 1024px) {
+    .rdp-shell__sidebar.is-collapsed {
+        flex: 0 0 64px;
+        width: 64px;
+    }
+    .rdp-shell__sidebar.is-collapsed .sidebar-link {
+        justify-content: center;
+        padding: 0;
+    }
+    .rdp-shell__sidebar.is-collapsed .sidebar-link > span:not([class^="icon-"]) {
+        display: none;
+    }
+    .rdp-shell__sidebar.is-collapsed .rdp-sidebar__brand-text,
+    .rdp-shell__sidebar.is-collapsed .rdp-sidebar__section-title {
+        display: none;
+    }
+    .rdp-shell__sidebar.is-collapsed .collapse-text {
+        display: none;
+    }
+    .rdp-shell__sidebar.is-collapsed .collapse-btn {
+        justify-content: center;
+    }
+}

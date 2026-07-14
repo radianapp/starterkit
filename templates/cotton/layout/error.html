@@ -1,0 +1,21 @@
+{% comment %}
+US-015, US-027: Layout Error — Untuk halaman error (403, 404, 500) kustom.
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="error">
+    <c-slot name="head">
+        {{ head }}
+    </c-slot>
+
+    <div class="rdp-layout rdp-layout--blank" x-data="layoutState()">
+        <main class="rdp-layout__content-blank" id="main-content">
+            {{ slot }}
+        </main>
+    </div>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

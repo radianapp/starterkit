@@ -1,0 +1,163 @@
+{% comment %}
+US-010, US-027, US-028: Layout Dashboard — Layout dengan topbar, sidebar, main content, footer, dan global modal/toast.
+DIPANGGIL DARI: Halaman aplikasi internal seperti Dashboard.
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="dashboard">
+    <c-slot name="head">
+        {{ head }}
+        <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    </c-slot>
+
+    <div x-data="layoutState()" 
+         @keydown.escape="sidebarOpen = false">
+        
+        <c-rdp.shell>
+            <c-slot name="sidebar">
+                {% if sidebar %}
+                    {{ sidebar }}
+                {% else %}
+                    {# Brand / Logo #}
+                    <a href="{% url 'dashboard:index' %}" style="display: flex; align-items: center; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--rdp-border); text-decoration: none; color: inherit;">
+                        <span style="width: 26px; height: 26px; border-radius: 8px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">{{ navbar_brand|default:'RDP'|slice:':1' }}</span>
+                        <span class="rdp-sidebar__brand-text" style="font-size: 14px; font-weight: 700; letter-spacing: -0.01em; color: var(--rdp-text);">{{ navbar_brand|default:"Acme Ops" }}</span>
+                    </a>
+                    
+                    {# Search box — visible only on mobile inside drawer #}
+                    <div class="sidebar-search" aria-label="Cari">
+                        ⌕ <input type="text" placeholder="Search…" />
+                    </div>
+                    
+                    <nav style="display: flex; flex-direction: column; gap: 2px; padding: 12px 10px;" aria-label="Navigasi sidebar">
+                        <a href="{% url 'dashboard:index' %}" class="sidebar-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page">
+                            <span class="icon-square"></span>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" class="sidebar-link">
+                            <span class="icon-circle"></span>
+                            <span>Orders</span>
+                        </a>
+                        <a href="#" class="sidebar-link">
+                            <span class="icon-diamond"></span>
+                            <span>Customers</span>
+                        </a>
+                        <a href="#" class="sidebar-link">
+                            <span class="icon-square"></span>
+                            <span>Inventory</span>
+                        </a>
+                        
+                        <div class="rdp-sidebar__section-title" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #B0ABA1; padding: 14px 10px 4px;">Akun</div>
+                        
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'accounts:profile' %}" class="sidebar-link {% if 'profile' in request.resolver_match.url_name %}active{% endif %}">
+                                <span class="icon-circle"></span>
+                                <span>Profil</span>
+                            </a>
+                            <a href="{% url 'admin:index' %}" class="sidebar-link">
+                                <span class="icon-square"></span>
+                                <span>Admin</span>
+                            </a>
+                            <form method="post" action="{% url 'accounts:logout' %}" style="margin:0">
+                                {% csrf_token %}
+                                <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;">
+                                    <span class="icon-square"></span>
+                                    <span>Keluar</span>
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'accounts:login' %}" class="sidebar-link">
+                                <span class="icon-circle"></span>
+                                <span>Masuk</span>
+                            </a>
+                        {% endif %}
+                    </nav>
+
+                    <div style="margin-top: auto; padding: 12px 10px; border-top: 1px solid var(--rdp-border);">
+                        <button
+                            class="collapse-btn"
+                            @click="window.innerWidth >= 1024 ? sidebarCollapsed = !sidebarCollapsed : sidebarOpen = false"
+                            data-rdp-action="toggle-sidebar"
+                            aria-label="Collapse sidebar"
+                            type="button"
+                            style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; color: #8A857C; font-size: 13px; font-weight: 500; background: none; border: none; cursor: pointer; width: 100%; text-align: left;">
+                            ⟨ <span class="collapse-text">&nbsp;Collapse</span>
+                        </button>
+                    </div>
+                {% endif %}
+            </c-slot>
+
+            <c-slot name="navbar">
+                {% if navbar %}
+                    {{ navbar }}
+                {% else %}
+                    {# Hamburger — shown at mobile & tablet, hidden on desktop #}
+                    <button
+                        @click="sidebarOpen = !sidebarOpen"
+                        class="rdp-topnav__toggle"
+                        title="Toggle sidebar"
+                        aria-label="Toggle navigasi">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+
+                    {# Search box — hidden on mobile (lives in sidebar), visible tablet+ #}
+                    <div class="app-search-box" style="margin-left: 12px;">
+                        ⌕ <input type="text" placeholder="Search…" />
+                        <span class="app-search-badge">⌘K</span>
+                    </div>
+                    
+                    {# Desktop right menu (hidden on mobile) #}
+                    <div class="app-desktop-only" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+                        {{ navbar_actions }}
+                        <button @click="toggleDarkMode()"
+                                style="width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--rdp-border); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: var(--rdp-text-muted); background: transparent; cursor: pointer;"
+                                :title="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+                                :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+                            <span x-show="!darkMode" aria-hidden="true">🌙</span>
+                            <span x-show="darkMode" aria-hidden="true" style="display:none;">☀️</span>
+                        </button>
+                        <span style="width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--rdp-border); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: var(--rdp-text-muted); cursor: pointer;">🔔</span>
+                        <span style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--rdp-border); cursor: pointer;">
+                            <span style="width: 22px; height: 22px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">{{ user.username|default:"G"|slice:":2"|upper }}</span>
+                            <span style="font-size: 13px; font-weight: 600; color: var(--rdp-text);">{{ user.username|default:"Guest" }}</span>
+                            <span style="color: #8A857C; font-size: 10px;">▾</span>
+                        </span>
+                    </div>
+                    
+                    {# Mobile profile avatar — only shown on mobile #}
+                    <span class="app-mobile-avatar" style="margin-left: auto;">
+                        {{ user.username|default:"G"|slice:":2"|upper }}
+                    </span>
+                {% endif %}
+            </c-slot>
+
+            <c-rdp.container size="xl">
+                {{ slot }}
+            </c-rdp.container>
+            
+            {% if right_panel %}
+                <c-slot name="right_panel">
+                    {{ right_panel }}
+                </c-slot>
+            {% endif %}
+
+        </c-rdp.shell>
+    </div>
+
+    <!-- Global Toast Container -->
+    <div id="toast-container" class="rdp-toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Global Modal dialog -->
+    <dialog id="global-modal" class="rdp-modal" aria-modal="true">
+        <div class="rdp-modal__content" id="global-modal-content"></div>
+    </dialog>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

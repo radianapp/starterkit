@@ -1,37 +1,33 @@
-{% extends "xbase.html" %}
+{# Error 500 — Server Error #}
 {% load static %}
 {% load cotton %}
 
+<c-layout.blank title="500 - Server Error" navbar_brand="{{ SITE_NAME }}">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+    </c-slot>
 
+    <div class="error-page">
+        <div class="error-container">
+            <c-rdp.card>
+                <div class="rdp-card__body error-content">
+                    <div class="error-icon">⚠️</div>
+                    <h1 class="error-title">500 — Internal Server Error</h1>
+                    <p class="error-message">
+                        Something went wrong on our end. Our team has been notified and is working to fix it.
+                        <br />Please try again later.
+                    </p>
 
-{% block title %}500 - Server Error{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/errors.css' %}">
-{% endblock %}
-
-{% block content %}
-<div class="error-page">
-  <div class="error-container">
-    <c-rdp.card>
-      <div class="rdp-card__body error-content">
-        <div class="error-icon">⚠️</div>
-        <h1 class="error-title">500 — Internal Server Error</h1>
-        <p class="error-message">
-          Something went wrong on our end. Our team has been notified and is working to fix it.
-          <br />Please try again later.
-        </p>
-
-        <div class="error-actions">
-          <c-rdp.button variant="primary" onclick="window.location.href='/'">
-            ← Go back to home
-          </c-rdp.button>
-          <c-rdp.button variant="secondary" onclick="window.location.reload()">
-            Refresh Page
-          </c-rdp.button>
+                    <div class="error-actions">
+                        <c-rdp.button variant="primary" onclick="window.location.href='/'">
+                            ← Go back to home
+                        </c-rdp.button>
+                        <c-rdp.button variant="secondary" onclick="window.location.reload()">
+                            Refresh Page
+                        </c-rdp.button>
+                    </div>
+                </div>
+            </c-rdp.card>
         </div>
-      </div>
-    </c-rdp.card>
-  </div>
-</div>
-{% endblock %}
+    </div>
+</c-layout.blank>

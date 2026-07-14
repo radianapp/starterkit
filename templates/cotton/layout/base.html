@@ -1,0 +1,99 @@
+{% comment %}
+US-010, US-011: Layout dasar Django-Cotton — Shared core shell.
+TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
+{% endcomment %}
+{% load static %}
+<c-vars title="{{ SITE_NAME }}" navbar_brand="{{ APP_BRAND_SHORT }}" layout_name="base" />
+
+<!DOCTYPE html>
+<html lang="id" data-theme="light" data-accent="{{ RDP_APP_ACCENT }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if title != SITE_NAME %}{{ title }} — {% endif %} {% if navbar_brand == "" %}{{ APP_BRAND_SHORT }} {% else %} {{ navbar_brand }} {% endif %}</title>
+
+    {# Restore saved theme & accent sebelum CSS render — cegah flash #}
+    <script>(function(){
+        var rdpTheme  = localStorage.getItem('rdp-rdp-theme') || '{{ RDP_APP_THEME|default:"default" }}';
+        var picoTheme = ['dark','midnight','terminal','nord','dracula'].indexOf(rdpTheme) >= 0 ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-rdp-theme', rdpTheme);
+        document.documentElement.setAttribute('data-theme', picoTheme);
+        document.documentElement.setAttribute('data-accent', localStorage.getItem('rdp-accent') || '{{ RDP_APP_ACCENT|default:"navy" }}');
+    }());</script>
+
+    <!-- PicoCSS & RDP-UI -->
+    {% if RDP_UI_SELF_HOST %}
+        <link rel="stylesheet" href="{% static 'vendor/picocss/pico.min.css' %}">
+        <link rel="stylesheet" href="{% static 'vendor/rdp-ui/rdp.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+        <link rel="stylesheet" href="https://cdn.radian.web.id/{{ RDP_UI_VERSION|default:'v1.0' }}/assets/rdp.css">
+    {% endif %}
+
+    {# Dynamic theme CSS loader — loads themes/*.css sesuai data-rdp-theme #}
+    <script>(function(){
+        var t = document.documentElement.getAttribute('data-rdp-theme') || 'default';
+        var l = document.createElement('link');
+        l.rel = 'stylesheet'; l.id = 'rdp-theme-css';
+        l.href = '{% static "vendor/rdp-ui/themes/" %}' + t + '.css';
+        document.head.appendChild(l);
+    }());</script>
+    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    {% if RDP_DEBUG_OVERLAY %}
+        <link rel="stylesheet" href="{% static 'css/debug.css' %}">
+    {% endif %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    {{ head }}
+</head>
+<body>
+    <a href="#main-content" class="rdp-skip-link">Lompati ke konten utama</a>
+    
+    {{ slot }}
+
+    <!-- Debug Overlay Panel -->
+    {% if RDP_DEBUG_OVERLAY %}
+        <div x-data="debugState('{{ layout_name }}')" class="rdp-debug-overlay">
+            <div class="rdp-debug-overlay__header" @click="open = !open">
+                🛠️ Debug (Layout: <span x-text="layout"></span>)
+                <span x-text="open ? '▼' : '▲'"></span>
+            </div>
+            <div class="rdp-debug-overlay__body" x-show="open">
+                <div class="rdp-debug-overlay__item">
+                    <span>Theme:</span>
+                    <strong x-text="darkMode ? '🌙 Dark' : '☀️ Light'"></strong>
+                </div>
+                <div class="rdp-debug-overlay__item">
+                    <span>Breakpoint:</span>
+                    <strong x-text="breakpoint"></strong>
+                </div>
+                <div class="rdp-debug-overlay__item">
+                    <span>Width:</span>
+                    <span x-text="width + 'px'"></span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if RDP_UI_SELF_HOST %}
+        <script src="{% static 'vendor/htmx/htmx.min.js' %}"></script>
+        <script defer src="{% static 'vendor/alpinejs/alpine.min.js' %}"></script>
+        <script type="module" src="{% static 'vendor/rdp-ui/rdp.js' %}" defer></script>
+    {% else %}
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script type="module" src="https://cdn.radian.web.id/{{ RDP_UI_VERSION }}/assets/rdp.js" defer></script>
+    {% endif %}
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/toast.js' %}"></script>
+    <script src="{% static 'js/modal-global.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/layout-state.js' %}"></script>
+    <script src="{% static 'js/debug-overlay.js' %}"></script>
+    {{ extra_js }}
+
+
+</body>
+</html>

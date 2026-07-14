@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 29 · INFORMATION ARCHITECTURE ================= -->
+  <div data-screen-label="29 Docs IA" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Docs Site · Sheet 29</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · information architecture</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Documentation IA</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 76ch;">Three-pane docs layout: sidebar nav (left), content, on-page TOC (right). Search is the primary navigation — the sidebar is the map, ⌘K is the teleport.</p>
+
+    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 32px;">
+      <!-- sidebar tree -->
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Sidebar nav — full tree</div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 14px 10px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; background: #FAF9F7;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E; padding: 4px 10px 6px;">Start</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Getting Started</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Installation</div>
+          <div style="padding: 6px 10px; border-radius: 7px; background: #EDF4F0; color: #10513F; font-weight: 600;">Quick Start</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E; padding: 14px 10px 6px;">Build</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A; display: flex; justify-content: space-between;">Components <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">42</span></div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Layouts</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Patterns (HTMX)</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Templates</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A; display: flex; justify-content: space-between;">Themes <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">11</span></div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Icons</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E; padding: 14px 10px 6px;">Learn</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Examples</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Cookbook</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Migration</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E; padding: 14px 10px 6px;">Project</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Roadmap</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Changelog</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">FAQ</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Blog</div>
+        </div>
+      </div>
+
+      <!-- search + switchers -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Global search · ⌘K — groups results by section, searches props too</div>
+          <div style="background: rgba(28,27,24,0.45); border-radius: 14px; padding: 32px 60px;">
+            <div style="background: #FFFFFF; border-radius: 14px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 12px 32px rgba(28,27,24,0.10); overflow: hidden; max-width: 560px; margin: 0 auto;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid #EFEDE8;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>
+                <span style="font-size: 14.5px; flex: 1;">butt<span style="display: inline-block; width: 1.5px; height: 16px; background: #1C1B18; vertical-align: middle;"></span></span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C; border: 1px solid #E5E2DC; border-radius: 5px; padding: 2px 6px;">esc</span>
+              </div>
+              <div style="padding: 8px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding: 6px 10px 4px;">Components</div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; background: #EDF4F0;"><span style="font-size: 13.5px; font-weight: 600; color: #10513F;">Button</span><span style="font-size: 12px; color: #6B665E;">variants, sizes, loading</span><span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">↵</span></div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px;"><span style="font-size: 13.5px; font-weight: 600;">Icon button</span><span style="font-size: 12px; color: #6B665E;">aria-label required</span></div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding: 10px 10px 4px;">Cookbook</div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px;"><span style="font-size: 13.5px; font-weight: 600;">Disable button while pending</span><span style="font-size: 12px; color: #6B665E;">hx-disabled-elt</span></div>
+              </div>
+              <div style="display: flex; gap: 14px; padding: 10px 18px; border-top: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;"><span>↑↓ navigate</span><span>↵ open</span><span>⌘↵ open in new tab</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Version switcher — per-version docs</div>
+            <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 6px; width: 180px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(28,27,24,0.04), 0 4px 12px rgba(28,27,24,0.07);">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 6px; background: #EDF4F0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #10513F;">v1.0 <span>✓</span></div>
+              <div style="padding: 8px 10px; border-radius: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #55514A;">v0.9</div>
+              <div style="padding: 8px 10px; border-radius: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #55514A;">next <span style="font-size: 10px; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 1px 7px; margin-left: 4px;">unstable</span></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Docs theme switcher — light / dark / system</div>
+            <div style="display: inline-flex; gap: 4px; background: #F2F0EC; border-radius: 10px; padding: 4px;">
+              <span style="padding: 7px 14px; font-size: 12.5px; font-weight: 600; background: #FFFFFF; border-radius: 7px; box-shadow: 0 1px 2px rgba(28,27,24,0.05);">☀ Light</span>
+              <span style="padding: 7px 14px; font-size: 12.5px; font-weight: 500; color: #6B665E;">☾ Dark</span>
+              <span style="padding: 7px 14px; font-size: 12.5px; font-weight: 500; color: #6B665E;">Auto</span>
+            </div>
+            <div style="font-size: 12px; line-height: 1.6; color: #55514A; margin-top: 12px;">Independent of the <em>preview</em> theme switcher on component pages — docs chrome and component previews theme separately.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 30 · COMPONENT PAGE TEMPLATE ================= -->
+  <div data-screen-label="30 Component page template" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Docs Site · Sheet 30</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · component page template</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">The component page, designed once</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 76ch;">Every one of the 42 component pages is this exact template — same order, same section names, no exceptions. Readers learn the shape once; the full rendered instance is below.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">01 · Overview</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">One paragraph: what it is, when to use it, when not to.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">02 · Preview</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">Interactive, with its own theme switcher — see the component in all 11 themes.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">03 · Code tabs</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">HTML / Django Cotton / HTMX — the same result, three depths.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">04 · API</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">Attributes, slots, events — types, defaults, one-line descriptions.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">05 · Accessibility</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">Keyboard map, ARIA it renders, what the developer must still provide.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">06 · Variants</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">Every variant × size × state rendered live, each with copyable code.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">07 · Customization</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">The component's CSS variables — override locally or per theme.</div></div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E;">08 · Best practices</span><div style="font-size: 12px; line-height: 1.55; color: #55514A; margin-top: 5px;">Do / Don't pairs with rendered examples, not prose sermons.</div></div>
+    </div>
+  </div>
+
+  <!-- ================= BUTTON DOCS PAGE (REAL INSTANCE) ================= -->
+  <div data-screen-label="Button docs page" style="width: 1180px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <!-- docs chrome: topbar -->
+    <div style="height: 56px; display: flex; align-items: center; gap: 20px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="display: inline-flex; align-items: center; gap: 9px;"><span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">R</span><span style="font-size: 14px; font-weight: 700;">RDP UI</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6B665E; border: 1px solid #E5E2DC; border-radius: 5px; padding: 2px 7px;">v1.0</span></span>
+      <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border: 1px solid #E5E2DC; border-radius: 8px; font-size: 12.5px; color: #6B665E; white-space: nowrap;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>Search docs <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">⌘K</span></span>
+      <span style="display: inline-flex; gap: 3px; background: #F2F0EC; border-radius: 8px; padding: 3px;"><span style="padding: 4px 9px; font-size: 11px; font-weight: 600; background: #FFFFFF; border-radius: 5px; box-shadow: 0 1px 2px rgba(28,27,24,0.05);">☀</span><span style="padding: 4px 9px; font-size: 11px; color: #6B665E;">☾</span></span>
+    </div>
+
+    <div style="display: flex;">
+      <!-- sidebar -->
+      <div style="width: 208px; flex: 0 0 208px; border-right: 1px solid #E5E2DC; padding: 20px 12px; font-size: 13px; background: #FFFFFF;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E; padding: 0 10px 8px;">Components</div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Alert</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Avatar</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Badge</div>
+          <div style="padding: 6px 10px; border-radius: 7px; background: #EDF4F0; color: #10513F; font-weight: 600;">Button</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Card</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Checkbox</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Drawer</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #55514A;">Dropdown</div>
+          <div style="padding: 6px 10px; border-radius: 7px; color: #8A857C;">…</div>
+        </div>
+      </div>
+
+      <!-- content -->
+      <div style="flex: 1; min-width: 0; padding: 32px 40px 48px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #6B665E; margin-bottom: 14px;"><a href="#29">Docs</a><span style="color: #B0ABA1;">/</span><a href="#29">Components</a><span style="color: #B0ABA1;">/</span><span style="font-weight: 600; color: #1C1B18;">Button</span></div>
+        <h1 style="font-size: 34px; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 10px;">Button</h1>
+        <p style="font-size: 15px; line-height: 1.65; color: #55514A; margin: 0 0 28px; max-width: 68ch;">Triggers an action. Use a button for actions, a link for navigation — if it changes the URL, it's a link. One primary button per view; everything else is secondary or quieter.</p>
+
+        <!-- preview -->
+        <div style="border: 1px solid {{ pBorder }}; border-radius: 14px 14px 0 0; background: {{ pBg }}; transition: background 0.25s;">
+          <div style="display: flex; align-items: center; gap: 6px; padding: 12px 16px; border-bottom: 1px solid {{ pBorder }};">
+            <sc-for list="{{ previewThemes }}" as="pt" hint-placeholder-count="5">
+              <button onClick="{{ pt.select }}" style="height: 28px; padding: 0 12px; font-size: 11.5px; font-weight: 600; font-family: inherit; color: {{ pt.fg }}; background: {{ pt.bg }}; border: 1px solid {{ pt.border }}; border-radius: 99px; cursor: pointer;">{{ pt.label }}</button>
+            </sc-for>
+          </div>
+          <div style="padding: 44px 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; align-items: center;">
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: {{ pPrimaryFg }}; background: {{ pPrimary }}; border-radius: 8px;">Save changes</span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: {{ pSoftFg }}; background: {{ pSoft }}; border-radius: 8px;">Secondary</span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: {{ pText }}; background: {{ pSurface }}; border: 1px solid {{ pBorderStrong }}; border-radius: 8px;">Outline</span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: {{ pMuted }}; border-radius: 8px;">Ghost</span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #B3382D; border-radius: 8px;">Delete</span>
+          </div>
+        </div>
+
+        <!-- code tabs -->
+        <div style="border: 1px solid #E5E2DC; border-top: none; border-radius: 0 0 14px 14px; overflow: hidden; margin-bottom: 32px;">
+          <div style="display: flex; gap: 2px; padding: 8px 12px 0; background: #F2F0EC;">
+            <sc-for list="{{ codeTabs }}" as="ct" hint-placeholder-count="3">
+              <button onClick="{{ ct.select }}" style="height: 34px; padding: 0 16px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: {{ ct.fg }}; background: {{ ct.bg }}; border: none; border-radius: 8px 8px 0 0; cursor: pointer;">{{ ct.label }}</button>
+            </sc-for>
+            <span style="margin-left: auto; align-self: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #6B665E; padding-right: 6px; cursor: pointer;">⧉ copy</span>
+          </div>
+          <div style="background: #1C1B18; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; line-height: 1.9; color: #D6E7DF; min-height: 116px;">
+            <sc-if value="{{ isTabHtml }}" hint-placeholder-val="{{ false }}">
+              <div>&lt;<span style="color: #D9A441;">button</span> <span style="color: #7DB3A0;">class</span>=<span style="color: #E8B4A8;">"rdp-btn rdp-btn--primary"</span>&gt;</div>
+              <div>&nbsp;&nbsp;Save changes</div>
+              <div>&lt;/<span style="color: #D9A441;">button</span>&gt;</div>
+            </sc-if>
+            <sc-if value="{{ isTabCotton }}" hint-placeholder-val="{{ true }}">
+              <div>&lt;<span style="color: #D9A441;">c-rdp.button</span> variant=<span style="color: #E8B4A8;">"primary"</span>&gt;</div>
+              <div>&nbsp;&nbsp;Save changes</div>
+              <div>&lt;/<span style="color: #D9A441;">c-rdp.button</span>&gt;</div>
+            </sc-if>
+            <sc-if value="{{ isTabHtmx }}" hint-placeholder-val="{{ false }}">
+              <div>&lt;<span style="color: #D9A441;">c-rdp.button</span> variant=<span style="color: #E8B4A8;">"primary"</span> loading-label=<span style="color: #E8B4A8;">"Saving…"</span></div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7DB3A0;">hx-post</span>=<span style="color: #E8B4A8;">"{% url 'customer-save' %}"</span> <span style="color: #7DB3A0;">hx-target</span>=<span style="color: #E8B4A8;">"#form"</span>&gt;</div>
+              <div>&nbsp;&nbsp;Save changes</div>
+              <div>&lt;/<span style="color: #D9A441;">c-rdp.button</span>&gt;</div>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- API -->
+        <h3 style="font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 14px;">API</h3>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden; margin-bottom: 12px;">
+          <div style="display: grid; grid-template-columns: 0.9fr 1fr 0.6fr 1.5fr; font-size: 12.5px;">
+            <div style="padding: 9px 14px; background: #FFFFFF; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Attribute</div>
+            <div style="padding: 9px 14px; background: #FFFFFF; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Type</div>
+            <div style="padding: 9px 14px; background: #FFFFFF; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Default</div>
+            <div style="padding: 9px 14px; background: #FFFFFF; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Description</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E; background: #FFFFFF;">variant</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #55514A; background: #FFFFFF;">primary · secondary · outline · ghost · danger</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: #FFFFFF;">primary</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A; background: #FFFFFF;">Visual weight of the action.</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E; background: #FFFFFF;">size</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #55514A; background: #FFFFFF;">sm · md · lg</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: #FFFFFF;">md</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A; background: #FFFFFF;">32 / 40 / 48px height.</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E; background: #FFFFFF;">loading-label</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #55514A; background: #FFFFFF;">string</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: #FFFFFF;">—</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A; background: #FFFFFF;">Label + spinner shown during an hx request.</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E; background: #FFFFFF;">disabled</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #55514A; background: #FFFFFF;">boolean</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: #FFFFFF;">false</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A; background: #FFFFFF;">Native disabled; keeps AA contrast.</div>
+            <div style="padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E; background: #FFFFFF;">type</div><div style="padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #55514A; background: #FFFFFF;">button · submit · reset</div><div style="padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: #FFFFFF;">submit</div><div style="padding: 8px 14px; color: #55514A; background: #FFFFFF;">Passed to the native element.</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 18px; font-size: 12.5px; color: #55514A; margin-bottom: 32px;">
+          <span><strong style="color: #1C1B18;">Slots:</strong> default (label) · <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">icon</span> (leading)</span>
+          <span><strong style="color: #1C1B18;">Events:</strong> none of its own — native click + all htmx events</span>
+        </div>
+
+        <!-- accessibility -->
+        <h3 style="font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 14px;">Accessibility</h3>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px; margin-bottom: 32px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.6; color: #55514A;">
+          <span>· Renders a real <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">&lt;button&gt;</span> — Space/Enter, focus and disabled semantics are native.</span>
+          <span>· While loading: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">aria-busy="true"</span>, label change announced; width locked so nothing shifts.</span>
+          <span>· Icon-only usage requires <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">aria-label</span> — the component raises in DEBUG without it.</span>
+          <span>· Focus ring: 2px ring / 2px offset on <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">:focus-visible</span> in every theme.</span>
+        </div>
+
+        <!-- variants -->
+        <h3 style="font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 14px;">Variants</h3>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px; margin-bottom: 32px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <span style="height: 32px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">Small</span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 8px;">Medium</span>
+            <span style="height: 48px; padding: 0 22px; display: inline-flex; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 9px;">Large</span>
+            <span style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.5 4.5a2.1 2.1 0 0 1 3 3L8.2 18.8 4 20z"></path></svg></span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 8px; opacity: 0.8;"><span style="width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #FFFFFF; border-radius: 99px;"></span>Saving…</span>
+            <span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #8A857C; background: #F2F0EC; border-radius: 8px;">Disabled</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E;">sizes sm/md/lg · icon-only · loading · disabled — each block in the real docs has a "show code" toggle.</div>
+        </div>
+
+        <!-- customization -->
+        <h3 style="font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 14px;">Customization</h3>
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.9; color: #D6E7DF; margin-bottom: 32px;">
+          <div style="color: #8A857C;">/* override locally — or in your theme block */</div>
+          <div>.checkout <span style="color: #D9A441;">.rdp-btn--primary</span> {</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-button-bg</span>: <span style="color: #E8B4A8;">var(--rdp-accent)</span>;</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-button-radius</span>: <span style="color: #E8B4A8;">var(--rdp-radius-pill)</span>;</div>
+          <div>}</div>
+        </div>
+
+        <!-- best practices -->
+        <h3 style="font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 14px;">Best practices</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div style="background: #FFFFFF; border: 1px solid #D6E7DF; border-radius: 12px; padding: 16px 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #1E7A46; margin-bottom: 10px;">✓ Do</div>
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;"><span style="height: 34px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">Save</span><span style="height: 34px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #55514A; border-radius: 7px;">Cancel</span></div>
+            <div style="font-size: 12.5px; line-height: 1.55; color: #55514A;">One primary action; cancel is a ghost. Verb-first labels.</div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E8C5C0; border-radius: 12px; padding: 16px 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #B3382D; margin-bottom: 10px;">✕ Don't</div>
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;"><span style="height: 34px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">OK</span><span style="height: 34px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">Yes</span><span style="height: 34px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">Submit</span></div>
+            <div style="font-size: 12.5px; line-height: 1.55; color: #55514A;">Competing primaries and vague labels — the user can't tell what happens.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOC -->
+      <div style="width: 160px; flex: 0 0 160px; padding: 32px 20px; font-size: 12px; border-left: 1px solid #EFEDE8;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; margin-bottom: 10px;">On this page</div>
+        <div style="display: flex; flex-direction: column; gap: 7px; color: #55514A;">
+          <span style="color: #10513F; font-weight: 600; border-left: 2px solid #15654E; padding-left: 8px; margin-left: -10px;">Preview</span>
+          <span>API</span><span>Accessibility</span><span>Variants</span><span>Customization</span><span>Best practices</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Docs site · Sheets 29–30 + Button page instance</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { theme: 'default', tab: 'cotton' };
+
+  themes = {
+    default: { label: 'Default', bg: '#FAF9F7', surface: '#FFFFFF', text: '#1C1B18', muted: '#55514A', border: '#E5E2DC', borderStrong: '#D2CEC6', primary: '#15654E', primaryFg: '#FFFFFF', soft: '#EDF4F0', softFg: '#10513F' },
+    dark:    { label: 'Dark',    bg: '#171614', surface: '#1F1E1B', text: '#F0EEE9', muted: '#A39E94', border: '#33302C', borderStrong: '#4A463F', primary: '#3FA47F', primaryFg: '#0D1F18', soft: '#1E2B26', softFg: '#7DC79C' },
+    ocean:   { label: 'Ocean',   bg: '#F5F8FA', surface: '#FFFFFF', text: '#16232B', muted: '#5E7079', border: '#DDE6EB', borderStrong: '#C2D1D9', primary: '#186B8A', primaryFg: '#FFFFFF', soft: '#E5F0F5', softFg: '#125269' },
+    nord:    { label: 'Nord',    bg: '#ECEFF4', surface: '#FFFFFF', text: '#2E3440', muted: '#616E88', border: '#D8DEE9', borderStrong: '#C3CCDC', primary: '#5E81AC', primaryFg: '#ECEFF4', soft: '#E1E7F0', softFg: '#4C6A92' },
+    dracula: { label: 'Dracula', bg: '#21222C', surface: '#282A36', text: '#F8F8F2', muted: '#9DA0B8', border: '#3B3D51', borderStrong: '#4D5069', primary: '#BD93F9', primaryFg: '#1E1329', soft: '#332E4E', softFg: '#CFB3FF' },
+  };
+
+  tabs = [ { key: 'html', label: 'HTML' }, { key: 'cotton', label: 'Django Cotton' }, { key: 'htmx', label: '+ HTMX' } ];
+
+  renderVals() {
+    const t = this.themes[this.state.theme];
+    return {
+      previewThemes: Object.entries(this.themes).map(([k, v]) => ({
+        label: v.label,
+        bg: k === this.state.theme ? '#1C1B18' : '#FFFFFF',
+        fg: k === this.state.theme ? '#FAF9F7' : '#1C1B18',
+        border: k === this.state.theme ? '#1C1B18' : '#D2CEC6',
+        select: () => this.setState({ theme: k }),
+      })),
+      codeTabs: this.tabs.map((tab) => ({
+        label: tab.label,
+        bg: this.state.tab === tab.key ? '#1C1B18' : 'transparent',
+        fg: this.state.tab === tab.key ? '#FAF9F7' : '#55514A',
+        select: () => this.setState({ tab: tab.key }),
+      })),
+      isTabHtml: this.state.tab === 'html',
+      isTabCotton: this.state.tab === 'cotton',
+      isTabHtmx: this.state.tab === 'htmx',
+      pBg: t.bg, pSurface: t.surface, pText: t.text, pMuted: t.muted, pBorder: t.border, pBorderStrong: t.borderStrong,
+      pPrimary: t.primary, pPrimaryFg: t.primaryFg, pSoft: t.soft, pSoftFg: t.softFg,
+    };
+  }
+}
+</script>
+</body>
+</html>

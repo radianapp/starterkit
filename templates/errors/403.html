@@ -1,49 +1,45 @@
-{% extends "xbase.html" %}
+{# Error 403 — Permission Denied #}
 {% load static %}
 {% load cotton %}
 
+<c-layout.blank title="403 - Permission Denied" navbar_brand="{{ SITE_NAME }}">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+    </c-slot>
 
+    <div class="error-page">
+        <div class="error-container">
+            <c-rdp.card>
+                <div class="rdp-card__body error-content">
+                    <div class="error-icon">🔒</div>
+                    <h1 class="error-title">403 — Permission Denied</h1>
+                    <p class="error-message">
+                        {% if user.is_authenticated %}
+                            You don't have permission to access this resource.
+                            {% if user.username %}
+                                You are logged in as <strong>{{ user.username }}</strong>.
+                            {% endif %}
+                        {% else %}
+                            You need to be logged in to access this resource.
+                        {% endif %}
+                    </p>
 
-{% block title %}403 - Permission Denied{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/errors.css' %}">
-{% endblock %}
-
-{% block content %}
-<div class="error-page">
-  <div class="error-container">
-    <c-rdp.card>
-      <div class="rdp-card__body error-content">
-        <div class="error-icon">🔒</div>
-        <h1 class="error-title">403 — Permission Denied</h1>
-        <p class="error-message">
-          {% if user.is_authenticated %}
-            You don't have permission to access this resource.
-            {% if user.username %}
-              You are logged in as <strong>{{ user.username }}</strong>.
-            {% endif %}
-          {% else %}
-            You need to be logged in to access this resource.
-          {% endif %}
-        </p>
-
-        <div class="error-actions">
-          <c-rdp.button variant="primary" onclick="window.location.href='/'">
-            ← Go back to home
-          </c-rdp.button>
-          {% if not user.is_authenticated %}
-            <c-rdp.button variant="secondary" onclick="window.location.href='/accounts/login/'">
-              Login
-            </c-rdp.button>
-          {% else %}
-            <c-rdp.button variant="secondary" onclick="window.location.href='/dashboard/'">
-              Go to Dashboard
-            </c-rdp.button>
-          {% endif %}
+                    <div class="error-actions">
+                        <c-rdp.button variant="primary" onclick="window.location.href='/'">
+                            ← Go back to home
+                        </c-rdp.button>
+                        {% if not user.is_authenticated %}
+                            <c-rdp.button variant="secondary" onclick="window.location.href='/accounts/login/'">
+                                Login
+                            </c-rdp.button>
+                        {% else %}
+                            <c-rdp.button variant="secondary" onclick="window.location.href='/dashboard/'">
+                                Go to Dashboard
+                            </c-rdp.button>
+                        {% endif %}
+                    </div>
+                </div>
+            </c-rdp.card>
         </div>
-      </div>
-    </c-rdp.card>
-  </div>
-</div>
-{% endblock %}
+    </div>
+</c-layout.blank>

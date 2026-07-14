@@ -1,0 +1,56 @@
+{# US-005: Fragment form login — HTMX target: #login-form #}
+<div id="login-form">
+    {% if form.non_field_errors %}
+        <c-rdp.alert type="error">{{ form.non_field_errors.0 }}</c-rdp.alert>
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <c-rdp.alert type="{{ message.tags|default:'info' }}">{{ message }}</c-rdp.alert>
+        {% endfor %}
+    {% endif %}
+
+    <form
+        method="post"
+        hx-post="{% url 'accounts:login' %}{% if next %}?next={{ next }}{% endif %}"
+        hx-target="#login-form"
+        hx-swap="outerHTML"
+        class="auth-card__form"
+        novalidate
+    >
+        {% csrf_token %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+        <c-rdp.form.input
+            name="email"
+            type="email"
+            label="Email"
+            value="{{ form.email.value|default:'' }}"
+            error="{{ form.email.errors.0|default:'' }}"
+            required="true"
+            autofocus="true"
+            placeholder="nama@contoh.com"
+        />
+
+        <c-rdp.form.input
+            name="password"
+            type="password"
+            label="Password"
+            error="{{ form.password.errors.0|default:'' }}"
+            required="true"
+            autocomplete="current-password"
+        />
+
+        <div class="auth-card__remember">
+            <label>
+                <input type="checkbox" name="remember_me" {% if form.remember_me.value %}checked{% endif %}>
+                Ingat saya
+            </label>
+            <a href="{% url 'accounts:password_reset' %}" class="auth-card__forgot">Lupa password?</a>
+        </div>
+
+        <c-rdp.button type="submit" variant="primary" size="md" style="width:100%">
+            Masuk
+        </c-rdp.button>
+    </form>
+</div>

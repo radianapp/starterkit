@@ -9,6 +9,117 @@
   --color-sidebar-border: #e0e0e0;
 }
 
+/* US-024: Theme Accents based on data-accent */
+html[data-accent="teal"] {
+  --color-primary: #0d9488;
+  --color-primary-hover: #0f766e;
+  --pico-primary: #0d9488;
+  --pico-primary-background: #0d9488;
+  --pico-primary-hover: #0f766e;
+  --rdp-primary-500: #0d9488;
+  --rdp-primary-600: #0f766e;
+  --rdp-primary-900: #115e59;
+  --rdp-primary-200: #99f6e4;
+  --rdp-primary-50: #f0fdfa;
+}
+html[data-accent="coral"] {
+  --color-primary: #e11d48;
+  --color-primary-hover: #be123c;
+  --pico-primary: #e11d48;
+  --pico-primary-background: #e11d48;
+  --pico-primary-hover: #be123c;
+  --rdp-primary-500: #e11d48;
+  --rdp-primary-600: #be123c;
+  --rdp-primary-900: #881337;
+  --rdp-primary-200: #fecdd3;
+  --rdp-primary-50: #fff1f2;
+}
+html[data-accent="purple"] {
+  --color-primary: #7c3aed;
+  --color-primary-hover: #6d28d9;
+  --pico-primary: #7c3aed;
+  --pico-primary-background: #7c3aed;
+  --pico-primary-hover: #6d28d9;
+  --rdp-primary-500: #7c3aed;
+  --rdp-primary-600: #6d28d9;
+  --rdp-primary-900: #4c1d95;
+  --rdp-primary-200: #ddd6fe;
+  --rdp-primary-50: #f5f3ff;
+}
+html[data-accent="amber"] {
+  --color-primary: #d97706;
+  --color-primary-hover: #b45309;
+  --pico-primary: #d97706;
+  --pico-primary-background: #d97706;
+  --pico-primary-hover: #b45309;
+  --rdp-primary-500: #d97706;
+  --rdp-primary-600: #b45309;
+  --rdp-primary-900: #78350f;
+  --rdp-primary-200: #fde68a;
+  --rdp-primary-50: #fffbeb;
+}
+html[data-accent="gold"] {
+  --color-primary: #ca8a04;
+  --color-primary-hover: #a16207;
+  --pico-primary: #ca8a04;
+  --pico-primary-background: #ca8a04;
+  --pico-primary-hover: #a16207;
+  --rdp-primary-500: #ca8a04;
+  --rdp-primary-600: #a16207;
+  --rdp-primary-900: #713f12;
+  --rdp-primary-200: #fef08a;
+  --rdp-primary-50: #fefce8;
+}
+html[data-accent="navy"] {
+  --color-primary: #0066cc;
+  --color-primary-hover: #004a99;
+  --pico-primary: #0066cc;
+  --pico-primary-background: #0066cc;
+  --pico-primary-hover: #004a99;
+  --rdp-primary-500: #3B6797;
+  --rdp-primary-600: #335F8F;
+  --rdp-primary-900: #091A30;
+  --rdp-primary-200: #9EB2CC;
+  --rdp-primary-50: #E8EDF3;
+}
+html[data-accent="emerald"] {
+  --color-primary: #10b981;
+  --color-primary-hover: #059669;
+  --pico-primary: #10b981;
+  --pico-primary-background: #10b981;
+  --pico-primary-hover: #059669;
+  --rdp-primary-500: #10b981;
+  --rdp-primary-600: #059669;
+  --rdp-primary-900: #064e3b;
+  --rdp-primary-200: #a7f3d0;
+  --rdp-primary-50: #ecfdf5;
+}
+html[data-accent="sapphire"] {
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --pico-primary: #2563eb;
+  --pico-primary-background: #2563eb;
+  --pico-primary-hover: #1d4ed8;
+  --rdp-primary-500: #2563eb;
+  --rdp-primary-600: #1d4ed8;
+  --rdp-primary-900: #1e3a8a;
+  --rdp-primary-200: #bfdbfe;
+  --rdp-primary-50: #eff6ff;
+}
+html[data-accent="sunset"] {
+  --color-primary: #f97316;
+  --color-primary-hover: #ea580c;
+  --pico-primary: #f97316;
+  --pico-primary-background: #f97316;
+  --pico-primary-hover: #ea580c;
+  --rdp-primary-500: #f97316;
+  --rdp-primary-600: #ea580c;
+  --rdp-primary-900: #7c2d12;
+  --rdp-primary-200: #fed7aa;
+  --rdp-primary-50: #fff7ed;
+}
+
+
 * {
   box-sizing: border-box;
 }
@@ -132,14 +243,41 @@ body {
   flex-shrink: 0;
 }
 
-.rdp-sidebar__brand-text {
+.rdp-sidebar__brand-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--rdp-primary, #15654E);
+  color: var(--rdp-on-primary, #FFFFFF);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
   font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rdp-sidebar__brand-text {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--rdp-text);
 }
 
 .rdp-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 12px 10px;
   flex: 1;
-  padding: 16px 0;
   overflow-y: auto;
+}
+
+/* Reset margin semua elemen di dalam nav — PicoCSS menambahkan margin-bottom ke elemen block */
+.rdp-sidebar__nav * {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .rdp-sidebar__section {
@@ -147,13 +285,13 @@ body {
 }
 
 .rdp-sidebar__section-title {
-  padding: 0 16px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #999999;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
+  color: #B0ABA1;
+  padding: 8px 10px 4px;
 }
 
 .rdp-sidebar__link {
@@ -179,6 +317,23 @@ body {
   border-left-color: #0066cc;
   color: #0066cc;
   font-weight: 600;
+}
+
+/* sidebar-link on button elements */
+button.sidebar-link, button.rdp-sidebar__link {
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.rdp-sidebar__theme-swatch {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  display: inline-block;
 }
 
 .rdp-sidebar__link-icon {
@@ -210,6 +365,7 @@ body {
   padding: 16px 0;
   border-top: 1px solid var(--color-sidebar-border);
   flex-shrink: 0;
+  position: relative;
 }
 
 .rdp-sidebar__footer .rdp-sidebar__link {
@@ -230,6 +386,20 @@ body {
   background: #ffffff;
   color: #333333;
 }
+
+@media (min-width: 768px) {
+  .rdp-sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--topbar-height);
+    height: calc(100vh - var(--topbar-height));
+    width: var(--sidebar-width);
+  }
+  .rdp-layout__content {
+    margin-left: var(--sidebar-width);
+  }
+}
+
 
 /* ============================================================ */
 /* DASHBOARD TOPBAR (inside content) */
@@ -273,6 +443,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
   padding: 6px 12px;
   background: transparent;
   border: 1px solid #e0e0e0;
@@ -290,6 +461,40 @@ body {
   border-color: #ccc;
 }
 
+.rdp-btn--primary {
+  background: var(--color-primary, #0066cc);
+  color: #ffffff;
+  border-color: var(--color-primary, #0066cc);
+}
+
+.rdp-btn--primary:hover {
+  background: #0052a3;
+  border-color: #0052a3;
+  color: #ffffff;
+}
+
+.rdp-btn--secondary {
+  background: transparent;
+  color: var(--color-text, #333);
+  border-color: #ccc;
+}
+
+.rdp-btn--secondary:hover {
+  background: #f0f0f0;
+}
+
+.rdp-btn--danger {
+  background: var(--color-danger, #dc3545);
+  color: #ffffff;
+  border-color: var(--color-danger, #dc3545);
+}
+
+.rdp-btn--danger:hover {
+  background: #b02a37;
+  border-color: #b02a37;
+  color: #ffffff;
+}
+
 .rdp-btn--ghost {
   border: none;
   background: transparent;
@@ -303,6 +508,16 @@ body {
 .rdp-btn--sm {
   padding: 6px 10px;
   font-size: 0.85rem;
+}
+
+.rdp-btn--md {
+  padding: 8px 16px;
+  font-size: 1rem;
+}
+
+.rdp-btn--lg {
+  padding: 10px 20px;
+  font-size: 1.1rem;
 }
 
 /* ============================================================ */
@@ -328,12 +543,12 @@ body {
 }
 
 .rdp-footer {
-  background: linear-gradient(135deg, #0066cc 0%, #004a99 100%);
+  /* background: linear-gradient(135deg, #0066cc 0%, #004a99 100%); */
   border-top: 1px solid rgba(0,0,0,0.1);
   padding: 16px 20px;
   text-align: center;
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.9);
+  /* color: rgba(255,255,255,0.9); */
   margin-top: auto;
 }
 
@@ -375,8 +590,49 @@ body {
 }
 
 /* ============================================================ */
-/* RESPONSIVE — Mobile (<768px) */
+/* RESPONSIVE & LAYOUT INTEGRATION */
 /* ============================================================ */
+
+/* Desktop & Tablet Layout (min-width: 768px) */
+@media (min-width: 768px) {
+  .rdp-sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--topbar-height);
+    height: calc(100vh - var(--topbar-height));
+    width: var(--sidebar-width);
+    transform: none !important;
+    z-index: 99;
+  }
+  .rdp-layout__content {
+    margin-left: var(--sidebar-width);
+  }
+}
+
+/* Tablet Layout Specifically (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+  .rdp-sidebar__section-title {
+    font-size: 0.7rem;
+    padding: 0 12px;
+  }
+  .rdp-sidebar__link {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .rdp-sidebar__link-text {
+    font-size: 0.85rem;
+    display: inline-block !important; /* Force display teks menu di tablet */
+  }
+  .rdp-sidebar__brand-text {
+    display: inline-block !important;
+  }
+}
+
+
+/* RESPONSIVE — Mobile (<768px) */
 @media (max-width: 767px) {
   :root {
     --sidebar-width: 240px;
@@ -416,8 +672,10 @@ body {
 
   .rdp-layout__content {
     padding: 0;
+    margin-left: 0 !important;
   }
 }
+
 
 /* ============================================================ */
 /* RESPONSIVE — Small mobile (<480px) */
@@ -449,38 +707,158 @@ body {
 }
 
 /* ============================================================ */
-/* DARK MODE */
+/* THEME TOGGLE BUTTON */
 /* ============================================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-sidebar-bg: #2a2a2a;
-    --color-sidebar-border: #444;
-  }
-
-  body {
-    background: #1a1a1a;
-    color: #f0f0f0;
-  }
-
-  .rdp-sidebar {
-    background: var(--color-sidebar-bg);
-    border-right-color: var(--color-sidebar-border);
-  }
-
-  .rdp-sidebar__link {
-    color: #f0f0f0;
-  }
-
-  .rdp-sidebar__link:hover {
-    background: #333333;
-  }
-
-  .rdp-sidebar__link-icon {
-    color: #f0f0f0;
-  }
-
-  .rdp-layout__content {
-    background: #1a1a1a;
-    color: #f0f0f0;
-  }
+.rdp-theme-toggle {
+  color: #ffffff;
+  font-size: 1.1rem;
+  padding: 6px 8px;
+  border-radius: 6px;
+  line-height: 1;
 }
+
+.rdp-theme-toggle:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.rdp-theme-toggle--floating {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.12);
+  color: #333;
+  border-radius: 8px;
+}
+
+[data-theme="dark"] .rdp-theme-toggle--floating {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+/* ============================================================ */
+/* THEME SYSTEM — data-theme attribute only (single source)
+   Komponen baru cukup pakai --color-* vars, otomatis ikut theme.
+/* ============================================================ */
+
+/* Light theme vars (default) */
+[data-theme="light"],
+:root {
+  --color-bg: #ffffff;
+  --color-text: #333333;
+  --color-border: #ddd;
+  --color-bg-secondary: #f5f5f5;
+  --color-text-secondary: #666;
+  --color-sidebar-bg: #f8f9fa;
+  --color-sidebar-border: #e0e0e0;
+  --color-primary: #0066cc;
+  --color-danger: #dc3545;
+}
+
+/* Dark theme vars */
+[data-theme="dark"] {
+  --color-bg: #1a1a1a;
+  --color-text: #f0f0f0;
+  --color-border: #555;
+  --color-bg-secondary: #2a2a2a;
+  --color-text-secondary: #aaa;
+  --color-sidebar-bg: #2a2a2a;
+  --color-sidebar-border: #444;
+  --color-primary: #4499ee;
+  --color-danger: #e05060;
+}
+
+/* ── Dark mode component overrides ── */
+[data-theme="dark"] body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .rdp-sidebar {
+  background: var(--color-sidebar-bg);
+  border-right-color: var(--color-sidebar-border);
+}
+
+[data-theme="dark"] .rdp-sidebar__brand {
+  color: #ffffff;
+  border-bottom-color: var(--color-sidebar-border);
+}
+
+[data-theme="dark"] .rdp-sidebar__link {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .rdp-sidebar__link:hover,
+[data-theme="dark"] .rdp-sidebar__link.active {
+  background: #333333;
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .rdp-sidebar__section-title {
+  color: #777777;
+}
+
+[data-theme="dark"] .rdp-sidebar__link-icon {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .rdp-layout__content {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .rdp-card {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .rdp-card__label,
+[data-theme="dark"] .rdp-activity-item__desc,
+[data-theme="dark"] .rdp-techstack-group ul li {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .rdp-activity-item {
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .rdp-topnav {
+  background: #1e1e1e;
+  border-bottom-color: #333;
+}
+
+[data-theme="dark"] .rdp-dashboard-topbar {
+  background: var(--color-bg-secondary);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .rdp-dashboard-topbar__title {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .rdp-btn--secondary {
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .rdp-btn--secondary:hover {
+  background: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .rdp-dashboard-footer {
+  background: var(--color-bg-secondary);
+  border-top-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+

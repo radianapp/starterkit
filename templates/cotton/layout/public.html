@@ -1,0 +1,37 @@
+{% comment %}
+US-010, US-027: Layout Public — Untuk halaman landing page publik, pricing, about, privacy, dll.
+Menerima slot: nav_links, default, footer.
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="public">
+    <c-slot name="head">
+        {{ head }}
+    </c-slot>
+
+    <div class="rdp-layout">
+        <c-layout.header navbar_brand="{{ navbar_brand }}">
+            {% if nav_links %}
+                {{ nav_links }}
+            {% else %}
+                <a href="/" class="home-nav__link">Home</a>
+                <a href="/dashboard/" class="home-nav__link home-nav__link--cta">Dashboard</a>
+            {% endif %}
+        </c-layout.header>
+
+        <main class="rdp-layout__content-home" id="main-content">
+            {{ slot }}
+        </main>
+
+        <c-layout.footer year="{{ COPYRIGHT_YEAR|default:'2024' }}" company="{{ COMPANY_NAME|default:'StarterKit' }}">
+            {% if footer %}
+                {{ footer }}
+            {% endif %}
+        </c-layout.footer>
+    </div>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

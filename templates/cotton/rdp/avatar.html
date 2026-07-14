@@ -1,0 +1,18 @@
+{# US-033: Komponen avatar untuk foto profil atau inisial nama #}
+{% comment %}
+TUJUAN: Reusable avatar component dengan fallback ke inisial jika src kosong.
+- src (optional): URL gambar avatar
+- name (required): Nama user untuk inisial fallback
+- size (optional): "xs" | "sm" | "md" | "lg" | "xl" — default "md"
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<div
+  class="rdp-avatar rdp-avatar--{{ size|default:'md' }}"
+  {{ attrs }}>
+  {% if src %}
+    <img src="{{ src }}" alt="Avatar {{ name }}" class="rdp-avatar__img">
+  {% else %}
+    <span class="rdp-avatar__initials">{{ name|slice:":1"|upper }}</span>
+  {% endif %}
+</div>

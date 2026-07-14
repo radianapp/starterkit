@@ -1,0 +1,435 @@
+{% load static %}
+<c-layout.dashboard title="{{ page_title }}" navbar_brand="RDP Tokens">
+    <c-slot name="head">
+        <meta name="description" content="Halaman showcase design tokens dan {{ theme_count }} tema RDP UI Design System.">
+        
+        <!-- {#
+            Load SEMUA tema CSS sekaligus agar Theme Gallery dapat merender setiap
+            card dengan variabel warna yang benar. Setiap file tema di-scope ke
+            [data-rdp-theme="X"] sehingga tidak saling konflik.
+        #} -->
+        {% for theme in themes %}
+        <link rel="stylesheet" href="{% static 'vendor/rdp-ui/themes/' %}{{ theme.id }}.css"
+              id="{% if forloop.first %}rdp-theme-css{% endif %}">
+        {% endfor %}
+
+        <link rel="stylesheet" href="{% static 'css/token-test.css' %}">
+    </c-slot>
+
+    <c-slot name="extra_js">
+        <script src="{% static 'js/token-test.js' %}"></script>
+    </c-slot>
+
+    {# ── CUSTOM SIDEBAR ── #}
+    <c-slot name="sidebar">
+        {# Brand / Logo #}
+        <c-sidebar.brand title="Design Tokens" initial="T" />
+
+        {# Search box — visible only on mobile inside drawer #}
+        <c-sidebar.search placeholder="Search tokens…" />
+
+        <c-sidebar.nav>
+            <c-sidebar.section title="Token Layers" />
+            <c-sidebar.link href="#colors" icon="🎨">Colors</c-sidebar.link>
+            <c-sidebar.link href="#semantics" icon="🔗">Semantic Tokens</c-sidebar.link>
+            <c-sidebar.link href="#typography" icon="✍️">Typography</c-sidebar.link>
+            <c-sidebar.link href="#spacing" icon="📐">Spacing</c-sidebar.link>
+            <c-sidebar.link href="#radius" icon="⬜">Radius</c-sidebar.link>
+            <c-sidebar.link href="#shadows" icon="🌑">Shadows</c-sidebar.link>
+            <c-sidebar.link href="#motion" icon="⚡">Motion</c-sidebar.link>
+
+            <c-sidebar.section title="Themes" />
+            <c-sidebar.link href="#gallery" icon="🖼️">Theme Gallery</c-sidebar.link>
+
+            {# Dynamic theme switcher — tidak bisa pakai c-sidebar.link karena perlu onclick dinamis #}
+            {% for theme in themes %}
+            <button onclick="switchTheme('{{ theme.id }}')"
+                    class="sidebar-link"
+                    id="nav-{{ theme.id }}">
+                <span class="rdp-sidebar__theme-swatch" style="background:{{ theme.swatch }};"></span>
+                <span>{{ theme.label }}</span>
+            </button>
+            {% endfor %}
+        </c-sidebar.nav>
+    </c-slot>
+
+    {# ── NAVBAR ACTIONS ── #}
+    <c-slot name="navbar_actions">
+        <div style="display:flex;align-items:center;gap:var(--rdp-space-sm);margin-right:12px;border-right:1px solid var(--rdp-border);padding-right:12px;">
+            <span class="rdp-badge rdp-badge--success">{{ theme_count }} Themes</span>
+            <span style="font-size:.75rem;color:var(--rdp-text-muted)">Active:</span>
+            <span id="tt-active-theme-label" style="font-size:.8rem;font-weight:700;font-family:var(--rdp-font-mono);color:var(--rdp-primary)">default</span>
+        </div>
+    </c-slot>
+
+    {# ── MAIN CONTENT ── #}
+
+            {# ─ 8. THEME GALLERY ─ #}
+            <section class="tt-section" id="gallery">
+                <h2 class="tt-section-title">🖼️ Theme Gallery — {{ theme_count }} Tema</h2>
+                <p class="tt-section-sub">Semua {{ theme_count }} tema berjalan bersamaan. Klik kartu untuk mengaktifkan tema di halaman ini.</p>
+
+                <div class="tt-theme-gallery">
+                    {% for theme in themes %}
+                    <div class="tt-theme-card" data-theme-id="{{ theme.id }}" onclick="switchTheme('{{ theme.id }}')" id="card-{{ theme.id }}">
+                        {# Mini preview menggunakan tema tersebut via inline style #}
+                        <div data-rdp-theme="{{ theme.id }}" style="background:var(--rdp-background);padding:0">
+                            {# Top bar mini #}
+                            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--rdp-surface);border-bottom:1px solid var(--rdp-border)">
+                                <div style="display:flex;align-items:center;gap:6px">
+                                    <div style="width:16px;height:16px;border-radius:4px;background:var(--rdp-primary)"></div>
+                                    <span style="font-size:.7rem;font-weight:700;color:var(--rdp-text)">{{ theme.label }}</span>
+                                </div>
+                                <div style="display:flex;gap:3px">
+                                    {% if theme.dark %}<span style="font-size:.6rem;padding:1px 6px;border-radius:99px;background:var(--rdp-primary-soft);color:var(--rdp-primary);font-weight:600">Dark</span>{% else %}<span style="font-size:.6rem;padding:1px 6px;border-radius:99px;background:var(--rdp-primary-soft);color:var(--rdp-primary);font-weight:600">Light</span>{% endif %}
+                                </div>
+                            </div>
+
+                            {# Card preview #}
+                            <div style="padding:10px 12px;background:var(--rdp-background)">
+                                <div style="background:var(--rdp-surface);border:1px solid var(--rdp-border);border-radius:8px;padding:10px;box-shadow:var(--rdp-shadow-1)">
+                                    <div style="font-size:.7rem;font-weight:700;color:var(--rdp-text);margin-bottom:4px">Tambah Anggota Tim</div>
+                                    <div style="height:22px;background:var(--rdp-surface-sunken);border:1px solid var(--rdp-border);border-radius:5px;margin-bottom:6px"></div>
+                                    <div style="display:flex;gap:4px;margin-bottom:6px">
+                                        <div style="height:24px;flex:1;background:var(--rdp-primary);border-radius:5px;display:flex;align-items:center;justify-content:center">
+                                            <span style="font-size:.6rem;color:var(--rdp-on-primary);font-weight:600">Undang</span>
+                                        </div>
+                                        <div style="height:24px;flex:1;background:var(--rdp-surface-sunken);border:1px solid var(--rdp-border);border-radius:5px;display:flex;align-items:center;justify-content:center">
+                                            <span style="font-size:.6rem;color:var(--rdp-text-muted)">Batal</span>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex;gap:3px">
+                                        <div style="height:10px;width:10px;border-radius:50%;background:var(--rdp-success)"></div>
+                                        <div style="height:10px;width:10px;border-radius:50%;background:var(--rdp-warning)"></div>
+                                        <div style="height:10px;width:10px;border-radius:50%;background:var(--rdp-danger)"></div>
+                                        <div style="height:10px;width:10px;border-radius:50%;background:var(--rdp-info)"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Swatch row #}
+                            <div style="display:flex;padding:6px 12px 10px;gap:4px">
+                                <div style="height:8px;flex:1;border-radius:4px;background:var(--rdp-primary)"></div>
+                                <div style="height:8px;flex:1;border-radius:4px;background:var(--rdp-success)"></div>
+                                <div style="height:8px;flex:1;border-radius:4px;background:var(--rdp-warning)"></div>
+                                <div style="height:8px;flex:1;border-radius:4px;background:var(--rdp-danger)"></div>
+                                <div style="height:8px;flex:1;border-radius:4px;background:var(--rdp-info)"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>        
+
+            {# ─ 1. COLOR PRIMITIVES ─ #}
+            <section class="tt-section" id="colors">
+                <h2 class="tt-section-title">🎨 Color Primitives</h2>
+                <p class="tt-section-sub">Skala warna mentah. Tidak pernah digunakan langsung oleh komponen — hanya oleh tema dan semantic tokens.</p>
+
+                <div class="tt-swatch-group">
+                    <div class="tt-swatch-group-label">Green Scale</div>
+
+                    <div class="tt-swatches">
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#EDF4F0"></div><div class="tt-swatch-name">green-50</div><div class="tt-swatch-val">#EDF4F0</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#D6E7DF"></div><div class="tt-swatch-name">green-100</div><div class="tt-swatch-val">#D6E7DF</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#ACCFC1"></div><div class="tt-swatch-name">green-200</div><div class="tt-swatch-val">#ACCFC1</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#7DB3A0"></div><div class="tt-swatch-name">green-300</div><div class="tt-swatch-val">#7DB3A0</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#5FA98C"></div><div class="tt-swatch-name">green-400</div><div class="tt-swatch-val">#5FA98C</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#2A7A5E"></div><div class="tt-swatch-name">green-500</div><div class="tt-swatch-val">#2A7A5E</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#15654E"></div><div class="tt-swatch-name">green-600 ★</div><div class="tt-swatch-val">#15654E</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#10513F"></div><div class="tt-swatch-name">green-700</div><div class="tt-swatch-val">#10513F</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#0C3D30"></div><div class="tt-swatch-name">green-800</div><div class="tt-swatch-val">#0C3D30</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#082A21"></div><div class="tt-swatch-name">green-900</div><div class="tt-swatch-val">#082A21</div></div>
+                    </div>
+                </div>
+
+                <div class="tt-swatch-group">
+                    <div class="tt-swatch-group-label">Neutral Scale (Warm Gray)</div>
+                    <div class="tt-swatches">
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#FAF9F7"></div><div class="tt-swatch-name">neutral-50</div><div class="tt-swatch-val">#FAF9F7</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#F2F0EC"></div><div class="tt-swatch-name">neutral-100</div><div class="tt-swatch-val">#F2F0EC</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#E5E2DC"></div><div class="tt-swatch-name">neutral-200</div><div class="tt-swatch-val">#E5E2DC</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#D2CEC6"></div><div class="tt-swatch-name">neutral-300</div><div class="tt-swatch-val">#D2CEC6</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#B0ABA1"></div><div class="tt-swatch-name">neutral-400</div><div class="tt-swatch-val">#B0ABA1</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#8A857C"></div><div class="tt-swatch-name">neutral-500</div><div class="tt-swatch-val">#8A857C</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#6B665E"></div><div class="tt-swatch-name">neutral-600</div><div class="tt-swatch-val">#6B665E</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#4E4A44"></div><div class="tt-swatch-name">neutral-700</div><div class="tt-swatch-val">#4E4A44</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#33302C"></div><div class="tt-swatch-name">neutral-800</div><div class="tt-swatch-val">#33302C</div></div>
+                        <div class="tt-swatch"><div class="tt-swatch-color" style="background:#1C1B18"></div><div class="tt-swatch-name">neutral-900</div><div class="tt-swatch-val">#1C1B18</div></div>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--rdp-space-lg)">
+                    <div class="tt-swatch-group">
+                        <div class="tt-swatch-group-label">Status — Emerald</div>
+                        <div class="tt-swatches">
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#E8F5EE"></div><div class="tt-swatch-name">em-50</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#66BE8C"></div><div class="tt-swatch-name">em-400</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#1E7A46"></div><div class="tt-swatch-name">em-600 ★</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#0E482B"></div><div class="tt-swatch-name">em-800</div></div>
+                        </div>
+                    </div>
+                    <div class="tt-swatch-group">
+                        <div class="tt-swatch-group-label">Status — Red</div>
+                        <div class="tt-swatches">
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#FCECEA"></div><div class="tt-swatch-name">red-50</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#E08273"></div><div class="tt-swatch-name">red-300</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#B3382D"></div><div class="tt-swatch-name">red-600 ★</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#4F1612"></div><div class="tt-swatch-name">red-900</div></div>
+                        </div>
+                    </div>
+                    <div class="tt-swatch-group">
+                        <div class="tt-swatch-group-label">Status — Blue</div>
+                        <div class="tt-swatches">
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#EBF1F9"></div><div class="tt-swatch-name">blue-50</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#82AEE3"></div><div class="tt-swatch-name">blue-300</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#2A5FA8"></div><div class="tt-swatch-name">blue-600 ★</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#0F2347"></div><div class="tt-swatch-name">blue-900</div></div>
+                        </div>
+                    </div>
+                    <div class="tt-swatch-group">
+                        <div class="tt-swatch-group-label">Status — Yellow</div>
+                        <div class="tt-swatches">
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#FDF6E3"></div><div class="tt-swatch-name">yel-50</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#D9A441"></div><div class="tt-swatch-name">yel-300</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#9A6A0B"></div><div class="tt-swatch-name">yel-600 ★</div></div>
+                            <div class="tt-swatch"><div class="tt-swatch-color" style="background:#3E2A04"></div><div class="tt-swatch-name">yel-900</div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {# ─ 2. SEMANTIC TOKENS ─ #}
+            <section class="tt-section" id="semantics">
+                <h2 class="tt-section-title">🔗 Semantic Tokens</h2>
+                <p class="tt-section-sub">Token bermakna yang di-override oleh tema. Komponen hanya boleh merujuk ke layer ini.</p>
+
+                <div class="tt-semantic-grid">
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-background)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-background</div>
+                            <div class="tt-sem-swatch__desc">Page background</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-surface);border:1px solid var(--rdp-border)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-surface</div>
+                            <div class="tt-sem-swatch__desc">Card / panel surface</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-surface-sunken)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-surface-sunken</div>
+                            <div class="tt-sem-swatch__desc">Input background</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-primary)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-primary</div>
+                            <div class="tt-sem-swatch__desc">Brand / action color</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-primary-soft)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-primary-soft</div>
+                            <div class="tt-sem-swatch__desc">Subtle tint of primary</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-text)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-text</div>
+                            <div class="tt-sem-swatch__desc">Body text</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-text-muted)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-text-muted</div>
+                            <div class="tt-sem-swatch__desc">Secondary / captions</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-border)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-border</div>
+                            <div class="tt-sem-swatch__desc">Default separator</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-success)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-success</div>
+                            <div class="tt-sem-swatch__desc">Success state</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-warning)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-warning</div>
+                            <div class="tt-sem-swatch__desc">Warning state</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-danger)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-danger</div>
+                            <div class="tt-sem-swatch__desc">Error / destructive</div>
+                        </div>
+                    </div>
+                    <div class="tt-sem-swatch">
+                        <div class="tt-sem-swatch__color" style="background:var(--rdp-info)"></div>
+                        <div class="tt-sem-swatch__info">
+                            <div class="tt-sem-swatch__token">--rdp-info</div>
+                            <div class="tt-sem-swatch__desc">Informational</div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Status soft rows #}
+                <div style="display:flex;gap:var(--rdp-space-sm);flex-wrap:wrap;margin-top:var(--rdp-space-lg)">
+                    <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--rdp-radius-sm);background:var(--rdp-success-soft);color:var(--rdp-success);font-size:.8rem;font-weight:600">✓ success-soft</div>
+                    <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--rdp-radius-sm);background:var(--rdp-warning-soft);color:var(--rdp-warning);font-size:.8rem;font-weight:600">⚠ warning-soft</div>
+                    <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--rdp-radius-sm);background:var(--rdp-danger-soft);color:var(--rdp-danger);font-size:.8rem;font-weight:600">✕ danger-soft</div>
+                    <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--rdp-radius-sm);background:var(--rdp-info-soft);color:var(--rdp-info);font-size:.8rem;font-weight:600">ℹ info-soft</div>
+                </div>
+            </section>
+
+            {# ─ 3. TYPOGRAPHY ─ #}
+            <section class="tt-section" id="typography">
+                <h2 class="tt-section-title">✍️ Typography Scale</h2>
+                <p class="tt-section-sub">Setiap baris menggunakan CSS <code>font</code> shorthand dari token <code>--rdp-text-*</code>. Font: <strong>Instrument Sans</strong> (sans) + <strong>IBM Plex Mono</strong> (mono).</p>
+
+                <div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-display</div><div class="tt-type-size">3rem / 1.1 / bold</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-display);letter-spacing:-0.025em">Display Text</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-h1</div><div class="tt-type-size">2.25rem / 1.15 / bold</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-h1)">Heading 1</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-h2</div><div class="tt-type-size">1.75rem / 1.2 / bold</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-h2)">Heading 2</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-h3</div><div class="tt-type-size">1.375rem / 1.3 / semibold</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-h3)">Heading 3</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-h4</div><div class="tt-type-size">1.125rem / 1.4 / semibold</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-h4)">Heading 4</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-body</div><div class="tt-type-size">1rem / 1.6 / regular</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-body)">Body text — Teks utama halaman, paragraf, dan konten.</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-small</div><div class="tt-type-size">0.875rem / 1.55 / regular</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-small)">Small text — Label, deskripsi pendek, dan UI copy.</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-caption</div><div class="tt-type-size">0.75rem / 1.45 / medium</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-caption);color:var(--rdp-text-muted)">Caption — Timestamp, metadata, helper text.</div>
+                    </div>
+                    <div class="tt-type-row">
+                        <div class="tt-type-meta"><div class="tt-type-label">--rdp-text-code</div><div class="tt-type-size">0.875rem / mono / medium</div></div>
+                        <div class="tt-type-specimen" style="font:var(--rdp-text-code);color:var(--rdp-danger)">const token = '--rdp-primary';</div>
+                    </div>
+                </div>
+            </section>
+
+            {# ─ 4. SPACING ─ #}
+            <section class="tt-section" id="spacing">
+                <h2 class="tt-section-title">📐 Spacing Scale</h2>
+                <p class="tt-section-sub">Base unit: 4px. Tokens <code>--rdp-space-1</code> hingga <code>--rdp-space-10</code>.</p>
+
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-1</span><div class="tt-space-bar" style="width:4px"></div><span class="tt-space-val">4px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-2  (xs)</span><div class="tt-space-bar" style="width:8px"></div><span class="tt-space-val">8px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-3  (sm)</span><div class="tt-space-bar" style="width:12px"></div><span class="tt-space-val">12px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-4  (md)</span><div class="tt-space-bar" style="width:16px"></div><span class="tt-space-val">16px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-5  (lg)</span><div class="tt-space-bar" style="width:24px"></div><span class="tt-space-val">24px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-6  (xl)</span><div class="tt-space-bar" style="width:32px"></div><span class="tt-space-val">32px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-7  (2xl)</span><div class="tt-space-bar" style="width:48px"></div><span class="tt-space-val">48px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-8  (3xl)</span><div class="tt-space-bar" style="width:64px"></div><span class="tt-space-val">64px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-9  (4xl)</span><div class="tt-space-bar" style="width:96px"></div><span class="tt-space-val">96px</span></div>
+                    <div class="tt-space-row"><span class="tt-space-label">--rdp-space-10</span><div class="tt-space-bar" style="width:128px"></div><span class="tt-space-val">128px</span></div>
+                </div>
+            </section>
+
+            {# ─ 5. RADIUS ─ #}
+            <section class="tt-section" id="radius">
+                <h2 class="tt-section-title">⬜ Radius Scale</h2>
+                <p class="tt-section-sub">Nesting rule: inner = outer − padding, minimum xs.</p>
+
+                <div class="tt-radius-grid">
+                    <div class="tt-radius-box"><div class="tt-radius-demo" style="border-radius:0px"></div><div class="tt-radius-label">0 (none)</div></div>
+                    <div class="tt-radius-box"><div class="tt-radius-demo" style="border-radius:var(--rdp-radius-xs)"></div><div class="tt-radius-label">--rdp-radius-xs · 4px</div></div>
+                    <div class="tt-radius-box"><div class="tt-radius-demo" style="border-radius:var(--rdp-radius-sm)"></div><div class="tt-radius-label">--rdp-radius-sm · 6px</div></div>
+                    <div class="tt-radius-box"><div class="tt-radius-demo" style="border-radius:var(--rdp-radius-md)"></div><div class="tt-radius-label">--rdp-radius-md · 10px</div></div>
+                    <div class="tt-radius-box"><div class="tt-radius-demo" style="border-radius:var(--rdp-radius-lg)"></div><div class="tt-radius-label">--rdp-radius-lg · 14px</div></div>
+                    <div class="tt-radius-box"><div class="tt-radius-demo" style="border-radius:var(--rdp-radius-xl)"></div><div class="tt-radius-label">--rdp-radius-xl · 20px</div></div>
+                    <div class="tt-radius-box">
+                        <div style="width:80px;height:30px;background:var(--rdp-primary-soft);border:2px solid var(--rdp-primary);border-radius:var(--rdp-radius-full)"></div>
+                        <div class="tt-radius-label">--rdp-radius-full · pill</div>
+                    </div>
+                    <div class="tt-radius-box">
+                        <div style="width:60px;height:60px;background:var(--rdp-primary-soft);border:2px solid var(--rdp-primary);border-radius:50%"></div>
+                        <div class="tt-radius-label">--rdp-radius-circle · 50%</div>
+                    </div>
+                </div>
+            </section>
+
+            {# ─ 6. SHADOWS ─ #}
+            <section class="tt-section" id="shadows">
+                <h2 class="tt-section-title">🌑 Shadow Levels</h2>
+                <p class="tt-section-sub">Dua-layer shadows, tinted ink. Semantically named shadow-1 → shadow-4.</p>
+
+                <div class="tt-shadow-grid">
+                    <div class="tt-shadow-box"><div class="tt-shadow-demo" style="box-shadow:var(--rdp-shadow-1)"></div><div class="tt-shadow-label">--rdp-shadow-1</div><div style="font-size:.6rem;color:var(--rdp-text-muted);font-family:var(--rdp-font-mono);text-align:center">Contact · xs</div></div>
+                    <div class="tt-shadow-box"><div class="tt-shadow-demo" style="box-shadow:var(--rdp-shadow-2)"></div><div class="tt-shadow-label">--rdp-shadow-2</div><div style="font-size:.6rem;color:var(--rdp-text-muted);font-family:var(--rdp-font-mono);text-align:center">Card · sm</div></div>
+                    <div class="tt-shadow-box"><div class="tt-shadow-demo" style="box-shadow:var(--rdp-shadow-3)"></div><div class="tt-shadow-label">--rdp-shadow-3</div><div style="font-size:.6rem;color:var(--rdp-text-muted);font-family:var(--rdp-font-mono);text-align:center">Modal · lg</div></div>
+                    <div class="tt-shadow-box"><div class="tt-shadow-demo" style="box-shadow:var(--rdp-shadow-4)"></div><div class="tt-shadow-label">--rdp-shadow-4</div><div style="font-size:.6rem;color:var(--rdp-text-muted);font-family:var(--rdp-font-mono);text-align:center">Floating · xl</div></div>
+                </div>
+            </section>
+
+            {# ─ 7. MOTION ─ #}
+            <section class="tt-section" id="motion">
+                <h2 class="tt-section-title">⚡ Motion Tokens</h2>
+                <p class="tt-section-sub">Hover card untuk preview durasi. Semua animation menggunakan <code>opacity</code> dan <code>transform</code> saja.</p>
+
+                <div style="display:flex;flex-wrap:wrap;gap:var(--rdp-space-md)">
+                    <div class="rdp-card rdp-card__body" style="padding:var(--rdp-space-md);min-width:160px;text-align:center">
+                        <div style="font-family:var(--rdp-font-mono);font-size:.75rem;font-weight:700;color:var(--rdp-primary);margin-bottom:4px">--rdp-duration-fast</div>
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--rdp-text)">100ms</div>
+                        <div style="font-size:.7rem;color:var(--rdp-text-muted)">Hover, press feedback</div>
+                    </div>
+                    <div class="rdp-card rdp-card__body" style="padding:var(--rdp-space-md);min-width:160px;text-align:center">
+                        <div style="font-family:var(--rdp-font-mono);font-size:.75rem;font-weight:700;color:var(--rdp-primary);margin-bottom:4px">--rdp-duration-base</div>
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--rdp-text)">200ms</div>
+                        <div style="font-size:.7rem;color:var(--rdp-text-muted)">Default transitions</div>
+                    </div>
+                    <div class="rdp-card rdp-card__body" style="padding:var(--rdp-space-md);min-width:160px;text-align:center">
+                        <div style="font-family:var(--rdp-font-mono);font-size:.75rem;font-weight:700;color:var(--rdp-primary);margin-bottom:4px">--rdp-duration-slow</div>
+                        <div style="font-size:1.5rem;font-weight:700;color:var(--rdp-text)">300ms</div>
+                        <div style="font-size:.7rem;color:var(--rdp-text-muted)">Sidebar, drawers</div>
+                    </div>
+                    <div class="rdp-card rdp-card__body" style="padding:var(--rdp-space-md);min-width:160px;text-align:center">
+                        <div style="font-family:var(--rdp-font-mono);font-size:.75rem;font-weight:700;color:var(--rdp-primary);margin-bottom:4px">--rdp-ease-spring</div>
+                        <div style="font-size:.9rem;font-weight:700;color:var(--rdp-text);font-family:var(--rdp-font-mono)">cubic-bezier(.34,1.56,.64,1)</div>
+                        <div style="font-size:.7rem;color:var(--rdp-text-muted)">Playful micro-interactions</div>
+                    </div>
+                </div>
+            </section>
+
+                </div>
+            </section>
+
+</c-layout.dashboard>

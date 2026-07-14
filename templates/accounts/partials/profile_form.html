@@ -1,0 +1,59 @@
+{# US-009: Fragment form edit profil — HTMX target: #profile-form-section #}
+<form
+    hx-post="{% url 'accounts:profile' %}"
+    hx-target="#profile-form-section"
+    hx-swap="innerHTML"
+    class="profile-form"
+>
+    {% csrf_token %}
+
+    {% if success %}
+        <c-rdp.alert type="success">Profil berhasil diperbarui.</c-rdp.alert>
+    {% endif %}
+
+    <div class="profile-form__row">
+        <c-rdp.form.input
+            name="first_name"
+            label="Nama Depan"
+            value="{{ form.first_name.value|default:'' }}"
+            placeholder="Nama depan"
+        >
+            {% if form.first_name.errors %}
+                <c-slot name="error">{{ form.first_name.errors.0 }}</c-slot>
+            {% endif %}
+        </c-rdp.form.input>
+
+        <c-rdp.form.input
+            name="last_name"
+            label="Nama Belakang"
+            value="{{ form.last_name.value|default:'' }}"
+            placeholder="Nama belakang"
+        >
+            {% if form.last_name.errors %}
+                <c-slot name="error">{{ form.last_name.errors.0 }}</c-slot>
+            {% endif %}
+        </c-rdp.form.input>
+    </div>
+
+    <div>
+        <label class="rdp-form-field__label" for="id_bio">Bio</label>
+        <textarea
+            id="id_bio"
+            name="bio"
+            rows="3"
+            placeholder="Cerita singkat tentang kamu..."
+            class="rdp-form-field__input{% if form.bio.errors %} rdp-form-field__input--error{% endif %}"
+            maxlength="500"
+        >{{ form.bio.value|default:'' }}</textarea>
+        {% if form.bio.errors %}
+            <span class="rdp-form-field__error">{{ form.bio.errors.0 }}</span>
+        {% endif %}
+        <span class="rdp-form-field__hint">Maksimal 500 karakter.</span>
+    </div>
+
+    <div>
+        <c-rdp.button type="submit" variant="primary">
+            Simpan Perubahan
+        </c-rdp.button>
+    </div>
+</form>

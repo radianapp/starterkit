@@ -1,0 +1,31 @@
+{# US-031: About Page #}
+<c-layout.public title="Tentang Kami" navbar_brand="{{ APP_BRAND_SHORT }}">
+    <div class="container" style="max-width: 800px; padding: 40px 0;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 8px;">Tentang {{ APP_BRAND_SHORT }}</h1>
+        <p style="font-size: 1.2rem; color: var(--pico-muted-color); margin-bottom: 40px;">Misi kami adalah mempermudah pengembangan aplikasi web modern berkualitas tinggi bagi seluruh tim developer.</p>
+
+        <article style="margin-bottom: 40px;">
+            <header>
+                <h3 style="margin: 0; font-size: 1.25rem;">Visi & Misi</h3>
+            </header>
+            <p><strong>Visi:</strong> Menjadi platform fondasi standar industri untuk semua proyek web berbasis Django.</p>
+            <p><strong>Misi:</strong> Menghilangkan boilerplates yang tidak perlu dan menghemat ribuan jam kerja developer dengan menyediakan solusi siap pakai yang terintegrasi, andal, dan aman.</p>
+        </article>
+
+        <div class="grid" style="margin-bottom: 40px;">
+            <div>
+                <h5>Inovasi Terbuka</h5>
+                <p>Kami percaya pada kekuatan open-source dan kolaborasi global untuk mendorong standar teknologi ke tingkat berikutnya.</p>
+            </div>
+            <div>
+                <h5>Kualitas Utama</h5>
+                <p>Setiap baris kode di starter kit ini diuji dengan ketat demi menjamin stabilitas dan keamanan di level produksi.</p>
+            </div>
+        </div>
+
+        <section style="text-align: center; margin-top: 60px;">
+            <h3 style="margin-bottom: 24px;">Siap Memulai Proyek Anda?</h3>
+            <a href="{% url 'accounts:register' %}" class="rdp-btn rdp-btn--primary" style="padding: 12px 32px; font-weight: 600;">Daftar Sekarang</a>
+        </section>
+    </div>
+</c-layout.public>

@@ -12,6 +12,7 @@ ALUR:
   5. Configure authentication dengan Custom User model
 """
 
+import json
 import logging
 import os
 from pathlib import Path
@@ -56,6 +57,19 @@ SECRET_KEY = env_var("SECRET_KEY", required=True)
 DEBUG = env_var("DEBUG", "False").lower() in ("true", "1", "yes")
 ALLOWED_HOSTS = env_var("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 ENVIRONMENT = env_var("ENVIRONMENT", "development")
+RDP_DEBUG_OVERLAY = env_var("RDP_DEBUG_OVERLAY", str(DEBUG)).lower() in ("true", "1", "yes")
+
+# ⚙️ KONFIGURASI: RDP-UI Version and Self-Host
+RDP_UI_VERSION = env_var("RDP_UI_VERSION", "v1.0")
+RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")
+RDP_APP_ACCENT = env_var("RDP_APP_ACCENT", "navy")
+
+
+# ⚙️ KONFIGURASI: White label — brand bisa dikustom via .env
+SITE_NAME = env_var("SITE_NAME", "RDP Starter Kit")
+COMPANY_NAME = env_var("COMPANY_NAME", "Radian Data Platform")
+APP_BRAND_SHORT = env_var("APP_BRAND_SHORT", "RDP")
+COPYRIGHT_YEAR = env_var("COPYRIGHT_YEAR", "2026")
 
 # ⚙️ KONFIGURASI: Database
 DEFAULT_DB_ENGINE = "django.db.backends.sqlite3" if DEBUG else "django.db.backends.postgresql"
@@ -86,8 +100,8 @@ else:
     )
     if not match:
         raise ValueError(
-            f"❌ Invalid DATABASE_URL format. Expected: "
-            f"postgresql://user:password@host:port/dbname or sqlite:///path/to/db.sqlite3"
+            "❌ Invalid DATABASE_URL format. Expected: "
+            "postgresql://user:password@host:port/dbname or sqlite:///path/to/db.sqlite3"
         )
     user, password, host, port, dbname = match.groups()
     DATABASES = {
@@ -155,6 +169,8 @@ else:  # console
 
 # Application definition
 DJANGO_APPS = [
+    # US-012: jazzmin harus sebelum django.contrib.admin
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -179,9 +195,102 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # ⚙️ KONFIGURASI: Custom User model
 AUTH_USER_MODEL = "accounts.User"
+
+# ⚙️ KONFIGURASI: US-012 — Jazzmin admin theme
+# KEPUTUSAN TEKNIS: Pakai jazzmin untuk tema admin kustom
+# ALASAN: Tampilan lebih modern, dark mode otomatis via OS, tanpa perlu override template manual
+# ALTERNATIF: Override template admin secara manual (lebih kontrol tapi effort besar)
+JAZZMIN_SETTINGS = {
+    "site_title": f"{APP_BRAND_SHORT} Admin",
+    "site_header": COMPANY_NAME,
+    "site_brand": APP_BRAND_SHORT,
+    "site_logo": None,
+    "login_logo": None,
+    "welcome_sign": f"Selamat datang di {APP_BRAND_SHORT} Admin",
+    "copyright": COMPANY_NAME,
+    # Search model — shortcut search di navbar admin
+    "search_model": ["accounts.User"],
+    # Top menu links
+    "topmenu_links": [
+        {"name": "Dashboard", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "App", "url": "/", "new_window": False},
+    ],
+    # User menu (kanan atas)
+    "usermenu_links": [
+        {"name": "Profil", "url": "/accounts/profile/", "new_window": False},
+    ],
+    # Sidebar
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    # Icon per model — Font Awesome 5 Free
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.Group": "fas fa-users",
+        "accounts.User": "fas fa-user",
+        "accounts.UserProfile": "fas fa-id-card",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    # UI tweaks
+    "related_modal_active": False,
+    "custom_css": None,
+    "custom_js": None,
+    "use_google_fonts_cdn": False,  # pakai CDN jazzmin bawaan, bukan Google Fonts
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "language_chooser": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    # KEPUTUSAN TEKNIS: theme "darkly" untuk dark mode, "flatly" untuk light mode
+    # ALASAN: User bisa ganti via admin UI builder kalau show_ui_builder=True
+    # Pakai "auto" tidak tersedia di jazzmin — dark mode via bootswatch theme
+    "navbar": "navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    # 🧪 TEST MANUAL: Theme bisa diubah ke "flatly" untuk light mode
+    "theme": "darkly",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
 # KEPUTUSAN TEKNIS: Custom User sejak awal (bukan Django default User)
 # ALASAN: Memudahkan menambah field ke User di masa depan tanpa migrasi berbahaya
 # ALTERNATIF: Pakai Django default User (kurang flexible)
+
+# ⚙️ KONFIGURASI: Registration wizard steps — dikonfigurasi via .env
+# Format JSON: [{"key":"org","label":"Organisasi","type":"text","required":true}]
+# Tipe field: text, email, select (butuh "choices": [...]), textarea
+# Default kosong = wizard hanya email + password
+REGISTRATION_STEPS = json.loads(env_var("REGISTRATION_STEPS", "[]"))
+
+# ⚙️ KONFIGURASI: US-008 — Wajib verifikasi email sebelum akses penuh
+# False = user bisa langsung akses semua fitur walau belum verify
+# True  = user diarahkan ke halaman "cek email" jika belum verify
+REQUIRE_EMAIL_VERIFICATION = env_var("REQUIRE_EMAIL_VERIFICATION", "False").lower() == "true"
+
+# ⚙️ KONFIGURASI: Auth URL — @login_required redirect ke sini
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -191,6 +300,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # US-008: Enforce email verification jika REQUIRE_EMAIL_VERIFICATION=True
+    "apps.core.middleware.EmailVerificationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -208,6 +319,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.core.context_processors.debug_settings",
             ],
         },
     },

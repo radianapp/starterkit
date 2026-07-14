@@ -1,0 +1,8 @@
+<c-vars variant="default" pill=False outline=False dismissible=False dot=False />
+<span class="rdp-badge rdp-badge--{{ variant }} {% if pill %}rdp-badge--pill{% endif %} {% if outline %}rdp-badge--outline{% endif %} {{ class }}" {{ attrs }}>
+  {% if dot %}<span class="rdp-badge__dot"></span>{% endif %}
+  {{ slot }}
+  {% if dismissible %}
+    <span class="rdp-badge__dismiss" tabindex="0" role="button" aria-label="Dismiss">×</span>
+  {% endif %}
+</span>

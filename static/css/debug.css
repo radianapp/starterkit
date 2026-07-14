@@ -1,0 +1,47 @@
+/* Debug Overlay CSS */
+.rdp-debug-overlay {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(30, 30, 30, 0.95);
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  width: 220px;
+  overflow: hidden;
+}
+
+.rdp-debug-overlay__header {
+  padding: 8px 12px;
+  background: #111;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  border-bottom: 1px solid #333;
+  user-select: none;
+}
+
+.rdp-debug-overlay__body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rdp-debug-overlay__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #333;
+  padding-bottom: 4px;
+}
+
+.rdp-debug-overlay__item:last-child {
+  border-bottom: none;
+}

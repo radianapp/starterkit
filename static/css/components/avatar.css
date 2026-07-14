@@ -1,0 +1,58 @@
+/* US-033: Styling avatar menggunakan CSS variables RDP-UI */
+.rdp-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rdp-radius-circle, 50%);
+  background-color: var(--rdp-primary-500, #3B6797);
+  color: var(--rdp-text-inverse, #FFFFFF);
+  font-weight: 600;
+  overflow: hidden;
+  user-select: none;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.rdp-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rdp-avatar__initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+/* Sizes */
+.rdp-avatar--xs {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+}
+
+.rdp-avatar--sm {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
+}
+
+.rdp-avatar--md {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.125rem;
+}
+
+.rdp-avatar--lg {
+  width: 4rem;
+  height: 4rem;
+  font-size: 1.5rem;
+}
+
+.rdp-avatar--xl {
+  width: 6rem;
+  height: 6rem;
+  font-size: 2.25rem;
+}

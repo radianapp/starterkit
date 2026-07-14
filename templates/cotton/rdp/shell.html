@@ -1,0 +1,38 @@
+<div class="rdp-shell" {{ attrs }}>
+
+  {# Scrim / overlay — mobile only, shown when sidebar is open #}
+  <div
+    x-show="sidebarOpen"
+    @click="sidebarOpen = false"
+    x-transition:enter="transition-opacity duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity duration-200"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="rdp-shell__scrim"
+    aria-hidden="true"
+  ></div>
+
+  <aside class="rdp-shell__sidebar" id="rdp-sidebar" :class="{ 'is-open': sidebarOpen, 'is-collapsed': sidebarCollapsed }">
+    {{ sidebar }}
+  </aside>
+
+  <div class="rdp-shell__main">
+    <header class="rdp-shell__navbar">
+      {{ navbar }}
+    </header>
+
+    <div class="rdp-shell__body">
+      <main class="rdp-shell__content" @click="window.innerWidth < 768 && sidebarOpen ? sidebarOpen = false : null">
+        {{ slot }}
+      </main>
+
+      {% if right_panel %}
+      <aside class="rdp-shell__right">
+        {{ right_panel }}
+      </aside>
+      {% endif %}
+    </div>
+  </div>
+</div>

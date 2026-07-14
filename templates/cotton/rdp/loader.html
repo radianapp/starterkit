@@ -1,0 +1,14 @@
+{# US-033: Komponen loader spinner #}
+{% comment %}
+TUJUAN: Spinner animation loader dengan ukuran dinamis.
+- size (optional): "sm" | "md" | "lg" — default "md"
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<div
+  class="rdp-loader rdp-loader--{{ size|default:'md' }}"
+  role="status"
+  aria-label="Loading"
+  {{ attrs }}>
+  <div class="rdp-loader__spinner"></div>
+</div>

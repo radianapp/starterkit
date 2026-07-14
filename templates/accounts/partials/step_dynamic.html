@@ -1,0 +1,63 @@
+{# US-004: Register wizard — Step dynamic (dari REGISTRATION_STEPS) #}
+<form
+    hx-post="{% url 'accounts:register' %}"
+    hx-target="#wizard-content"
+    hx-swap="innerHTML"
+    hx-indicator="#wizard-spinner"
+    class="reg-wizard__form"
+    novalidate
+>
+    {% csrf_token %}
+
+    <div class="reg-wizard__step-header">
+        <h2>{{ step_def.label }}</h2>
+        {% if step_def.help_text %}
+            <p>{{ step_def.help_text }}</p>
+        {% endif %}
+    </div>
+
+    {% for field in form %}
+        {% if field.field.widget.input_type == "select" %}
+            <c-rdp.form.select
+                name="{{ field.html_name }}"
+                label="{{ field.label }}"
+                error="{{ field.errors.0|default:'' }}"
+                required="{{ step_def.required|yesno:'true,false' }}"
+            >
+                {% for val, display in field.field.choices %}
+                    <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </c-rdp.form.select>
+        {% elif field.field.widget.input_type == "textarea" %}
+            <c-rdp.form.input
+                name="{{ field.html_name }}"
+                type="textarea"
+                label="{{ field.label }}"
+                value="{{ field.value|default:'' }}"
+                error="{{ field.errors.0|default:'' }}"
+                required="{{ step_def.required|yesno:'true,false' }}"
+            />
+        {% else %}
+            <c-rdp.form.input
+                name="{{ field.html_name }}"
+                type="{{ step_def.type }}"
+                label="{{ field.label }}"
+                value="{{ field.value|default:'' }}"
+                error="{{ field.errors.0|default:'' }}"
+                required="{{ step_def.required|yesno:'true,false' }}"
+            />
+        {% endif %}
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+        <c-rdp.alert type="error">{{ form.non_field_errors.0 }}</c-rdp.alert>
+    {% endif %}
+
+    <div class="reg-wizard__actions">
+        <c-rdp.button type="submit" variant="primary" size="md">
+            Lanjut →
+        </c-rdp.button>
+    </div>
+
+    <span id="wizard-spinner" class="reg-wizard__spinner htmx-indicator">Memproses...</span>
+</form>

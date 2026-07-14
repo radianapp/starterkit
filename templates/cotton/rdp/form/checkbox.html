@@ -1,0 +1,8 @@
+<c-vars name="" label="" disabled=False checked=False value="on" />
+<label class="rdp-checkbox" {{ attrs }}>
+  <input type="checkbox" name="{{ name }}" class="rdp-checkbox__input" 
+         value="{{ value }}"
+         {% if checked %}checked{% endif %}
+         {% if disabled %}disabled{% endif %}>
+  <span>{{ label }}{{ slot }}</span>
+</label>

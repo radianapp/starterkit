@@ -1,0 +1,8 @@
+<c-vars name="" label="" disabled=False checked=False value="" />
+<label class="rdp-radio" {{ attrs }}>
+  <input type="radio" name="{{ name }}" class="rdp-radio__input" 
+         value="{{ value }}"
+         {% if checked %}checked{% endif %}
+         {% if disabled %}disabled{% endif %}>
+  <span>{{ label }}{{ slot }}</span>
+</label>

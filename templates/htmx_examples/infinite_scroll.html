@@ -1,0 +1,77 @@
+{# US-036: HTMX Infinite Scroll Showcase Page #}
+{% load static %}
+
+{% block extra_head %}
+<style>
+  /* Indikator HTMX: tersembunyi secara default, tampil saat request berjalan */
+  .htmx-indicator { display: none; }
+  .htmx-indicator.htmx-request { display: table-row; }
+</style>
+{% endblock %}
+<c-layout.app title="Infinite Scroll Demo" navbar_brand="Showcase HTMX">
+
+    <c-slot name="sidebar">
+        <a href="/" class="rdp-sidebar__brand">
+            <span class="rdp-sidebar__brand-icon">⬡</span>
+            <span class="rdp-sidebar__brand-text">{{ APP_BRAND_SHORT }}</span>
+        </a>
+        <nav class="rdp-sidebar__nav" aria-label="Main navigation">
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Menu Utama</div>
+                <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">📊</span>
+                    <span class="rdp-sidebar__link-text">Dashboard</span>
+                </a>
+                <a href="{% url 'htmx-examples' %}" class="rdp-sidebar__link active">
+                    <span class="rdp-sidebar__link-icon">⚡</span>
+                    <span class="rdp-sidebar__link-text">Showcase HTMX</span>
+                </a>
+            </div>
+        </nav>
+    </c-slot>
+
+    <nav aria-label="Breadcrumb" class="rdp-dashboard-breadcrumb">
+        <ul class="rdp-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url 'htmx-examples' %}">Showcase HTMX</a></li>
+            <li>Infinite Scroll</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-dashboard-content" style="max-width: 800px; margin: 0 auto;">
+        <div class="rdp-page-header">
+            <h2 class="rdp-page-header__title">Pola Infinite Scroll</h2>
+            <c-rdp.button variant="secondary" onclick="window.location.href='{% url 'htmx-examples' %}'">← Kembali ke Showcase</c-rdp.button>
+        </div>
+
+        <c-rdp.card>
+            <c-slot name="header">
+                <h3 style="margin: 0; font-size: 1.25rem;">Log Aktivitas Sistem</h3>
+            </c-slot>
+            <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 20px;">Scroll ke bawah tabel untuk memicu lazy-loading baris data berikutnya secara otomatis saat baris terakhir masuk ke viewport (sensor <code>hx-trigger="revealed"</code>).</p>
+
+            <div class="rdp-table-wrapper">
+                <table class="rdp-table rdp-table--striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">ID Log</th>
+                            <th>Aktivitas Log</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-table-body">
+                        {% include "htmx_examples/partials/log_rows.html" with rows=initial_rows next_page=next_page %}
+                    </tbody>
+                    <tbody>
+                        <tr id="scroll-loading" class="htmx-indicator">
+                            <td colspan="3" style="text-align: center; padding: 16px; color: var(--pico-muted-color);">
+                                ⏳ Memuat data berikutnya...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </c-rdp.card>
+    </div>
+
+</c-layout.app>

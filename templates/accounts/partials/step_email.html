@@ -1,0 +1,39 @@
+{# US-004: Register wizard — Step 0: Email #}
+<form
+    hx-post="{% url 'accounts:register' %}"
+    hx-target="#wizard-content"
+    hx-swap="innerHTML"
+    hx-indicator="#wizard-spinner"
+    class="reg-wizard__form"
+    novalidate
+>
+    {% csrf_token %}
+
+    <div class="reg-wizard__step-header">
+        <h2>Masukkan Email Anda</h2>
+        <p>Email ini akan digunakan untuk login.</p>
+    </div>
+
+    <c-rdp.form.input
+        name="email"
+        type="email"
+        label="Alamat Email"
+        value="{{ form.email.value|default:'' }}"
+        error="{{ form.email.errors.0|default:'' }}"
+        required="true"
+        autofocus="true"
+        placeholder="nama@contoh.com"
+    />
+
+    {% if form.non_field_errors %}
+        <c-rdp.alert type="error">{{ form.non_field_errors.0 }}</c-rdp.alert>
+    {% endif %}
+
+    <div class="reg-wizard__actions">
+        <c-rdp.button type="submit" variant="primary" size="md">
+            Lanjut →
+        </c-rdp.button>
+    </div>
+
+    <span id="wizard-spinner" class="reg-wizard__spinner htmx-indicator">Memproses...</span>
+</form>

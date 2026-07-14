@@ -1,0 +1,23 @@
+{# US-008: Verifikasi email — halaman link invalid #}
+{% load static %}
+<c-layout.blank title="Link Tidak Valid">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <div class="auth-card__brand">{{ APP_BRAND_SHORT }}</div>
+            <h1 class="auth-card__title">Link Tidak Valid</h1>
+            <p class="auth-card__subtitle">
+                Link verifikasi tidak dikenali atau sudah dipakai.
+            </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+            <a href="{% url 'accounts:login' %}" class="rdp-btn rdp-btn--primary rdp-btn--md">
+                Kembali ke Login
+            </a>
+        </div>
+    </div>
+</c-layout.blank>

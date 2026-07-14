@@ -1,0 +1,40 @@
+{# US-004: Register akun baru — wizard shell #}
+{% load static %}
+<c-layout.blank title="Daftar Akun">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="reg-wizard">
+        <div class="reg-wizard__header">
+            <div class="reg-wizard__brand">
+                <a href="{% url 'home' %}"><strong>{{ SITE_NAME }}</strong></a>
+            </div>
+            <h1 class="reg-wizard__title">Buat Akun Baru</h1>
+
+            {# Progress bar #}
+            <div class="reg-wizard__progress">
+                {% for label in step_labels %}
+                    <div class="reg-wizard__step {% if forloop.counter0 < current_step %}reg-wizard__step--done{% elif forloop.counter0 == current_step %}reg-wizard__step--active{% endif %}">
+                        <div class="reg-wizard__step-dot">
+                            {% if forloop.counter0 < current_step %}✓{% else %}{{ forloop.counter }}{% endif %}
+                        </div>
+                        <span class="reg-wizard__step-label">{{ label }}</span>
+                    </div>
+                    {% if not forloop.last %}
+                        <div class="reg-wizard__step-line {% if forloop.counter0 < current_step %}reg-wizard__step-line--done{% endif %}"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Target HTMX swap — konten step berubah di sini #}
+        <div id="wizard-content" class="reg-wizard__content">
+            {% include "accounts/partials/step_email.html" %}
+        </div>
+
+        <p class="reg-wizard__login-link">
+            Sudah punya akun? <a href="{% url 'accounts:login' %}">Masuk</a>
+        </p>
+    </div>
+</c-layout.blank>

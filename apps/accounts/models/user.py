@@ -10,6 +10,8 @@ ALUR:
   3. Override manager untuk support login dengan email
 """
 
+from typing import ClassVar
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -110,14 +112,14 @@ class User(AbstractUser):
 
     # Set email sebagai USERNAME_FIELD dan gunakan UserManager custom
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS: ClassVar[list] = ["username"]
     objects = UserManager()
 
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
-        ordering = ["-created_at"]
-        indexes = [
+        ordering: ClassVar[list] = ["-created_at"]
+        indexes: ClassVar[list] = [
             models.Index(fields=["email"]),
             models.Index(fields=["email_verified"]),
             models.Index(fields=["-created_at"]),

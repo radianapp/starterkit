@@ -1,132 +1,34 @@
-{# US-011: Komponen form input — text input dengan label, help text, error display #}
-{#
-TUJUAN: Reusable form input component untuk berbagai input type.
-Support label, help text, error message, dan form validation styling.
-
-PARAMETER:
-- name (required): Input name attribute
-- label (optional): Label text
-- type (optional): Input type (text, email, password, number, dll) — default "text"
-- placeholder (optional): Input placeholder
-- value (optional): Input value
-- error (optional): Error message untuk display validation error
-- help_text (optional): Helper text di bawah input
-- required (optional): true | false — mark as required
-- disabled (optional): true | false
-- {{ attrs }}: Semua atribut HTML lainnya
-
-SLOT:
-- label: Custom label content (override parameter label)
-- help: Custom help text (override parameter help_text)
-
-CONTOH:
-<c-rdp.form.input
-  name="email"
-  type="email"
-  label="Email Address"
-  placeholder="you@example.com"
-  help_text="We'll never share your email"
-  required />
-
-<c-rdp.form.input
-  name="password"
-  type="password"
-  label="Password"
-  error="Password is too short" />
-
-CATATAN:
-- Error display menambah red border + error message
-- Label + required asterisk automatic
-- Dark mode via RDP-UI CSS variable
-#}
-
-<template>
-  <div class="rdp-form-field">
-    {% if label %}
-      <label for="{{ name }}" class="rdp-form-field__label">
-        <c-slot name="label">{{ label }}</c-slot>
-        {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
-      </label>
-    {% endif %}
-
-    <input
-      id="{{ name }}"
-      name="{{ name }}"
-      type="{{ type|default:'text' }}"
-      class="rdp-form-field__input {% if error %}rdp-form-field__input--error{% endif %}"
-      {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
-      {% if value %}value="{{ value }}"{% endif %}
-      {% if required %}required{% endif %}
-      {% if disabled %}disabled{% endif %}
-      {{ attrs }} />
-
-    {% if error %}
-      <div class="rdp-form-field__error">{{ error }}</div>
-    {% endif %}
-
-    {% if help_text %}
-      <small class="rdp-form-field__help">
-        <c-slot name="help">{{ help_text }}</c-slot>
-      </small>
-    {% endif %}
-  </div>
-</template>
-
-<style>
-  .rdp-form-field {
-    margin-bottom: 16px;
-  }
-
-  .rdp-form-field__label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: var(--color-text, #333);
-  }
-
-  .rdp-form-field__required {
-    color: var(--color-danger, #dc3545);
-    margin-left: 2px;
-  }
-
-  .rdp-form-field__input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    font-size: 1rem;
-    font-family: inherit;
-    color: var(--color-text, #333);
-    background: var(--color-bg, white);
-    transition: border-color 0.2s;
-  }
-
-  .rdp-form-field__input:focus {
-    outline: none;
-    border-color: var(--color-primary, #0066cc);
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-  }
-
-  .rdp-form-field__input--error {
-    border-color: var(--color-danger, #dc3545);
-  }
-
-  .rdp-form-field__error {
-    color: var(--color-danger, #dc3545);
-    font-size: 0.875rem;
-    margin-top: 4px;
-  }
-
-  .rdp-form-field__help {
-    display: block;
-    color: var(--color-text-secondary, #666);
-    font-size: 0.875rem;
-    margin-top: 4px;
-  }
-
-  .rdp-form-field__input:disabled {
-    background: var(--color-bg-secondary, #f5f5f5);
-    color: var(--color-text-secondary, #999);
-    cursor: not-allowed;
-  }
-</style>
+<c-vars name="" label="" type="text" help_text="" error="" required=False disabled=False value="" placeholder="" prefix="" suffix="" />
+<div class="rdp-form-field">
+  {% if label %}
+    <label for="{{ name }}" class="rdp-form-field__label">
+      {{ label }}
+      {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  {% if prefix or suffix %}
+    <div class="rdp-input-group" {% if error %}aria-invalid="true"{% endif %}>
+      {% if prefix %}<span class="rdp-input-addon rdp-input-addon--left">{{ prefix }}</span>{% endif %}
+      <input type="{{ type }}" name="{{ name }}" id="{{ name }}" class="rdp-input"
+             {% if value %}value="{{ value }}"{% endif %}
+             {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+             {% if disabled %}disabled{% endif %}
+             {{ attrs }}>
+      {% if suffix %}<span class="rdp-input-addon rdp-input-addon--right">{{ suffix }}</span>{% endif %}
+    </div>
+  {% else %}
+    <input type="{{ type }}" name="{{ name }}" id="{{ name }}" class="rdp-input"
+           {% if error %}aria-invalid="true"{% endif %}
+           {% if value %}value="{{ value }}"{% endif %}
+           {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+           {% if disabled %}disabled{% endif %}
+           {{ attrs }}>
+  {% endif %}
+  
+  {% if error %}
+    <div class="rdp-form-field__error"><span>⚠</span>{{ error }}</div>
+  {% elif help_text %}
+    <div class="rdp-form-field__help">{{ help_text }}</div>
+  {% endif %}
+</div>

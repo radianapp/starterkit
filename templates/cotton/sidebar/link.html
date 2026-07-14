@@ -1,0 +1,7 @@
+<c-vars href="#" icon="" active=False id="" onclick="" />
+<a href="{{ href }}" class="sidebar-link {% if active %}active{% endif %}" {% if id %}id="{{ id }}"{% endif %} {% if onclick %}onclick="{{ onclick }}"{% endif %}>
+    {% if icon %}
+        <span class="icon-square">{{ icon }}</span>
+    {% endif %}
+    <span>{{ slot }}</span>
+</a>

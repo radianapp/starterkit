@@ -1,0 +1,23 @@
+{# US-034: Komponen tabs menggunakan Alpine.js #}
+{% comment %}
+TUJUAN: Reusable tab navigation dengan state switcher Alpine.js.
+- items (required): List of dict `[{'id': '...', 'label': '...'}, ...]`
+- default_tab (optional): ID tab yang aktif pertama kali (default: item pertama)
+- persist_hash (optional): true | false — jika true, aktifkan hash sync di URL (default: false)
+- {{ attrs }}: Atribut HTML tambahan
+
+CONTOH:
+<c-rdp.tabs :items="[{'id': 'profile', 'label': 'Profil'}, {'id': 'settings', 'label': 'Pengaturan'}]">
+  <div x-show="activeTab === 'profile'">Konten Profil</div>
+  <div x-show="activeTab === 'settings'">Konten Pengaturan</div>
+</c-rdp.tabs>
+{% endcomment %}
+<c-vars />
+<div x-data="{ activeTab: 0 }" class="rdp-tabs" {{ attrs }}>
+  <div class="rdp-tabs__list" role="tablist">
+    {{ tab_list }}
+  </div>
+  <div class="rdp-tabs__panel">
+    {{ slot }}
+  </div>
+</div>

@@ -1,0 +1,408 @@
+{# US-035: Halaman demo internal untuk pustaka komponen (Component Library) #}
+{% load static %}
+{% load cotton %}
+
+<c-layout.dashboard title="Component Library Demo" navbar_brand="RDP Component Library">
+
+  <c-slot name="head">
+    <style>
+      .dev-components-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--rdp-space-xl, 2rem);
+        padding-bottom: var(--rdp-space-2xl, 3rem);
+      }
+      .dev-component-card {
+        padding: var(--rdp-space-lg, 1.5rem);
+        border: 1px solid var(--rdp-border, #DEE2E6);
+        border-radius: var(--rdp-radius-lg, 12px);
+        background-color: var(--rdp-surface, #FFFFFF);
+      }
+      .dev-component-card__header {
+        border-bottom: 1px solid var(--rdp-border-light, #E9ECEF);
+        padding-bottom: var(--rdp-space-sm, 0.5rem);
+        margin-bottom: var(--rdp-space-md, 1rem);
+      }
+      .dev-component-card__title {
+        font-size: var(--rdp-size-h3, 1.25rem);
+        font-weight: 600;
+        margin: 0;
+        color: var(--rdp-text, #212529);
+      }
+      .dev-component-card__desc {
+        font-size: var(--rdp-size-caption, 0.75rem);
+        color: var(--rdp-text-muted, #868E96);
+        margin-top: var(--rdp-space-3xs, 0.125rem);
+      }
+      .dev-component-card__preview {
+        padding: var(--rdp-space-md, 1rem);
+        background-color: var(--rdp-bg-secondary, #F8F9FA);
+        border-radius: var(--rdp-radius-md, 8px);
+        border: 1px solid var(--rdp-border-light, #E9ECEF);
+        margin-bottom: var(--rdp-space-md, 1rem);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--rdp-space-md, 1rem);
+        align-items: center;
+      }
+      .dev-component-card__code {
+        margin: 0;
+        background-color: var(--rdp-bg-tertiary, #F1F3F5);
+      }
+    </style>
+  </c-slot>
+
+  <div class="rdp-page-header">
+    <h2 class="rdp-page-header__title">Pustaka Komponen UI RDP</h2>
+    <p class="rdp-text-muted">Halaman ini digunakan untuk pengujian visual dan dokumentasi kode komponen django-cotton.</p>
+  </div>
+
+  <div class="dev-components-grid">
+
+    <!-- 1. BADGE -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.badge&gt;</h4>
+        <p class="dev-component-card__desc">Badge penunjuk status dengan berbagai variasi warna.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.badge variant="neutral">Neutral</c-rdp.badge>
+        <c-rdp.badge variant="primary">Primary</c-rdp.badge>
+        <c-rdp.badge variant="success">Success</c-rdp.badge>
+        <c-rdp.badge variant="warning">Warning</c-rdp.badge>
+        <c-rdp.badge variant="danger">Danger</c-rdp.badge>
+        <c-rdp.badge variant="info">Info</c-rdp.badge>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.badge variant="success"&gt;Success&lt;/c-rdp.badge&gt;</code></pre>
+    </section>
+
+    <!-- 2. AVATAR -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.avatar&gt;</h4>
+        <p class="dev-component-card__desc">Avatar profil dengan opsi inisial teks fallback.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.avatar name="Rahadi" size="xs" />
+        <c-rdp.avatar name="Budi" size="sm" />
+        <c-rdp.avatar name="Andi" size="md" />
+        <c-rdp.avatar name="Chandra" size="lg" />
+        <c-rdp.avatar name="Dani" size="xl" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.avatar name="Rahadi" size="md" /&gt;</code></pre>
+    </section>
+
+    <!-- 3. LOADER -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.loader&gt;</h4>
+        <p class="dev-component-card__desc">Spinner animasi loading.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.loader size="sm" />
+        <c-rdp.loader size="md" />
+        <c-rdp.loader size="lg" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.loader size="md" /&gt;</code></pre>
+    </section>
+
+    <!-- 4. TABS -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.tabs&gt;</h4>
+        <p class="dev-component-card__desc">Navigasi tab interaktif menggunakan Alpine.js.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.tabs :items="tab_items" default_tab="tab1">
+          <div x-show="activeTab === 'tab1'" class="rdp-p-sm">
+            <h5>Konten Informasi</h5>
+            <p>Ini adalah tab pertama yang memuat data informasi.</p>
+          </div>
+          <div x-show="activeTab === 'tab2'" class="rdp-p-sm" style="display: none;">
+            <h5>Konten Pengaturan</h5>
+            <p>Di sini Anda dapat mengonfigurasi pengaturan akun.</p>
+          </div>
+          <div x-show="activeTab === 'tab3'" class="rdp-p-sm" style="display: none;">
+            <h5>Konten Keamanan</h5>
+            <p>Menu ini memuat setelan keamanan akun dan kata sandi.</p>
+          </div>
+        </c-rdp.tabs>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.tabs :items="tab_items" default_tab="tab1"&gt;
+  &lt;div x-show="activeTab === 'tab1'"&gt;Konten Panel 1&lt;/div&gt;
+&lt;/c-rdp.tabs&gt;</code></pre>
+    </section>
+
+    <!-- 5. TOAST -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.toast&gt;</h4>
+        <p class="dev-component-card__desc">Notifikasi mengambang (dismissible & auto-dismiss).</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.toast type="success" message="Data berhasil disimpan!" />
+        <c-rdp.toast type="warning" message="Periksa kembali koneksi internet Anda." />
+        <c-rdp.toast type="error" message="Gagal memproses data." />
+        <c-rdp.toast type="info" message="Sesi Anda akan segera berakhir." />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.toast type="success" message="Tindakan Berhasil!" /&gt;</code></pre>
+    </section>
+
+    <!-- 6. TOOLTIP -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.tooltip&gt;</h4>
+        <p class="dev-component-card__desc">Informasi tambahan saat kursor diarahkan ke elemen.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.tooltip content="Ini tooltip atas" position="top">
+          <button class="rdp-btn rdp-btn--sm">Hover Saya (Top)</button>
+        </c-rdp.tooltip>
+        <c-rdp.tooltip content="Ini tooltip bawah" position="bottom">
+          <button class="rdp-btn rdp-btn--sm">Hover Saya (Bottom)</button>
+        </c-rdp.tooltip>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.tooltip content="Informasi tambahan" position="top"&gt;
+  &lt;span&gt;Arahkan kursor&lt;/span&gt;
+&lt;/c-rdp.tooltip&gt;</code></pre>
+    </section>
+
+    <!-- 7. ACCORDION -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.accordion&gt;</h4>
+        <p class="dev-component-card__desc">Panel konten lipat dengan transisi transparan.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.accordion title="Apakah produk ini gratis?">
+          Ya, Anda dapat mencoba paket gratis selamanya dengan batasan fitur tertentu.
+        </c-rdp.accordion>
+        <c-rdp.accordion title="Bagaimana cara mengajukan pengembalian dana?" open="true">
+          Hubungi tim support kami melalui menu Pusat Bantuan dalam waktu 7 hari setelah pembelian.
+        </c-rdp.accordion>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.accordion title="Judul Lipatan" open="false"&gt;
+  Isi konten di sini...
+&lt;/c-rdp.accordion&gt;</code></pre>
+    </section>
+
+    <!-- 8. SKELETON -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.skeleton&gt;</h4>
+        <p class="dev-component-card__desc">Placeholder animasi loading yang menyerupai tata letak asli.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <div class="rdp-flex rdp-items-center rdp-gap-sm rdp-mb-sm">
+          <c-rdp.skeleton width="48px" height="48px" circle="true" />
+          <div class="rdp-flex-1">
+            <c-rdp.skeleton width="40%" height="16px" class="rdp-mb-xs" />
+            <c-rdp.skeleton width="60%" height="12px" />
+          </div>
+        </div>
+        <c-rdp.skeleton width="100%" height="32px" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.skeleton width="48px" height="48px" circle="true" /&gt;</code></pre>
+    </section>
+
+    <!-- 9. EMPTY STATE -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.empty-state&gt;</h4>
+        <p class="dev-component-card__desc">Tampilan informatif saat halaman atau tabel tidak memiliki data.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.empty-state icon="📭" title="Tidak Ada Transaksi" description="Belum ada catatan transaksi pada akun Anda hari ini.">
+          <c-slot name="actions">
+            <button class="rdp-btn rdp-btn--primary rdp-btn--sm">Buat Transaksi Baru</button>
+          </c-slot>
+        </c-rdp.empty-state>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.empty-state icon="📭" title="Judul" description="Deskripsi"&gt;
+  &lt;c-slot name="actions"&gt;...&lt;/c-slot&gt;
+&lt;/c-rdp.empty-state&gt;</code></pre>
+    </section>
+
+    <!-- 10. STAT CARD -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.stat-card&gt;</h4>
+        <p class="dev-component-card__desc">Menampilkan ringkasan data statistik dengan perubahan tren.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.stat-card label="Pengguna Baru" value="1.240" trend="+15.3%" trend_up="true" />
+        <c-rdp.stat-card label="Tingkat Batal" value="2.4%" trend="-0.8%" trend_up="false" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.stat-card label="Pengguna Baru" value="1.240" trend="+15.3%" trend_up="true" /&gt;</code></pre>
+    </section>
+
+    <!-- 11. CONFIRM -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.confirm&gt;</h4>
+        <p class="dev-component-card__desc">Modal dialog peringatan konfirmasi sebelum melakukan aksi kritis.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.confirm title="Hapus Berkas?" message="Apakah Anda yakin ingin menghapus berkas data ini secara permanen?" destructive="true" trigger_text="Hapus Berkas" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.confirm title="Hapus Berkas?" message="..." destructive="true" trigger_text="Hapus" /&gt;</code></pre>
+    </section>
+
+    <!-- 12. PROGRESS -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.progress&gt;</h4>
+        <p class="dev-component-card__desc">Indikator visual pencapaian progres/langkah.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <div class="rdp-mb-sm">
+          <span>Progres Profil (60%)</span>
+          <c-rdp.progress value="60" max="100" variant="primary" />
+        </div>
+        <div>
+          <span>Unggah Selesai (100%)</span>
+          <c-rdp.progress value="100" max="100" variant="success" />
+        </div>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.progress value="60" max="100" /&gt;</code></pre>
+    </section>
+
+    <!-- 13. DRAWER -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.drawer&gt;</h4>
+        <p class="dev-component-card__desc">Panel slide-over yang muncul dari pinggir kanan layar.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.drawer title="Menu Detail" trigger_text="Buka Detail">
+          <p>Teks informasi tambahan di dalam drawer panel.</p>
+          <c-slot name="footer">
+            <button class="rdp-btn rdp-btn--secondary rdp-btn--sm">Tutup</button>
+          </c-slot>
+        </c-rdp.drawer>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.drawer title="Menu Detail" trigger_text="Buka"&gt;
+  &lt;p&gt;Isi konten...&lt;/p&gt;
+&lt;/c-rdp.drawer&gt;</code></pre>
+    </section>
+
+    <!-- 14. SEARCH BOX -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.search-box&gt;</h4>
+        <p class="dev-component-card__desc">Input teks pencarian dengan ikon dan delay ketik bawaan (debounce).</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <c-rdp.search-box placeholder="Cari data pengguna..." />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.search-box placeholder="Cari..." /&gt;</code></pre>
+    </section>
+
+    <!-- 15. FILTER BAR -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.filter-bar&gt;</h4>
+        <p class="dev-component-card__desc">Wadah filter data horizontal yang responsif.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.filter-bar>
+          <select name="status" class="rdp-p-xs" aria-label="Status">
+            <option value="">Semua Status</option>
+            <option value="active">Aktif</option>
+            <option value="inactive">Nonaktif</option>
+          </select>
+          <c-rdp.search-box placeholder="Cari..." />
+          <c-slot name="actions">
+            <button class="rdp-btn rdp-btn--secondary rdp-btn--sm">Reset</button>
+          </c-slot>
+        </c-rdp.filter-bar>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.filter-bar&gt;
+  &lt;select&gt;...&lt;/select&gt;
+  &lt;c-rdp.search-box /&gt;
+&lt;/c-rdp.filter-bar&gt;</code></pre>
+    </section>
+
+    <!-- 16. FILE UPLOAD -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.file-upload&gt;</h4>
+        <p class="dev-component-card__desc">Zona unggah berkas drag & drop dengan batas ukuran file.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.file-upload name="avatar" accept="image/*" max_size="1MB" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.file-upload accept="image/*" max_size="2MB" /&gt;</code></pre>
+    </section>
+
+    <!-- 17. STEPS -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.steps&gt;</h4>
+        <p class="dev-component-card__desc">Penunjuk progres langkah-langkah wizard pendaftaran.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.steps :items="step_items" current="2" />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.steps :items="step_items" current="2" /&gt;</code></pre>
+    </section>
+
+    <!-- 18. THEME & ACCENT PICKER (EXTRAS) -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.theme_picker&gt;</h4>
+        <p class="dev-component-card__desc">Widget pemilih tema dan aksen warna interaktif.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block; max-width: 320px;">
+        <c-rdp.theme_picker />
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.theme_picker /&gt;</code></pre>
+    </section>
+
+    <!-- 19. RATING (EXTRAS) -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.rating&gt;</h4>
+        <p class="dev-component-card__desc">Sistem rating bintang interaktif.</p>
+      </div>
+      <div class="dev-component-card__preview">
+        <div>
+          <p class="rdp-text-muted" style="margin-bottom: 4px; font-size: 0.8rem;">Interactive:</p>
+          <c-rdp.rating value="3" max="5" name="my_rating" />
+        </div>
+        <div style="margin-left: 20px;">
+          <p class="rdp-text-muted" style="margin-bottom: 4px; font-size: 0.8rem;">Read-only:</p>
+          <c-rdp.rating value="4" max="5" readonly="true" />
+        </div>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.rating value="3" max="5" name="my_rating" /&gt;</code></pre>
+    </section>
+
+    <!-- 20. TIMELINE (EXTRAS) -->
+    <section class="dev-component-card">
+      <div class="dev-component-card__header">
+        <h4 class="dev-component-card__title">&lt;c-rdp.timeline&gt; &amp; &lt;c-rdp.timeline_item&gt;</h4>
+        <p class="dev-component-card__desc">Linimasa aktivitas vertikal responsif.</p>
+      </div>
+      <div class="dev-component-card__preview" style="display: block;">
+        <c-rdp.timeline>
+          <c-rdp.timeline_item title="Registrasi Akun" time="10:00 WIB" icon="👤" variant="success">
+            User baru berhasil mendaftar ke sistem dengan email verifikasi.
+          </c-rdp.timeline_item>
+          <c-rdp.timeline_item title="Pembaruan Profil" time="10:15 WIB" icon="⚙️" variant="primary">
+            Mengunggah avatar baru dan memperbarui preferensi tema ke mode gelap.
+          </c-rdp.timeline_item>
+          <c-rdp.timeline_item title="Kesalahan Autentikasi" time="10:30 WIB" icon="⚠️" variant="danger">
+            Percobaan login gagal sebanyak 3 kali dari alamat IP tidak dikenal.
+          </c-rdp.timeline_item>
+        </c-rdp.timeline>
+      </div>
+      <pre class="dev-component-card__code"><code>&lt;c-rdp.timeline&gt;
+  &lt;c-rdp.timeline_item title="Registrasi" variant="success" icon="👤"&gt;Content&lt;/c-rdp.timeline_item&gt;
+&lt;/c-rdp.timeline&gt;</code></pre>
+    </section>
+
+  </div>
+
+</c-layout.dashboard>
+

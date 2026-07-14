@@ -1,0 +1,36 @@
+{# US-008: Verifikasi email — halaman link expired #}
+{% load static %}
+<c-layout.blank title="Link Expired">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <div class="auth-card__brand">{{ APP_BRAND_SHORT }}</div>
+            <h1 class="auth-card__title">Link Kedaluwarsa</h1>
+            <p class="auth-card__subtitle">
+                Link verifikasi sudah lebih dari 72 jam dan tidak berlaku lagi.
+            </p>
+        </div>
+
+        {% if user.is_authenticated and not user.email_verified %}
+            <form method="post" action="{% url 'accounts:resend_verification' %}">
+                {% csrf_token %}
+                <c-rdp.button type="submit" variant="primary" size="md">
+                    Kirim Link Baru
+                </c-rdp.button>
+            </form>
+        {% else %}
+            <div style="text-align: center;">
+                <a href="{% url 'accounts:login' %}" class="rdp-btn rdp-btn--primary rdp-btn--md">
+                    Masuk untuk Kirim Ulang
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="auth-card__alt-link">
+            <a href="{% url 'accounts:login' %}">Kembali ke Login</a>
+        </div>
+    </div>
+</c-layout.blank>

@@ -5,14 +5,17 @@ US: US-002 — Konfigurasi environment via `.env`
 TUJUAN: Override production settings dengan setup yang cocok untuk development lokal.
 """
 
-from .base import *  # noqa: F401, F403
+from .base import *  # noqa: F403
+
+RDP_DEBUG_OVERLAY = env_var("RDP_DEBUG_OVERLAY", "True").lower() in ("true", "1", "yes")
+
+# For local development of the UI framework, ensure we load local CSS
+RDP_UI_SELF_HOST = True
 
 DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
-# Development email backend — emails tampil di console
-if not EMAIL_BACKEND or EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Email backend sudah default console di base.py — tidak perlu override
 
 # Development cache — gunakan local memory
 CACHES = {

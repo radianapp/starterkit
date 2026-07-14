@@ -1,0 +1,23 @@
+/* US-034: Styling skeleton menggunakan CSS variables RDP-UI */
+.rdp-skeleton {
+  display: block;
+  background-color: var(--rdp-border-light, #E9ECEF);
+  border-radius: var(--rdp-radius-sm, 4px);
+  animation: rdp-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.rdp-skeleton--circle {
+  border-radius: var(--rdp-radius-circle, 50%) !important;
+}
+
+@keyframes rdp-skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}

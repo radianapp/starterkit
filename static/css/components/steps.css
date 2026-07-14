@@ -1,0 +1,88 @@
+/* US-034: Styling wizard steps menggunakan CSS variables RDP-UI */
+.rdp-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--rdp-space-sm, 0.5rem) 0;
+  overflow-x: auto;
+}
+
+.rdp-steps__item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-grow: 1;
+}
+
+.rdp-steps__item:last-child {
+  flex-grow: 0;
+}
+
+.rdp-steps__indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--rdp-radius-circle, 50%);
+  border: 2px solid var(--rdp-border-strong, #ADB5BD);
+  background-color: var(--rdp-bg, #FFFFFF);
+  color: var(--rdp-text-muted, #868E96);
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-small, 0.875rem);
+  font-weight: 700;
+  z-index: 1;
+  flex-shrink: 0;
+  transition: background-color var(--rdp-transition), border-color var(--rdp-transition), color var(--rdp-transition);
+}
+
+.rdp-steps__label {
+  margin-left: var(--rdp-space-sm, 0.5rem);
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-small, 0.875rem);
+  font-weight: 500;
+  color: var(--rdp-text-muted, #868E96);
+  white-space: nowrap;
+  z-index: 1;
+  padding-right: var(--rdp-space-sm, 0.5rem);
+  background-color: var(--rdp-bg-secondary, #F8F9FA); /* overlay line background */
+}
+
+.rdp-steps__line {
+  position: absolute;
+  top: 50%;
+  left: 2rem;
+  right: 0;
+  height: 2px;
+  background-color: var(--rdp-border, #DEE2E6);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+/* Active State */
+.rdp-steps__item--active .rdp-steps__indicator {
+  border-color: var(--rdp-primary-500, #3B6797);
+  background-color: var(--rdp-primary-500, #3B6797);
+  color: var(--rdp-text-inverse, #FFFFFF);
+}
+
+.rdp-steps__item--active .rdp-steps__label {
+  color: var(--rdp-text, #212529);
+  font-weight: 600;
+}
+
+/* Completed State */
+.rdp-steps__item--completed .rdp-steps__indicator {
+  border-color: var(--rdp-success, #4CAF50);
+  background-color: var(--rdp-success, #4CAF50);
+  color: var(--rdp-text-inverse, #FFFFFF);
+}
+
+.rdp-steps__item--completed .rdp-steps__label {
+  color: var(--rdp-text-secondary, #495057);
+}
+
+.rdp-steps__item--completed .rdp-steps__line {
+  background-color: var(--rdp-success, #4CAF50);
+}

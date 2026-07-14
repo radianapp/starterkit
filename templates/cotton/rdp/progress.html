@@ -1,0 +1,6 @@
+<c-vars variant="primary" indeterminate=False value="" max="100" />
+<div class="rdp-progress rdp-progress--{{ variant }} {% if indeterminate %}rdp-progress--indeterminate{% endif %} {{ class }}" 
+     value="{{ value }}" max="{{ max }}"
+     {{ attrs }} role="progressbar" aria-valuemin="0" aria-valuemax="{{ max }}" {% if value %}aria-valuenow="{{ value }}"{% endif %}>
+  <div class="rdp-progress__bar" {% if value and not indeterminate %}style="width: {{ value }}%;"{% endif %}></div>
+</div>

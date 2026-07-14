@@ -1,0 +1,214 @@
+/*
+ * Landing page CSS
+ * Mobile-first.
+ */
+
+/* ── Landing nav + footer: putih di light mode ──────────────── */
+.rdp-topnav {
+    background: #ffffff;
+    border-bottom: 1px solid var(--pico-muted-border-color, #e5e7eb);
+    box-shadow: none;
+}
+
+.rdp-topnav__brand-link,
+.home-nav__link:not(.home-nav__link--cta) {
+    color: var(--pico-color, #222);
+    text-decoration: none;
+}
+
+.rdp-topnav__brand-link {
+    font-weight: 700;
+}
+
+.home-nav__link:not(.home-nav__link--cta):hover {
+    opacity: 0.7;
+}
+
+.rdp-theme-toggle {
+    color: var(--pico-color, #333);
+}
+
+.rdp-footer,
+.rdp-footer p,
+.rdp-footer a {
+    color: var(--pico-muted-color, #666) !important;
+}
+
+.rdp-footer {
+    background: #ffffff;
+    border-top: 1px solid var(--pico-muted-border-color, #e5e7eb);
+    color: var(--pico-muted-color, #666);
+}
+
+[data-theme="dark"] .rdp-footer,
+[data-theme="dark"] .rdp-footer p,
+[data-theme="dark"] .rdp-footer a {
+    color: #aaa !important;
+}
+
+/* Dark mode override untuk landing nav + footer */
+[data-theme="dark"] .rdp-topnav {
+    background: #1e1e1e;
+    border-bottom-color: #333;
+}
+
+[data-theme="dark"] .rdp-topnav__brand-link,
+[data-theme="dark"] .home-nav__link:not(.home-nav__link--cta) {
+    color: #e0e0e0;
+}
+
+/* Light mode override untuk landing nav + footer */
+[data-theme="dark"] .rdp-footer {
+    background: #1a1a1a;
+    border-top-color: #444;
+    color: #aaa;
+}
+
+
+/* ── Nav links ──────────────────────────────────────────────── */
+.home-nav__link {
+    color: var(--pico-color, #222);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+}
+
+.home-nav__link:hover {
+    opacity: 0.7;
+}
+
+.home-nav__link--cta {
+    background: var(--pico-primary, #1a73e8);
+    color: #ffffff !important;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.home-nav__link--cta:hover {
+    opacity: 0.85;
+}
+
+[data-theme="dark"] .home-nav__link {
+    color: #f0f0f0;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.home-hero {
+    text-align: center;
+    padding: 4rem 1rem 3rem;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.home-hero__badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pico-primary, #1a73e8);
+    background: color-mix(in srgb, var(--pico-primary, #1a73e8) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--pico-primary, #1a73e8) 30%, transparent);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 1.25rem;
+}
+
+.home-hero__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.2;
+    margin: 0 0 1rem;
+}
+
+.home-hero__subtitle {
+    font-size: 1.1rem;
+    color: var(--pico-muted-color, #666);
+    line-height: 1.6;
+    margin: 0 0 2rem;
+}
+
+.home-hero__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+
+.home-btn:hover {
+    opacity: 0.85;
+}
+
+.home-btn--primary {
+    background: var(--pico-primary, #1a73e8);
+    color: #fff;
+}
+
+.home-btn--ghost {
+    background: transparent;
+    color: var(--pico-color, #222);
+    border: 1.5px solid var(--pico-muted-border-color, #ccc);
+}
+
+/* ── Feature grid ───────────────────────────────────────────── */
+.home-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 2rem auto 0;
+    padding: 0 1rem;
+}
+
+.home-feature {
+    background: var(--pico-card-background-color, #fff);
+    border: 1px solid var(--pico-muted-border-color, #e5e7eb);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.home-feature__icon {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.home-feature h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+}
+
+.home-feature p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--pico-muted-color, #666);
+    line-height: 1.5;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .home-hero {
+        padding: 2.5rem 1rem 2rem;
+    }
+
+    .home-hero__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .home-btn {
+        justify-content: center;
+    }
+}

@@ -1,0 +1,145 @@
+/* ==========================================================================
+   Layout System Styles (c-layout.*)
+   ========================================================================== */
+
+/* Accessibility: skip-nav link */
+.rdp-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 20px;
+    background: var(--primary);
+    color: var(--primary-inverse);
+    padding: 10px 15px;
+    z-index: 1000;
+    transition: top 0.2s;
+    border-radius: 4px;
+}
+.rdp-skip-link:focus {
+    top: 20px;
+    outline: 2px solid var(--primary);
+}
+
+/* Blank/Auth Layout (c-layout.auth) */
+.rdp-layout__content-blank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Public Layout (c-layout.public) */
+.rdp-topnav__links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.rdp-layout__content-home {
+    flex: 1;
+    padding: 40px 20px;
+}
+
+/* Dashboard Layout (c-layout.dashboard) */
+.rdp-topnav__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rdp-sidebar__logout-form {
+    margin: 0;
+}
+.rdp-sidebar__logout-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+/* Toast Container (Global) */
+.rdp-toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 320px;
+}
+
+/* Toast Item */
+.rdp-toast {
+    padding: 12px 16px;
+    border-radius: 6px;
+    background: var(--card-background-color, #ffffff);
+    color: var(--color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    animation: slideIn 0.3s ease, fadeOut 0.3s ease 3.7s forwards;
+}
+.rdp-toast--success {
+    border-left-color: #2ecc71;
+}
+.rdp-toast--error {
+    border-left-color: #e74c3c;
+}
+.rdp-toast--info {
+    border-left-color: #3498db;
+}
+.rdp-toast__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    color: var(--muted-color);
+}
+
+/* Global Modal Dialog Override */
+.rdp-modal {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+.rdp-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+.rdp-modal__content {
+    padding: 24px;
+}
+
+/* Print Layout Override (c-layout.print) */
+@media print {
+    .rdp-topnav,
+    .rdp-sidebar,
+    .rdp-footer,
+    .rdp-theme-toggle,
+    .rdp-debug-overlay {
+        display: none !important;
+    }
+    body, .rdp-layout, .rdp-layout__content {
+        background: #fff !important;
+        color: #000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(120%); }
+    to { transform: translateX(0); }
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

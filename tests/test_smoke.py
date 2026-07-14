@@ -14,8 +14,7 @@ ALUR:
 """
 
 import pytest
-from django.test import Client
-from django.urls import reverse
+
 from apps.accounts.models import User, UserProfile
 
 
@@ -101,9 +100,11 @@ class TestCustomUserModel:
             password="testpass123",
             username="testuser1",
         )
-        with pytest.raises(Exception):  # IntegrityError atau similar
+        from django.db import IntegrityError
+
+        with pytest.raises(IntegrityError):
             User.objects.create_user(
-                email="test@example.com",  # Same email
+                email="test@example.com",
                 password="testpass123",
                 username="testuser2",
             )
@@ -127,22 +128,18 @@ class TestCustomUserModel:
     @pytest.mark.django_db
     def test_user_profile_auto_created(self):
         """
-        TUJUAN: Verify UserProfile auto-created saat user creation.
+        TUJUAN: Verify UserProfile auto-created via signal saat user creation.
 
-        🚧 TODO: Implement signal untuk auto-create profile
-        AC: UserProfile harus ada untuk setiap User
+        AC: UserProfile harus ada untuk setiap User tanpa manual create
         """
-        # Ini akan implement di sprint selanjutnya dengan signal
-        # Untuk saat ini, test untuk memverifikasi model ada
         user = User.objects.create_user(
             email="test@example.com",
             password="testpass123",
             username="testuser",
         )
-        # Manual profile creation untuk sekarang
-        profile = UserProfile.objects.create(user=user)
-        assert profile.user == user
+        # Signal post_save di accounts/signals.py harusnya sudah buat profile
         assert UserProfile.objects.filter(user=user).exists()
+        assert user.profile is not None
 
     @pytest.mark.django_db
     def test_user_mark_email_verified(self):

@@ -28,7 +28,6 @@ class AccountsConfig(AppConfig):
         TUJUAN: Setup signals saat Django start.
 
         ALUR:
-          1. Import signals untuk user creation/update
+          1. Import signals module → receiver decorator mendaftarkan diri otomatis
         """
-        # Signals akan di-setup di sini jika ada
-        pass
+        import apps.accounts.signals  # noqa: F401

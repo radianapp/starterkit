@@ -1,0 +1,20 @@
+{# US-036: HTMX Live Email Validation Partial #}
+<div id="email-validation-wrapper">
+    <label for="live-email">Surel (Email)</label>
+    <input type="email" 
+           id="live-email" 
+           name="email" 
+           placeholder="Ketik email untuk validasi..." 
+           value="{{ email_value|default:'' }}"
+           hx-post="{% url 'htmx-live-validation' %}" 
+           hx-trigger="keyup changed delay:400ms" 
+           hx-target="#email-validation-wrapper" 
+           hx-swap="outerHTML"
+           style="{% if error_msg %}border-color: var(--pico-danger-color);{% elif success_msg %}border-color: var(--pico-success-color);{% endif %}" />
+    
+    {% if error_msg %}
+        <small style="color: var(--pico-danger-color); display: block; margin-top: -8px; margin-bottom: 12px;">❌ {{ error_msg }}</small>
+    {% elif success_msg %}
+        <small style="color: var(--pico-success-color); display: block; margin-top: -8px; margin-bottom: 12px;">✅ {{ success_msg }}</small>
+    {% endif %}
+</div>

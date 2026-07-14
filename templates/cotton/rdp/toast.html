@@ -1,0 +1,13 @@
+<c-vars type="info" message="" action_label="" />
+<div class="rdp-toast rdp-toast--{{ type }} {{ class }}" role="status" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition.opacity.duration.300ms {{ attrs }}>
+  <div class="rdp-toast__icon">
+    {{ icon }}
+  </div>
+  <div class="rdp-toast__content">
+    {% if message %}<div class="rdp-toast__desc">{{ message }}</div>{% endif %}
+    {% if slot %}<div class="rdp-toast__desc">{{ slot }}</div>{% endif %}
+  </div>
+  {% if action_label %}
+    <button class="rdp-toast__action">{{ action_label }}</button>
+  {% endif %}
+</div>

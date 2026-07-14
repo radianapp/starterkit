@@ -1,0 +1,41 @@
+{# US-008: Verifikasi email — halaman prompt untuk user belum verify #}
+{% load static %}
+<c-layout.blank title="Verifikasi Email">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <div class="auth-card__brand">{{ APP_BRAND_SHORT }}</div>
+            <h1 class="auth-card__title">Cek Email Kamu</h1>
+            <p class="auth-card__subtitle">
+                Kami sudah mengirim link verifikasi ke<br>
+                <strong>{{ user.email }}</strong>
+            </p>
+        </div>
+
+        <p style="text-align: center; color: var(--pico-muted-color, #666); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            Link berlaku selama 72 jam. Cek juga folder Spam jika tidak ada di Inbox.
+        </p>
+
+        <form method="post" action="{% url 'accounts:resend_verification' %}">
+            {% csrf_token %}
+            <c-rdp.button type="submit" variant="secondary" size="md">
+                Kirim Ulang Email
+            </c-rdp.button>
+        </form>
+
+        {% if messages %}
+            {% for message in messages %}
+                <c-rdp.alert type="{{ message.tags|default:'info' }}" style="margin-top: 1rem;">
+                    {{ message }}
+                </c-rdp.alert>
+            {% endfor %}
+        {% endif %}
+
+        <div class="auth-card__alt-link">
+            <a href="{% url 'accounts:logout' %}">Logout</a>
+        </div>
+    </div>
+</c-layout.blank>

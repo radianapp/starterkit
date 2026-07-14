@@ -1,0 +1,41 @@
+/* US-033: Styling loader spinner menggunakan CSS variables RDP-UI */
+.rdp-loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rdp-loader__spinner {
+  border: 3px solid var(--rdp-border-light, #E9ECEF);
+  border-top: 3px solid var(--rdp-primary-500, #3B6797);
+  border-radius: var(--rdp-radius-circle, 50%);
+  animation: rdp-spin 0.8s linear infinite;
+}
+
+/* Sizes */
+.rdp-loader--sm .rdp-loader__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-width: 2px;
+}
+
+.rdp-loader--md .rdp-loader__spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-width: 3px;
+}
+
+.rdp-loader--lg .rdp-loader__spinner {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-width: 4px;
+}
+
+@keyframes rdp-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

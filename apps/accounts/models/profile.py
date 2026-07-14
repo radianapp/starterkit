@@ -11,8 +11,11 @@ ALUR:
   4. Auto-create profile saat user baru
 """
 
+from typing import ClassVar
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
 from .user import User
 
 
@@ -49,6 +52,15 @@ class UserProfile(models.Model):
         max_length=500,
         help_text=_("Deskripsi singkat tentang user"),
     )
+    # KEPUTUSAN TEKNIS: Simpan jawaban wizard registration di JSONField
+    # ALASAN: Tiap project punya step custom berbeda — skema tidak bisa diprediksi di model
+    # ALTERNATIF: Buat model terpisah per step, tapi overengineering untuk starter kit
+    extra_data = models.JSONField(
+        _("extra data"),
+        default=dict,
+        blank=True,
+        help_text=_("Data tambahan dari registration wizard (konfigurasi via REGISTRATION_STEPS)"),
+    )
 
     # Timestamps
     created_at = models.DateTimeField(
@@ -63,7 +75,7 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = _("user profile")
         verbose_name_plural = _("user profiles")
-        ordering = ["-created_at"]
+        ordering: ClassVar[list] = ["-created_at"]
 
     def __str__(self):
         """Return username sebagai string representation."""

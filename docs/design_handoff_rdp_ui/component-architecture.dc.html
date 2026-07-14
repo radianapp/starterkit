@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 22 · ANATOMY ================= -->
+  <div data-screen-label="22 Component anatomy" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Architecture · Sheet 22</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · component contract</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Anatomy of an RDP component</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 76ch;">Every component is the same four layers. Learn one, know them all — that's the Minimal API principle mechanized.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px;">
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; margin-bottom: 8px;">1 · Wrapper</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">One semantic root element (<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">button</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">dialog</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">nav</span>…) with class <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">rdp-{name}</span>. Extra attributes pass through — <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">hx-*</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">id</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">data-*</span> land on the root.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; margin-bottom: 8px;">2 · Slots</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Default slot = the tag's children. Named slots (<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">header</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">footer</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">icon</span>…) are optional; an empty slot renders nothing — no ghost padding.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; margin-bottom: 8px;">3 · States</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Native where possible (<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">:hover</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">:disabled</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">aria-invalid</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">aria-current</span>); style hooks target those, never state classes like <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">.is-active</span>.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; margin-bottom: 8px;">4 · Tokens</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">All visuals via <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">--rdp-{name}-*</span> component tokens defaulting to semantic tokens. Zero literals inside a component's CSS.</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 10px;">The Cotton mapping</div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; font-size: 12.5px;">
+            <div style="padding: 10px 16px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Design concept</div>
+            <div style="padding: 10px 16px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">Cotton syntax</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Component</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">&lt;c-rdp.card&gt;</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Prop (string)</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">variant="primary"</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Prop (bound / non-string)</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">:items="orders" :count="12"</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Boolean flag</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">disabled · loading</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Default slot</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">tag children</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Named slot</div>
+            <div style="padding: 10px 16px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">&lt;c-slot name="footer"&gt;</div>
+            <div style="padding: 10px 16px; color: #55514A;">Passthrough attrs</div>
+            <div style="padding: 10px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #15654E;">hx-post · id · data-* → root</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 10px;">Composition model</div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 22px;">C1</span><span style="font-size: 12.5px; line-height: 1.55; color: #55514A;"><strong style="color: #1C1B18;">Components nest freely.</strong> Any component can appear in any slot — a button in a card footer, a badge in a table cell, a form in a modal.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 22px;">C2</span><span style="font-size: 12.5px; line-height: 1.55; color: #55514A;"><strong style="color: #1C1B18;">Slots over props.</strong> If content could ever be more than a string, it's a slot, not a prop. Props configure; slots compose.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 22px;">C3</span><span style="font-size: 12.5px; line-height: 1.55; color: #55514A;"><strong style="color: #1C1B18;">Convenience props are shorthand.</strong> <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">title="…"</span> exists for the 80% case and is exactly equivalent to filling the slot.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 22px;">C4</span><span style="font-size: 12.5px; line-height: 1.55; color: #55514A;"><strong style="color: #1C1B18;">No hidden layout.</strong> Components size to their container; parents own spacing via stack/grid — a component never sets its own margins.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 22px;">C5</span><span style="font-size: 12.5px; line-height: 1.55; color: #55514A;"><strong style="color: #1C1B18;">HTMX rides along.</strong> Interactivity is attributes on the same tags — components are transport-agnostic and work with plain form posts too.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 23 · WORKED EXAMPLES ================= -->
+  <div data-screen-label="23 Worked examples" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Architecture · Sheet 23</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · 5 worked compositions</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Composition, worked</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 24px; max-width: 76ch;">Template on the left, rendered result on the right. Note how HTMX attributes sit directly on component tags.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+
+      <!-- 1 card -->
+      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: stretch;">
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.85; color: #D6E7DF; overflow-x: auto;">
+          <div style="color: #8A857C;">&lt;!-- 1 · Card: header + body + footer --&gt;</div>
+          <div>&lt;<span style="color: #D9A441;">c-rdp.card</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"header"</span>&gt;API usage&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&nbsp;&nbsp;14.2M requests this cycle — 71% of quota.</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.progress</span> :value=<span style="color: #E8B4A8;">"71"</span> /&gt;</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"footer"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.button</span> variant=<span style="color: #E8B4A8;">"primary"</span>&gt;Upgrade&lt;/<span style="color: #D9A441;">c-rdp.button</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&lt;/<span style="color: #D9A441;">c-rdp.card</span>&gt;</div>
+        </div>
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 12px; padding: 22px; display: flex; align-items: center;">
+          <div style="width: 100%; background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; box-shadow: 0 1px 2px rgba(28,27,24,0.05); overflow: hidden;">
+            <div style="padding: 13px 18px; border-bottom: 1px solid #EFEDE8; font-size: 14px; font-weight: 700;">API usage</div>
+            <div style="padding: 14px 18px; font-size: 13px; line-height: 1.55; color: #55514A;">14.2M requests this cycle — 71% of quota.</div>
+            <div style="padding: 0 18px 14px;"><div style="height: 8px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><div style="width: 71%; height: 100%; background: #15654E; border-radius: 99px;"></div></div></div>
+            <div style="padding: 12px 18px; border-top: 1px solid #EFEDE8; background: #FAF9F7;"><button style="height: 34px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">Upgrade</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 modal -->
+      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: stretch;">
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.85; color: #D6E7DF; overflow-x: auto;">
+          <div style="color: #8A857C;">&lt;!-- 2 · Modal: body loaded lazily by HTMX --&gt;</div>
+          <div>&lt;<span style="color: #D9A441;">c-rdp.modal</span> id=<span style="color: #E8B4A8;">"edit-customer"</span> title=<span style="color: #E8B4A8;">"Edit customer"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;div <span style="color: #7DB3A0;">hx-get</span>=<span style="color: #E8B4A8;">"/customers/42/edit"</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: #7DB3A0;">hx-trigger</span>=<span style="color: #E8B4A8;">"rdp:open from:closest dialog"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.skeleton</span> lines=<span style="color: #E8B4A8;">"3"</span> /&gt;</div>
+          <div>&nbsp;&nbsp;&lt;/div&gt;</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"footer"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.button</span> variant=<span style="color: #E8B4A8;">"outline"</span> data-close&gt;Cancel&lt;/<span style="color: #D9A441;">c-rdp.button</span>&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.button</span> variant=<span style="color: #E8B4A8;">"primary"</span> form=<span style="color: #E8B4A8;">"edit-form"</span>&gt;Save&lt;/<span style="color: #D9A441;">c-rdp.button</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&lt;/<span style="color: #D9A441;">c-rdp.modal</span>&gt;</div>
+        </div>
+        <div style="background: rgba(28,27,24,0.5); border-radius: 12px; padding: 22px; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 100%; max-width: 320px; background: #FFFFFF; border-radius: 14px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 12px 32px rgba(28,27,24,0.10); overflow: hidden;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 0;"><span style="font-size: 15px; font-weight: 700;">Edit customer</span><span style="color: #6B665E; font-size: 15px;">×</span></div>
+            <div style="padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;">
+              <span style="height: 12px; width: 45%; border-radius: 4px; background: #F2F0EC;"></span>
+              <span style="height: 12px; width: 85%; border-radius: 4px; background: #F2F0EC;"></span>
+              <span style="height: 12px; width: 70%; border-radius: 4px; background: #F2F0EC;"></span>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; padding: 12px 20px; border-top: 1px solid #EFEDE8; background: #FAF9F7;">
+              <button style="height: 32px; padding: 0 12px; font-size: 12.5px; font-weight: 600; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 7px; cursor: pointer;">Cancel</button>
+              <button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; cursor: pointer;">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 table row actions -->
+      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: stretch;">
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.85; color: #D6E7DF; overflow-x: auto;">
+          <div style="color: #8A857C;">&lt;!-- 3 · Table row actions: menu in a cell slot --&gt;</div>
+          <div>&lt;<span style="color: #D9A441;">c-rdp.table.row</span> :record=<span style="color: #E8B4A8;">"customer"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"actions"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.menu</span> icon=<span style="color: #E8B4A8;">"dots"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.menu.item</span> <span style="color: #7DB3A0;">hx-get</span>=<span style="color: #E8B4A8;">"{% url 'edit' customer.pk %}"</span>&gt;Edit&lt;/…&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.menu.item</span> variant=<span style="color: #E8B4A8;">"danger"</span> confirm=<span style="color: #E8B4A8;">"Delete Ana?"</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7DB3A0;">hx-delete</span>=<span style="color: #E8B4A8;">"{% url 'delete' customer.pk %}"</span>&gt;Delete&lt;/…&gt;</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color: #D9A441;">c-rdp.menu</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&lt;/<span style="color: #D9A441;">c-rdp.table.row</span>&gt;</div>
+        </div>
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 12px; padding: 22px; display: flex; align-items: center;">
+          <div style="width: 100%; background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; display: flex; align-items: center; padding: 10px 14px; gap: 12px; position: relative;">
+            <span style="width: 28px; height: 28px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">AL</span>
+            <span style="flex: 1;"><span style="font-size: 13px; font-weight: 600; display: block;">Ana Lima</span><span style="font-size: 11px; color: #6B665E;">Scale · $490</span></span>
+            <span style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; background: #F2F0EC; letter-spacing: 2px; color: #55514A;">⋯</span>
+            <span style="position: absolute; top: 46px; right: 10px; z-index: 5; background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; box-shadow: 0 1px 2px rgba(28,27,24,0.04), 0 4px 12px rgba(28,27,24,0.07); padding: 5px; width: 130px;">
+              <span style="display: flex; align-items: center; height: 30px; padding: 0 10px; border-radius: 6px; font-size: 12.5px; background: #F2F0EC;">Edit</span>
+              <span style="display: flex; align-items: center; height: 30px; padding: 0 10px; border-radius: 6px; font-size: 12.5px; color: #B3382D;">Delete…</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 form field -->
+      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: stretch;">
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.85; color: #D6E7DF; overflow-x: auto;">
+          <div style="color: #8A857C;">&lt;!-- 4 · Form field: binds a Django form field --&gt;</div>
+          <div>&lt;<span style="color: #D9A441;">c-rdp.field</span> :field=<span style="color: #E8B4A8;">"form.email"</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"prefix"</span>&gt;&lt;<span style="color: #D9A441;">c-rdp.icon</span> name=<span style="color: #E8B4A8;">"mail"</span> /&gt;&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"help"</span>&gt;We'll send a verification link.&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&lt;/<span style="color: #D9A441;">c-rdp.field</span>&gt;</div>
+          <div style="color: #8A857C;">&lt;!-- label, id, required, errors: derived from the</div>
+          <div style="color: #8A857C;">&nbsp;&nbsp;&nbsp;&nbsp; bound field; error auto-replaces help slot --&gt;</div>
+        </div>
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 12px; padding: 22px; display: flex; align-items: center;">
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 600;">Email <span style="color: #B3382D;">*</span></label>
+            <div style="display: flex; align-items: stretch; border: 1px solid #D2CEC6; border-radius: 8px; overflow: hidden; background: #FFFFFF;">
+              <span style="display: flex; align-items: center; padding: 0 0 0 12px; color: #8A857C;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></span>
+              <input placeholder="ana@acme.dev" style="height: 40px; padding: 0 12px; font-size: 14px; font-family: inherit; border: none; outline: none; flex: 1; min-width: 0;">
+            </div>
+            <div style="font-size: 12px; color: #6B665E;">We'll send a verification link.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 sidebar item -->
+      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: stretch;">
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.85; color: #D6E7DF; overflow-x: auto;">
+          <div style="color: #8A857C;">&lt;!-- 5 · Sidebar item: active from the URL --&gt;</div>
+          <div>&lt;<span style="color: #D9A441;">c-rdp.sidebar.item</span> url=<span style="color: #E8B4A8;">"{% url 'orders' %}"</span> icon=<span style="color: #E8B4A8;">"cart"</span>&gt;</div>
+          <div>&nbsp;&nbsp;Orders</div>
+          <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"meta"</span>&gt;&lt;<span style="color: #D9A441;">c-rdp.badge</span>&gt;&#123;&#123; pending_count &#125;&#125;&lt;/<span style="color: #D9A441;">c-rdp.badge</span>&gt;&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+          <div>&lt;/<span style="color: #D9A441;">c-rdp.sidebar.item</span>&gt;</div>
+          <div style="color: #8A857C;">&lt;!-- active state + aria-current="page" derived by</div>
+          <div style="color: #8A857C;">&nbsp;&nbsp;&nbsp;&nbsp; matching request.path — no is_active prop --&gt;</div>
+        </div>
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 12px; padding: 22px; display: flex; align-items: center;">
+          <div style="width: 210px; display: flex; flex-direction: column; gap: 3px; background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; background: #EDF4F0; color: #10513F; font-size: 13.5px; font-weight: 600;"><span style="width: 15px; height: 15px; border: 1.75px solid #10513F; border-radius: 4px; flex: 0 0 15px;"></span>Orders <span style="margin-left: auto; font-size: 10.5px; font-weight: 600; color: #10513F; background: #D6E7DF; border-radius: 99px; padding: 1px 8px;">12</span></div>
+            <div style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; color: #55514A; font-size: 13.5px; font-weight: 500;"><span style="width: 15px; height: 15px; border: 1.75px solid #8A857C; border-radius: 99px; flex: 0 0 15px;"></span>Customers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #F2F0EC; border-radius: 10px; padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.9; color: #4E4A44; margin-top: 24px;">
+      <span style="color: #8A857C;">/* naming */</span> tags: c-rdp.{name}[.{part}] · props: kebab-case strings, :bound for context vars · slots: header / footer / icon / prefix / suffix / help / meta / actions — same names everywhere
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Component architecture · Sheets 22–23</div>
+</div>
+
+</x-dc>
+</body>
+</html>

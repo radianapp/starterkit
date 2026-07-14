@@ -1,0 +1,48 @@
+/* US-034: Styling tabs menggunakan CSS variables RDP-UI */
+.rdp-tabs-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rdp-space-md, 1rem);
+  width: 100%;
+}
+
+.rdp-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--rdp-border, #DEE2E6);
+  gap: var(--rdp-space-sm, 0.5rem);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.rdp-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.rdp-tabs__trigger {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--rdp-text-secondary, #495057);
+  padding: var(--rdp-space-sm, 0.5rem) var(--rdp-space-md, 1rem);
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-body, 1rem);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--rdp-transition), border-color var(--rdp-transition);
+}
+
+.rdp-tabs__trigger:hover {
+  color: var(--rdp-primary-600, #335F8F);
+  border-bottom-color: var(--rdp-border-strong, #ADB5BD);
+}
+
+.rdp-tabs__trigger--active {
+  color: var(--rdp-primary-500, #3B6797) !important;
+  border-bottom-color: var(--rdp-primary-500, #3B6797) !important;
+  font-weight: 600;
+}
+
+.rdp-tabs__panels {
+  width: 100%;
+}

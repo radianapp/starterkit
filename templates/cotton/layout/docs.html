@@ -1,0 +1,53 @@
+{% comment %}
+US-010: Layout Docs — Untuk halaman dokumentasi teknis atau help, lengkap dengan TOC di sebelah kanan.
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="docs">
+    <c-slot name="head">
+        {{ head }}
+    </c-slot>
+
+    <div class="rdp-layout">
+        <nav class="rdp-topnav" role="navigation" aria-label="Docs navigation">
+            <div class="rdp-topnav__brand">
+                <a href="/" style="color: white; text-decoration: none; font-weight: bold;">{{ navbar_brand }} Docs</a>
+            </div>
+            <div class="rdp-topnav__actions">
+                <a href="/dashboard/" style="color: white; text-decoration: none; font-size: 0.9rem;">Back to App</a>
+            </div>
+        </nav>
+
+        <div class="rdp-layout__wrapper" style="display: flex; flex: 1;">
+            <!-- Left Sidebar: API / Docs Nav -->
+            <aside class="rdp-sidebar" style="width: 250px; flex-shrink: 0; border-right: 1px solid var(--color-sidebar-border); padding: 20px;">
+                {% if sidebar %}
+                    {{ sidebar }}
+                {% else %}
+                    <div class="rdp-sidebar__section-title">Dokumentasi</div>
+                    <ul style="list-style: none; padding: 0; margin: 10px 0;">
+                        <li><a href="#" class="rdp-sidebar__link active">Memulai</a></li>
+                        <li><a href="#" class="rdp-sidebar__link">Konfigurasi</a></li>
+                        <li><a href="#" class="rdp-sidebar__link">API Referensi</a></li>
+                    </ul>
+                {% endif %}
+            </aside>
+
+            <!-- Main Docs Content -->
+            <main class="rdp-layout__content" style="flex: 1; padding: 40px; overflow-y: auto;">
+                {{ slot }}
+            </main>
+
+            <!-- Right TOC Sidebar (Desktop only) -->
+            <aside class="rdp-toc" style="width: 200px; flex-shrink: 0; border-left: 1px solid var(--color-sidebar-border); padding: 20px; font-size: 0.85rem; display: none;">
+                <div style="font-weight: bold; margin-bottom: 10px;">Pada Halaman Ini</div>
+                {{ toc }}
+            </aside>
+        </div>
+    </div>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

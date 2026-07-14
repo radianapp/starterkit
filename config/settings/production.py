@@ -4,32 +4,52 @@ US: US-016 — Security headers production-ready
 US: US-002 — Konfigurasi environment via `.env`
 
 TUJUAN: Override base settings dengan security headers dan production-grade configuration.
+
+## CARA KERJA
+Security headers dikonfigurasi via Django built-in settings:
+  - HTTPS: SECURE_SSL_REDIRECT + HSTS (SECURE_HSTS_SECONDS)
+  - Cookie: SESSION_COOKIE_SECURE + CSRF_COOKIE_SECURE
+  - Clickjacking: X_FRAME_OPTIONS = DENY
+  - MIME sniff: SECURE_CONTENT_TYPE_NOSNIFF
+  - Referrer: SECURE_REFERRER_POLICY
+  - CSP: belum diterapkan di v0.2 — butuh package `django-csp`.
+          Roadmap v0.3+. Header CSP saat ini dikelola di level nginx/reverse-proxy.
 """
 
-from .base import *  # noqa: F401, F403
+from .base import *  # noqa: F403
 
 DEBUG = False
 ALLOWED_HOSTS = env_var("ALLOWED_HOSTS", "localhost").split(",")  # noqa: F405
 
-# ⚙️ KONFIGURASI: Security headers
+# ⚙️ KONFIGURASI: HTTPS redirect + cookie security
 # Referensi: https://docs.djangoproject.com/en/stable/ref/settings/#security
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_SECURITY_POLICY = {
-    "default-src": ("'self'",),
-    "script-src": ("'self'", "cdn.radian.web.id"),
-    "style-src": ("'self'", "'unsafe-inline'", "cdn.radian.web.id"),
-    "img-src": ("'self'", "data:", "https:"),
-    "font-src": ("'self'", "cdn.radian.web.id"),
-    "connect-src": ("'self'",),
-}
-SECURE_HSTS_SECONDS = 31536000  # 1 year
+
+# ⚙️ KONFIGURASI: HTTP Strict Transport Security (HSTS)
+# KEPUTUSAN TEKNIS: 1 tahun + includeSubDomains + preload
+# ALASAN: Setelah HSTS aktif dengan preload, domain terdaftar di browser preload list
+# ⚠️ PERHATIAN: Jangan aktifkan di production sebelum HTTPS benar-benar berjalan
+#               HSTS tidak bisa di-undo dengan mudah setelah browser cache-nya
+SECURE_HSTS_SECONDS = 31536000  # 1 tahun
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
+# ⚙️ KONFIGURASI: Anti-clickjacking + MIME sniff prevention
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# ⚙️ KONFIGURASI: Referrer policy
+# KEPUTUSAN TEKNIS: strict-origin-when-cross-origin
+# ALASAN: Masih mengirim referrer untuk same-origin (analytics internal), tapi
+#         tidak bocorkan path ke domain lain
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+# KEPUTUSAN TEKNIS: CSP tidak dikonfigurasi via Django di v0.2
+# ALASAN: Django tidak punya built-in CSP support. Butuh `django-csp` (roadmap v0.3).
+#         Saat ini CSP dikelola di nginx/reverse-proxy config.
+# ALTERNATIF: uv add django-csp → tambah 'csp' ke INSTALLED_APPS + CSP_* settings
 
 # ⚙️ KONFIGURASI: Use PostgreSQL di production
 # Database sudah dikonfigurasi di base.py dengan DATABASE_URL

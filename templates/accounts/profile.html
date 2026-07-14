@@ -1,0 +1,54 @@
+{# US-009: Edit profil & avatar #}
+{% load static %}
+<c-layout.app title="Edit Profil">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="profile-page">
+
+        {# Header: avatar + info user #}
+        <div class="profile-header">
+            <div id="avatar-section" class="profile-avatar">
+                {% include "accounts/partials/avatar_preview.html" %}
+            </div>
+
+            <div class="profile-info">
+                <p class="profile-info__name">
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name }}
+                    {% else %}
+                        {{ user.email }}
+                    {% endif %}
+                </p>
+                <p class="profile-info__email">{{ user.email }}</p>
+
+                {% if user.email_verified %}
+                    <span class="profile-info__badge profile-info__badge--verified">✓ Email terverifikasi</span>
+                {% else %}
+                    <span class="profile-info__badge profile-info__badge--unverified">
+                        ⚠ Belum terverifikasi —
+                        <a href="{% url 'accounts:resend_verification' %}">kirim ulang</a>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Pesan sukses/error dari messages framework #}
+        {% if messages %}
+            {% for message in messages %}
+                <c-rdp.alert type="{{ message.tags }}" class="mb-1">{{ message }}</c-rdp.alert>
+            {% endfor %}
+        {% endif %}
+
+        {# Form edit profil #}
+        <div class="profile-section">
+            <p class="profile-section__title">Informasi Profil</p>
+
+            <div id="profile-form-section">
+                {% include "accounts/partials/profile_form.html" %}
+            </div>
+        </div>
+
+    </div>
+</c-layout.app>

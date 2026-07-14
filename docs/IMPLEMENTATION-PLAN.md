@@ -1,7 +1,7 @@
-# Implementation Plan — RDP Starter Kit v0.1
+# Implementation Plan — RDP Starter Kit v0.2
 
 **Total estimasi**: 59 story points  
-**Referensi**: docs/prd/user-stories/rdp-starter-kit.md  
+**Referensi**: docs/prd/user-stories/rdp-starter-kit.md (dipindah dari docs/user-stories/ — FR-23)  
 **Dibuat**: 2026-06-29
 
 ---
@@ -27,7 +27,7 @@ Sebelum mulai koding setiap fase:
 | US-001 | Clone & jalankan project baru | 2 | [x] |
 | US-002 | Konfigurasi environment via `.env` | 2 | [x] |
 | US-003 | Custom User model siap pakai | 2 | [x] |
-| US-016 | Security headers production-ready | 2 | [ ] |
+| US-016 | Security headers production-ready | 2 | [x] |
 | US-021 | Cache (Redis / Local Memory) | 2 | [x] |
 | US-022 | Email (SMTP / Console / Mailpit) | 2 | [x] |
 | US-013 | Static & media files | 2 | [x] |
@@ -58,12 +58,12 @@ pytest.ini (atau pyproject.toml) # US-017
 ```
 
 **Checklist selesai Fase 1**:
-- [ ] `uv sync` berjalan tanpa error di environment bersih
-- [ ] `uv run python manage.py migrate` lulus dari database kosong
-- [ ] `uv run pytest` — 100% pass
-- [ ] `uv run python manage.py check --deploy` — tidak ada warning kritis
-- [ ] `AUTH_USER_MODEL = "accounts.User"` terkonfigurasi di `base.py`
-- [ ] Semua env var terdokumentasi di `.env.example`
+- [x] `uv sync` berjalan tanpa error di environment bersih
+- [x] `uv run python manage.py migrate` lulus dari database kosong
+- [x] `uv run pytest` — 100% pass
+- [x] `uv run python manage.py check --deploy` — tidak ada warning kritis
+- [x] `AUTH_USER_MODEL = "accounts.User"` terkonfigurasi di `base.py`
+- [x] Semua env var terdokumentasi di `.env.example`
 
 ---
 
@@ -108,12 +108,12 @@ apps/dashboard/urls.py
 ```
 
 **Checklist selesai Fase 2**:
-- [ ] `http://localhost:8000` terbuka tanpa error
-- [ ] RDP-UI CDN ter-load (cek Network tab browser)
-- [ ] Dark mode mengikuti preferensi OS
-- [ ] Semua komponen Cotton bisa dirender tanpa error
-- [ ] URL yang tidak ada menampilkan 404 kustom (bukan Django default)
-- [ ] `uv run pytest` — masih hijau
+- [x] `http://localhost:8000` terbuka tanpa error
+- [x] RDP-UI CDN ter-load (cek Network tab browser)
+- [x] Dark mode mengikuti preferensi OS
+- [x] Semua komponen Cotton bisa dirender tanpa error
+- [x] URL yang tidak ada menampilkan 404 kustom (bukan Django default)
+- [x] `uv run pytest` — masih hijau
 
 ---
 
@@ -125,12 +125,12 @@ apps/dashboard/urls.py
 
 | Story | Judul | Estimasi | Status |
 |---|---|---|---|
-| US-004 | Register akun baru | 3 | [ ] |
-| US-005 | Login | 2 | [ ] |
-| US-006 | Logout | 1 | [ ] |
-| US-007 | Lupa password & reset | 3 | [ ] |
-| US-008 | Verifikasi email | 3 | [ ] |
-| US-009 | Edit profil & avatar | 3 | [ ] |
+| US-004 | Register akun baru | 3 | [x] |
+| US-005 | Login | 2 | [x] |
+| US-006 | Logout | 1 | [x] |
+| US-007 | Lupa password & reset | 3 | [x] |
+| US-008 | Verifikasi email | 3 | [x] |
+| US-009 | Edit profil & avatar | 3 | [x] |
 
 **Urutan yang disarankan**: US-004 → US-005 → US-006 → US-007 → US-008 → US-009
 
@@ -165,12 +165,12 @@ templates/cotton/rdp/
 ```
 
 **Checklist selesai Fase 3**:
-- [ ] Alur register → verifikasi email → login berjalan end-to-end
-- [ ] Alur forgot password → email → reset berjalan end-to-end
-- [ ] Form error tampil sebagai fragment HTMX (response 422, bukan full reload)
-- [ ] Redirect setelah login menggunakan `HX-Redirect`
-- [ ] Avatar tersimpan dan tampil di navbar
-- [ ] `uv run pytest` — masih hijau dengan coverage > 80%
+- [x] Alur register → verifikasi email → login berjalan end-to-end
+- [x] Alur forgot password → email → reset berjalan end-to-end
+- [x] Form error tampil sebagai fragment HTMX (response 422, bukan full reload)
+- [x] Redirect setelah login menggunakan `HX-Redirect`
+- [x] Avatar tersimpan dan tampil di navbar
+- [x] `uv run pytest` — masih hijau dengan coverage > 80%
 
 ---
 
@@ -182,8 +182,8 @@ templates/cotton/rdp/
 
 | Story | Judul | Estimasi | Status |
 |---|---|---|---|
-| US-020 | Authorization (Permission & Group) | 3 | [ ] |
-| US-012 | Admin Django kustom | 3 | [ ] |
+| US-020 | Authorization (Permission & Group) | 3 | [x] |
+| US-012 | Admin Django kustom | 3 | [x] |
 
 **Urutan yang disarankan**: US-020 → US-012
 
@@ -205,10 +205,10 @@ templates/admin/                 # US-012: override template admin
 ```
 
 **Checklist selesai Fase 4**:
-- [ ] View dengan `PermissionRequiredMixin` redirect ke 403 untuk user tanpa permission
-- [ ] Admin panel menampilkan tema kustom (bukan Django default)
-- [ ] Dark mode berfungsi di admin panel
-- [ ] `uv run pytest` — masih hijau
+- [x] View dengan `PermissionRequiredMixin` redirect ke 403 untuk user tanpa permission
+- [x] Admin panel menampilkan tema kustom (bukan Django default)
+- [x] Dark mode berfungsi di admin panel
+- [x] `uv run pytest` — masih hijau
 
 ---
 
@@ -220,9 +220,9 @@ templates/admin/                 # US-012: override template admin
 
 | Story | Judul | Estimasi | Status |
 |---|---|---|---|
-| US-018 | CI/CD GitHub Actions | 3 | [ ] |
-| US-019 | CLAUDE.md untuk AI assistant | 1 | [ ] |
-| US-023 | Dokumentasi project | 3 | [ ] |
+| US-018 | CI/CD GitHub Actions | 3 | [x] |
+| US-019 | CLAUDE.md untuk AI assistant | 1 | [x] |
+| US-023 | Dokumentasi project | 3 | [x] |
 
 **Urutan yang disarankan**: US-018 → US-019 → US-023
 
@@ -249,6 +249,291 @@ docs/
 
 ---
 
+## Fase 6 — Layout System & App Shell (8 poin)
+
+> Setelah fase ini, semua 7 layout Cotton tersedia dengan naming v0.2, bebas inline CSS, PicoCSS diload, dan app shell punya persistent theme + toast/modal global.
+
+**Prasyarat**: Fase 1 dan Fase 2 selesai.
+
+| Story | Judul | Estimasi | Status |
+|---|---|---|---|
+| US-027 | Layout system lengkap — 7 komponen Cotton sesuai konvensi v0.2 | 3 | [x] |
+| US-026 | Self-host RDP-UI aset via env var | 2 | [x] |
+| US-028 | App shell lengkap — persistent theme, toast global, modal global | 3 | [x] |
+
+**Urutan yang disarankan**: US-026 → US-027 → US-028
+
+**File utama yang akan dibuat/diubah**:
+
+```
+templates/cotton/layout/
+    base.html              # fix: PicoCSS, versioned CDN, skip-nav, debug.css gate
+    auth.html              # rename dari blank.html + hapus inline CSS
+    public.html            # rename dari home.html + hapus inline CSS
+    dashboard.html         # rename dari app.html + toast/modal container
+    error.html             # baru
+    email.html             # baru — inline CSS safe untuk email client
+    print.html             # baru
+static/css/
+    layout.css             # CSS yang dipindah dari inline
+static/js/
+    theme.js               # persistent theme via localStorage
+    toast.js               # toast global handler
+    modal-global.js        # modal global handler
+config/settings/base.py    # tambah RDP_UI_VERSION, RDP_UI_SELF_HOST
+```
+
+**Checklist selesai Fase 6**:
+
+- [ ] `uv run python manage.py check` — bersih
+- [ ] Tidak ada `style="..."` inline di semua file `templates/cotton/layout/`
+- [ ] PicoCSS diload sebelum `rdp.css` di semua halaman
+- [ ] `debug.css` hanya diload jika `RDP_DEBUG_OVERLAY=True`
+- [ ] Theme switcher persist setelah refresh
+- [ ] Toast muncul saat server return `HX-Trigger: {"showToast": {...}}`
+- [ ] `uv run pytest` — masih hijau
+
+---
+
+## Fase 7 — Component Library (12 poin)
+
+> Setelah fase ini, semua komponen Cotton yang diperlukan tersedia (termasuk komponen gap), halaman demo internal dapat diakses di `/dev/components/`.
+
+**Prasyarat**: Fase 6 selesai.
+
+| Story | Judul | Estimasi | Status |
+|---|---|---|---|
+| US-033 | Komponen Cotton RDP-UI v1.0 gap — badge, avatar, loader | 2 | [x] |
+| US-034 | Component library gap — tabs, toast, tooltip, accordion, skeleton, dst. | 8 | [x] |
+| US-035 | Halaman demo komponen internal `/dev/components/` | 2 | [x] |
+
+**Urutan yang disarankan**: US-033 → US-034 → US-035
+
+**File utama yang akan dibuat/diubah**:
+
+```
+templates/cotton/rdp/
+    badge.html
+    avatar.html
+    loader.html
+    tabs.html
+    toast.html
+    tooltip.html
+    accordion.html
+    skeleton.html
+    empty_state.html
+    stat_card.html
+    confirm.html           # US-034 + FR-17
+    progress.html
+    drawer.html
+    search_box.html
+    filter_bar.html
+    file_upload.html
+    steps.html
+static/css/components/
+    badge.css
+    avatar.css
+    tabs.css
+    toast.css
+    tooltip.css
+    accordion.css
+    skeleton.css
+    empty-state.css
+    stat-card.css
+    confirm.css
+    progress.css
+    drawer.css
+    search-box.css
+    file-upload.css
+    steps.css
+apps/core/views/
+    dev.py                 # /dev/components/ view (DEBUG only)
+config/urls.py             # tambah path dev (if DEBUG)
+```
+
+**Checklist selesai Fase 7**:
+
+- [x] Semua komponen bisa dirender tanpa error di `/dev/components/`
+- [x] Tidak ada warna hex hardcoded di `static/css/components/*.css` (semua `var(--rdp-*)`)
+- [x] `/dev/components/` return 404 saat `DEBUG=False`
+- [x] `uv run pytest` — masih hijau
+
+---
+
+## Fase 8 — Public & App Pages + HTMX Patterns (11 poin)
+
+> Setelah fase ini, semua halaman bawaan (public, auth, dashboard, error) siap pakai dan 10 HTMX pattern terimplementasi sebagai contoh hidup.
+
+**Prasyarat**: Fase 6, Fase 7, dan Fase 3 (Auth) selesai.
+
+| Story | Judul | Estimasi | Status |
+|---|---|---|---|
+| US-029 | HTMX form validation pattern — 422 fragment + HX-Redirect | 2 | [x] |
+| US-030 | Layout email + template email transaksional | 2 | [x] |
+| US-031 | Public pages — landing, about, terms, privacy | 3 | [x] |
+| US-032 | Dashboard default dengan demo data — KPI cards, tabel, pagination | 3 | [x] |
+| US-036 | 10 HTMX patterns — contoh hidup + resep cookbook | 5 | [x] |
+
+**Urutan yang disarankan**: US-029 → US-030 → US-031 → US-032 → US-036
+
+**File utama yang akan dibuat/diubah**:
+
+```
+apps/core/mixins/
+    htmx.py                # HtmxFormMixin — 422 fragment + HX-Redirect
+templates/
+    email/
+        verify_email.html
+        password_reset.html
+    public/
+        landing.html
+        about.html
+        terms.html
+        privacy.html
+    dashboard/
+        index.html         # update: data dari DB + pagination HTMX
+    htmx_examples/
+        crud_list.html
+        modal_form.html
+        delete_confirm.html
+        live_validation.html
+        inline_edit.html
+        search_debounce.html
+        pagination_fragment.html
+        infinite_scroll.html
+        polling.html
+        toast_trigger.html
+apps/core/views/
+    htmx_examples.py       # view untuk setiap HTMX pattern
+apps/dashboard/views/
+    index.py               # update: query dari DB
+config/urls.py             # tambah path public + htmx-examples
+```
+
+**Checklist selesai Fase 8**:
+
+- [ ] Landing page tampil di `http://localhost:8000/` tanpa login
+- [ ] Dashboard KPI angka dari DB (bukan hardcoded)
+- [ ] Semua 10 HTMX pattern accessible dan berfungsi
+- [ ] Form error menggunakan HTTP 422 fragment
+- [ ] Redirect sukses menggunakan `HX-Redirect`
+- [ ] `uv run pytest --cov=apps` — coverage ≥ 80%
+
+---
+
+## Fase 9 — CLI & DX (9 poin)
+
+> Setelah fase ini, developer baru bisa bootstrap project baru dalam < 5 menit via CLI, demo data tersedia, dan lint template berjalan di CI.
+
+**Prasyarat**: Fase 6–8 selesai (layout dan halaman harus final sebelum CLI di-bake).
+
+| Story | Judul | Estimasi | Status |
+|---|---|---|---|
+| US-024 | CLI `rdp new` — wizard interaktif bootstrap project | 5 | [x] |
+| US-025 | Template app untuk `manage.py startapp --template` | 2 | [x] |
+| US-037 | Management command demo data | 2 | [x] |
+| US-038 | Script lint template + integrasi CI | 3 | [x] |
+
+**Urutan yang disarankan**: US-037 → US-025 → US-038 → US-024
+
+**File utama yang akan dibuat/diubah**:
+
+```
+scripts/
+    rdp_new.py             # CLI wizard
+    lint_templates.py      # lint inline CSS/JS + hex hardcoded
+    app_template/          # template untuk startapp
+        models/__init__.py
+        views/__init__.py
+        services/__init__.py
+        forms/__init__.py
+        admin/__init__.py
+        tests/__init__.py
+        urls.py
+        apps.py
+apps/core/management/commands/
+    loaddemodata.py
+fixtures/
+    demo_data.json
+.github/workflows/
+    ci.yml                 # update: tambah step "Lint templates"
+```
+
+**Checklist selesai Fase 9**:
+
+- [ ] `uv run scripts/rdp_new.py testproject` → `cd testproject && uv sync && uv run python manage.py runserver` dalam < 5 menit
+- [ ] `uv run python manage.py loaddemodata` idempotent
+- [ ] `uv run python scripts/lint_templates.py` exit 0 di repo yang bersih
+- [ ] CI gagal saat ada `style="..."` inline di template
+- [ ] `uv run pytest` — masih hijau
+
+---
+
+## Fase 10 — Dokumentasi & SOP (9 poin)
+
+> Fase terakhir v0.2. Setelah ini docs/ terstruktur, semua SOP dan cookbook tersedia, dan skills AI up-to-date.
+
+**Prasyarat**: Fase 1–9 selesai.
+
+| Story | Judul | Estimasi | Status |
+|---|---|---|---|
+| US-039 | Restrukturisasi `docs/` sesuai standar v0.2 | 2 | [x] |
+| US-040 | SOP lengkap — HTMX, Cotton, Git, testing, modul | 3 | [x] |
+| US-041 | Cookbook resep langkah-demi-langkah | 3 | [x] |
+| US-042 | Workflow update skills AI seiring perubahan konvensi | 1 | [x] |
+
+**Urutan yang disarankan**: US-039 → US-040 → US-041 → US-042
+
+**File utama yang akan dibuat/diubah**:
+
+```
+docs/
+    prd/
+        v0.2.md            # sudah ada
+        archive/
+            PRDv0.1.md     # pindah dari docs/PRDv0.1.md
+    prd/user-stories/
+        rdp-starter-kit.md # pindah dari docs/user-stories/
+    architecture/
+        database.md        # sudah ada (path lama)
+    decisions/             # ADR (kosong, siap diisi)
+    modules/
+        ui-components.md   # sudah ada, update path
+    sop/
+        frontend-structure.md   # pindah dari SOP-FRONTEND-STRUCTURE.md
+        htmx-patterns.md        # baru
+        cotton-components.md    # baru
+        git-workflow.md         # baru
+        testing.md              # baru
+        module-documentation.md # baru
+    cookbook/
+        htmx-patterns.md        # baru (dari US-036)
+        crud.md                 # baru
+        modal-htmx.md           # baru
+        wizard.md               # baru
+        add-app.md              # baru
+        change-app-color.md     # baru
+        enable-celery.md        # baru
+        enable-asgi.md          # baru
+        enable-drf.md           # baru
+        enable-s3.md            # baru
+CLAUDE.md                       # update: path docs baru + PRD v0.2
+```
+
+**Checklist selesai Fase 10 (= Definition of Done v0.2)**:
+
+- [ ] Semua link di CLAUDE.md, README, dan skills menuju path yang benar
+- [ ] `docs/sop/` berisi ≥ 5 SOP dengan contoh kode konkret
+- [ ] `docs/cookbook/` berisi ≥ 9 resep
+- [ ] Semua Acceptance Criteria Fase 5 (v0.1) masih terpenuhi
+- [ ] `uv run pytest --cov=apps` — coverage ≥ 80%
+- [ ] `uv run python scripts/lint_templates.py` — exit 0
+- [ ] `uv run python manage.py check --deploy` — bersih
+- [ ] Clone fresh + `uv sync && migrate && runserver` dalam < 5 menit (jalur manual, tanpa CLI)
+- [ ] `uv run scripts/rdp_new.py testproject` → runserver dalam < 5 menit
+
+---
+
 ## Ringkasan Total
 
 | Fase | Stories | Poin | Prasyarat |
@@ -257,8 +542,13 @@ docs/
 | Fase 2 — UI Shell | US-010,011,015 | 12 | Fase 1 |
 | Fase 3 — Auth | US-004,005,006,007,008,009 | 15 | Fase 1, 2 |
 | Fase 4 — Authorization & Admin | US-020,012 | 6 | Fase 3 |
-| Fase 5 — Tooling & Docs | US-018,019,023 | 7 | Fase 1–4 |
-| **Total** | **23 stories** | **59 poin** | |
+| Fase 5 — Tooling & Docs (v0.1) | US-018,019,023 | 7 | Fase 1–4 |
+| Fase 6 — Layout System & App Shell | US-026,027,028 | 8 | Fase 1, 2 |
+| Fase 7 — Component Library | US-033,034,035 | 12 | Fase 6 |
+| Fase 8 — Public & App Pages + HTMX | US-029,030,031,032,036 | 15 | Fase 3, 6, 7 |
+| Fase 9 — CLI & DX | US-024,025,037,038 | 12 | Fase 6–8 |
+| Fase 10 — Dokumentasi & SOP | US-039,040,041,042 | 9 | Fase 1–9 |
+| **Total v0.2** | **42 stories** | **115 poin** | |
 
 ---
 

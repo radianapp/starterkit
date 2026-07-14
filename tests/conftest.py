@@ -10,11 +10,9 @@ ALUR:
   3. Setup markers untuk test categorization
 """
 
-import os
-
 import pytest
-from django.conf import settings
 from django.test import Client
+
 from apps.accounts.models import User
 
 

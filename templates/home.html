@@ -1,0 +1,275 @@
+{# Landing page publik RDP UI Framework — menggabungkan / dengan /rdp-ui/ #}
+{# Mengikuti design handoff: docs/design_handoff_rdp_ui/index.dc.html #}
+{% load static %}
+<c-layout.base title="RDP UI — Modern UI Framework for Django" navbar_brand="RDP UI">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/rdp-ui-landing.css' %}">
+        <meta name="description" content="A complete UI ecosystem — design system, CSS framework, Django Cotton components, and HTMX patterns. HTML first, server first, zero build step.">
+    </c-slot>
+
+    <div class="lp-root">
+
+        {# ============ NAV ============ #}
+        <header class="lp-nav">
+            <div class="lp-nav__inner">
+                <a href="/" class="lp-nav__brand">
+                    <span class="lp-nav__logo">R</span>
+                    <span class="lp-nav__name">RDP UI</span>
+                </a>
+                <nav class="lp-nav__links" aria-label="Landing navigation">
+                    <a href="#get-started" class="lp-nav__link">Get started</a>
+                    <a href="#docs" class="lp-nav__link">Docs</a>
+                    <a href="#examples" class="lp-nav__link">Examples</a>
+                    <a href="/rdp-ui/tokens/" class="lp-nav__link">Themes</a>
+
+                </nav>
+                {# Nav mobile: hanya tampilkan CTA #}
+                <div class="lp-nav__links" style="display:flex;margin-left:auto;" aria-hidden="true">
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'dashboard:index' %}" class="lp-nav__auth-cta" id="nav-dashboard-cta">Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="lp-nav__auth-link">Masuk</a>
+                        <a href="{% url 'accounts:register' %}" class="lp-nav__auth-cta" id="nav-register-cta">Daftar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        {# ============ HERO ============ #}
+        <section id="top" class="lp-hero">
+            <div class="lp-hero__inner">
+                <div class="lp-hero__badge">
+                    <span class="lp-hero__badge-dot"></span>
+                    <span class="lp-hero__badge-text">v0.x · DESIGN SPEC COMPLETE</span>
+                </div>
+                <h1 class="lp-hero__title">Modern UI Framework<br>for Django</h1>
+                <p class="lp-hero__subtitle">
+                    A complete ecosystem — design system, CSS framework, Django Cotton components, and HTMX patterns. HTML first, server first, zero build step. Beautiful Django apps without a frontend team.
+                </p>
+                <div class="lp-hero__actions">
+                    <a href="#get-started" class="lp-btn-primary" id="hero-get-started">Get Started</a>
+                    <a href="#docs" class="lp-btn-ghost" id="hero-browse-docs">Browse the Docs</a>
+                </div>
+                <div class="lp-hero__checklist">
+                    <span class="lp-hero__check-item">
+                        <span class="lp-hero__check-icon">✓</span>No React, no build step
+                    </span>
+                    <span class="lp-hero__check-item">
+                        <span class="lp-hero__check-icon">✓</span>11 themes, CSS variables only
+                    </span>
+                    <span class="lp-hero__check-item">
+                        <span class="lp-hero__check-icon">✓</span>WCAG AA accessible
+                    </span>
+                    <span class="lp-hero__check-item">
+                        <span class="lp-hero__check-icon">✓</span>HTMX native
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        {# ============ GET STARTED ============ #}
+        <section id="get-started" class="lp-started">
+            <div class="lp-started__inner">
+                <div class="lp-section-label">
+                    <span class="lp-section-label__text">GET STARTED</span>
+                    <span class="lp-section-label__rule"></span>
+                </div>
+                <h2 class="lp-section-title">Up and running in three steps</h2>
+                <p class="lp-section-desc">
+                    RDP UI is plain CSS plus Django Cotton components. If you can write a Django template, you already know how to use it.
+                </p>
+
+                <div class="lp-steps">
+
+                    {# Step 1 #}
+                    <div class="lp-step-card">
+                        <div class="lp-step-card__header">
+                            <span class="lp-step-card__num">1</span>
+                            <h3 class="lp-step-card__title">Install</h3>
+                        </div>
+                        <p class="lp-step-card__desc">One pip package brings the CSS, the component library, and the icon set.</p>
+                        <div class="lp-code">
+                            <div><span class="lp-code__prompt">$</span> pip install rdp-ui</div>
+                            <div class="lp-code__comment"># settings.py</div>
+                            <div>INSTALLED_APPS = [</div>
+                            <div>&nbsp;&nbsp;<span class="lp-code__tag">"rdp_ui"</span>, <span class="lp-code__tag">"django_cotton"</span>,</div>
+                            <div>]</div>
+                        </div>
+                    </div>
+
+                    {# Step 2 #}
+                    <div class="lp-step-card">
+                        <div class="lp-step-card__header">
+                            <span class="lp-step-card__num">2</span>
+                            <h3 class="lp-step-card__title">Load the theme</h3>
+                        </div>
+                        <p class="lp-step-card__desc">One stylesheet, one attribute. Swap the theme by changing a single token set.</p>
+                        <div class="lp-code">
+                            <div>&lt;<span class="lp-code__tag">link</span> rel=<span class="lp-code__string">"stylesheet"</span></div>
+                            <div>&nbsp;&nbsp;href=<span class="lp-code__string">"{% verbatim %}{% static 'rdp/rdp.css' %}{% endverbatim %}"</span>&gt;</div>
+                            <div>&lt;<span class="lp-code__tag">body</span> data-rdp-theme=<span class="lp-code__string">"default"</span>&gt;</div>
+                        </div>
+                    </div>
+
+                    {# Step 3 #}
+                    <div class="lp-step-card">
+                        <div class="lp-step-card__header">
+                            <span class="lp-step-card__num">3</span>
+                            <h3 class="lp-step-card__title">Use components</h3>
+                        </div>
+                        <p class="lp-step-card__desc">Every component is a Cotton tag with attributes as props and named slots.</p>
+                        <div class="lp-code">
+                            <div>&lt;<span class="lp-code__tag">c-rdp.card</span>&gt;</div>
+                            <div>&nbsp;&nbsp;&lt;<span class="lp-code__tag">c-slot</span> name=<span class="lp-code__string">"header"</span>&gt;Team&lt;/<span class="lp-code__tag">c-slot</span>&gt;</div>
+                            <div>&nbsp;&nbsp;&lt;<span class="lp-code__tag">c-rdp.button</span> variant=<span class="lp-code__string">"primary"</span>&gt;</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;Save&lt;/<span class="lp-code__tag">c-rdp.button</span>&gt;</div>
+                            <div>&lt;/<span class="lp-code__tag">c-rdp.card</span>&gt;</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {# HTMX note #}
+                <div class="lp-htmx-note">
+                    <span class="lp-htmx-note__label">INTERACTIVITY</span>
+                    <p class="lp-htmx-note__text">
+                        Need dynamic behavior? Add <code>hx-get</code> / <code>hx-post</code> to any component — loading states, validation re-renders, and toasts are built in. See <a href="/examples/htmx/">HTMX Interaction Patterns</a>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        {# ============ DOCS ============ #}
+        <section id="docs" class="lp-docs">
+            <div class="lp-docs__inner">
+                <div class="lp-section-label">
+                    <span class="lp-section-label__text">DOCS</span>
+                    <span class="lp-section-label__rule" style="background:#DEDBD4;"></span>
+                </div>
+                <h2 class="lp-section-title">Design specification</h2>
+                <p class="lp-section-desc">
+                    The complete product design — from tokens to component contracts to accessibility rules.
+                </p>
+
+                <div class="lp-docs__grid">
+                    <a href="/rdp-ui/tokens/" class="lp-doc-card" id="doc-theme-architecture">
+                        <span class="lp-doc-card__num">03</span>
+                        <span class="lp-doc-card__title">Theme Architecture</span>
+                        <span class="lp-doc-card__desc">Token inheritance model and the 11-theme gallery.</span>
+                    </a>
+                    <a href="/rdp-ui/layout/" class="lp-doc-card" id="doc-layout-system">
+                        <span class="lp-doc-card__num">04</span>
+                        <span class="lp-doc-card__title">Layout System</span>
+                        <span class="lp-doc-card__desc">Container, 12-col grid, app shell, responsive strategy.</span>
+                    </a>
+                    <a href="/rdp-ui/components/" class="lp-doc-card" id="doc-component-showcase">
+                        <span class="lp-doc-card__num">05</span>
+                        <span class="lp-doc-card__title">Component Showcase</span>
+                        <span class="lp-doc-card__desc">Buttons, badges, alerts, toasts, tooltips, progress.</span>
+                    </a>
+                    <a href="/examples/htmx/" class="lp-doc-card" id="doc-htmx-patterns">
+                        <span class="lp-doc-card__num">10</span>
+                        <span class="lp-doc-card__title">HTMX Interaction Patterns</span>
+                        <span class="lp-doc-card__desc">12 server-first patterns with motion guidelines.</span>
+                    </a>
+                    <a href="/dev/components/" class="lp-doc-card" id="doc-dev-components">
+                        <span class="lp-doc-card__num">09</span>
+                        <span class="lp-doc-card__title">Component Architecture</span>
+                        <span class="lp-doc-card__desc">Anatomy, slots, and the Django Cotton mapping.</span>
+                    </a>
+                    <a href="/about/" class="lp-doc-card" id="doc-product-foundation">
+                        <span class="lp-doc-card__num">01</span>
+                        <span class="lp-doc-card__title">Product Foundation</span>
+                        <span class="lp-doc-card__desc">Positioning, personas, and the 7 design principles.</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        {# ============ EXAMPLES ============ #}
+        <section id="examples" class="lp-examples">
+            <div class="lp-examples__inner">
+                <div class="lp-section-label">
+                    <span class="lp-section-label__text">EXAMPLES</span>
+                    <span class="lp-section-label__rule"></span>
+                </div>
+                <h2 class="lp-section-title">Example applications</h2>
+                <p class="lp-section-desc">
+                    Complete apps built entirely from RDP UI components — desktop and mobile ready.
+                </p>
+
+                <div class="lp-examples__grid">
+                    <a href="/dashboard/" class="lp-example-card" id="example-dashboard">
+                        <span class="lp-example-card__glyph">▦</span>
+                        <span class="lp-example-card__title">Admin Dashboard</span>
+                        <span class="lp-example-card__desc">KPI stat cards, activity table, quick actions — starter kit flagship.</span>
+                    </a>
+                    <a href="{% url 'accounts:login' %}" class="lp-example-card" id="example-auth">
+                        <span class="lp-example-card__glyph">◈</span>
+                        <span class="lp-example-card__title">Authentication</span>
+                        <span class="lp-example-card__desc">Login, register, forgot password, dan profile settings.</span>
+                    </a>
+                    <a href="/examples/htmx/" class="lp-example-card" id="example-htmx">
+                        <span class="lp-example-card__glyph">◎</span>
+                        <span class="lp-example-card__title">HTMX Patterns</span>
+                        <span class="lp-example-card__desc">10 pola interaksi server-first: create, delete, search, scroll, polling.</span>
+                    </a>
+                    <a href="/rdp-ui/components/" class="lp-example-card" id="example-components">
+                        <span class="lp-example-card__glyph">▤</span>
+                        <span class="lp-example-card__title">Component Library</span>
+                        <span class="lp-example-card__desc">Seluruh komponen Cotton yang tersedia dengan props dan slot docs.</span>
+                    </a>
+                    <a href="/rdp-ui/tokens/" class="lp-example-card" id="example-themes">
+                        <span class="lp-example-card__glyph">◐</span>
+                        <span class="lp-example-card__title">Theme Gallery</span>
+                        <span class="lp-example-card__desc">11 tema siap pakai: default, dark, midnight, ocean, forest, dan lainnya.</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        {# ============ FOOTER ============ #}
+        <footer class="lp-footer">
+            <div class="lp-footer__inner">
+                <div class="lp-footer__top">
+                    <div class="lp-footer__brand">
+                        <div class="lp-footer__brand-row">
+                            <span class="lp-footer__logo">R</span>
+                            <span class="lp-footer__brand-name">RDP UI</span>
+                        </div>
+                        <p class="lp-footer__brand-desc">Modern UI Framework for Django. HTML first · Server first · Theme first.</p>
+                    </div>
+                    <div class="lp-footer__links">
+                        <div class="lp-footer__col">
+                            <span class="lp-footer__col-label">PROJECT</span>
+                            <a href="#get-started" class="lp-footer__col-link">Get started</a>
+                            <a href="/rdp-ui/tokens/" class="lp-footer__col-link">Theme gallery</a>
+                            <a href="/about/" class="lp-footer__col-link">About</a>
+                        </div>
+                        <div class="lp-footer__col">
+                            <span class="lp-footer__col-label">RESOURCES</span>
+                            <a href="#docs" class="lp-footer__col-link">Docs</a>
+                            <a href="#examples" class="lp-footer__col-link">Examples</a>
+                            <a href="/examples/htmx/" class="lp-footer__col-link">HTMX Patterns</a>
+                        </div>
+                        <div class="lp-footer__col">
+                            <span class="lp-footer__col-label">ACCOUNT</span>
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'dashboard:index' %}" class="lp-footer__col-link">Dashboard</a>
+                                <a href="{% url 'accounts:logout' %}" class="lp-footer__col-link">Keluar</a>
+                            {% else %}
+                                <a href="{% url 'accounts:login' %}" class="lp-footer__col-link">Masuk</a>
+                                <a href="{% url 'accounts:register' %}" class="lp-footer__col-link">Daftar</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="lp-footer__bottom">
+                    <span class="lp-footer__copy">© {{ COPYRIGHT_YEAR }} {{ COMPANY_NAME }} · rdpui.radian.web.id</span>
+                    <span class="lp-footer__license">MIT LICENSE · MADE FOR DJANGO</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+</c-layout.base>

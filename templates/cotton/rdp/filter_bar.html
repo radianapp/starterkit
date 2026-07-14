@@ -1,0 +1,22 @@
+{# US-034: Komponen filter bar #}
+{% comment %}
+TUJUAN: Bar horizontal penampung input filter dan pencarian di dashboard/list.
+- {{ attrs }}: Atribut HTML tambahan
+- slot: Elemen-elemen filter (input, select, dll)
+- slot actions: Elemen aksi di sisi kanan (tombol reset, export, dll)
+{% endcomment %}
+
+<div
+  class="rdp-filter-bar"
+  {{ attrs }}>
+  
+  <div class="rdp-filter-bar__filters">
+    {{ slot }}
+  </div>
+
+  {% if actions %}
+    <div class="rdp-filter-bar__actions">
+      {{ actions }}
+    </div>
+  {% endif %}
+</div>

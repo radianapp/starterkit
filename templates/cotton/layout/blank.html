@@ -1,0 +1,28 @@
+{% comment %}
+US-010: Layout Blank — Untuk halaman minimalis (login, register, forgot password, error).
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="blank">
+    <c-slot name="head">
+        {{ head }}
+    </c-slot>
+
+    <div class="rdp-layout rdp-layout--blank" x-data="layoutState()">
+        <button @click="toggleDarkMode()"
+                class="rdp-btn rdp-btn--ghost rdp-theme-toggle rdp-theme-toggle--floating"
+                :title="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+                :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+            <span x-show="!darkMode" aria-hidden="true">🌙</span>
+            <span x-show="darkMode" aria-hidden="true">☀️</span>
+        </button>
+        <main class="rdp-layout__content-blank" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
+            {{ slot }}
+        </main>
+    </div>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

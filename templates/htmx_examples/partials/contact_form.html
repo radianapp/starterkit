@@ -1,0 +1,35 @@
+{# US-029, US-036: HTMX Contact Form Partial #}
+<div id="contact-form-container">
+    <form hx-post="{% url 'htmx-contact-create' %}" hx-target="#contact-form-container" hx-swap="outerHTML" class="rdp-form">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 16px;">
+            <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <small style="color: var(--pico-danger-color);">{{ form.name.errors.as_text }}</small>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 16px;">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <small style="color: var(--pico-danger-color);">{{ form.email.errors.as_text }}</small>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 24px;">
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+                <small style="color: var(--pico-danger-color);">{{ form.phone.errors.as_text }}</small>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <c-rdp.button type="button" variant="secondary" onclick="document.getElementById('contact-modal').close()">Batal</c-rdp.button>
+            <c-rdp.button type="submit" variant="primary">Simpan Kontak</c-rdp.button>
+        </div>
+    </form>
+</div>

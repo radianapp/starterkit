@@ -1,0 +1,19 @@
+<c-vars navbar_brand="" />
+<nav class="rdp-topnav" x-data="layoutState()" role="navigation" aria-label="Public navigation">
+    <div class="rdp-topnav__brand">
+        <a href="/" class="rdp-topnav__brand-link" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+            <span class="rdp-topnav__brand-logo" style="font-size: 1.2rem;">⬡</span>
+            <span>{{ navbar_brand|default:"StarterKit" }}</span>
+        </a>
+    </div>
+    <div class="rdp-topnav__links">
+        {{ slot }}
+        <button @click="toggleDarkMode()"
+                class="rdp-btn rdp-btn--ghost rdp-theme-toggle"
+                :title="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+                :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+            <span x-show="!darkMode" aria-hidden="true">🌙</span>
+            <span x-show="darkMode" aria-hidden="true">☀️</span>
+        </button>
+    </div>
+</nav>

@@ -1,0 +1,83 @@
+{# Komponen Theme Picker — 11 tema RDP UI #}
+{% comment %}
+TUJUAN: Widget interaktif untuk memilih salah satu dari 11 tema RDP UI.
+Menggunakan Alpine.js untuk reaktivitas client-side.
+Memanggil RDP.setRdpTheme(id) yang didefinisikan di rdp.js.
+
+PARAMETER:
+  - {{ attrs }}: Atribut HTML tambahan (class, id, dll.)
+
+SLOT: — (tidak ada slot, semua konten self-contained)
+
+CONTOH:
+  <c-rdp.theme_picker />
+  <c-rdp.theme_picker class="rdp-mt-md" />
+{% endcomment %}
+
+<div style="display:none;">Mode Tema Warna Aksen</div>
+<div x-data="{
+    currentTheme: document.documentElement.getAttribute('data-rdp-theme') || 'default',
+    themes: [
+        { id: 'default',   label: 'Default',    swatch: '#15654E', dark: false },
+        { id: 'light',     label: 'Light',      swatch: '#2A5FA8', dark: false },
+        { id: 'corporate', label: 'Corporate',  swatch: '#24427C', dark: false },
+        { id: 'ocean',     label: 'Ocean',      swatch: '#0E7490', dark: false },
+        { id: 'forest',    label: 'Forest',     swatch: '#2F6B3C', dark: false },
+        { id: 'github',    label: 'GitHub',     swatch: '#0969DA', dark: false },
+        { id: 'dark',      label: 'Dark',       swatch: '#5FA98C', dark: true  },
+        { id: 'midnight',  label: 'Midnight',   swatch: '#8FA8EC', dark: true  },
+        { id: 'nord',      label: 'Nord',       swatch: '#88C0D0', dark: true  },
+        { id: 'dracula',   label: 'Dracula',    swatch: '#BD93F9', dark: true  },
+        { id: 'terminal',  label: 'Terminal',   swatch: '#4ADE80', dark: true  }
+    ],
+    setTheme(id) {
+        this.currentTheme = id;
+        var dark = this.themes.find(t => t.id === id)?.dark || false;
+        document.documentElement.setAttribute('data-rdp-theme', id);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        try { localStorage.setItem('rdp-rdp-theme', id); } catch(e){}
+        /* swap theme CSS */
+        var el = document.getElementById('rdp-theme-css');
+        if (el) {
+            var base = el.href.substring(0, el.href.lastIndexOf('/') + 1);
+            el.href = base + id + '.css';
+        }
+        document.dispatchEvent(new CustomEvent('rdp:theme-change', { detail: { theme: id, dark: dark } }));
+    }
+}" class="rdp-theme-picker" {{ attrs }}>
+
+    <div class="rdp-theme-picker__section">
+        <span class="rdp-theme-picker__label">Tema Terang</span>
+        <div class="rdp-theme-picker__grid">
+            <template x-for="t in themes.filter(t => !t.dark)" :key="t.id">
+                <button
+                    @click="setTheme(t.id)"
+                    class="rdp-theme-picker__chip"
+                    :class="{ 'active': currentTheme === t.id }"
+                    :title="t.label"
+                    type="button">
+                    <span class="rdp-theme-picker__dot" :style="'background:' + t.swatch"></span>
+                    <span x-text="t.label"></span>
+                </button>
+            </template>
+        </div>
+    </div>
+
+    <div class="rdp-theme-picker__section">
+        <span class="rdp-theme-picker__label">Tema Gelap</span>
+        <div class="rdp-theme-picker__grid">
+            <template x-for="t in themes.filter(t => t.dark)" :key="t.id">
+                <button
+                    @click="setTheme(t.id)"
+                    class="rdp-theme-picker__chip"
+                    :class="{ 'active': currentTheme === t.id }"
+                    :title="t.label"
+                    type="button">
+                    <span class="rdp-theme-picker__dot" :style="'background:' + t.swatch"></span>
+                    <span x-text="t.label"></span>
+                </button>
+            </template>
+        </div>
+    </div>
+
+</div>

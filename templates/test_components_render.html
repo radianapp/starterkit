@@ -1,0 +1,47 @@
+{% load cotton %}
+{% if test_comp == 'badge' %}
+  <c-rdp.badge variant="{{ variant }}">{{ content }}</c-rdp.badge>
+{% elif test_comp == 'avatar' %}
+  <c-rdp.avatar name="{{ name }}" size="{{ size }}" src="{{ src }}" />
+{% elif test_comp == 'loader' %}
+  <c-rdp.loader size="{{ size }}" />
+{% elif test_comp == 'tabs' %}
+  <c-rdp.tabs :items="items" default_tab="{{ default_tab }}">
+    <div x-show="activeTab === 'tab1'">Panel 1</div>
+  </c-rdp.tabs>
+{% elif test_comp == 'toast' %}
+  <c-rdp.toast type="{{ type }}" message="{{ message }}" />
+{% elif test_comp == 'tooltip' %}
+  <c-rdp.tooltip content="{{ content }}" position="{{ position }}">Hover</c-rdp.tooltip>
+{% elif test_comp == 'accordion' %}
+  <c-rdp.accordion title="{{ title }}" open="{{ open }}">Jawaban</c-rdp.accordion>
+{% elif test_comp == 'skeleton' %}
+  <c-rdp.skeleton width="{{ width }}" height="{{ height }}" circle="{{ circle }}" />
+{% elif test_comp == 'empty_state' %}
+  <c-rdp.empty-state icon="{{ icon }}" title="{{ title }}" description="{{ description }}" />
+{% elif test_comp == 'stat_card' %}
+  <c-rdp.stat-card label="{{ label }}" value="{{ value }}" trend="{{ trend }}" trend_up="{{ trend_up }}" />
+{% elif test_comp == 'confirm' %}
+  <c-rdp.confirm title="{{ title }}" message="{{ message }}" destructive="{{ destructive }}" trigger_text="{{ trigger_text }}" hx-delete="{{ hx_delete }}" />
+{% elif test_comp == 'progress' %}
+  <c-rdp.progress value="{{ value }}" max="{{ max }}" variant="{{ variant }}" />
+{% elif test_comp == 'drawer' %}
+  <c-rdp.drawer title="{{ title }}" trigger_text="{{ trigger_text }}">Konten</c-rdp.drawer>
+{% elif test_comp == 'search_box' %}
+  <c-rdp.search-box placeholder="{{ placeholder }}" hx-get="{{ hx_get }}" />
+{% elif test_comp == 'filter_bar' %}
+  <c-rdp.filter-bar>Filters</c-rdp.filter-bar>
+{% elif test_comp == 'file_upload' %}
+  <c-rdp.file-upload name="{{ name }}" accept="{{ accept }}" max_size="{{ max_size }}" />
+{% elif test_comp == 'steps' %}
+  <c-rdp.steps :items="items" current="{{ current }}" />
+{% elif test_comp == 'rating' %}
+  <c-rdp.rating value="{{ value }}" max="{{ max }}" name="{{ name }}" readonly="{{ readonly }}" />
+{% elif test_comp == 'timeline' %}
+  <c-rdp.timeline>
+    <c-rdp.timeline_item title="{{ title }}" time="{{ time }}" icon="{{ icon }}" variant="{{ variant }}">{{ content }}</c-rdp.timeline_item>
+  </c-rdp.timeline>
+{% elif test_comp == 'theme_picker' %}
+  <c-rdp.theme_picker />
+{% endif %}
+

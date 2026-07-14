@@ -1,0 +1,14 @@
+{# US-034: Komponen tooltip hover helper #}
+{% comment %}
+TUJUAN: Tooltip berbasis CSS untuk menampilkan keterangan tambahan saat hover.
+- content (required): Teks tooltip yang akan ditampilkan
+- position (optional): "top" | "bottom" | "left" | "right" — default "top"
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<span
+  class="rdp-tooltip-wrapper rdp-tooltip-wrapper--{{ position|default:'top' }}"
+  data-tooltip="{{ content }}"
+  {{ attrs }}>
+  {{ slot }}
+</span>

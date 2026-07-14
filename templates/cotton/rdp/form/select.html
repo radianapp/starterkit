@@ -1,123 +1,22 @@
-{# US-011: Komponen form select — dropdown select dengan label, help text, error display #}
-{#
-TUJUAN: Reusable form select component untuk option dropdown.
-Support label, help text, error message, grouped options.
-
-PARAMETER:
-- name (required): Select name attribute
-- label (optional): Label text
-- placeholder (optional): First placeholder option
-- options (optional): Dict of {value: label} untuk options
-- value (optional): Selected value
-- error (optional): Error message
-- help_text (optional): Helper text
-- required (optional): true | false
-- disabled (optional): true | false
-- {{ attrs }}: Semua atribut HTML lainnya
-
-SLOT:
-- default: Custom option elements (override parameter options)
-- label: Custom label
-- help: Custom help text
-
-CONTOH:
-<c-rdp.form.select
-  name="status"
-  label="Status"
-  placeholder="Choose status..."
-  options="{{ status_choices }}"
-  required />
-
-<c-rdp.form.select name="category" label="Category">
-  <option value="">-- Select --</option>
-  <option value="1">Option 1</option>
-  <option value="2">Option 2</option>
-</c-rdp.form.select>
-
-CATATAN:
-- Placeholder option (first) dapat dikustomisasi atau di-skip
-- Error display menambah red border + error message
-- Dark mode via RDP-UI CSS variable
-#}
-
-<template>
-  <div class="rdp-form-field">
-    {% if label %}
-      <label for="{{ name }}" class="rdp-form-field__label">
-        <c-slot name="label">{{ label }}</c-slot>
-        {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
-      </label>
-    {% endif %}
-
-    <select
-      id="{{ name }}"
-      name="{{ name }}"
-      class="rdp-form-field__select {% if error %}rdp-form-field__select--error{% endif %}"
-      {% if required %}required{% endif %}
-      {% if disabled %}disabled{% endif %}
-      {{ attrs }}>
-
-      {% if placeholder %}
-        <option value="">{{ placeholder }}</option>
-      {% endif %}
-
-      {# Custom options from slot #}
-      <c-slot name="default">
-        {# Auto-generate options dari dict jika ada #}
-        {% if options %}
-          {% for value, label in options.items %}
-            <option value="{{ value }}" {% if value == selected_value %}selected{% endif %}>
-              {{ label }}
-            </option>
-          {% endfor %}
-        {% endif %}
-      </c-slot>
-    </select>
-
-    {% if error %}
-      <div class="rdp-form-field__error">{{ error }}</div>
-    {% endif %}
-
-    {% if help_text %}
-      <small class="rdp-form-field__help">
-        <c-slot name="help">{{ help_text }}</c-slot>
-      </small>
-    {% endif %}
-  </div>
-</template>
-
-<style>
-  .rdp-form-field__select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    font-size: 1rem;
-    font-family: inherit;
-    color: var(--color-text, #333);
-    background: var(--color-bg, white);
-    cursor: pointer;
-    transition: border-color 0.2s;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 30px;
-  }
-
-  .rdp-form-field__select:focus {
-    outline: none;
-    border-color: var(--color-primary, #0066cc);
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-  }
-
-  .rdp-form-field__select--error {
-    border-color: var(--color-danger, #dc3545);
-  }
-
-  .rdp-form-field__select:disabled {
-    background-color: var(--color-bg-secondary, #f5f5f5);
-    color: var(--color-text-secondary, #999);
-    cursor: not-allowed;
-  }
-</style>
+<c-vars name="" label="" help_text="" error="" required=False disabled=False />
+<div class="rdp-form-field">
+  {% if label %}
+    <label for="{{ name }}" class="rdp-form-field__label">
+      {{ label }}
+      {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <select name="{{ name }}" id="{{ name }}" class="rdp-select"
+          {% if error %}aria-invalid="true"{% endif %}
+          {% if disabled %}disabled{% endif %}
+          {{ attrs }}>
+    {{ slot }}
+  </select>
+  
+  {% if error %}
+    <div class="rdp-form-field__error"><span>⚠</span>{{ error }}</div>
+  {% elif help_text %}
+    <div class="rdp-form-field__help">{{ help_text }}</div>
+  {% endif %}
+</div>

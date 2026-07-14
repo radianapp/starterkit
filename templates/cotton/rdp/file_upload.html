@@ -1,0 +1,111 @@
+{# US-034: Komponen file upload #}
+{% comment %}
+TUJUAN: Input upload file dengan fungsionalitas drag & drop serta validasi ukuran/tipe file client-side.
+- name (optional): Nama field input (default: "file")
+- accept (optional): Format file yang diizinkan (default: "*/*")
+- max_size (optional): Batas ukuran maksimum file, contoh: "2MB", "500KB" (default: "2MB")
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<div
+  x-data="{
+    isDragOver: false,
+    fileName: '',
+    fileSize: '',
+    errorMsg: '',
+    maxSizeBytes: 0,
+    init() {
+      const sizeStr = '{{ max_size|default:'2MB' }}'.toUpperCase();
+      const num = parseFloat(sizeStr);
+      if (sizeStr.endsWith('KB')) {
+        this.maxSizeBytes = num * 1024;
+      } else if (sizeStr.endsWith('GB')) {
+        this.maxSizeBytes = num * 1024 * 1024 * 1024;
+      } else {
+        this.maxSizeBytes = num * 1024 * 1024;
+      }
+    },
+    validateFile(file) {
+      this.errorMsg = '';
+      if (!file) return false;
+      
+      // Validasi ukuran
+      if (file.size > this.maxSizeBytes) {
+        this.errorMsg = `Ukuran file melebihi batas {{ max_size|default:'2MB' }}`;
+        this.fileName = '';
+        return false;
+      }
+      
+      // Validasi tipe
+      const accept = '{{ accept|default:'*/*' }}';
+      if (accept !== '*/*') {
+        const fileType = file.type;
+        const match = accept.split(',').some(type => {
+          type = type.trim();
+          if (type.startsWith('.')) {
+            return file.name.toLowerCase().endsWith(type.toLowerCase());
+          } else if (type.endsWith('/*')) {
+            return fileType.startsWith(type.replace('*', ''));
+          } else {
+            return fileType === type;
+          }
+        });
+        if (!match) {
+          this.errorMsg = `Format file tidak diizinkan. Gunakan format: ${accept}`;
+          this.fileName = '';
+          return false;
+        }
+      }
+      
+      this.fileName = file.name;
+      this.fileSize = file.size > 1024 * 1024 
+        ? (file.size / (1024 * 1024)).toFixed(2) + ' MB' 
+        : (file.size / 1024).toFixed(1) + ' KB';
+      return true;
+    },
+    handleDrop(e) {
+      this.isDragOver = false;
+      const file = e.dataTransfer.files[0];
+      if (this.validateFile(file)) {
+        this.$refs.fileInput.files = e.dataTransfer.files;
+        this.$refs.fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    },
+    handleSelect(e) {
+      const file = e.target.files[0];
+      if (!this.validateFile(file)) {
+        e.target.value = ''; // Reset input
+      }
+    }
+  }"
+  class="rdp-file-upload-container"
+  :class="{ 'rdp-file-upload-container--dragover': isDragOver }"
+  @dragover.prevent="isDragOver = true"
+  @dragleave.prevent="isDragOver = false"
+  @drop.prevent="handleDrop($event)"
+  {{ attrs }}>
+  
+  <label class="rdp-file-upload-label">
+    <input
+      type="file"
+      name="{{ name|default:'file' }}"
+      accept="{{ accept|default:'*/*' }}"
+      class="rdp-file-upload-input"
+      x-ref="fileInput"
+      @change="handleSelect($event)">
+      
+    <div class="rdp-file-upload-dropzone">
+      <span class="rdp-file-upload-icon">📤</span>
+      <span class="rdp-file-upload-text">Tarik file ke sini atau klik untuk memilih file</span>
+      <span class="rdp-file-upload-subtext">Maksimum {{ max_size|default:'2MB' }} ({{ accept|default:'Semua format' }})</span>
+    </div>
+  </label>
+  
+  <div x-show="fileName" class="rdp-file-upload-info" style="display: none;">
+    <span>📄 <strong x-text="fileName"></strong> (<span x-text="fileSize"></span>)</span>
+  </div>
+  
+  <div x-show="errorMsg" class="rdp-file-upload-error" style="display: none;">
+    <span>⚠️ <span x-text="errorMsg"></span></span>
+  </div>
+</div>

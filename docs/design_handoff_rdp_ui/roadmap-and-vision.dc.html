@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="display: flex; justify-content: center; padding: 56px 40px;">
+  <div data-screen-label="Roadmap & future vision" style="width: 1080px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 72px 80px 64px;">
+
+    <!-- masthead -->
+    <div style="display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid #1C1B18; padding-bottom: 20px; margin-bottom: 8px;">
+      <span style="width: 30px; height: 30px; border-radius: 8px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; align-self: center;">R</span>
+      <span style="font-size: 15px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;">RDP UI</span>
+      <span style="font-size: 12.5px; color: #6B665E;">Modern UI Framework for Django</span>
+      <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">SPEC · 12 / 12 · ROADMAP</span>
+    </div>
+
+    <h1 style="font-size: 44px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.08; margin: 40px 0 14px;">Roadmap &amp; future vision</h1>
+    <p style="font-size: 16.5px; line-height: 1.6; color: #55514A; max-width: 62ch; margin: 0 0 52px;">Four deliberate phases, each shippable on its own. The API surface stays small at every step — we grow the ecosystem around the components, not the components themselves.</p>
+
+    <!-- ============ ROADMAP ============ -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 26px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; letter-spacing: 0.08em;">01</span>
+      <h2 style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0;">Roadmap</h2>
+      <span style="flex: 1; height: 1px; background: #DEDBD4;"></span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 56px;">
+
+      <!-- phase v0.x -->
+      <div style="padding-right: 24px; border-right: 1px solid #E5E2DC;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span style="width: 12px; height: 12px; border-radius: 99px; background: #15654E;"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #15654E;">v0.x</span>
+          <span style="font-size: 10.5px; font-weight: 700; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 9px; letter-spacing: 0.04em;">NOW</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 10px;">Foundations &amp; core components</h3>
+        <ul style="margin: 0; padding: 0 0 0 16px; font-size: 12.5px; line-height: 1.75; color: #55514A;">
+          <li>Design tokens: color, type, space, radius, elevation</li>
+          <li>CSS framework, zero build step</li>
+          <li>Core components: buttons → tables</li>
+          <li>Light + dark themes</li>
+          <li>HTMX interaction patterns</li>
+        </ul>
+      </div>
+
+      <!-- phase v1.0 -->
+      <div style="padding: 0 24px; border-right: 1px solid #E5E2DC;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span style="width: 12px; height: 12px; border-radius: 99px; border: 2.5px solid #15654E; box-sizing: border-box; background: #FAF9F7;"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #1C1B18;">v1.0</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 10px;">Stable API</h3>
+        <ul style="margin: 0; padding: 0 0 0 16px; font-size: 12.5px; line-height: 1.75; color: #55514A;">
+          <li>Frozen component contracts — semver from here on</li>
+          <li>Full <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">&lt;c-rdp.*&gt;</span> Cotton set</li>
+          <li>Documentation site launch</li>
+          <li>5 example apps: Admin, Auth, CRM, Invoicing, HRM</li>
+          <li>WCAG AA audit, published results</li>
+        </ul>
+      </div>
+
+      <!-- phase v1.x -->
+      <div style="padding: 0 24px; border-right: 1px solid #E5E2DC;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span style="width: 12px; height: 12px; border-radius: 99px; border: 1.5px solid #B0ABA1; box-sizing: border-box; background: #FAF9F7;"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #1C1B18;">v1.x</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 10px;">Distribution &amp; depth</h3>
+        <ul style="margin: 0; padding: 0 0 0 16px; font-size: 12.5px; line-height: 1.75; color: #55514A;">
+          <li><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">pip install rdp-ui</span> — Django package with templatetags &amp; static assets</li>
+          <li>Full 11-theme gallery, theme builder</li>
+          <li>Cookbook: recipes for real screens</li>
+          <li>Migration guides (Bootstrap, plain CSS)</li>
+        </ul>
+      </div>
+
+      <!-- phase v2.0 -->
+      <div style="padding-left: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+          <span style="width: 12px; height: 12px; border-radius: 99px; border: 1.5px solid #B0ABA1; box-sizing: border-box; background: #FAF9F7;"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: #1C1B18;">v2.0</span>
+        </div>
+        <h3 style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 10px;">Ecosystem</h3>
+        <ul style="margin: 0; padding: 0 0 0 16px; font-size: 12.5px; line-height: 1.75; color: #55514A;">
+          <li>Community themes — publish &amp; share token sets</li>
+          <li>Template marketplace</li>
+          <li>CLI scaffolding: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">rdp new dashboard</span></li>
+          <li>Figma kit mirroring the token system 1:1</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- progress bar -->
+    <div style="margin: -34px 0 56px;">
+      <div style="height: 4px; background: #E5E2DC; border-radius: 99px; overflow: hidden; display: flex;">
+        <span style="width: 22%; background: #15654E;"></span>
+        <span style="width: 6%; background: #7FAE9E;"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C; margin-top: 6px;">
+        <span>DESIGN SPEC COMPLETE</span>
+        <span>EACH PHASE INDEPENDENTLY SHIPPABLE</span>
+      </div>
+    </div>
+
+    <!-- ============ VISION ============ -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 26px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; letter-spacing: 0.08em;">02</span>
+      <h2 style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0;">Future vision</h2>
+      <span style="flex: 1; height: 1px; background: #DEDBD4;"></span>
+    </div>
+
+    <div style="background: #1C1B18; border-radius: 14px; padding: 44px 48px; margin-bottom: 32px;">
+      <p style="font-size: 26px; line-height: 1.4; font-weight: 500; letter-spacing: -0.015em; color: #FAF9F7; margin: 0; max-width: 32ch;">RDP UI becomes the default answer to <em style="color: #9FCBBC;">“how do I make my Django app beautiful without a frontend team?”</em></p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px;">The Django-native choice</h3>
+        <p style="font-size: 13px; line-height: 1.65; color: #55514A; margin: 0;">When a tutorial, a Stack Overflow answer, or the Django forum needs UI, it reaches for <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">&lt;c-rdp.*&gt;</span> the way it reaches for the ORM — because it fits the framework's grain, not despite it.</p>
+      </div>
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px;">Backend engineers ship product</h3>
+        <p style="font-size: 13px; line-height: 1.65; color: #55514A; margin: 0;">A solo developer takes an idea from <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">startproject</span> to a polished, accessible, themeable SaaS — templates, HTMX, and RDP UI. No build step, no JS framework, no designer on payroll.</p>
+      </div>
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin: 0 0 6px;">Enterprise standard</h3>
+        <p style="font-size: 13px; line-height: 1.65; color: #55514A; margin: 0;">Internal tools — ERP, CRM, HRM, admin panels — stop looking like 2009. One token system, one component contract, every team's tools consistent and WCAG AA by default.</p>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div style="border-top: 1px solid #DEDBD4; margin-top: 52px; padding-top: 18px; display: flex; justify-content: space-between; font-size: 11.5px; color: #8A857C;">
+      <span>RDP UI · Product design specification — final sheet</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;">HTML FIRST · SERVER FIRST · THEME FIRST</span>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+</body>
+</html>

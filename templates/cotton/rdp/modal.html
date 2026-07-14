@@ -1,165 +1,34 @@
-{# US-011: Komponen modal — popup dialog box dengan overlay #}
-{#
-TUJUAN: Reusable modal component yang terbuka via Alpine.js trigger.
-Support trigger button, header, body, footer sections.
-
-PARAMETER:
-- trigger_text (optional): Teks button trigger — default "Open Modal"
-- title (optional): Modal title
-- size (optional): "sm" | "md" | "lg" — default "md"
-
-SLOT:
-- default | body: Modal body content
-- header: Custom header (override title)
-- footer: Modal footer (buttons, actions)
-- trigger: Custom trigger button (override trigger_text)
-
-CONTOH:
-<c-rdp.modal title="Delete Item?" trigger_text="Delete">
-  <p>Are you sure you want to delete this item? This action cannot be undone.</p>
-  <c-slot name="footer">
-    <button @click="modalOpen = false" class="rdp-btn rdp-btn--secondary">Cancel</button>
-    <button @click="deleteItem()" class="rdp-btn rdp-btn--danger">Delete</button>
-  </c-slot>
-</c-rdp.modal>
-
-CATATAN:
-- Modal state manage via Alpine.js (modalOpen)
-- Overlay click close modal (optional via @click.away)
-- Esc key untuk close (via @keydown.escape)
-- Size mapping: sm=30%, md=50%, lg=80% viewport width
-- Dark mode via RDP-UI CSS variable
-#}
-
-<template>
-  <div x-data="{ modalOpen: false }">
-    {# Trigger button #}
-    <c-slot name="trigger">
-      <button @click="modalOpen = true" class="rdp-btn rdp-btn--primary">
-        {{ trigger_text|default:'Open Modal' }}
-      </button>
-    </c-slot>
-
-    {# Modal overlay #}
-    <div
-      x-show="modalOpen"
-      @keydown.escape="modalOpen = false"
-      @click.away="modalOpen = false"
-      class="rdp-modal-overlay"
-      x-transition>
-
-      {# Modal dialog #}
-      <div
-        @click.stop
-        class="rdp-modal rdp-modal--{{ size|default:'md' }}"
-        {{ attrs }}>
-
-        {# Modal header #}
-    <div class="rdp-modal__header">
-      <div class="rdp-modal__title">
-        <c-slot name="header">
-          {{ title|default:'Modal' }}
-        </c-slot>
-      </div>
-      <button
-        @click="modalOpen = false"
-        class="rdp-modal__close"
-        aria-label="Close modal">
-        ✕
-      </button>
-    </div>
-
-    {# Modal body #}
-    <div class="rdp-modal__body">
-      <c-slot name="default"></c-slot>
-    </div>
-
-    {# Modal footer #}
-    <div class="rdp-modal__footer">
-      <c-slot name="footer"></c-slot>
-    </div>
-      </div>
-    </div>
+<c-vars title="" size="md" />
+<div x-data="{ modalOpen: false }">
+  <div @click="modalOpen = true; $nextTick(() => { $refs.modalBody.scrollTop = 0; })">
+    {{ trigger }}
   </div>
-</template>
 
-<style>
-  {# ⚡ PERFORMA: Minimal CSS — rely on RDP-UI untuk styling utama #}
-  .rdp-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .rdp-modal {
-    background: var(--color-bg, white);
-    border-radius: 8px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  }
-
-  .rdp-modal--sm {
-    width: 30%;
-    min-width: 300px;
-  }
-
-  .rdp-modal--md {
-    width: 50%;
-    min-width: 400px;
-  }
-
-  .rdp-modal--lg {
-    width: 80%;
-    min-width: 600px;
-  }
-
-  @media (max-width: 768px) {
-    .rdp-modal--sm,
-    .rdp-modal--md,
-    .rdp-modal--lg {
-      width: 90%;
-      min-width: unset;
-    }
-  }
-
-  .rdp-modal__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid var(--color-border, #e0e0e0);
-  }
-
-  .rdp-modal__title {
-    margin: 0;
-    font-size: 1.25rem;
-  }
-
-  .rdp-modal__close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--color-text-secondary, #666);
-  }
-
-  .rdp-modal__body {
-    padding: 20px;
-  }
-
-  .rdp-modal__footer {
-    padding: 20px;
-    border-top: 1px solid var(--color-border, #e0e0e0);
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-</style>
+  <template x-teleport="body">
+    <div x-show="modalOpen" class="rdp-modal-backdrop"
+         x-transition
+         @keydown.escape.window="modalOpen = false"
+         style="display: none;">
+      
+      <div class="rdp-modal rdp-modal--{{ size }}" @click.away="modalOpen = false"
+           x-transition>
+        
+        <div class="rdp-modal__header">
+          <h3 class="rdp-modal__title">{{ title }}</h3>
+          <button class="rdp-modal__close" @click="modalOpen = false" aria-label="Close modal">×</button>
+        </div>
+        
+        <div class="rdp-modal__body" x-ref="modalBody">
+          {{ slot }}
+        </div>
+        
+        {% if footer %}
+        <div class="rdp-modal__footer">
+          {{ footer }}
+        </div>
+        {% endif %}
+        
+      </div>
+    </div>
+  </template>
+</div>

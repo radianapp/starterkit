@@ -1,0 +1,25 @@
+{# US-034: Komponen stat card / metric card #}
+{% comment %}
+TUJUAN: Menampilkan metric data dengan indikator trend (kenaikan/penurunan).
+- label (required): Nama metric
+- value (required): Nilai metric
+- trend (optional): Persentase perubahan trend (contoh: "+12%")
+- trend_up (optional): "true" | "false" — arah trend
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<c-vars label="" value="" trend="" trend_up=False />
+<div class="rdp-stat-card" {{ attrs }}>
+  <div class="rdp-stat-card__label">{{ label }}</div>
+  <div class="rdp-stat-card__value-wrapper">
+    <div class="rdp-stat-card__value">{{ value }}</div>
+    {% if trend %}
+      <div class="rdp-stat-card__trend {% if trend_up == 'true' or trend_up == 'True' or trend_up == True %}rdp-stat-card__trend--up{% else %}rdp-stat-card__trend--down{% endif %}">
+        {% if trend_up == 'true' or trend_up == 'True' or trend_up == True %}▲{% else %}▼{% endif %} {{ trend }}
+      </div>
+    {% endif %}
+  </div>
+  {% if slot %}
+    <div class="rdp-stat-card__extra">{{ slot }}</div>
+  {% endif %}
+</div>

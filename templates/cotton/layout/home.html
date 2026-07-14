@@ -1,0 +1,51 @@
+{% comment %}
+US-010: Layout Home — Untuk halaman landing page publik, pricing, about, privacy, dll.
+Menerima slot: nav_links, default, footer.
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="home">
+    <c-slot name="head">
+        {{ head }}
+    </c-slot>
+
+    <div class="rdp-layout">
+        <nav class="rdp-topnav" x-data="layoutState()" role="navigation" aria-label="Public navigation">
+            <div class="rdp-topnav__brand">
+                <a href="/" class="rdp-topnav__brand-link">{{ navbar_brand }}</a>
+            </div>
+            <div class="rdp-topnav__links" style="display: flex; gap: 20px; align-items: center;">
+                {% if nav_links %}
+                    {{ nav_links }}
+                {% else %}
+                    <a href="/" class="home-nav__link">Home</a>
+                    <a href="/dashboard/" class="home-nav__link home-nav__link--cta">Dashboard</a>
+                {% endif %}
+                <button @click="toggleDarkMode()"
+                        class="rdp-btn rdp-btn--ghost rdp-theme-toggle"
+                        :title="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+                        :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+                    <span x-show="!darkMode" aria-hidden="true">🌙</span>
+                    <span x-show="darkMode" aria-hidden="true">☀️</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="rdp-layout__content-home" style="flex: 1; padding: 40px 20px;">
+            {{ slot }}
+        </main>
+
+        <footer class="rdp-footer">
+            {% if footer %}
+                {{ footer }}
+            {% else %}
+                <p>&copy; {{ COPYRIGHT_YEAR }} {{ COMPANY_NAME }}. All rights reserved.</p>
+            {% endif %}
+        </footer>
+    </div>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

@@ -1,0 +1,29 @@
+{# US-036: HTMX Contact Row Edit Partial #}
+<tr id="contact-row-{{ contact.id }}">
+    <td>{{ contact.id }}</td>
+    <td>
+        <input type="text" name="name" value="{{ contact.name }}" style="padding: 4px; margin: 0; font-size: 0.9rem;" required />
+    </td>
+    <td>
+        <input type="email" name="email" value="{{ contact.email }}" style="padding: 4px; margin: 0; font-size: 0.9rem;" required />
+    </td>
+    <td>
+        <input type="text" name="phone" value="{{ contact.phone }}" style="padding: 4px; margin: 0; font-size: 0.9rem;" required />
+    </td>
+    <td style="text-align: right;">
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <c-rdp.button variant="secondary" 
+                         hx-get="{% url 'htmx-contact-edit' pk=contact.id %}" 
+                         hx-target="#contact-row-{{ contact.id }}" 
+                         hx-swap="outerHTML" 
+                         hx-confirm="Batalkan perubahan?"
+                         style="padding: 4px 8px; font-size: 0.8rem;">Batal</c-rdp.button>
+            <c-rdp.button variant="primary" 
+                         hx-post="{% url 'htmx-contact-edit' pk=contact.id %}" 
+                         hx-include="closest tr"
+                         hx-target="#contact-row-{{ contact.id }}" 
+                         hx-swap="outerHTML" 
+                         style="padding: 4px 8px; font-size: 0.8rem;">Simpan</c-rdp.button>
+        </div>
+    </td>
+</tr>

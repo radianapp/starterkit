@@ -1,0 +1,20 @@
+{# US-034: Komponen search box #}
+{% comment %}
+TUJUAN: Input pencarian dengan icon dan debounce bawaan HTMX.
+- placeholder (optional): Teks placeholder (default: "Cari...")
+- name (optional): Nama parameter query (default: "q")
+- value (optional): Nilai input saat ini
+- {{ attrs }}: Atribut HTMX (hx-get, hx-target, hx-swap, dll) yang diteruskan ke <input>
+{% endcomment %}
+
+<div class="rdp-search-wrapper">
+  <span class="rdp-search-icon" aria-hidden="true">🔍</span>
+  <input
+    type="search"
+    name="{{ name|default:'q' }}"
+    value="{{ value }}"
+    placeholder="{{ placeholder|default:'Cari...' }}"
+    class="rdp-search-input"
+    hx-trigger="keyup changed delay:300ms, search"
+    {{ attrs }}>
+</div>

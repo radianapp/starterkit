@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+    @keyframes rdp-spin { to { transform: rotate(360deg); } }
+    @keyframes rdp-shimmer { 0% { background-position: -200px 0; } 100% { background-position: 200px 0; } }
+    @keyframes rdp-indeterminate { 0% { left: -35%; } 100% { left: 105%; } }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 12 · BUTTONS ================= -->
+  <div data-screen-label="12 Buttons" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Components · Sheet 12</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · &lt;c-rdp.button&gt;</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Buttons</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 74ch;">Five variants, three sizes, one component. Hover the live samples — every state below is real CSS, not a mock.</p>
+
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Variants · md · live hover</div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 26px;">
+      <button style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;" style-hover="background: #10513F">Primary</button>
+      <button style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; font-family: inherit; color: #10513F; background: #EDF4F0; border: none; border-radius: 8px; cursor: pointer;" style-hover="background: #D6E7DF">Secondary</button>
+      <button style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;" style-hover="background: #FAF9F7; border-color: #B0ABA1">Outline</button>
+      <button style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; font-family: inherit; color: #55514A; background: transparent; border: none; border-radius: 8px; cursor: pointer;" style-hover="background: #F2F0EC; color: #1C1B18">Ghost</button>
+      <button style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #B3382D; border: none; border-radius: 8px; cursor: pointer;" style-hover="background: #942E25">Danger</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 26px;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Sizes</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button style="height: 32px; padding: 0 12px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 6px; cursor: pointer;">Small · 32</button>
+          <button style="height: 40px; padding: 0 18px; font-size: 14px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">Medium · 40</button>
+          <button style="height: 48px; padding: 0 22px; font-size: 15px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 10px; cursor: pointer;">Large · 48</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Icon buttons &amp; loading</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button aria-label="Add" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: #15654E; border: none; border-radius: 8px; cursor: pointer;" style-hover="background: #10513F"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+          <button aria-label="Edit" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;" style-hover="background: #FAF9F7"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4E4A44" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.5 4.5a2.1 2.1 0 0 1 3 3L8.2 18.8 4 20z"></path></svg></button>
+          <button aria-label="Delete" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; border-radius: 8px; cursor: pointer;" style-hover="background: #F7E9E7"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#B3382D" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="m7 7 1 13h8l1-13"></path><path d="M10 7V4h4v3"></path></svg></button>
+          <button disabled style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; opacity: 0.85; cursor: progress;"><span style="width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #FFFFFF; border-radius: 99px; display: inline-block; animation: rdp-spin 0.7s linear infinite;"></span>Saving…</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">State matrix · primary</div>
+    <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 22px;">
+      <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 8px;">Rest</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">primary</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #10513F; border-radius: 8px;">Hover</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">primary-hover</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 8px; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #15654E;">Focus</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">focus ring 2px/2px</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #0C3D30; border-radius: 8px; transform: translateY(1px);">Active</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">green-800 · +1px y</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;"><span style="height: 40px; padding: 0 18px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #8A857C; background: #F2F0EC; border-radius: 8px; cursor: not-allowed;">Disabled</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">sunken + muted</span></div>
+    </div>
+
+    <div style="background: #F2F0EC; border-radius: 10px; padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.9; color: #4E4A44;">
+      <span style="color: #8A857C;">/* consumes */</span> --rdp-button-bg: var(--rdp-primary) · --rdp-button-fg: var(--rdp-on-primary) · --rdp-button-radius: var(--rdp-radius-sm) · --rdp-space-3/4 · --rdp-text-small · --rdp-focus · --rdp-danger
+    </div>
+  </div>
+
+  <!-- ================= SHEET 13 · INDICATORS ================= -->
+  <div data-screen-label="13 Indicators" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Components · Sheet 13</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · badges · progress · spinner · skeleton</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Indicators</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 24px;">
+      <div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Badge · &lt;c-rdp.badge&gt;</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">--rdp-{status}-soft bg · --rdp-{status} text · radius-pill · text-caption</div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px;">
+          <span style="font-size: 12px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 4px 11px;">Default</span>
+          <span style="font-size: 12px; font-weight: 600; color: #1E7A46; background: #E4F2EA; border-radius: 99px; padding: 4px 11px;">Success</span>
+          <span style="font-size: 12px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 4px 11px;">Warning</span>
+          <span style="font-size: 12px; font-weight: 600; color: #B3382D; background: #F7E9E7; border-radius: 99px; padding: 4px 11px;">Danger</span>
+          <span style="font-size: 12px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 4px 11px;">Info</span>
+          <span style="font-size: 12px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 4px 11px;">Neutral</span>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 12px; font-weight: 600; color: #1E7A46; border: 1px solid #9CCEB0; border-radius: 99px; padding: 3px 11px;">Outline</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #1E7A46; background: #E4F2EA; border-radius: 99px; padding: 4px 11px;"><span style="width: 7px; height: 7px; border-radius: 99px; background: #1E7A46;"></span>With dot</span>
+          <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 4px 7px 4px 11px;">Dismissible <span style="width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; border-radius: 99px; background: #E5E2DC; font-size: 10px; color: #6B665E;">×</span></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 4px 11px;">v2.4.1</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Progress · &lt;c-rdp.progress&gt;</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">--rdp-primary fill · --rdp-surface-sunken track · radius-pill · h 8px</div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;"><span style="font-weight: 600;">Uploading assets</span><span style="font-family: 'IBM Plex Mono', monospace; color: #6B665E;">64%</span></div>
+            <div style="height: 8px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><div style="width: 64%; height: 100%; background: #15654E; border-radius: 99px;"></div></div>
+          </div>
+          <div>
+            <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px;">Indeterminate</div>
+            <div style="height: 8px; background: #F2F0EC; border-radius: 99px; overflow: hidden; position: relative;"><div style="position: absolute; top: 0; width: 30%; height: 100%; background: #15654E; border-radius: 99px; animation: rdp-indeterminate 1.4s ease-in-out infinite;"></div></div>
+          </div>
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="flex: 1;"><div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #B3382D;">Error at 32%</div><div style="height: 8px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><div style="width: 32%; height: 100%; background: #B3382D; border-radius: 99px;"></div></div></div>
+            <div style="width: 44px; height: 44px; border-radius: 99px; background: conic-gradient(#15654E 0 64%, #F2F0EC 64% 100%); display: flex; align-items: center; justify-content: center;"><span style="width: 32px; height: 32px; border-radius: 99px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; color: #10513F;">64</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Spinner · &lt;c-rdp.spinner&gt;</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">currentColor stroke · sizes 16/24/32 · 0.7s linear · htmx-indicator ready</div>
+        <div style="display: flex; gap: 24px; align-items: center;">
+          <span style="width: 16px; height: 16px; border: 2px solid #E5E2DC; border-top-color: #15654E; border-radius: 99px; display: inline-block; animation: rdp-spin 0.7s linear infinite;"></span>
+          <span style="width: 24px; height: 24px; border: 2.5px solid #E5E2DC; border-top-color: #15654E; border-radius: 99px; display: inline-block; animation: rdp-spin 0.7s linear infinite;"></span>
+          <span style="width: 32px; height: 32px; border: 3px solid #E5E2DC; border-top-color: #15654E; border-radius: 99px; display: inline-block; animation: rdp-spin 0.7s linear infinite;"></span>
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: #6B665E;"><span style="width: 16px; height: 16px; border: 2px solid #E5E2DC; border-top-color: #6B665E; border-radius: 99px; display: inline-block; animation: rdp-spin 0.7s linear infinite;"></span>Loading orders…</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Skeleton · &lt;c-rdp.skeleton&gt;</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">--rdp-surface-sunken base · shimmer 1.6s · matches radius of the real element</div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 16px; display: flex; gap: 14px; align-items: flex-start; max-width: 420px;">
+          <span style="width: 40px; height: 40px; border-radius: 99px; flex: 0 0 40px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 400px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span>
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+            <span style="height: 13px; width: 55%; border-radius: 4px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 400px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span>
+            <span style="height: 11px; width: 90%; border-radius: 4px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 400px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span>
+            <span style="height: 11px; width: 74%; border-radius: 4px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 400px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 14 · FEEDBACK ================= -->
+  <div data-screen-label="14 Feedback" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Components · Sheet 14</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · alert · toast · tooltip · popover</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Feedback</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 24px;">
+      <div>
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Alert · &lt;c-rdp.alert&gt;</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">--rdp-{status}-soft bg · --rdp-{status} icon/title · radius-md · role="alert"</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 12px; background: #E4F2EA; border-radius: 10px; padding: 14px 16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 20px; margin-top: 1px;"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg>
+            <div><div style="font-size: 13.5px; font-weight: 700; color: #14532D;">Invite sent</div><div style="font-size: 12.5px; line-height: 1.55; color: #2F5B41;">ana@acme.dev will receive a join link valid for 7 days.</div></div>
+          </div>
+          <div style="display: flex; gap: 12px; background: #F8EFDC; border-radius: 10px; padding: 14px 16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A5407" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 20px; margin-top: 1px;"><path d="M12 4 3 19h18L12 4z"></path><path d="M12 10v4M12 16.8v.2"></path></svg>
+            <div><div style="font-size: 13.5px; font-weight: 700; color: #6E4B06;">Trial ends in 3 days</div><div style="font-size: 12.5px; line-height: 1.55; color: #7C5F23;">Add a payment method to keep your workspace active.</div></div>
+          </div>
+          <div style="display: flex; gap: 12px; background: #F7E9E7; border-radius: 10px; padding: 14px 16px; align-items: flex-start;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B3382D" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 20px; margin-top: 1px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.2"></path></svg>
+            <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 700; color: #7C2A22;">Import failed</div><div style="font-size: 12.5px; line-height: 1.55; color: #8A473F;">Row 214: “email” is required. Fix the CSV and retry.</div></div>
+            <span style="font-size: 15px; color: #B3382D; cursor: pointer; line-height: 1;">×</span>
+          </div>
+          <div style="display: flex; gap: 12px; background: #EBF1F9; border-radius: 10px; padding: 14px 16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A5FA8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 20px; margin-top: 1px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.2"></path></svg>
+            <div><div style="font-size: 13.5px; font-weight: 700; color: #1E3F66;">Scheduled maintenance</div><div style="font-size: 12.5px; line-height: 1.55; color: #3D5875;">Sunday 02:00–03:00 UTC. Reads stay available.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <div>
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Toast · &lt;c-rdp.toast&gt;</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">surface-raised · shadow-4 · radius-md · bottom-right · auto-dismiss 5s · role="status"</div>
+          <div style="background: #F2F0EC; border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+            <div style="display: flex; gap: 12px; align-items: center; background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px; box-shadow: 0 4px 12px rgba(28,27,24,0.06), 0 24px 56px rgba(28,27,24,0.14); width: 320px; box-sizing: border-box;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 18px;"><path d="m5 12.5 5 5L19 7"></path></svg>
+              <div style="flex: 1;"><div style="font-size: 13px; font-weight: 700;">Order refunded</div><div style="font-size: 12px; color: #6B665E;">$164.00 back to the customer.</div></div>
+              <button style="font-size: 12.5px; font-weight: 600; font-family: inherit; color: #10513F; background: none; border: none; cursor: pointer;">Undo</button>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center; background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px; box-shadow: 0 4px 12px rgba(28,27,24,0.06), 0 24px 56px rgba(28,27,24,0.14); width: 320px; box-sizing: border-box; opacity: 0.75;">
+              <span style="width: 16px; height: 16px; border: 2px solid #E5E2DC; border-top-color: #6B665E; border-radius: 99px; flex: 0 0 16px; animation: rdp-spin 0.7s linear infinite;"></span>
+              <div style="flex: 1; font-size: 13px; font-weight: 600; color: #55514A;">Exporting 1,284 rows…</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Tooltip &amp; Popover</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C; margin-bottom: 14px;">tooltip: neutral-900 bg · text ≤ 1 line · delay 400ms — popover: surface-raised · shadow-2 · focus-trapped</div>
+          <div style="background: #F2F0EC; border-radius: 12px; padding: 26px 22px; display: flex; gap: 40px; align-items: flex-start;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+              <span style="background: #1C1B18; color: #FAF9F7; font-size: 12px; font-weight: 500; border-radius: 6px; padding: 6px 10px; white-space: nowrap;">Copy link</span>
+              <span style="width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #1C1B18; margin-top: -8px;"></span>
+              <button aria-label="Copy" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4E4A44" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg></button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button style="height: 36px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer; align-self: flex-start;">Filters ▾</button>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; box-shadow: 0 1px 2px rgba(28,27,24,0.04), 0 4px 12px rgba(28,27,24,0.07); padding: 14px 16px; width: 240px;">
+                <div style="font-size: 12.5px; font-weight: 700; margin-bottom: 10px;">Filter orders</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; color: #55514A;">
+                  <label style="display: flex; align-items: center; gap: 8px;"><span style="width: 14px; height: 14px; border-radius: 4px; background: #15654E; display: inline-flex; align-items: center; justify-content: center;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg></span>Paid</label>
+                  <label style="display: flex; align-items: center; gap: 8px;"><span style="width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #B0ABA1;"></span>Pending</label>
+                  <label style="display: flex; align-items: center; gap: 8px;"><span style="width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #B0ABA1;"></span>Refunded</label>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #EFEDE8;">
+                  <button style="height: 28px; padding: 0 10px; font-size: 12px; font-weight: 600; font-family: inherit; color: #55514A; background: none; border: none; cursor: pointer;">Clear</button>
+                  <button style="height: 28px; padding: 0 12px; font-size: 12px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 6px; cursor: pointer;">Apply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size: 12px; line-height: 1.6; color: #8A857C; margin: 24px 0 0;">Accessibility: alerts announce via role="alert"; toasts via role="status" and never steal focus; tooltips are hover + focus, dismiss on Esc; popovers trap focus and restore it on close.</p>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Component showcase · Sheets 12–14</div>
+</div>
+
+</x-dc>
+</body>
+</html>

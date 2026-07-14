@@ -1,0 +1,23 @@
+{# US-009: Fragment form upload avatar — HTMX target: #avatar-section #}
+<form
+    hx-post="{% url 'accounts:avatar_upload' %}"
+    hx-target="#avatar-section"
+    hx-swap="innerHTML"
+    hx-encoding="multipart/form-data"
+    style="margin-top: 0.5rem;"
+>
+    {% csrf_token %}
+
+    {% if avatar_form.avatar.errors %}
+        <p class="profile-avatar__error">{{ avatar_form.avatar.errors.0 }}</p>
+    {% endif %}
+
+    <input
+        type="file"
+        name="avatar"
+        accept="image/jpeg,image/png,image/webp"
+        id="id_avatar"
+        style="font-size: 0.75rem; width: 100%;"
+        onchange="this.form.requestSubmit()"
+    >
+</form>

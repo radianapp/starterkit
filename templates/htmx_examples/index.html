@@ -1,0 +1,170 @@
+{# US-036: HTMX Examples Index Page #}
+{% load static %}
+<c-layout.app title="Contoh Polla HTMX" navbar_brand="Showcase HTMX">
+
+    {# Sidebar slots #}
+    <c-slot name="sidebar">
+        <c-sidebar.brand title="{{ APP_BRAND_SHORT }}" initial="⬡" />
+
+        <c-sidebar.nav>
+            <c-sidebar.section title="Menu Utama" />
+            <c-sidebar.link href="{% url 'dashboard:index' %}" icon="📊">Dashboard</c-sidebar.link>
+            <c-sidebar.link href="{% url 'htmx-examples' %}" icon="⚡" active="True">Showcase HTMX</c-sidebar.link>
+        </c-sidebar.nav>
+
+        <div class="rdp-sidebar__footer">
+            <div class="rdp-sidebar__user-btn" style="padding: 12px;">
+                <div class="rdp-avatar rdp-avatar--sm">
+                    <span class="rdp-avatar__initials">AD</span>
+                </div>
+                <span class="rdp-sidebar__link-text">{{ user.email }}</span>
+            </div>
+        </div>
+    </c-slot>
+
+    <nav aria-label="Breadcrumb" class="rdp-dashboard-breadcrumb">
+        <ul class="rdp-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li>Showcase HTMX</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-dashboard-content">
+        <div class="rdp-page-header">
+            <h2 class="rdp-page-header__title">Demo 10 Pola HTMX Bawaan</h2>
+            <div class="rdp-page-header__actions">
+                <c-rdp.button variant="primary" onclick="document.getElementById('contact-modal').showModal()">➕ Kontak Baru</c-rdp.button>
+            </div>
+        </div>
+
+        <!-- Grid Dashboard Utama -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
+            
+            <!-- Bagian 1: Live CRUD & Search & Inline Edit (Pattern 1, 3, 5, 6) -->
+            <c-rdp.card style="grid-column: span 2;">
+                <c-slot name="header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
+                        <h3 style="margin: 0; font-size: 1.25rem;">Manajemen Kontak (CRUD, Search, Inline Edit)</h3>
+                        <!-- Live Search Input -->
+                        <div style="flex: 1; min-width: 250px; max-width: 350px;">
+                            <input type="search" 
+                                   name="q" 
+                                   placeholder="Cari kontak (debounce 300ms)..." 
+                                   hx-get="{% url 'htmx-contact-search' %}" 
+                                   hx-trigger="keyup changed delay:300ms, search" 
+                                   hx-target="#contact-list-body" 
+                                   style="margin: 0; font-size: 0.85rem; width: 100%;" />
+                        </div>
+                    </div>
+                </c-slot>
+
+                <c-rdp.table striped hover>
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Telepon</th>
+                            <th style="text-align: right; width: 180px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contact-list-body">
+                        {% include "htmx_examples/partials/contact_list_body.html" with contacts=contacts %}
+                    </tbody>
+                </c-rdp.table>
+            </c-rdp.card>
+
+            <!-- Bagian 2: Live Field Validation (Pattern 4) -->
+            <c-rdp.card>
+                <c-slot name="header">
+                    <h3 style="margin: 0; font-size: 1.25rem;">Validasi Input Langsung (Live Validation)</h3>
+                </c-slot>
+                <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 16px;">Ketik alamat email di bawah. Validasi dilakukan secara otomatis di sisi server saat Anda mengetik dengan penundaan (debounce) 400ms.</p>
+                
+                {% include "htmx_examples/partials/email_input.html" %}
+            </c-rdp.card>
+
+            <!-- Bagian 3: Polling Status (Pattern 9) -->
+            <c-rdp.card>
+                <c-slot name="header">
+                    <h3 style="margin: 0; font-size: 1.25rem;">Pemantauan Berkala (Polling Status)</h3>
+                </c-slot>
+                <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 16px;">Simulasi memantau progress pekerjaan di background yang ter-update otomatis dari server setiap 2 detik.</p>
+                
+                {% include "htmx_examples/partials/job_status.html" with progress=0 %}
+            </c-rdp.card>
+
+            <!-- Bagian 4: Link ke Infinite Scroll & Demo Lainnya (Pattern 8) -->
+            <c-rdp.card>
+                <c-slot name="header">
+                    <h3 style="margin: 0; font-size: 1.25rem;">Infinite Scroll & Lazy Loading</h3>
+                </c-slot>
+                <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 20px;">Lihat implementasi meload baris data log tambahan secara otomatis saat scroll mencapai bagian akhir halaman.</p>
+                <c-rdp.button variant="secondary" onclick="window.location.href='{% url 'htmx-infinite-scroll' %}'">Buka Demo Infinite Scroll →</c-rdp.button>
+            </c-rdp.card>
+
+            <!-- Bagian 5: Toast Trigger via Response Header (Pattern 10) -->
+            <c-rdp.card>
+                <c-slot name="header">
+                    <h3 style="margin: 0; font-size: 1.25rem;">Notifikasi Toast via Header HX-Trigger</h3>
+                </c-slot>
+                <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 20px;">Tekan tombol di bawah untuk meminta server mengirimkan respons yang menyertakan header <code>HX-Trigger</code> untuk menampilkan toast.</p>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <c-rdp.button variant="success" 
+                                 hx-post="{% url 'htmx-toast-demo' %}" 
+                                 hx-vals='{"message": "Toast Sukses Ditampilkan!", "type": "success"}'
+                                 hx-swap="none"
+                                 style="font-size: 0.85rem; padding: 8px 12px;">Default (Bawah Kanan)</c-rdp.button>
+                                 
+                    <c-rdp.button variant="secondary" 
+                                 hx-post="{% url 'htmx-toast-demo' %}" 
+                                 hx-vals='{"message": "Toast Info di Kiri Atas!", "type": "info", "position": "top-left"}'
+                                 hx-swap="none"
+                                 style="font-size: 0.85rem; padding: 8px 12px;">Kiri Atas</c-rdp.button>
+                                 
+                    <c-rdp.button variant="secondary" 
+                                 hx-post="{% url 'htmx-toast-demo' %}" 
+                                 hx-vals='{"message": "Toast Error di Tengah Atas!", "type": "error", "position": "top-center"}'
+                                 hx-swap="none"
+                                 style="font-size: 0.85rem; padding: 8px 12px;">Tengah Atas</c-rdp.button>
+                </div>
+            </c-rdp.card>
+
+        </div>
+    </div>
+
+    <!-- Modal Form (Pattern 2) -->
+    <dialog id="contact-modal" class="rdp-modal">
+        <article style="max-width: 500px; width: 100%;">
+            <header>
+                <button aria-label="Close" rel="prev" onclick="document.getElementById('contact-modal').close()" style="float: right; background: transparent; border: none; font-size: 1.5rem; line-height: 1; cursor: pointer;">&times;</button>
+                <h3 style="margin: 0;">Kontak Baru (Modal Form)</h3>
+            </header>
+            <div style="padding: 16px 0 0 0;">
+                <div id="contact-modal-body">
+                    {# Form di-load via partial langsung untuk demo, atau via hx-get #}
+                    <form hx-post="{% url 'htmx-contact-create' %}" hx-target="#contact-modal-body" class="rdp-form">
+                        {% csrf_token %}
+                        <div style="margin-bottom: 16px;">
+                            <label>Nama Lengkap</label>
+                            <input type="text" name="name" placeholder="Masukkan nama..." required />
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <label>Surel (Email)</label>
+                            <input type="email" name="email" placeholder="Masukkan email..." required />
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label>Nomor Telepon</label>
+                            <input type="text" name="phone" placeholder="Masukkan nomor telepon..." required />
+                        </div>
+                        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                            <c-rdp.button type="button" variant="secondary" onclick="document.getElementById('contact-modal').close()">Batal</c-rdp.button>
+                            <c-rdp.button type="submit" variant="primary">Simpan</c-rdp.button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </dialog>
+
+</c-layout.app>

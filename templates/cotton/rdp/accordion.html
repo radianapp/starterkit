@@ -1,0 +1,25 @@
+{# US-034: Komponen accordion panel #}
+{% comment %}
+TUJUAN: Reusable accordion panel dengan expand/collapse dan animasi.
+- title (required): Judul header accordion
+- open (optional): true | false — default false
+- {{ attrs }}: Atribut HTML tambahan
+{% endcomment %}
+
+<c-vars title="" open=False />
+<div x-data="{ isOpen: {{ open|default:'false' }} }"
+     class="rdp-accordion {% if open == 'true' or open == 'True' or open == True %}rdp-accordion--open{% endif %}"
+     :class="{ 'rdp-accordion--open': isOpen }"
+     {{ attrs }}>
+  <button type="button" class="rdp-accordion__header" @click="isOpen = !isOpen" :aria-expanded="isOpen">
+    <span class="rdp-accordion__title">{{ title }}</span>
+    <span class="rdp-accordion__caret" :class="{ 'rdp-accordion__caret--rotated': isOpen }">
+      ▼
+    </span>
+  </button>
+  <div class="rdp-accordion__body" x-show="isOpen" style="display: none;">
+    <div class="rdp-accordion__content">
+      {{ slot }}
+    </div>
+  </div>
+</div>

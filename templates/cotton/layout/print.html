@@ -1,0 +1,21 @@
+{% comment %}
+US-027: Layout Print — Layout khusus ramah cetak (print-friendly) tanpa navigasi.
+{% endcomment %}
+{% load static %}
+{% load cotton %}
+
+<c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="print">
+    <c-slot name="head">
+        {{ head }}
+    </c-slot>
+
+    <div class="rdp-layout rdp-layout--print">
+        <main id="main-content" style="padding: 20px; width: 100%;">
+            {{ slot }}
+        </main>
+    </div>
+
+    <c-slot name="extra_js">
+        {{ extra_js }}
+    </c-slot>
+</c-layout.base>

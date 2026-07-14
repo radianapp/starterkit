@@ -1,0 +1,8 @@
+{# US-036: HTMX Contact List Body Partial #}
+{% for contact in contacts %}
+    {% include "htmx_examples/partials/contact_row_view.html" with contact=contact %}
+{% empty %}
+    <tr>
+        <td colspan="5" style="text-align: center; padding: 24px; color: var(--pico-muted-color);">Kontak tidak ditemukan.</td>
+    </tr>
+{% endfor %}

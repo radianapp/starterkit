@@ -1,0 +1,27 @@
+{# US-034: Komponen empty state #}
+{% comment %}
+TUJUAN: Tampilan kosong ketika data tidak ada/belum di-input.
+- icon (optional): Emoji atau teks icon
+- title (required): Judul pesan empty state
+- description (optional): Penjelasan/deskripsi
+- {{ attrs }}: Atribut HTML tambahan
+- slot actions: Tempat untuk tombol CTA
+{% endcomment %}<c-vars title="" description="" icon="" />
+<div class="rdp-empty-state" {{ attrs }}>
+  {% if icon %}
+    <div class="rdp-empty-state__icon">
+      {{ icon }}
+    </div>
+  {% endif %}
+  <h3 class="rdp-empty-state__title">{{ title }}</h3>
+  {% if description %}
+    <p class="rdp-empty-state__desc">{{ description }}</p>
+  {% else %}
+    <div class="rdp-empty-state__desc">{{ slot }}</div>
+  {% endif %}
+  {% if actions %}
+    <div class="rdp-empty-state__actions">
+      {{ actions }}
+    </div>
+  {% endif %}
+</div>

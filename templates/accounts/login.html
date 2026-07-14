@@ -1,0 +1,20 @@
+{# US-005: Login #}
+{% load static %}
+<c-layout.blank title="Masuk">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <div class="auth-card__brand"><a href="{% url 'home' %}"><strong>{{ SITE_NAME }}</strong></a></div>
+            <h1 class="auth-card__title">Masuk ke Akun</h1>
+        </div>
+
+        {% include "accounts/partials/login_form.html" %}
+
+        <p class="auth-card__alt-link">
+            Belum punya akun? <a href="{% url 'accounts:register' %}">Daftar</a>
+        </p>
+    </div>
+</c-layout.blank>

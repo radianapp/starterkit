@@ -1,0 +1,65 @@
+{# US-034 + FR-17: Komponen confirm dialog untuk tindakan destruktif/umum #}
+{% comment %}
+TUJUAN: Modal konfirmasi khusus yang terintegrasi dengan HTMX.
+- title (required): Judul konfirmasi (contoh: "Hapus item?")
+- message (required): Deskripsi/pertanyaan konfirmasi
+- trigger_text (optional): Teks tombol trigger (default: "Confirm")
+- trigger_variant (optional): Varian tombol trigger (default: "danger")
+- confirm_text (optional): Teks tombol konfirmasi (default: "Lanjutkan")
+- cancel_text (optional): Teks tombol batal (default: "Batal")
+- destructive (optional): "true" | "false" — jika true, tombol konfirmasi berwarna merah (default: "false")
+- {{ attrs }}: Atribut HTMX (hx-delete, hx-target, dll) yang dipasang ke tombol konfirmasi
+{% endcomment %}
+
+<div x-data="{ open: false }" class="rdp-confirm-wrapper">
+  {# Trigger Button #}
+  <button
+    type="button"
+    @click="open = true"
+    class="rdp-btn rdp-btn--{{ trigger_variant|default:'danger' }}">
+    {{ trigger_text|default:'Confirm' }}
+  </button>
+
+  {# Confirm Overlay / Backdrop #}
+  <div
+    x-show="open"
+    class="rdp-confirm-overlay"
+    @keydown.escape.window="open = false"
+    style="display: none;"
+    x-transition>
+    
+    {# Confirm Dialog #}
+    <div
+      class="rdp-confirm-modal"
+      @click.away="open = false"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title-{{ title|slugify }}">
+      
+      <div class="rdp-confirm-modal__header">
+        <h3 class="rdp-confirm-modal__title" id="confirm-title-{{ title|slugify }}">{{ title }}</h3>
+      </div>
+      
+      <div class="rdp-confirm-modal__body">
+        <p class="rdp-confirm-modal__message">{{ message }}</p>
+      </div>
+      
+      <div class="rdp-confirm-modal__footer">
+        <button
+          type="button"
+          @click="open = false"
+          class="rdp-btn rdp-btn--secondary">
+          {{ cancel_text|default:'Batal' }}
+        </button>
+        
+        <button
+          type="button"
+          @click="open = false"
+          class="rdp-btn rdp-btn--{% if destructive == 'true' or destructive == True %}danger{% else %}primary{% endif %}"
+          {{ attrs }}>
+          {{ confirm_text|default:'Lanjutkan' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+{# US-036: HTMX Infinite Scroll Rows Partial #}
+{# Pola resmi HTMX: baris TERAKHIR membawa hx-trigger="revealed" hx-swap="afterend" #}
+{# Response di-append SETELAH baris terakhir tersebut. #}
+
+{% for row in rows %}
+<tr{% if forloop.last and next_page %}
+    hx-get="{% url 'htmx-infinite-scroll-rows' %}?page={{ next_page }}"
+    hx-trigger="intersect once"
+    hx-swap="afterend"
+    hx-indicator="#scroll-loading"{% endif %}>
+    <td>{{ row.id }}</td>
+    <td>{{ row.title }}</td>
+    <td>
+        {% if row.status == "Sukses" %}
+            <span style="background: #d4edda; color: #155724; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Sukses</span>
+        {% else %}
+            <span style="background: #fff3cd; color: #856404; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Peringatan</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

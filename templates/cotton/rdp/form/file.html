@@ -1,0 +1,21 @@
+<c-vars name="" label="" help_text="" error="" required=False disabled=False />
+<div class="rdp-form-field">
+  {% if label %}
+    <label for="{{ name }}" class="rdp-form-field__label">
+      {{ label }}
+      {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <label class="rdp-file-drop" {% if disabled %}style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color: var(--rdp-text-muted)"><path d="M12 16V5"></path><path d="m7 9 5-5 5 5"></path><path d="M5 20h14"></path></svg>
+    <div style="font-size: 13px;"><span style="font-weight: 600; color: var(--rdp-primary);">Browse</span> or drop files here</div>
+    <input type="file" name="{{ name }}" id="{{ name }}" style="display: none;" {% if disabled %}disabled{% endif %} {{ attrs }}>
+  </label>
+  
+  {% if error %}
+    <div class="rdp-form-field__error"><span>⚠</span>{{ error }}</div>
+  {% elif help_text %}
+    <div class="rdp-form-field__help">{{ help_text }}</div>
+  {% endif %}
+</div>

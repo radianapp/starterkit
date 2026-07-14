@@ -1,0 +1,22 @@
+{# US-036: HTMX Contact Row View Partial #}
+<tr id="contact-row-{{ contact.id }}">
+    <td>{{ contact.id }}</td>
+    <td>{{ contact.name }}</td>
+    <td>{{ contact.email }}</td>
+    <td>{{ contact.phone }}</td>
+    <td style="text-align: right;">
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <c-rdp.button variant="secondary" 
+                         hx-get="{% url 'htmx-contact-edit' pk=contact.id %}" 
+                         hx-target="#contact-row-{{ contact.id }}" 
+                         hx-swap="outerHTML" 
+                         style="padding: 4px 8px; font-size: 0.8rem;">✏️ Edit</c-rdp.button>
+            <c-rdp.button variant="danger" 
+                         hx-delete="{% url 'htmx-contact-delete' pk=contact.id %}" 
+                         hx-confirm="Apakah Anda yakin ingin menghapus kontak ini?" 
+                         hx-target="#contact-row-{{ contact.id }}" 
+                         hx-swap="outerHTML" 
+                         style="padding: 4px 8px; font-size: 0.8rem;">🗑️ Hapus</c-rdp.button>
+        </div>
+    </td>
+</tr>

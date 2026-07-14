@@ -1,0 +1,11 @@
+<c-vars title="RDP" href="/" initial="" />
+<a href="{{ href }}" class="rdp-sidebar__brand">
+    <span class="rdp-sidebar__brand-logo">
+        {% if initial %}
+            {{ initial }}
+        {% else %}
+            {{ title|slice:":1"|upper }}
+        {% endif %}
+    </span>
+    <span class="rdp-sidebar__brand-text">{{ title }}</span>
+</a>

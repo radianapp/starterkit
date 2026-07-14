@@ -61,7 +61,8 @@ rdp-starter/
 ├── templates/
 │   ├── cotton/         ← komponen django-cotton yang bisa di-override per project
 │   │   └── rdp/        ← namespace komponen: <c-rdp.button>, <c-rdp.card>, dst.
-│   ├── base.html       ← load RDP-UI CDN + HTMX + Alpine.js, extend ini
+│   ├── layout/
+│   │   ├── base.html   ← load RDP-UI CDN + HTMX + Alpine.js, extend ini
 │   ├── account/        ← login, register, forgot password, profile
 │   └── errors/         ← 403.html, 404.html, 500.html
 │
@@ -223,11 +224,52 @@ ERD **tidak** perlu diupdate jika perubahan hanya di view, form, service, templa
 
 ## Rencana Implementasi
 
+**PRD aktif**: `docs/prd/v0.2.md` (PRD v0.1 diarsipkan ke `docs/prd/archive/PRDv0.1.md`)
+
 Lihat `docs/IMPLEMENTATION-PLAN.md` untuk:
-- Urutan fase pengerjaan (5 fase)
+
+- Urutan fase pengerjaan (10 fase — Fase 1–5 v0.1, Fase 6–10 v0.2)
 - Story mana yang masuk fase mana
 - Checklist selesai per fase
 - File-file yang akan dibuat per fase
+
+---
+
+## Struktur Docs
+
+```text
+docs/
+├── IMPLEMENTATION-PLAN.md        ← rencana fase + checklist
+├── prd/
+│   ├── v0.2.md                   ← PRD aktif
+│   ├── archive/
+│   │   └── PRDv0.1.md            ← arsip PRD v0.1
+│   └── user-stories/
+│       └── rdp-starter-kit.md    ← 42 user stories (US-001–US-042)
+├── architecture/
+│   └── database.md               ← ERD Mermaid (wajib update saat models/ berubah)
+├── decisions/                    ← ADR (Architecture Decision Records)
+├── modules/
+│   └── ui-components.md          ← dokumentasi komponen UI
+├── sop/
+│   ├── frontend-structure.md     ← SOP CSS/JS (no inline)
+│   ├── htmx-patterns.md          ← konvensi 422/HX-Redirect/HX-Trigger (Fase 10)
+│   ├── cotton-components.md      ← naming/props/slot/<c-rdp.*> (Fase 10)
+│   ├── git-workflow.md           ← branch/commit/release (Fase 10)
+│   ├── testing.md                ← SOP unit test (Fase 10)
+│   └── module-documentation.md   ← SOP dokumentasi modul (Fase 10)
+└── cookbook/
+    ├── htmx-patterns.md          ← 10 resep HTMX (Fase 10)
+    ├── crud.md                   ← buat CRUD baru (Fase 10)
+    ├── modal-htmx.md             ← form dalam modal (Fase 10)
+    ├── wizard.md                 ← wizard form multi-step (Fase 10)
+    ├── add-app.md                ← tambah app baru (Fase 10)
+    ├── change-app-color.md       ← ubah warna tema (Fase 10)
+    ├── enable-celery.md          ← integrasi Celery (Fase 10)
+    ├── enable-asgi.md            ← WebSocket/ASGI (Fase 10)
+    ├── enable-drf.md             ← Django Ninja API (Fase 10)
+    └── enable-s3.md              ← Cloud storage S3 (Fase 10)
+```
 
 ---
 
@@ -242,12 +284,35 @@ Lihat `docs/IMPLEMENTATION-PLAN.md` untuk:
 | `apps/accounts/models/user.py` | Custom User model — extend `AbstractUser` |
 | `apps/accounts/models/__init__.py` | Import semua model publik (wajib untuk backward compat) |
 | `apps/accounts/services/user_service.py` | Logic bisnis: send email, update profil, dll. |
-| `templates/base.html` | Base template — load CDN, block content/scripts |
+| `templates/cotton/layout/base.html` | Base layout — load CDN berversi, PicoCSS, HTMX, Alpine |
 | `.env.example` | Semua env var yang tersedia |
-| `docs/configuration.md` | Penjelasan detail setiap env var |
-| `docs/cookbook.md` | Cara aktifkan fitur opsional (Celery, ASGI, S3, DRF) |
-| `docs/IMPLEMENTATION-PLAN.md` | 5 fase implementasi, urutan story, checklist per fase |
-| `docs/prd/user-stories/rdp-starter-kit.md` | 23 user stories dengan acceptance criteria |
+| `docs/prd/v0.2.md` | PRD aktif — FR-01 s/d FR-26, 9 layer, Non-Goals |
+| `docs/prd/user-stories/rdp-starter-kit.md` | 42 user stories dengan acceptance criteria |
+| `docs/IMPLEMENTATION-PLAN.md` | 10 fase implementasi, urutan story, checklist per fase |
+| `docs/architecture/database.md` | ERD — wajib update saat `models/` berubah |
+| `docs/sop/frontend-structure.md` | SOP CSS/JS — no inline style/script |
+
+---
+
+## Komponen Kustom (Wajib Dibaca Sebelum Coding UI)
+
+Proyek ini memiliki **komponen Cotton kustom** yang sudah dibuat dan terdokumentasi. Sebelum menulis HTML baru, **wajib cek `docs/component.md` terlebih dahulu**.
+
+### Komponen yang Tersedia
+
+| Komponen | Kegunaan | Contoh |
+|---|---|---|
+| `<c-sidebar.brand>` | Logo/brand di atas sidebar | `<c-sidebar.brand title="App" />` |
+| `<c-sidebar.search>` | Kotak pencarian sidebar | `<c-sidebar.search placeholder="Cari…" />` |
+| `<c-sidebar.nav>` | Wrapper navigasi `<nav>` | `<c-sidebar.nav>…</c-sidebar.nav>` |
+| `<c-sidebar.section>` | Judul grup menu | `<c-sidebar.section title="Pengaturan" />` |
+| `<c-sidebar.link>` | Item tautan menu | `<c-sidebar.link href="/" icon="🏠">Home</c-sidebar.link>` |
+
+### Aturan Komponen
+1. **Gunakan komponen yang ada** — jangan tulis `<div class="rdp-sidebar__..." style="...">` secara manual jika komponen sudah tersedia.
+2. **Buat komponen baru jika perlu** — jika HTML yang sama muncul > 2 kali, buat komponen Cotton baru di `templates/cotton/` dengan namespace yang sesuai.
+3. **Dokumentasikan komponen baru** — setiap komponen baru wajib didokumentasikan di `docs/component.md` sebelum digunakan, termasuk: file path, parameter, contoh penggunaan, kelebihan, dan kekurangan.
+4. **Tidak ada inline CSS di komponen** — pindahkan semua style ke file CSS yang sesuai (lihat `docs/sop/frontend-structure.md`).
 
 ---
 
@@ -265,3 +330,4 @@ Lihat `docs/IMPLEMENTATION-PLAN.md` untuk:
 - Jangan taruh logic bisnis di `config/` — itu hanya untuk konfigurasi
 - Jangan commit file `.env` — hanya `.env.example`
 - Jangan pakai `*` sebagai versi dependency di `pyproject.toml`
+- Jangan hapus komen dalam kode

@@ -14,3 +14,12 @@ document.addEventListener('htmx:configRequest', function(event) {
     event.detail.headers['X-CSRFToken'] = csrfToken.content;
   }
 });
+
+// Izinkan HTMX swap response 422 (form validation errors)
+// Tanpa ini, HTMX buang response 4xx dan user tidak melihat error
+document.addEventListener('htmx:beforeSwap', function(event) {
+  if (event.detail.xhr.status === 422) {
+    event.detail.shouldSwap = true;
+    event.detail.isError = false;
+  }
+});

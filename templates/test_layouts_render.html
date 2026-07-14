@@ -1,0 +1,16 @@
+{% load cotton %}
+{% if test_layout == 'base' %}
+<c-layout.base>Hello World</c-layout.base>
+{% elif test_layout == 'auth' %}
+<c-layout.auth>Hello World</c-layout.auth>
+{% elif test_layout == 'public' %}
+<c-layout.public>Hello World</c-layout.public>
+{% elif test_layout == 'dashboard' %}
+<c-layout.dashboard>Hello World</c-layout.dashboard>
+{% elif test_layout == 'error' %}
+<c-layout.error>Hello World</c-layout.error>
+{% elif test_layout == 'email' %}
+<c-layout.email>Hello World</c-layout.email>
+{% elif test_layout == 'print' %}
+<c-layout.print>Hello World</c-layout.print>
+{% endif %}

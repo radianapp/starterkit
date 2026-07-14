@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 01 · COLOR ================= -->
+  <div data-screen-label="01 Color" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 01</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · WCAG AA verified</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Color system</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 70ch;">Semantic tokens only — components never reference raw scale steps. Every text/surface pair below passes WCAG AA (≥ 4.5:1). Ratios shown as <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">light · dark</span>, measured against <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">--rdp-surface</span>.</p>
+
+    <table style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+      <thead>
+        <tr>
+          <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 12px 8px 0; border-bottom: 1px solid #1C1B18; width: 22%;">Token</th>
+          <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 12px 8px 0; border-bottom: 1px solid #1C1B18; width: 26%;">Role</th>
+          <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 12px 8px 0; border-bottom: 1px solid #1C1B18; width: 19%;">Light</th>
+          <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 12px 8px 0; border-bottom: 1px solid #1C1B18; width: 19%;">Dark</th>
+          <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 0 8px 0; border-bottom: 1px solid #1C1B18;">Contrast</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #B0ABA1; padding: 14px 0 6px;">Brand</td></tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-primary</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Primary actions, links, active states</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #15654E; border: 1px solid rgba(28,27,24,0.08);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#15654E</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #5FA98C; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#5FA98C</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 7.0 · 5.9</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-primary-hover</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Hover / pressed shift of primary</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #10513F; border: 1px solid rgba(28,27,24,0.08);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#10513F</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #78BCA2; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#78BCA2</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 9.2 · 7.5</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-primary-soft</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Tinted backgrounds, selected rows</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #EDF4F0; border: 1px solid rgba(28,27,24,0.08);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#EDF4F0</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #12352A; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#12352A</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">surface tint</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-on-primary</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Text and icons on primary fills</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #FFFFFF; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#FFFFFF</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #082A21; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#082A21</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 7.0 · 5.5</span></td>
+        </tr>
+
+        <tr><td colspan="5" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #B0ABA1; padding: 16px 0 6px;">Surfaces</td></tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-background</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">App canvas behind everything</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #FAF9F7; border: 1px solid rgba(28,27,24,0.1);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#FAF9F7</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #171614; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#171614</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">surface</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-surface</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Cards, panels, table bodies</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #FFFFFF; border: 1px solid rgba(28,27,24,0.12);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#FFFFFF</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #1F1E1B; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#1F1E1B</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">surface</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-surface-raised</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Dropdowns, popovers, modals</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #FFFFFF; border: 1px solid rgba(28,27,24,0.12);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#FFFFFF</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #262522; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#262522</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">surface</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-surface-sunken</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Wells, code blocks, table headers</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #F2F0EC; border: 1px solid rgba(28,27,24,0.1);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#F2F0EC</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #131210; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#131210</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">surface</span></td>
+        </tr>
+
+        <tr><td colspan="5" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #B0ABA1; padding: 16px 0 6px;">Text</td></tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-text</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Headings, body copy, values</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #1C1B18;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#1C1B18</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #F2F0EC; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#F2F0EC</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AAA 17.2 · 14.6</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-text-muted</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Descriptions, labels, meta</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #6B665E;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#6B665E</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #B0ABA1; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#B0ABA1</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 5.7 · 7.2</span></td>
+        </tr>
+
+        <tr><td colspan="5" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #B0ABA1; padding: 16px 0 6px;">Borders &amp; focus</td></tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-border</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Hairlines: cards, dividers, tables</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #E5E2DC; border: 1px solid rgba(28,27,24,0.08);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#E5E2DC</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #33302C; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#33302C</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">non-text</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-border-strong</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Input borders, interactive edges</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #D2CEC6; border: 1px solid rgba(28,27,24,0.08);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#D2CEC6</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #4E4A44; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#4E4A44</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">3:1 vs surface</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-focus</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">2px focus ring, offset 2px, everywhere</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #FFFFFF; box-shadow: inset 0 0 0 2px #15654E;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#15654E</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #1F1E1B; box-shadow: inset 0 0 0 2px #5FA98C;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#5FA98C</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A857C;">3:1 non-text</span></td>
+        </tr>
+
+        <tr><td colspan="5" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #B0ABA1; padding: 16px 0 6px;">Status — each also ships a -soft background tint</td></tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-success</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Confirmation, positive deltas</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #1E7A46;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#1E7A46</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #66BE8C; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#66BE8C</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 5.4 · 7.4</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-warning</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Caution, pending, degraded</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #9A6A0B;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#9A6A0B</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #D9A441; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#D9A441</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 4.7 · 8.1</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">--rdp-danger</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;">Destructive actions, errors</td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #B3382D;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#B3382D</span></span></td>
+          <td style="padding: 7px 12px 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #E08273; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#E08273</span></span></td>
+          <td style="padding: 7px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 6.0 · 6.9</span></td>
+        </tr>
+        <tr>
+          <td style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; padding: 7px 12px 7px 0;">--rdp-info</td>
+          <td style="color: #55514A; padding: 7px 12px 7px 0;">Neutral notices, in-progress</td>
+          <td style="padding: 7px 12px 7px 0;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #2A5FA8;"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#2A5FA8</span></span></td>
+          <td style="padding: 7px 12px 7px 0;"><span style="display: inline-flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 6px; background: #82AEE3; border: 1px solid rgba(28,27,24,0.15);"></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">#82AEE3</span></span></td>
+          <td style="padding: 7px 0;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #1E7A46; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">AA 6.3 · 7.6</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px;">
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 8px;">Neutral scale · warm gray · --rdp-neutral-*</div>
+        <div style="display: grid; grid-template-columns: repeat(10, 1fr); border-radius: 10px; overflow: hidden; border: 1px solid #E5E2DC;">
+          <div style="background: #FAF9F7; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #6B665E;"><span style="font-weight: 600;">50</span><span>FAF9F7</span></div>
+          <div style="background: #F2F0EC; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #6B665E;"><span style="font-weight: 600;">100</span><span>F2F0EC</span></div>
+          <div style="background: #E5E2DC; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #6B665E;"><span style="font-weight: 600;">200</span><span>E5E2DC</span></div>
+          <div style="background: #D2CEC6; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #4E4A44;"><span style="font-weight: 600;">300</span><span>D2CEC6</span></div>
+          <div style="background: #B0ABA1; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #33302C;"><span style="font-weight: 600;">400</span><span>B0ABA1</span></div>
+          <div style="background: #8A857C; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #FAF9F7;"><span style="font-weight: 600;">500</span><span>8A857C</span></div>
+          <div style="background: #6B665E; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #FAF9F7;"><span style="font-weight: 600;">600</span><span>6B665E</span></div>
+          <div style="background: #4E4A44; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #FAF9F7;"><span style="font-weight: 600;">700</span><span>4E4A44</span></div>
+          <div style="background: #33302C; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #FAF9F7;"><span style="font-weight: 600;">800</span><span>33302C</span></div>
+          <div style="background: #1C1B18; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #FAF9F7;"><span style="font-weight: 600;">900</span><span>1C1B18</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 8px;">Primary scale · green · --rdp-green-*</div>
+        <div style="display: grid; grid-template-columns: repeat(10, 1fr); border-radius: 10px; overflow: hidden; border: 1px solid #E5E2DC;">
+          <div style="background: #EDF4F0; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #10513F;"><span style="font-weight: 600;">50</span><span>EDF4F0</span></div>
+          <div style="background: #D6E7DF; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #10513F;"><span style="font-weight: 600;">100</span><span>D6E7DF</span></div>
+          <div style="background: #ACCFC1; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #10513F;"><span style="font-weight: 600;">200</span><span>ACCFC1</span></div>
+          <div style="background: #7DB3A0; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #082A21;"><span style="font-weight: 600;">300</span><span>7DB3A0</span></div>
+          <div style="background: #5FA98C; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #082A21;"><span style="font-weight: 600;">400</span><span>5FA98C</span></div>
+          <div style="background: #2A7A5E; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #EDF4F0;"><span style="font-weight: 600;">500</span><span>2A7A5E</span></div>
+          <div style="background: #15654E; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #EDF4F0;"><span style="font-weight: 600;">600</span><span>15654E</span></div>
+          <div style="background: #10513F; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #EDF4F0;"><span style="font-weight: 600;">700</span><span>10513F</span></div>
+          <div style="background: #0C3D30; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #EDF4F0;"><span style="font-weight: 600;">800</span><span>0C3D30</span></div>
+          <div style="background: #082A21; height: 64px; display: flex; flex-direction: column; justify-content: flex-end; padding: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #EDF4F0;"><span style="font-weight: 600;">900</span><span>082A21</span></div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size: 12px; line-height: 1.6; color: #8A857C; margin: 18px 0 0;">Rule: components reference semantic tokens only. Scales exist to derive themes — a theme remaps semantics onto scales; dark mode is a token swap, never a component change.</p>
+  </div>
+
+  <!-- ================= SHEET 02 · TYPOGRAPHY ================= -->
+  <div data-screen-label="02 Typography" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 02</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Typography system</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 24px; max-width: 70ch;">System-first stack: zero-request by default, with <strong>Instrument Sans</strong> as the optional premium webfont layered on top. Scale is rem-based; 1rem = 16px.</p>
+
+    <div style="background: #F2F0EC; border-radius: 10px; padding: 18px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.9; margin-bottom: 28px;">
+      <div><span style="color: #15654E;">--rdp-font-sans</span>: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;</div>
+      <div><span style="color: #15654E;">--rdp-font-mono</span>: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;</div>
+      <div><span style="color: #15654E;">--rdp-weight-regular</span>: 400; &nbsp;<span style="color: #15654E;">--rdp-weight-medium</span>: 500; &nbsp;<span style="color: #15654E;">--rdp-weight-semibold</span>: 600; &nbsp;<span style="color: #15654E;">--rdp-weight-bold</span>: 700;</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column;">
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 14px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 48px; line-height: 1.1; font-weight: 700; letter-spacing: -0.025em;">Modern UI for Django</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-display</span><br>3rem / 1.1 / 700 / -0.025em · hero &amp; marketing only</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 14px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 36px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em;">Page title — h1</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-h1</span><br>2.25rem / 1.15 / 700 / -0.02em · one per page</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 14px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 28px; line-height: 1.2; font-weight: 700; letter-spacing: -0.015em;">Section heading — h2</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-h2</span><br>1.75rem / 1.2 / 700 / -0.015em</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 14px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 22px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em;">Card &amp; panel heading — h3</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-h3</span><br>1.375rem / 1.3 / 600 / -0.01em</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 18px; line-height: 1.4; font-weight: 600;">Subsection heading — h4</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-h4</span> · 1.125rem / 1.4 / 600</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 16px; line-height: 1.5; font-weight: 600;">Widget heading — h5</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-h5</span> · 1rem / 1.5 / 600</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 13px; line-height: 1.5; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B665E;">Group label — h6</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-h6</span> · 0.8125rem / 1.5 / 600 / +0.08em caps</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 16px; line-height: 1.6;">Body — the default reading size for forms, tables, and prose. Comfortable at long lengths.</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-body</span> · 1rem / 1.6 / 400</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 14px; line-height: 1.55;">Small — dense UI: table cells, sidebars, secondary descriptions.</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-small</span> · 0.875rem / 1.55 / 400</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFEDE8;">
+        <div style="font-size: 12px; line-height: 1.45; color: #6B665E; font-weight: 500;">Caption — timestamps, helper text, table meta. Never below this size.</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-caption</span> · 0.75rem / 1.45 / 500</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: center; padding: 12px 0;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; line-height: 1.6;">&lt;c-rdp.button variant="primary"&gt; — code, tokens, kbd</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: #6B665E;"><span style="color: #15654E; font-weight: 600;">--rdp-text-code</span> · 0.875rem / 1.6 / 500 mono</div>
+      </div>
+    </div>
+    <p style="font-size: 12px; line-height: 1.6; color: #8A857C; margin: 18px 0 0;">Rules: max two weights per view beyond regular · body text ≥ 0.875rem in app UI · measure 45–75ch for prose · headings use <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">text-wrap: balance</span>.</p>
+  </div>
+
+  <!-- ================= SHEET 03 · SPACING ================= -->
+  <div data-screen-label="03 Spacing" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 03</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · base 4px</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Spacing system</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 70ch;">Every gap, padding, and margin is a multiple of 4px, drawn from nine tokens. If a design needs a value between steps, the design is wrong — snap it.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 0; margin-bottom: 32px;">
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-1</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">4px</span><span style="display: block; height: 14px; width: 20px; background: #ACCFC1; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-2</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">8px</span><span style="display: block; height: 14px; width: 40px; background: #ACCFC1; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-3</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">12px</span><span style="display: block; height: 14px; width: 60px; background: #7DB3A0; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-4</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">16px</span><span style="display: block; height: 14px; width: 80px; background: #7DB3A0; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-5</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">24px</span><span style="display: block; height: 14px; width: 120px; background: #5FA98C; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-6</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">32px</span><span style="display: block; height: 14px; width: 160px; background: #2A7A5E; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-7</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">48px</span><span style="display: block; height: 14px; width: 240px; background: #15654E; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0; border-bottom: 1px solid #EFEDE8;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-8</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">64px</span><span style="display: block; height: 14px; width: 320px; background: #10513F; border-radius: 3px;"></span></div>
+      <div style="display: grid; grid-template-columns: 160px 70px 1fr; gap: 16px; align-items: center; padding: 8px 0;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; color: #15654E;">--rdp-space-9</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B665E;">96px</span><span style="display: block; height: 14px; width: 480px; background: #0C3D30; border-radius: 3px;"></span></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 10px;">Component padding</div>
+        <div style="font-size: 12.5px; line-height: 1.7; color: #55514A;">Compact controls: <strong style="color: #1C1B18;">2 × 3</strong> (8 × 12)<br>Buttons &amp; inputs: <strong style="color: #1C1B18;">3 × 4</strong> (12 × 16)<br>Cards &amp; panels: <strong style="color: #1C1B18;">5</strong> (24)<br>Modals &amp; drawers: <strong style="color: #1C1B18;">6</strong> (32)</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 10px;">Stack gaps</div>
+        <div style="font-size: 12.5px; line-height: 1.7; color: #55514A;">Label → control: <strong style="color: #1C1B18;">2</strong> (8)<br>Form fields: <strong style="color: #1C1B18;">4</strong> (16)<br>Cards in a grid: <strong style="color: #1C1B18;">5</strong> (24)<br>Unrelated blocks: <strong style="color: #1C1B18;">6</strong> (32)</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px 20px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 10px;">Section rhythm</div>
+        <div style="font-size: 12.5px; line-height: 1.7; color: #55514A;">Page gutter: <strong style="color: #1C1B18;">5–6</strong> (24–32)<br>Between page sections: <strong style="color: #1C1B18;">7</strong> (48)<br>Marketing sections: <strong style="color: #1C1B18;">8–9</strong> (64–96)<br>Rule: space between &gt; space within.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 04 · RADIUS ================= -->
+  <div data-screen-label="04 Radius" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 04</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Radius system</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 32px; max-width: 70ch;">Soft, never bubbly. Nesting rule: inner radius = outer radius − padding, floored at <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">xs</span>.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;">
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="width: 100%; height: 88px; background: #EDF4F0; border: 1.5px solid #15654E; border-radius: 4px;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-radius-xs · 4</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #55514A;">Checkboxes, tags, kbd, nested elements</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="width: 100%; height: 88px; background: #EDF4F0; border: 1.5px solid #15654E; border-radius: 6px;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-radius-sm · 6</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #55514A;">Buttons, inputs, selects, menu items</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="width: 100%; height: 88px; background: #EDF4F0; border: 1.5px solid #15654E; border-radius: 10px;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-radius-md · 10</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #55514A;">Cards, alerts, popovers, dropdowns</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="width: 100%; height: 88px; background: #EDF4F0; border: 1.5px solid #15654E; border-radius: 14px;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-radius-lg · 14</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #55514A;">Modals, drawers, command palette</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="width: 100%; height: 88px; background: #EDF4F0; border: 1.5px solid #15654E; border-radius: 20px;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-radius-xl · 20</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #55514A;">Hero panels, feature tiles, empty states</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+        <div style="width: 100%; height: 88px; background: #EDF4F0; border: 1.5px solid #15654E; border-radius: 99px;"></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-radius-pill · 999</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #55514A;">Badges, avatars, switches, filter chips</div>
+      </div>
+    </div>
+    <p style="font-size: 12px; line-height: 1.6; color: #8A857C; margin: 24px 0 0;">Themes may shift the whole system with one multiplier (<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">--rdp-radius-scale</span>): 0 for a sharp enterprise look, 1 default, 1.5 for a friendly consumer look.</p>
+  </div>
+
+  <!-- ================= SHEET 05 · ELEVATION ================= -->
+  <div data-screen-label="05 Elevation" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 05</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Elevation system</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 32px; max-width: 70ch;">Two-layer shadows: a tight contact shadow plus a wide, very soft ambient one — tinted with the ink color, never pure black. Elevation communicates layer, not importance.</p>
+
+    <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 14px; padding: 36px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+      <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 1px 2px rgba(28,27,24,0.05); padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-shadow-1</div>
+        <div style="font-size: 12.5px; font-weight: 600;">Rest</div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Cards, inputs, table containers</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; line-height: 1.6; color: #8A857C; margin-top: auto;">0 1px 2px ink/5%</div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 1px 2px rgba(28,27,24,0.04), 0 4px 12px rgba(28,27,24,0.07); padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-shadow-2</div>
+        <div style="font-size: 12.5px; font-weight: 600;">Raised</div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Dropdowns, popovers, hover lift</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; line-height: 1.6; color: #8A857C; margin-top: auto;">0 1px 2px ink/4%<br>0 4px 12px ink/7%</div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 12px 32px rgba(28,27,24,0.10); padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-shadow-3</div>
+        <div style="font-size: 12.5px; font-weight: 600;">Overlay</div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Modals, drawers, command palette</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; line-height: 1.6; color: #8A857C; margin-top: auto;">0 2px 6px ink/5%<br>0 12px 32px ink/10%</div>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 12px rgba(28,27,24,0.06), 0 24px 56px rgba(28,27,24,0.14); padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 120px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">--rdp-shadow-4</div>
+        <div style="font-size: 12.5px; font-weight: 600;">Peak</div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Toasts, onboarding spotlight</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; line-height: 1.6; color: #8A857C; margin-top: auto;">0 4px 12px ink/6%<br>0 24px 56px ink/14%</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;">
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 22px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 8px;">Border elevation — flat contexts</div>
+        <p style="font-size: 12.5px; line-height: 1.6; color: #55514A; margin: 0 0 12px;">Dense tables, sidebars, and print use borders instead of shadows: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">--rdp-elevation-border: 0 0 0 1px var(--rdp-border)</span>. Combine with shadow-1 for cards that must read on tinted backgrounds.</p>
+        <div style="display: flex; gap: 12px;">
+          <div style="flex: 1; height: 56px; border-radius: 10px; box-shadow: 0 0 0 1px #E5E2DC; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">border only</div>
+          <div style="flex: 1; height: 56px; border-radius: 10px; box-shadow: 0 0 0 1px #E5E2DC, 0 1px 2px rgba(28,27,24,0.05); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">border + shadow-1</div>
+        </div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 22px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 8px;">Dark mode rule</div>
+        <p style="font-size: 12.5px; line-height: 1.6; color: #55514A; margin: 0 0 12px;">Shadows barely read on dark surfaces. Elevation switches to surface steps — each layer up uses a lighter surface token plus <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">--rdp-border</span>. Same tokens, remapped by the theme.</p>
+        <div style="background: #171614; border-radius: 10px; padding: 14px; display: flex; gap: 12px;">
+          <div style="flex: 1; height: 42px; background: #1F1E1B; border: 1px solid #33302C; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #B0ABA1;">surface</div>
+          <div style="flex: 1; height: 42px; background: #262522; border: 1px solid #33302C; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #B0ABA1;">raised</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 06 · ICONOGRAPHY ================= -->
+  <div data-screen-label="06 Iconography" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 06</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Iconography</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 70ch;">Quiet line icons that sit beside text without shouting. Icons inherit <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">currentColor</span> — they are text, tinted by the same tokens.</p>
+
+    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 8px;">Construction</div>
+          <div style="font-size: 12.5px; line-height: 1.75; color: #55514A;">Grid: <strong style="color: #1C1B18;">24 × 24</strong>, 2px safe area<br>Stroke: <strong style="color: #1C1B18;">1.75px</strong>, non-scaling<br>Caps &amp; joins: <strong style="color: #1C1B18;">round</strong><br>Corners: 2px optical rounding<br>Fill: none — <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">-fill</span> suffix for solid variants</div>
+        </div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 8px;">Naming &amp; usage</div>
+          <div style="font-size: 12.5px; line-height: 1.75; color: #55514A;">Kebab-case: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">object-modifier</span><br><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">arrow-right</span>, <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">chevron-down</span><br>Cotton: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">&lt;c-rdp.icon name="bell" /&gt;</span><br>Sizes: 16 / 20 / 24 only<br>Always <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">aria-hidden</span> beside a label</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.8 12 4l8 6.8"></path><path d="M6 9.5V20h12V9.5"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">home</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">search</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-3.3 3.6-5 8-5s8 1.7 8 5"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">user</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z"></path><path d="M10 19a2 2 0 0 0 4 0"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">bell</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">calendar</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-8M12 20V6M19 20v-5"></path><path d="M3.5 20h17"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">chart-bar</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">plus</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 5 5L19 7"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">check</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">close</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">chevron-down</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">arrow-right</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="m7 7 1 13h8l1-13"></path><path d="M10 7V4h4v3"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">trash</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.5 4.5a2.1 2.1 0 0 1 3 3L8.2 18.8 4 20z"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">edit</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">download</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5"></path><path d="m7 9 5-5 5 5"></path><path d="M5 20h14"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">upload</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7v5.5l-4 2.5v-8L4 5z"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">filter</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">mail</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">lock</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">eye</span></div>
+        <div style="border: 1px solid #EFEDE8; border-radius: 10px; padding: 14px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"></path><circle cx="15" cy="6" r="2" fill="#FFFFFF"></circle><circle cx="8" cy="12" r="2" fill="#FFFFFF"></circle><circle cx="17" cy="18" r="2" fill="#FFFFFF"></circle></svg><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">sliders</span></div>
+      </div>
+    </div>
+    <p style="font-size: 12px; line-height: 1.6; color: #8A857C; margin: 24px 0 0;">Metaphor rules: one concept per icon · no perspective, no 3D, no fills at rest · when a concept needs more than three strokes, use a word instead.</p>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Foundations · 6 sheets · pin them up</div>
+</div>
+
+</x-dc>
+</body>
+</html>

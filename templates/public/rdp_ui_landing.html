@@ -1,0 +1,202 @@
+{# Halaman Landing RDP UI Framework (Extras) #}
+<c-layout.public title="RDP-UI Framework" navbar_brand="RDP-UI">
+    <c-slot name="head">
+        <style>
+            .rdp-ui-hero {
+                padding: 80px 0 60px;
+                text-align: center;
+                background: linear-gradient(135deg, var(--rdp-primary-900, #091A30) 0%, var(--color-primary, #0066cc) 100%);
+                color: #ffffff;
+                border-radius: 16px;
+                margin-bottom: 60px;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            }
+            .rdp-ui-hero::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+                pointer-events: none;
+            }
+            .rdp-ui-hero__badge {
+                display: inline-block;
+                padding: 6px 16px;
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                border-radius: 30px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                margin-bottom: 24px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+            .rdp-ui-hero__title {
+                font-size: 3.5rem;
+                font-weight: 800;
+                line-height: 1.15;
+                margin-bottom: 20px;
+                color: #ffffff;
+            }
+            .rdp-ui-hero__subtitle {
+                font-size: 1.35rem;
+                max-width: 700px;
+                margin: 0 auto 40px;
+                opacity: 0.9;
+                font-weight: 300;
+            }
+            .rdp-ui-features {
+                margin-bottom: 60px;
+            }
+            .rdp-ui-feature-card {
+                padding: 24px;
+                border-radius: 12px;
+                background: var(--color-bg-secondary);
+                border: 1px solid var(--color-border);
+                transition: transform 0.3s, box-shadow 0.3s;
+                height: 100%;
+            }
+            .rdp-ui-feature-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            }
+            .rdp-ui-feature-card__icon {
+                font-size: 2rem;
+                margin-bottom: 16px;
+                display: inline-block;
+            }
+            .rdp-ui-feature-card__title {
+                font-size: 1.25rem;
+                font-weight: 700;
+                margin-bottom: 12px;
+            }
+            .rdp-ui-demo-section {
+                background: var(--color-bg);
+                border: 1px solid var(--color-border);
+                border-radius: 16px;
+                padding: 40px;
+                margin-bottom: 60px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            }
+            .rdp-ui-playground-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            @media (min-width: 768px) {
+                .rdp-ui-playground-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+        </style>
+    </c-slot>
+
+    <div class="container" style="padding: 20px 0 80px;">
+        
+        <!-- Hero Section -->
+        <header class="rdp-ui-hero">
+            <div class="container" style="max-width: 900px;">
+                <span class="rdp-ui-hero__badge">⚡ RDP-UI Extras Release</span>
+                <h1 class="rdp-ui-hero__title">Membangun UI Django Lebih Cepat & Elegan</h1>
+                <p class="rdp-ui-hero__subtitle">
+                    Kombinasi harmonis antara PicoCSS (minimalis kelas), Django-Cotton (komponen reusable), HTMX (SPA feel), dan Alpine.js (interaktivitas dinamis).
+                </p>
+                <div style="display: flex; gap: 16px; justify-content: center;">
+                    <a href="#quickstart" class="rdp-btn rdp-btn--lg" style="background: #ffffff; color: var(--color-primary, #0066cc); border-color: #ffffff; font-weight: 600;">
+                        Mulai Cepat
+                    </a>
+                    <a href="/dev/components/" class="rdp-btn rdp-btn--secondary rdp-btn--lg" style="color: #ffffff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1);">
+                        Pustaka Komponen ↗
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Core Philosophy / Features Section -->
+        <section class="rdp-ui-features">
+            <h2 style="text-align: center; font-weight: 800; margin-bottom: 40px;">Mengapa Memilih RDP-UI?</h2>
+            <div class="grid">
+                <div>
+                    <article class="rdp-ui-feature-card">
+                        <span class="rdp-ui-feature-card__icon">🎨</span>
+                        <h4 class="rdp-ui-feature-card__title">Sistem Tema Global</h4>
+                        <p class="rdp-text-muted">Mendukung tema terang, gelap, dan aksen warna kustom yang tersimpan di localStorage secara instan tanpa kedipan (no flash).</p>
+                    </article>
+                </div>
+                <div>
+                    <article class="rdp-ui-feature-card">
+                        <span class="rdp-ui-feature-card__icon">🧩</span>
+                        <h4 class="rdp-ui-feature-card__title">Komponen Cotton</h4>
+                        <p class="rdp-text-muted">Komponen terenkapsulasi penuh menggunakan sintaks HTML deklaratif tanpa perlu kompilasi runtime yang berat.</p>
+                    </article>
+                </div>
+                <div>
+                    <article class="rdp-ui-feature-card">
+                        <span class="rdp-ui-feature-card__icon">🚀</span>
+                        <h4 class="rdp-ui-feature-card__title">HTMX Ready</h4>
+                        <p class="rdp-text-muted">Setiap elemen dirancang untuk swap sebagian halaman (HATEOAS) guna mewujudkan pengalaman single-page application yang responsif.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Playground & Dynamic Customizer -->
+        <section class="rdp-ui-demo-section">
+            <h3 style="font-weight: 700; margin-bottom: 8px;">Studio Kustomisasi & Playground</h3>
+            <p class="rdp-text-muted" style="margin-bottom: 40px;">Ubah tema atau aksen warna secara langsung di bawah ini dan lihat seluruh halaman ini berubah secara dinamis!</p>
+
+            <div class="rdp-ui-playground-grid">
+                <div>
+                    <h5 style="margin-bottom: 12px; font-weight: 600;">🔧 Pemilih Tema (Theme Customizer)</h5>
+                    <c-rdp.theme_picker />
+                </div>
+                
+                <div>
+                    <h5 style="margin-bottom: 16px; font-weight: 600;">📦 Uji Komponen Baru</h5>
+                    
+                    <!-- Rating Showcase -->
+                    <div style="margin-bottom: 24px;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-secondary);">Komponen Bintang &lt;c-rdp.rating&gt;</label>
+                        <div style="background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px; margin-top: 6px;">
+                            <c-rdp.rating value="4" max="5" name="playground_rating" />
+                        </div>
+                    </div>
+
+                    <!-- Timeline Showcase -->
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-secondary);">Komponen Linimasa &lt;c-rdp.timeline&gt;</label>
+                        <c-rdp.timeline style="margin: 10px 0 0;">
+                            <c-rdp.timeline_item title="Desain UI Framework" time="09:00" icon="✏️" variant="primary">
+                                Menyusun struktur PicoCSS dan Cotton.
+                            </c-rdp.timeline_item>
+                            <c-rdp.timeline_item title="Rilis Kode Baru" time="19:00" icon="🚀" variant="success">
+                                Implementasi extras siap dideploy.
+                            </c-rdp.timeline_item>
+                        </c-rdp.timeline>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation & Usage -->
+        <section id="quickstart" class="rdp-ui-demo-section" style="background: var(--color-bg-secondary);">
+            <h3 style="font-weight: 700; margin-bottom: 20px;">Memulai Cepat (Quickstart)</h3>
+            
+            <h5>1. Import Komponen di HTML</h5>
+            <pre><code>&lt;!-- Panggil komponen di dalam template Django Anda --&gt;
+&lt;c-rdp.rating value="4" max="5" /&gt;</code></pre>
+
+            <h5 style="margin-top: 24px;">2. Gunakan Helper HTMX di View Django</h5>
+            <pre><code>from apps.core.utils import htmx_redirect, htmx_trigger
+
+def my_view(request):
+    if request.method == "POST":
+        # Lakukan sesuatu...
+        response = HttpResponse("Sukses!")
+        return htmx_trigger(response, "show-toast", {"message": "Data disimpan!"})
+</code></pre>
+        </section>
+
+    </div>
+</c-layout.public>

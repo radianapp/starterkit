@@ -1,0 +1,21 @@
+<c-vars name="" label="" help_text="" error="" required=False disabled=False value="" placeholder="" rows="3" />
+<div class="rdp-form-field">
+  {% if label %}
+    <label for="{{ name }}" class="rdp-form-field__label">
+      {{ label }}
+      {% if required %}<span class="rdp-form-field__required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <textarea name="{{ name }}" id="{{ name }}" class="rdp-textarea" rows="{{ rows }}"
+            {% if error %}aria-invalid="true"{% endif %}
+            {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+            {% if disabled %}disabled{% endif %}
+            {{ attrs }}>{{ value }}{{ slot }}</textarea>
+  
+  {% if error %}
+    <div class="rdp-form-field__error"><span>⚠</span>{{ error }}</div>
+  {% elif help_text %}
+    <div class="rdp-form-field__help">{{ help_text }}</div>
+  {% endif %}
+</div>

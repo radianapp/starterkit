@@ -1,0 +1,12 @@
+Halo {{ user.email }},
+
+Terima kasih sudah mendaftar di RDP Starter Kit.
+
+Klik link berikut untuk memverifikasi email kamu (berlaku 72 jam):
+
+{{ verify_url }}
+
+Jika kamu tidak merasa mendaftar, abaikan email ini.
+
+Salam,
+Tim RDP

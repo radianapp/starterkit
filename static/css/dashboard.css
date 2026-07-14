@@ -324,3 +324,330 @@
     margin: 8px 0 0 0;
   }
 }
+
+/* Extra utility classes extracted from dashboard/index.html to follow SOP */
+.rdp-sidebar__brand-icon {
+  font-size: 1.5rem;
+}
+
+.rdp-sidebar__footer-avatar {
+  background: var(--color-primary-light, #e8f4ff);
+}
+
+.rdp-card__value--blue {
+  color: #0066cc;
+}
+
+.rdp-card__value--green {
+  color: #00b365;
+}
+
+.rdp-card__value--orange {
+  color: #ff9800;
+}
+
+.rdp-card__value--lightblue {
+  color: #2196f3;
+}
+
+.rdp-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rdp-dashboard-header__title {
+  margin: 0;
+}
+
+.rdp-dashboard-header__link {
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.rdp-avatar--blue {
+  background: #e8f4ff;
+}
+
+.rdp-avatar--orange {
+  background: #fff3e0;
+}
+
+.rdp-avatar--purple {
+  background: #f3e5f5;
+}
+
+.rdp-activity-item__body {
+  flex: 1;
+}
+
+.rdp-activity-item__title {
+  font-weight: 500;
+}
+
+.rdp-activity-item__desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.rdp-badge--success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.rdp-badge--warning {
+  background: #fff3e0;
+  color: #f57f17;
+}
+
+.rdp-badge--info {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.rdp-techstack__title {
+  margin: 0;
+}
+
+.rdp-techstack__group-title {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.rdp-techstack__list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+}
+
+
+/* ============================================================ */
+/* DARK MODE — Dashboard-specific overrides                      */
+/* ============================================================ */
+html.dark .rdp-dashboard-content {
+  background: transparent;
+}
+
+html.dark .rdp-page-header__title {
+  color: #ffffff !important;
+}
+
+html.dark .rdp-card {
+  background: #2d2d2d !important;
+  border: 1px solid #3d3d3d !important;
+  color: #f0f0f0 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
+html.dark .rdp-card__header {
+  border-bottom-color: #3d3d3d !important;
+}
+
+html.dark .rdp-card__footer {
+  border-top-color: #3d3d3d !important;
+}
+
+html.dark .rdp-card__label {
+  color: #999 !important;
+}
+
+html.dark .rdp-card__change {
+  color: #66bb6a !important;
+}
+
+html.dark .rdp-dashboard-stats .rdp-card {
+  background: #252525 !important;
+}
+
+html.dark .rdp-dashboard-header__title {
+  color: #f0f0f0 !important;
+}
+
+html.dark .rdp-dashboard-header__link {
+  color: #5b9cf6 !important;
+}
+
+html.dark .rdp-breadcrumb {
+  border-bottom-color: #3d3d3d;
+}
+
+html.dark .rdp-breadcrumb a {
+  color: #5b9cf6;
+}
+
+html.dark .rdp-breadcrumb li:not(:last-child)::after {
+  color: #555;
+}
+
+html.dark .rdp-activity-item {
+  border-bottom-color: #3d3d3d !important;
+}
+
+html.dark .rdp-activity-item__title {
+  color: #f0f0f0;
+}
+
+html.dark .rdp-activity-item__desc {
+  color: #999 !important;
+}
+
+html.dark .rdp-techstack-group ul li {
+  color: #aaa !important;
+}
+
+html.dark .rdp-techstack__group-title {
+  color: #f0f0f0;
+}
+
+html.dark .rdp-badge--success {
+  background: #1b3b1e !important;
+  color: #81c784 !important;
+}
+
+html.dark .rdp-badge--warning {
+  background: #3d2e10 !important;
+  color: #ffb74d !important;
+}
+
+html.dark .rdp-badge--info {
+  background: #2d1b3d !important;
+  color: #ce93d8 !important;
+}
+
+html.dark .rdp-alert--info {
+  background: #1a2633 !important;
+  border-color: #1e3a50 !important;
+  color: #90caf9 !important;
+}
+
+html.dark .rdp-alert__close {
+  color: #90caf9 !important;
+}
+
+html.dark .rdp-dashboard-footer {
+  border-top-color: #3d3d3d !important;
+  color: #666 !important;
+}
+
+html.dark .rdp-dashboard-footer a {
+  color: #5b9cf6 !important;
+}
+
+html.dark .rdp-topnav__action-btn {
+  color: #ffffff !important;
+}
+
+/* ─── User menu popup (sidebar footer) ─────────────────────── */
+
+.rdp-sidebar__user-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  color: inherit;
+  font-size: inherit;
+}
+
+.rdp-sidebar__user-btn:hover {
+  background: var(--color-bg-secondary, #f5f5f5);
+}
+
+.rdp-sidebar__user-chevron {
+  margin-left: auto;
+  font-size: 0.6rem;
+  opacity: 0.5;
+  transition: transform 0.2s;
+  transform: rotate(180deg);
+}
+
+.rdp-sidebar__user-chevron.is-open {
+  transform: rotate(0deg);
+}
+
+.rdp-user-menu {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 8px;
+  right: 8px;
+  background: var(--color-bg, #fff);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 8px;
+  box-shadow: 0 -4px 16px rgba(0,0,0,.12);
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* Transition via Alpine x-transition classes */
+.rdp-user-menu--enter { transition: opacity .15s, transform .15s; }
+.rdp-user-menu--enter-start { opacity: 0; transform: translateY(6px); }
+.rdp-user-menu--enter-end { opacity: 1; transform: translateY(0); }
+
+.rdp-user-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  color: var(--color-text, #333);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.rdp-user-menu__item:hover {
+  background: var(--color-bg-secondary, #f5f5f5);
+}
+
+.rdp-user-menu__item--danger {
+  color: var(--color-danger, #dc3545);
+}
+
+.rdp-user-menu__item--danger:hover {
+  background: #fff5f5;
+}
+
+.rdp-user-menu__icon {
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.rdp-user-menu__divider {
+  height: 1px;
+  background: var(--color-border, #ddd);
+  margin: 4px 0;
+}
+
+/* Dark mode */
+[data-theme="dark"] .rdp-user-menu {
+  background: var(--color-bg-secondary, #2a2a2a);
+  border-color: var(--color-border, #555);
+  box-shadow: 0 -4px 16px rgba(0,0,0,.4);
+}
+
+[data-theme="dark"] .rdp-user-menu__item {
+  color: var(--color-text, #f0f0f0);
+}
+
+[data-theme="dark"] .rdp-user-menu__item:hover {
+  background: var(--color-bg, #1a1a1a);
+}
+
+[data-theme="dark"] .rdp-user-menu__item--danger:hover {
+  background: #3d1515;
+}
+
+[data-theme="dark"] .rdp-sidebar__user-btn:hover {
+  background: var(--color-bg-secondary, #2a2a2a);
+}
+
+

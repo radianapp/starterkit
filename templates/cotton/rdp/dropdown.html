@@ -1,130 +1,14 @@
-{# US-011: Komponen dropdown — toggle dropdown menu dengan Alpine.js #}
-{#
-TUJUAN: Reusable dropdown menu component dengan auto-positioning.
-Support trigger button dan dropdown items dengan click-outside close.
-
-PARAMETER:
-- trigger_text (optional): Dropdown button text — default "Menu"
-- align (optional): "left" | "center" | "right" — alignment — default "left"
-
-SLOT:
-- trigger: Custom trigger button (override trigger_text)
-- default: Dropdown items (<a> atau <button> elements)
-
-CONTOH:
-<c-rdp.dropdown trigger_text="Actions">
-  <a href="/edit/">Edit</a>
-  <a href="/delete/">Delete</a>
-  <button @click="share()">Share</button>
-</c-rdp.dropdown>
-
-CATATAN:
-- Dropdown state manage via Alpine.js (dropdownOpen)
-- Click outside close dropdown (via @click.away)
-- Esc key untuk close (via @keydown.escape)
-- CSS class: rdp-dropdown, rdp-dropdown__menu, rdp-dropdown__item
-- Dark mode via RDP-UI CSS variable
-#}
-
-<template>
-  <div x-data="{ dropdownOpen: false }" class="rdp-dropdown" {{ attrs }}>
-    {# Trigger button #}
-    <c-slot name="trigger">
-      <button @click="dropdownOpen = !dropdownOpen" class="rdp-dropdown__trigger">
-        {{ trigger_text|default:'Menu' }}
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-          <polyline points="4 6 8 10 12 6"></polyline>
-        </svg>
-      </button>
-    </c-slot>
-
-    {# Dropdown menu #}
-    <div
-      x-show="dropdownOpen"
-      @keydown.escape="dropdownOpen = false"
-      @click.away="dropdownOpen = false"
-      class="rdp-dropdown__menu rdp-dropdown__menu--{{ align|default:'left' }}"
-      x-transition>
-      <c-slot name="default"></c-slot>
-    </div>
+<c-vars align="left" />
+<div x-data="{ dropdownOpen: false }" class="rdp-dropdown" {{ attrs }}>
+  <div @click="dropdownOpen = !dropdownOpen">
+    {{ trigger }}
   </div>
-</template>
 
-<style>
-  .rdp-dropdown {
-    position: relative;
-    display: inline-block;
-  }
-
-  .rdp-dropdown__trigger {
-    background: var(--color-bg, white);
-    border: 1px solid var(--color-border, #ddd);
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 1rem;
-    color: var(--color-text, #333);
-    transition: all 0.2s;
-  }
-
-  .rdp-dropdown__trigger:hover {
-    background: var(--color-bg-secondary, #f5f5f5);
-    border-color: var(--color-primary, #0066cc);
-  }
-
-  .rdp-dropdown__menu {
-    position: absolute;
-    top: 100%;
-    margin-top: 4px;
-    background: var(--color-bg, white);
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    min-width: 150px;
-  }
-
-  .rdp-dropdown__menu--left {
-    left: 0;
-  }
-
-  .rdp-dropdown__menu--center {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .rdp-dropdown__menu--right {
-    right: 0;
-  }
-
-  .rdp-dropdown__menu a,
-  .rdp-dropdown__menu button {
-    display: block;
-    width: 100%;
-    padding: 10px 12px;
-    border: none;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-    color: var(--color-text, #333);
-    text-decoration: none;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-  }
-
-  .rdp-dropdown__menu a:hover,
-  .rdp-dropdown__menu button:hover {
-    background: var(--color-bg-secondary, #f5f5f5);
-  }
-
-  .rdp-dropdown__menu a:first-child {
-    border-radius: 3px 3px 0 0;
-  }
-
-  .rdp-dropdown__menu a:last-child {
-    border-radius: 0 0 3px 3px;
-  }
-</style>
+  <div x-show="dropdownOpen" 
+       @click.away="dropdownOpen = false"
+       class="rdp-dropdown__menu rdp-dropdown__menu--{{ align }}"
+       x-transition
+       style="display: none;">
+    {{ slot }}
+  </div>
+</div>

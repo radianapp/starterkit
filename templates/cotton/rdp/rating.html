@@ -1,0 +1,48 @@
+{% comment %}
+Component Rating RDP (Extras)
+Tujuan: Menyediakan komponen rating bintang yang interaktif menggunakan Alpine.js.
+Parameter:
+- value (optional): Nilai default (0-max) — default 0
+- max (optional): Jumlah bintang maksimal — default 5
+- name (optional): Nama input form jika digunakan dalam form — default 'rating'
+- readonly (optional): Jika true, pengguna tidak bisa mengubah nilai — default false
+{% endcomment %}
+<c-vars value="0" max="5" name="rating" readonly="false" />
+
+<div x-data="{
+    currentValue: parseInt('{{ value }}'),
+    hoverValue: 0,
+    readonly: {{ readonly|lower }},
+    maxStars: parseInt('{{ max }}'),
+    setRating(val) {
+        if (this.readonly) return;
+        this.currentValue = val;
+        // Trigger custom event for integration (e.g. HTMX post on change)
+        this.$el.dispatchEvent(new CustomEvent('change', { detail: { value: val } }));
+    }
+}" 
+     class="rdp-rating"
+     :class="{ 'rdp-rating--readonly': readonly }"
+     {{ attrs }}>
+     
+    <!-- Hidden Input for Form Submission -->
+    <input type="hidden" name="{{ name }}" :value="currentValue">
+
+    <div class="rdp-rating__stars">
+        <template x-for="star in maxStars" :key="star">
+            <span @click="setRating(star)"
+                  @mouseenter="if(!readonly) hoverValue = star"
+                  @mouseleave="if(!readonly) hoverValue = 0"
+                  class="rdp-rating__star"
+                  :class="{
+                      'rdp-rating__star--active': hoverValue ? star <= hoverValue : star <= currentValue,
+                      'rdp-rating__star--hover': !readonly && hoverValue && star <= hoverValue
+                  }"
+                  role="button"
+                  :aria-label="'Beri rating ' + star + ' dari ' + maxStars"
+                  :aria-disabled="readonly">
+                ★
+            </span>
+        </template>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+/* US-034 + FR-17: Styling confirm dialog menggunakan CSS variables RDP-UI */
+.rdp-confirm-wrapper {
+  display: inline-block;
+}
+
+.rdp-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--rdp-z-modal, 1050);
+  padding: var(--rdp-space-md, 1rem);
+}
+
+.rdp-confirm-modal {
+  background-color: var(--rdp-surface, #FFFFFF);
+  border-radius: var(--rdp-radius-lg, 12px);
+  box-shadow: var(--rdp-shadow-modal);
+  width: 100%;
+  max-width: 440px;
+  overflow: hidden;
+  animation: rdp-confirm-zoom 0.2s var(--rdp-easing-out) forwards;
+}
+
+.rdp-confirm-modal__header {
+  padding: var(--rdp-space-md, 1rem) var(--rdp-space-lg, 1.5rem);
+  border-bottom: 1px solid var(--rdp-border-light, #E9ECEF);
+}
+
+.rdp-confirm-modal__title {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-h3, 1.25rem);
+  font-weight: 600;
+  color: var(--rdp-text, #212529);
+  margin: 0;
+}
+
+.rdp-confirm-modal__body {
+  padding: var(--rdp-space-lg, 1.5rem);
+}
+
+.rdp-confirm-modal__message {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-body, 1rem);
+  color: var(--rdp-text-secondary, #495057);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.rdp-confirm-modal__footer {
+  padding: var(--rdp-space-md, 1rem) var(--rdp-space-lg, 1.5rem);
+  background-color: var(--rdp-bg-secondary, #F8F9FA);
+  border-top: 1px solid var(--rdp-border-light, #E9ECEF);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--rdp-space-sm, 0.5rem);
+}
+
+@keyframes rdp-confirm-zoom {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,61 +1,21 @@
-{# US-011: Komponen alert — inline message dengan tipe (success, error, warning, info) #}
-{#
-TUJUAN: Reusable alert component dengan visual distinction per tipe.
-Support auto-dismiss dan dismissible button (optional).
-
-PARAMETER:
-- type (required): "success" | "error" | "warning" | "info" — default "info"
-- dismissible (optional): true | false — show close button
-- title (optional): Alert title/heading
-
-SLOT:
-- default: Alert message content
-
-CONTOH:
-<c-rdp.alert type="success" title="Saved!">
-  Your changes have been saved successfully.
-</c-rdp.alert>
-
-<c-rdp.alert type="error" dismissible>
-  Something went wrong. Please try again.
-</c-rdp.alert>
-
-CATATAN:
-- Icon color dan styling dari RDP-UI berdasarkan type class
-- Dismissible: gunakan Alpine.js untuk toggle visibility
-- CSS class: rdp-alert, rdp-alert--{type}
-- Responsive: full-width mobile, auto desktop
-- Dark mode via RDP-UI CSS variable
-#}
-
-<template>
-  <div
-    class="rdp-alert rdp-alert--{{ type|default:'info' }}"
-    {% if dismissible %}
-      x-data="{ show: true }"
-      x-show="show"
-      @click.away="show = false"
-    {% endif %}
-    {{ attrs }}>
-
-    {# Alert body — title + message #}
-    <div class="rdp-alert__content">
-      {% if title %}
-        <strong class="rdp-alert__title">{{ title }}</strong>
-      {% endif %}
-      <p class="rdp-alert__message">
-        <c-slot name="default"></c-slot>
-      </p>
-    </div>
-
-    {# Close button — optional #}
-    {% if dismissible %}
-      <button
-        @click="show = false"
-        class="rdp-alert__close"
-        aria-label="Dismiss alert">
-        ✕
-      </button>
+<c-vars variant="info" title="" dismissible=False />
+<div class="rdp-alert rdp-alert--{{ variant }} {{ class }}" role="alert" {{ attrs }} {% if dismissible %}x-data="{ show: true }" x-show="show"{% endif %}>
+  <div class="rdp-alert__icon">
+    {% if variant == 'success' %}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg>
+    {% elif variant == 'warning' %}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 3 19h18L12 4z"></path><path d="M12 10v4M12 16.8v.2"></path></svg>
+    {% elif variant == 'danger' %}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.2"></path></svg>
+    {% else %}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.2"></path></svg>
     {% endif %}
   </div>
-</template>
+  <div class="rdp-alert__content">
+    {% if title %}<div class="rdp-alert__title">{{ title }}</div>{% endif %}
+    <div class="rdp-alert__desc">{{ slot }}</div>
+  </div>
+  {% if dismissible %}
+    <button class="rdp-alert__dismiss" aria-label="Dismiss" @click="show = false">×</button>
+  {% endif %}
+</div>

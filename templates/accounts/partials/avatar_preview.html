@@ -1,0 +1,30 @@
+{# US-009: Fragment preview avatar + tombol upload — HTMX target: #avatar-section #}
+{% load static %}
+
+<img
+    src="{{ profile.get_avatar_url }}"
+    alt="Foto profil {{ user.get_full_name|default:user.email }}"
+    class="profile-avatar__img"
+>
+
+{# Tombol trigger upload — klik buka form #}
+<button
+    type="button"
+    class="profile-avatar__upload-btn"
+    onclick="document.getElementById('avatar-upload-form').classList.toggle('is-visible')"
+    title="Ganti foto profil"
+    aria-label="Ganti foto profil"
+>
+    ✎
+</button>
+
+<p class="profile-avatar__hint">JPG, PNG, WebP · Maks 2MB</p>
+
+{# Form upload — tersembunyi, muncul saat tombol diklik #}
+<div id="avatar-upload-form" class="profile-avatar-upload">
+    {% include "accounts/partials/avatar_upload_form.html" %}
+</div>
+
+{% if success %}
+    <script>document.getElementById('avatar-upload-form').classList.remove('is-visible');</script>
+{% endif %}

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+    input::placeholder { color: #757067; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= ROW 1 · LOGIN + REGISTER + FORGOT ================= -->
+  <div style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; justify-content: center;">
+
+    <!-- LOGIN -->
+    <div data-screen-label="Auth — login" style="width: 460px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 48px 0 40px;">
+      <div style="max-width: 360px; margin: 0 auto; padding: 0 24px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 32px;">
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">A</span>
+          <span style="font-size: 15px; font-weight: 700;">Acme Ops</span>
+        </div>
+        <h1 style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 6px;">Welcome back</h1>
+        <p style="font-size: 13.5px; color: #6B665E; margin: 0 0 24px;">Sign in to your workspace.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 600;">Email</label>
+            <input placeholder="ana@acme.dev" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;"><label style="font-size: 13px; font-weight: 600;">Password</label><a href="#forgot" style="font-size: 12.5px; font-weight: 500;">Forgot password?</a></div>
+            <div style="display: flex; align-items: stretch; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; overflow: hidden;">
+              <input type="password" value="••••••••••" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; border: none; outline: none; flex: 1; min-width: 0;">
+              <span aria-label="Show password" style="display: flex; align-items: center; padding: 0 13px; color: #6B665E; cursor: pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></span>
+            </div>
+          </div>
+          <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #55514A;"><span style="width: 18px; height: 18px; border-radius: 5px; background: #15654E; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 18px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg></span>Keep me signed in for 30 days</label>
+          <button style="height: 46px; font-size: 14.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 9px; cursor: pointer;">Sign in</button>
+          <div style="display: flex; align-items: center; gap: 12px; color: #8A857C; font-size: 12px;"><span style="flex: 1; height: 1px; background: #E5E2DC;"></span>or<span style="flex: 1; height: 1px; background: #E5E2DC;"></span></div>
+          <button style="height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; cursor: pointer;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m3 8 9 6 9-6"></path></svg>Continue with SSO</button>
+        </div>
+        <div style="font-size: 13px; color: #6B665E; margin-top: 24px; text-align: center;">New to Acme? <a href="#register" style="font-weight: 600;">Create an account</a></div>
+      </div>
+    </div>
+
+    <!-- REGISTER (422 state) -->
+    <div data-screen-label="Auth — register" style="width: 460px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 48px 0 40px;">
+      <div style="max-width: 360px; margin: 0 auto; padding: 0 24px;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 32px;">
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">A</span>
+          <span style="font-size: 15px; font-weight: 700;">Acme Ops</span>
+        </div>
+        <h1 style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 6px;">Create your account</h1>
+        <p style="font-size: 13.5px; color: #6B665E; margin: 0 0 20px;">Free for 14 days. No card required.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;"><label style="font-size: 13px; font-weight: 600;">First name</label><input value="Ana" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;"></div>
+            <div style="display: flex; flex-direction: column; gap: 7px;"><label style="font-size: 13px; font-weight: 600;">Last name</label><input value="Lima" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 600;">Work email</label>
+            <input value="ana@acme" aria-invalid="true" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1.5px solid #B3382D; border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;">
+            <div style="display: flex; gap: 6px; align-items: baseline; font-size: 12px; line-height: 1.5; color: #B3382D; font-weight: 500;"><span>⚠</span>Enter a full email address, like ana@acme.dev.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label style="font-size: 13px; font-weight: 600;">Password</label>
+            <input type="password" value="••••••" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;">
+            <div style="display: flex; gap: 4px; align-items: center;">
+              <span style="flex: 1; height: 4px; border-radius: 99px; background: #B3382D;"></span>
+              <span style="flex: 1; height: 4px; border-radius: 99px; background: #F2F0EC;"></span>
+              <span style="flex: 1; height: 4px; border-radius: 99px; background: #F2F0EC;"></span>
+              <span style="font-size: 11px; color: #B3382D; font-weight: 500; margin-left: 6px;">Weak</span>
+            </div>
+            <div style="font-size: 12px; color: #6B665E;">12+ characters with at least one number.</div>
+          </div>
+          <button style="height: 46px; font-size: 14.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 9px; cursor: pointer;">Create account</button>
+        </div>
+        <div style="font-size: 12px; line-height: 1.6; color: #6B665E; margin-top: 16px;">By continuing you agree to the <a href="#login">Terms</a> and <a href="#login">Privacy Policy</a>.</div>
+        <div style="font-size: 13px; color: #6B665E; margin-top: 18px; text-align: center;">Already have an account? <a href="#login" style="font-weight: 600;">Sign in</a></div>
+      </div>
+    </div>
+
+    <!-- FORGOT: two states stacked -->
+    <div style="display: flex; flex-direction: column; gap: 32px;">
+      <div data-screen-label="Auth — forgot password" style="width: 460px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 44px 0 36px;">
+        <div style="max-width: 360px; margin: 0 auto; padding: 0 24px;">
+          <a href="#login" style="font-size: 13px; font-weight: 500; color: #6B665E; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 24px;">← Back to sign in</a>
+          <h1 style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 6px;">Reset your password</h1>
+          <p style="font-size: 13.5px; line-height: 1.6; color: #6B665E; margin: 0 0 22px;">Enter your email and we'll send a reset link. It expires in 30 minutes.</p>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <label style="font-size: 13px; font-weight: 600;">Email</label>
+              <input placeholder="ana@acme.dev" style="height: 42px; padding: 0 13px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;">
+            </div>
+            <button style="height: 46px; font-size: 14.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 9px; cursor: pointer;">Send reset link</button>
+          </div>
+        </div>
+      </div>
+
+      <div data-screen-label="Auth — reset sent" style="width: 460px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 44px 0 36px;">
+        <div style="max-width: 360px; margin: 0 auto; padding: 0 24px; text-align: center;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #E4F2EA; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></span>
+          <h1 style="font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px;">Check your inbox</h1>
+          <p style="font-size: 13.5px; line-height: 1.65; color: #55514A; margin: 0 0 20px;">If <strong>ana@acme.dev</strong> has an account, a reset link is on its way. Same message either way — we don't reveal which emails exist.</p>
+          <button style="height: 42px; padding: 0 18px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 9px; cursor: pointer;">Resend email</button>
+          <div style="font-size: 12px; color: #8A857C; margin-top: 10px;">Resend available in 0:42</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PROFILE / SETTINGS ================= -->
+  <div data-screen-label="Auth — profile settings" style="width: 1180px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <!-- topbar -->
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">A</span>
+      <span style="font-size: 14px; font-weight: 700;">Acme Ops</span>
+      <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">AL</span>
+    </div>
+
+    <div style="display: flex; min-height: 620px;">
+      <!-- settings nav -->
+      <nav aria-label="Settings" style="width: 220px; flex: 0 0 220px; border-right: 1px solid #E5E2DC; background: #FFFFFF; padding: 24px 12px;">
+        <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.01em; padding: 0 10px 16px;">Settings</div>
+        <div style="display: flex; flex-direction: column; gap: 2px; font-size: 13.5px;">
+          <a href="#settings" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: 8px; background: #EDF4F0; color: #10513F; font-weight: 600;">Profile</a>
+          <a href="#settings" style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: 8px; color: #55514A; font-weight: 500;">Security</a>
+          <a href="#settings" style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: 8px; color: #55514A; font-weight: 500;">Notifications</a>
+          <a href="#settings" style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: 8px; color: #55514A; font-weight: 500;">Appearance</a>
+          <a href="#settings" style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: 8px; color: #55514A; font-weight: 500;">Team</a>
+          <a href="#settings" style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 10px; border-radius: 8px; color: #55514A; font-weight: 500;">Billing</a>
+        </div>
+      </nav>
+
+      <!-- content -->
+      <main style="flex: 1; min-width: 0; padding: 32px 40px 48px; max-width: 720px;">
+        <h1 style="font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 4px;">Profile</h1>
+        <p style="font-size: 13px; color: #6B665E; margin: 0 0 28px;">How you appear across the workspace. Each section saves independently.</p>
+
+        <!-- avatar + identity card -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid #EFEDE8; margin-bottom: 20px;">
+            <span style="width: 64px; height: 64px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700;">AL</span>
+            <div style="flex: 1;">
+              <div style="font-size: 15px; font-weight: 700;">Profile photo</div>
+              <div style="font-size: 12.5px; color: #6B665E; margin-top: 2px;">PNG or JPG, at least 256×256.</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button style="height: 36px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;">Upload</button>
+              <button style="height: 36px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #B3382D; background: #FFFFFF; border: 1px solid #E8C5C0; border-radius: 8px; cursor: pointer;">Remove</button>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 7px;"><label style="font-size: 13px; font-weight: 600;">First name</label><input value="Ana" style="height: 40px; padding: 0 12px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;"></div>
+            <div style="display: flex; flex-direction: column; gap: 7px;"><label style="font-size: 13px; font-weight: 600;">Last name</label><input value="Lima" style="height: 40px; padding: 0 12px; font-size: 14px; font-family: inherit; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;"></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px;">
+            <label style="font-size: 13px; font-weight: 600;">Email</label>
+            <div style="display: flex; align-items: stretch; background: #F2F0EC; border: 1px solid #E5E2DC; border-radius: 8px; overflow: hidden;">
+              <input value="ana@acme.dev" disabled style="height: 40px; padding: 0 12px; font-size: 14px; font-family: inherit; color: #55514A; background: transparent; border: none; outline: none; flex: 1; min-width: 0;">
+              <span style="display: flex; align-items: center; padding: 0 12px; font-size: 11.5px; font-weight: 600; color: #10513F;">Managed by SSO</span>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">Save changes</button>
+          </div>
+        </div>
+
+        <!-- preferences card -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px; margin-bottom: 18px;">
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">Preferences</div>
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 600;">Theme</div><div style="font-size: 12px; color: #6B665E; margin-top: 1px;">Applies to this workspace only.</div></div>
+              <span style="display: inline-flex; gap: 4px; background: #F2F0EC; border-radius: 9px; padding: 3px;"><span style="padding: 6px 13px; font-size: 12px; font-weight: 600; background: #FFFFFF; border-radius: 7px; box-shadow: 0 1px 2px rgba(28,27,24,0.05);">Light</span><span style="padding: 6px 13px; font-size: 12px; font-weight: 500; color: #6B665E;">Dark</span><span style="padding: 6px 13px; font-size: 12px; font-weight: 500; color: #6B665E;">System</span></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 600;">Email digests</div><div style="font-size: 12px; color: #6B665E; margin-top: 1px;">Weekly summary of orders and revenue.</div></div>
+              <span style="width: 38px; height: 22px; border-radius: 99px; background: #15654E; position: relative; flex: 0 0 38px;"><span style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 99px; background: #FFFFFF;"></span></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 600;">Desktop notifications</div><div style="font-size: 12px; color: #6B665E; margin-top: 1px;">Only for events that need action.</div></div>
+              <span style="width: 38px; height: 22px; border-radius: 99px; background: #D2CEC6; position: relative; flex: 0 0 38px;"><span style="position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 99px; background: #FFFFFF;"></span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- danger zone -->
+        <div style="background: #FFFFFF; border: 1px solid #E8C5C0; border-radius: 14px; padding: 24px;">
+          <div style="font-size: 15px; font-weight: 700; color: #B3382D; margin-bottom: 4px;">Danger zone</div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: 14px;">
+            <div style="flex: 1;"><div style="font-size: 13.5px; font-weight: 600;">Delete account</div><div style="font-size: 12px; line-height: 1.55; color: #6B665E; margin-top: 1px;">Removes your profile and access. Workspace data belongs to the org and is kept.</div></div>
+            <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #B3382D; border: none; border-radius: 8px; cursor: pointer; white-space: nowrap;">Delete account…</button>
+          </div>
+        </div>
+      </main>
+
+      <!-- notes rail -->
+      <aside style="width: 250px; flex: 0 0 250px; border-left: 1px solid #EFEDE8; padding: 32px 22px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #15654E; margin-bottom: 12px;">Pattern notes</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 12px; line-height: 1.6; color: #55514A;">
+          <div><strong style="color: #1C1B18;">Sectioned saves:</strong> each card is its own form with <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;">hx-post</span>; save buttons show the pending spinner from Pattern 8.</div>
+          <div><strong style="color: #1C1B18;">Toggles save instantly</strong> (optimistic — reversible, private) with a toast confirm.</div>
+          <div><strong style="color: #1C1B18;">Delete account</strong> opens the confirm dialog: type-to-confirm, Cancel focused.</div>
+          <div><strong style="color: #1C1B18;">Reset flow</strong> never reveals whether an email exists; resend is rate-limited with a visible countdown.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Example app · Authentication (login · register 422 · reset ×2 · profile settings)</div>
+</div>
+
+</x-dc>
+</body>
+</html>
