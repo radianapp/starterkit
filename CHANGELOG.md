@@ -9,6 +9,10 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-07-15
+
+- **Fitur Baru (CLI)**: Menambahkan perintah `rdp update` untuk memperbarui proyek RDP yang sudah ada dengan kode terbaru dari template GitHub. Dilengkapi dengan deteksi file pintar (melewati yang tidak berubah), *ignored directories* otomatis (`.env`, `db.sqlite3`, dll.), dan fitur *interactive prompt* (Y/n/d) untuk mengecek dan memverifikasi diff baris kode sebelum melakukan penimpaan file yang berbeda.
+
 ## [0.2.4] — 2026-07-15
 
 - **Bugfix (Templates)**: Memperbaiki *syntax error* komentar multiline di komponen Cotton (`pagination.html`, `sidebar.html`, `navbar.html`, `breadcrumb.html`) yang menggunakan tag `{#` sehingga muncul ter-render di halaman. Diubah menjadi blok tag `{% comment %}` yang valid.

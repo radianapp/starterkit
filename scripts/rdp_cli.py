@@ -12,11 +12,12 @@ CARA INSTALASI GLOBAL:
 
 PENGGUNAAN:
   rdp new nama-proyek       # Bootstrap proyek baru secara interaktif
-  rdp new --help            # Tampilkan bantuan
+  rdp update                # Update proyek dari template terbaru
+  rdp --help                # Tampilkan bantuan
   rdp --version             # Tampilkan versi
 
 ALUR:
-  1. Parse perintah (new, --version, --help)
+  1. Parse perintah (new, update, --version, --help)
   2. Jalankan wizard interaktif (nama, deskripsi, warna aksen, halaman opsional)
   3. Clone template dari GitHub ke direktori baru
   4. Bersihkan .git/, generate SECRET_KEY, setup .env
@@ -24,6 +25,8 @@ ALUR:
   6. Tampilkan langkah selanjutnya untuk menjalankan proyek
 """
 
+import difflib
+import filecmp
 import os
 import re
 import secrets
@@ -31,9 +34,10 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.2.4"
+__version__ = "0.3.0"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -57,13 +61,14 @@ def print_help():
 rdp — CLI untuk Radian Data Platform Starter Kit v{__version__}
 
 PENGGUNAAN:
-  rdp new <nama-proyek>     Bootstrap proyek Django baru dari template RDP
-  rdp --version             Tampilkan versi CLI
-  rdp --help                Tampilkan bantuan ini
+  rdp new <nama_proyek>  Membuat proyek baru dari template RDP
+  rdp update             Memperbarui proyek saat ini dengan versi template terbaru
+  rdp --help             Menampilkan bantuan ini
+  rdp --version          Menampilkan versi CLI
 
 CONTOH:
   rdp new portal-analytic
-  rdp new datahub-internal
+  rdp update
 
 PRASYARAT:
   - Git (https://git-scm.com) harus terinstal
@@ -164,23 +169,95 @@ def clone_template(target_dir: str) -> bool:
     if os.path.exists(git_dir):
         shutil.rmtree(git_dir, onerror=on_rm_error)
 
-    # Hapus file/direktori yang tidak relevan untuk proyek baru
-    cleanup_items = [
-        "htmlcov", ".coverage", "db.sqlite3",
-        "fix_bools.py", ".pytest_cache", ".ruff_cache",
-    ]
-    for item in cleanup_items:
-        item_path = os.path.join(target_dir, item)
-        if os.path.isfile(item_path):
-            try:
-                os.remove(item_path)
-            except PermissionError:
-                os.chmod(item_path, stat.S_IWRITE)
-                os.remove(item_path)
-        elif os.path.isdir(item_path):
-            shutil.rmtree(item_path, onerror=on_rm_error)
-
     return True
+
+
+def show_diff(file_current, file_new):
+    """Menampilkan perbedaan (diff) antara dua file."""
+    try:
+        with open(file_current, 'r', encoding='utf-8', errors='ignore') as f1, \
+             open(file_new, 'r', encoding='utf-8', errors='ignore') as f2:
+            diff = difflib.unified_diff(
+                f1.readlines(),
+                f2.readlines(),
+                fromfile='Current',
+                tofile='New Template',
+            )
+            for line in diff:
+                sys.stdout.write(line)
+    except Exception as e:
+        print(f"❌ Gagal membaca diff: {e}")
+
+
+def prompt_overwrite(current_file, new_file, rel_path) -> bool:
+    """Menampilkan prompt interaktif untuk file yang berbeda."""
+    while True:
+        choice = input(f"\n[UPDATE] File {rel_path} berbeda. Overwrite? [y/N/d (diff)]: ").strip().lower()
+        if choice == 'y':
+            return True
+        elif choice == 'd':
+            show_diff(current_file, new_file)
+        else:
+            return False
+
+
+def run_update(args):
+    """Jalankan proses update untuk proyek yang sudah ada."""
+    if not os.path.exists("manage.py") or not os.path.exists("pyproject.toml"):
+        print("❌ Error: Perintah 'rdp update' harus dijalankan di root direktori proyek RDP (yang memiliki manage.py dan pyproject.toml).")
+        sys.exit(1)
+        
+    print(f"Mengecek pembaruan template dari: {TEMPLATE_REPO_URL}")
+    
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Clone template to temp_dir
+        if not clone_template(temp_dir):
+            print("❌ Gagal mengunduh template.")
+            sys.exit(1)
+            
+        print("✅ Template terbaru berhasil diunduh. Menganalisis perbedaan...")
+        
+        ignored_patterns = [
+            ".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache",
+            "db.sqlite3", ".env", "media", "static", "staticfiles",
+            "htmlcov", ".coverage", "README.md", "CHANGELOG.md"
+        ]
+        
+        updated_count = 0
+        added_count = 0
+        skipped_count = 0
+        
+        for root, dirs, files in os.walk(temp_dir):
+            # Ignore specified directories
+            dirs[:] = [d for d in dirs if d not in ignored_patterns]
+            
+            for file in files:
+                if file in ignored_patterns:
+                    continue
+                    
+                src_path = os.path.join(root, file)
+                rel_path = os.path.relpath(src_path, temp_dir)
+                dest_path = os.path.join(os.getcwd(), rel_path)
+                
+                os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+                
+                if not os.path.exists(dest_path):
+                    print(f"➕ Menambahkan file baru: {rel_path}")
+                    shutil.copy2(src_path, dest_path)
+                    added_count += 1
+                else:
+                    if not filecmp.cmp(src_path, dest_path, shallow=False):
+                        if prompt_overwrite(dest_path, src_path, rel_path):
+                            print(f"🔄 Mengupdate: {rel_path}")
+                            shutil.copy2(src_path, dest_path)
+                            updated_count += 1
+                        else:
+                            print(f"⏭️ Melewati: {rel_path}")
+                            skipped_count += 1
+                            
+    print("\n🎉 Proses update selesai!")
+    print(f"Statistik: {added_count} ditambahkan, {updated_count} diupdate, {skipped_count} dilewati.")
+    print("Pastikan untuk mengecek perubahan, menjalankan `uv sync`, dan `python manage.py migrate` jika diperlukan.")
 
 
 def setup_env(target_dir: str, proj_name: str, color_choice: str):
@@ -484,11 +561,12 @@ def main():
 
     if args[0] == "new":
         run_new(args[1:])
-        return
-
-    print(f"[ERROR] Sub-perintah tidak dikenal: '{args[0]}'")
-    print("  Jalankan `rdp --help` untuk melihat daftar perintah yang tersedia.")
-    sys.exit(1)
+    elif args[0] == "update":
+        run_update(args[1:])
+    else:
+        print(f"[ERROR] Sub-perintah tidak dikenal: '{args[0]}'")
+        print("  Jalankan `rdp --help` untuk melihat daftar perintah yang tersedia.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
