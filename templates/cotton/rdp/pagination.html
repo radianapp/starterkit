@@ -1,5 +1,5 @@
 {# US-011: Komponen pagination — page navigation dengan HTMX support #}
-{#
+{% comment %}
 TUJUAN: Reusable pagination component untuk list views dengan HTMX support.
 Render prev/next buttons dan page number links.
 
@@ -19,7 +19,7 @@ CATATAN:
 - HTMX support: links bisa pakai hx-get untuk partial page refresh
 - CSS class: rdp-pagination, rdp-pagination__item, rdp-pagination__link
 - Dark mode via RDP-UI CSS variable
-#}
+{% endcomment %}
 
 <template>
   <nav class="rdp-pagination" {{ attrs }}>

@@ -1,5 +1,5 @@
 {# US-010: Komponen sidebar — left navigation panel #}
-{#
+{% comment %}
 TUJUAN: Sidebar component yang collapsible di mobile, responsive, dan terintegrasi dengan layout state.
 Menggunakan RDP-UI CSS class + Alpine.js untuk toggle behavior.
 
@@ -21,7 +21,7 @@ CATATAN:
 - State sidebarOpen dikelola di parent (base.html) via Alpine.js
 - Close sidebar otomatis saat user click link di mobile
 - Dark mode via RDP-UI CSS variable
-#}
+{% endcomment %}
 
 <template>
   <aside class="rdp-sidebar" :class="{ 'rdp-sidebar--open': sidebarOpen }" {{ attrs }}>

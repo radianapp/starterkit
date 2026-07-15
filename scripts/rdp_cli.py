@@ -33,7 +33,7 @@ import subprocess
 import sys
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"

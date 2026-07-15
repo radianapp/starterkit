@@ -9,6 +9,10 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.2.4] — 2026-07-15
+
+- **Bugfix (Templates)**: Memperbaiki *syntax error* komentar multiline di komponen Cotton (`pagination.html`, `sidebar.html`, `navbar.html`, `breadcrumb.html`) yang menggunakan tag `{#` sehingga muncul ter-render di halaman. Diubah menjadi blok tag `{% comment %}` yang valid.
+
 ## [0.2.3] — 2026-07-15
 
 - **Bugfix (UI/UX)**: Menghilangkan duplikasi ikon toolbar (Toggle Dark Mode & Notifikasi) di halaman dashboard.

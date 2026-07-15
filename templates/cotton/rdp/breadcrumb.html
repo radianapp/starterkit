@@ -1,5 +1,5 @@
 {# US-011: Komponen breadcrumb — navigation trail showing page location #}
-{#
+{% comment %}
 TUJUAN: Reusable breadcrumb component untuk menunjukkan navigation hierarchy.
 Support custom items atau auto-generate dari page title.
 
@@ -27,7 +27,7 @@ CATATAN:
 - Responsive: hide intermediate items di mobile
 - CSS class: rdp-breadcrumb, rdp-breadcrumb__item, rdp-breadcrumb__link
 - Dark mode via RDP-UI CSS variable
-#}
+{% endcomment %}
 
 <template>
   <nav class="rdp-breadcrumb" aria-label="Breadcrumb" {{ attrs }}>

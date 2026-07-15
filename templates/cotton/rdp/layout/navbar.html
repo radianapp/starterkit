@@ -1,5 +1,5 @@
 {# US-010: Komponen navbar — top navigation bar #}
-{#
+{% comment %}
 TUJUAN: Navbar component yang responsive, mendukung dark mode, dan terintegrasi dengan sidebar toggle.
 Menggunakan RDP-UI CSS class untuk styling konsisten.
 
@@ -15,7 +15,7 @@ CATATAN:
 - Navbar sticky di top
 - Hamburger toggle button hanya visible di mobile (<768px)
 - Dark mode mengikuti RDP-UI CSS variable otomatis
-#}
+{% endcomment %}
 
 <template>
   <nav class="rdp-topnav" {{ attrs }}>

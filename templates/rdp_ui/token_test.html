@@ -3,11 +3,11 @@
     <c-slot name="head">
         <meta name="description" content="Halaman showcase design tokens dan {{ theme_count }} tema RDP UI Design System.">
         
-        <!-- {#
+        <!-- 
             Load SEMUA tema CSS sekaligus agar Theme Gallery dapat merender setiap
             card dengan variabel warna yang benar. Setiap file tema di-scope ke
             [data-rdp-theme="X"] sehingga tidak saling konflik.
-        #} -->
+        -->
         {% for theme in themes %}
         <link rel="stylesheet" href="{% static 'vendor/rdp-ui/themes/' %}{{ theme.id }}.css"
               id="{% if forloop.first %}rdp-theme-css{% endif %}">
