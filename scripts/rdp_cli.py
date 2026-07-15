@@ -28,11 +28,12 @@ import os
 import re
 import secrets
 import shutil
+import stat
 import subprocess
 import sys
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -126,9 +127,17 @@ def check_git_available() -> bool:
         return False
 
 
+def on_rm_error(func, path, exc_info):
+    """Error handler untuk shutil.rmtree untuk file read-only di Windows."""
+    import stat
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
+
+
 def clone_template(target_dir: str) -> bool:
     """
     Clone template repositori dari GitHub ke direktori target.
+
 
     ALUR:
       1. Jalankan `git clone --depth=1` untuk mendapatkan versi terbaru
@@ -153,7 +162,7 @@ def clone_template(target_dir: str) -> bool:
     # Hapus riwayat Git template agar proyek baru bersih
     git_dir = os.path.join(target_dir, ".git")
     if os.path.exists(git_dir):
-        shutil.rmtree(git_dir)
+        shutil.rmtree(git_dir, onerror=on_rm_error)
 
     # Hapus file/direktori yang tidak relevan untuk proyek baru
     cleanup_items = [
@@ -163,9 +172,13 @@ def clone_template(target_dir: str) -> bool:
     for item in cleanup_items:
         item_path = os.path.join(target_dir, item)
         if os.path.isfile(item_path):
-            os.remove(item_path)
+            try:
+                os.remove(item_path)
+            except PermissionError:
+                os.chmod(item_path, stat.S_IWRITE)
+                os.remove(item_path)
         elif os.path.isdir(item_path):
-            shutil.rmtree(item_path)
+            shutil.rmtree(item_path, onerror=on_rm_error)
 
     return True
 

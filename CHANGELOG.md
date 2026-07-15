@@ -9,6 +9,10 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.2.2] — 2026-07-15
+
+- **Bugfix (Windows)**: Memperbaiki *PermissionError* saat CLI `rdp new` mencoba menghapus folder `.git/` bawaan template (file *pack* bersifat *read-only* di Windows).
+
 ## [0.2.1] — 2026-07-15
 
 - **US-024 (CLI Global)**: Refactor `rdp_new.py` menjadi `scripts/rdp_cli.py` — CLI global yang dapat diinstal via `uv tool install` dan dipanggil sebagai `rdp new <nama-proyek>` dari folder mana saja. CLI otomatis meng-*clone* template terbaru dari GitHub, men-*generate* `SECRET_KEY`, menyiapkan `.env`, dan menambahkan halaman opsional.
