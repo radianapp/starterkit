@@ -9,25 +9,7 @@
         <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     </c-slot>
 
-    {# Kanan navbar: dark mode toggle, notifikasi, avatar user #}
-    <c-slot name="navbar_actions">
-        <button
-            class="rdp-btn rdp-btn--sm rdp-btn--ghost rdp-topnav__action-btn"
-            @click="toggleDarkMode()"
-            :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-            aria-label="Toggle dark mode">
-            <span x-text="darkMode ? '☀️' : '🌙'">🌙</span>
-        </button>
-        <button
-            class="rdp-btn rdp-btn--sm rdp-btn--ghost rdp-topnav__action-btn"
-            title="Notifikasi"
-            aria-label="Notifikasi">
-            🔔
-        </button>
-        <div class="rdp-avatar rdp-avatar--sm" title="{{ user.get_full_name|default:user.username|default:'User' }}">
-            <span class="rdp-avatar__initials">RD</span>
-        </div>
-    </c-slot>
+    {# Navbar actions dikosongkan karena layout.app sudah memiliki toggle dark mode & avatar bawaan #}
 
     {# Sidebar: brand + navigasi + footer user #}
     <c-slot name="sidebar">
@@ -135,7 +117,7 @@
         <div class="rdp-page-header">
             <h2 class="rdp-page-header__title">Selamat Datang di {{ SITE_NAME }}</h2>
             <div class="rdp-page-header__actions">
-                <c-rdp.button variant="secondary" onclick="window.location.href='/docs/'">Baca Docs</c-rdp.button>
+                <c-rdp.button variant="secondary" onclick="window.open('https://github.com/radianapp/starterkit/tree/main/docs', '_blank')">Baca Docs</c-rdp.button>
                 <c-rdp.button variant="primary" onclick="window.location.href='/admin/'">Admin Panel</c-rdp.button>
             </div>
         </div>

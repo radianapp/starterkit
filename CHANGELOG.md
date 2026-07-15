@@ -9,6 +9,11 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.2.3] — 2026-07-15
+
+- **Bugfix (UI/UX)**: Menghilangkan duplikasi ikon toolbar (Toggle Dark Mode & Notifikasi) di halaman dashboard.
+- **Bugfix (Docs)**: Memperbaiki tautan tombol "Baca Docs" agar mengarah ke repositori dokumentasi Markdown di GitHub, bukan ke rute `/docs/` lokal yang menyebabkan 404.
+
 ## [0.2.2] — 2026-07-15
 
 - **Bugfix (Windows)**: Memperbaiki *PermissionError* saat CLI `rdp new` mencoba menghapus folder `.git/` bawaan template (file *pack* bersifat *read-only* di Windows).
