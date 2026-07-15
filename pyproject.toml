@@ -1,6 +1,6 @@
 [project]
 name = "rdp-starter-kit"
-version = "0.2.0"
+version = "0.2.1"
 description = "Production-ready Django starter template for Radian Data Platform (RDP)"
 requires-python = ">=3.11"
 license = "MIT"
@@ -19,6 +19,9 @@ dependencies = [
     "python-dateutil>=2.8.0",
     "django-jazzmin>=3.0.5",
 ]
+
+[project.scripts]
+rdp = "scripts.rdp_cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -82,6 +85,7 @@ exclude = [
     ".pytest_cache",
     ".ruff_cache",
     "scripts/app_template",
+    "scripts/rdp_new.py",
 ]
 
 [tool.ruff.lint]
@@ -105,11 +109,12 @@ ignore = [
 known-first-party = ["apps", "config"]
 
 [tool.setuptools]
-packages = ["config", "apps"]
+packages = ["config", "apps", "scripts"]
 
 [tool.setuptools.package-data]
 config = ["settings/*.py", "*.py"]
 apps = ["**/*.py"]
+scripts = ["*.py"]
 
 [build-system]
 requires = ["setuptools>=68.0"]

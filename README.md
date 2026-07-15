@@ -1,8 +1,9 @@
 # RDP Starter Kit — Production-Ready Django Template
 
-🚀 **Version 0.1.0** | Production-ready Django starter template untuk Radian Data Platform (RDP).
+🚀 **Version 0.2.0** | Production-ready Django starter template untuk Radian Data Platform (RDP).
 
 Developer dapat **clone & jalankan dalam < 5 menit** tanpa setup manual yang berulang.
+Instal sekali sebagai global CLI, gunakan dari folder mana saja.
 
 ---
 
@@ -23,32 +24,36 @@ Developer dapat **clone & jalankan dalam < 5 menit** tanpa setup manual yang ber
 
 ## 🚀 Quick Start
 
-### 1. Clone & Setup (5 menit)
+### 1. Instal CLI Secara Global (Satu Kali)
+
+Pastikan [uv](https://docs.astral.sh/uv/) dan [Git](https://git-scm.com) sudah terinstal, lalu:
 
 ```bash
-# Clone repository
-git clone https://github.com/radianapp/starterkit.git
-cd starterkit
+uv tool install git+https://github.com/radianapp/starterkit.git
+```
 
-# Copy environment template
-cp .env.example .env
+Setelah ini perintah `rdp` tersedia secara global dari folder mana saja di sistem Anda.
 
-# Install dependencies (wajib uv, bukan pip)
+### 2. Buat Proyek Baru
+
+```bash
+rdp new nama-proyek-anda
+```
+
+Wizard interaktif akan memandu Anda memilih nama, deskripsi, warna aksen, dan halaman opsional. Setelah selesai:
+
+```bash
+cd nama-proyek-anda
 uv sync --all-groups
-
-# Run migrations
 uv run python manage.py migrate
-
-# Create superuser (optional)
+uv run python manage.py loaddemodata   # muat data sampel (opsional)
 uv run python manage.py createsuperuser
-
-# Run development server
 uv run python manage.py runserver
 ```
 
 Buka **http://localhost:8000** — selesai! ✅
 
-### 2. Verify Setup
+### 3. Verify Setup
 
 ```bash
 # Test suite
@@ -190,10 +195,12 @@ apps/accounts/
 
 ## 📚 Documentation
 
+- **[docs/getting-started.md](docs/getting-started.md)** — Panduan lengkap mulai dari instalasi hingga struktur proyek
+- **[docs/USER_GUIDE.md](docs/USER_GUIDE.md)** — Panduan pengguna (fitur, alur, cara pakai)
+- **[docs/CLI_REFERENCE.md](docs/CLI_REFERENCE.md)** — Referensi lengkap perintah `rdp` CLI
+- **[docs/cookbook/](docs/cookbook/)** — Resep praktik terbaik (HTMX patterns, dll)
+- **[docs/faq.md](docs/faq.md)** — Pertanyaan yang sering ditanyakan
 - **CLAUDE.md** — Project conventions & AI assistant instructions
-- **docs/IMPLEMENTATION-PLAN.md** — 5 phases, 23 user stories, Definition of Done
-- **docs/user-stories/** — Detailed user stories dengan acceptance criteria
-- **docs/PRDv0.1.md** — Product Requirements Document
 
 ---
 

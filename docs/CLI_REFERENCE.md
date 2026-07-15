@@ -1,62 +1,108 @@
-# Referensi RDP CLI
+﻿# Referensi RDP CLI
 
-RDP (Radian Data Platform) CLI adalah alat baris perintah (*command-line interface*) yang dirancang khusus untuk menyederhanakan pengembangan, pengelolaan komponen UI, dan pembaruan (*update*) pada proyek yang dibangun menggunakan RDP Framework.
+RDP CLI (`rdp`) adalah alat baris perintah (*command-line interface*) untuk menyederhanakan pembuatan proyek baru berbasis RDP Starter Kit dari terminal, tanpa perlu meng-*clone* repositori secara manual.
 
-## Daftar Perintah (Commands)
+---
 
-### 1. `rdp init <nama_proyek>`
-Menginisialisasi proyek baru berdasarkan RDP Starterkit.
-- **Deskripsi:** Perintah ini akan mengkloning/menyalin struktur *template base* RDP ke direktori lokal Anda, membersihkan riwayat `.git` asal dari framework, dan menyiapkan nama proyek Anda secara otomatis.
-- **Penggunaan:** 
-  ```bash
-  rdp init aplikasi_keuangan
-  ```
+## Instalasi
 
-### 2. `rdp add <nama_komponen>`
-Menyalin komponen UI Cotton secara modular dari repositori pusat RDP langsung ke dalam folder proyek Anda (tepatnya di `templates/cotton/`).
-- **Deskripsi:** Memungkinkan Anda mengambil komponen hanya saat dibutuhkan (terinspirasi dari konsep Shadcn UI). Setelah disalin, komponen tersebut sepenuhnya menjadi "milik" proyek Anda (*Own Your Code*). Anda bebas memodifikasi HTML, logika, atau CSS komponen tersebut tanpa takut rusak.
-- **Penggunaan:**
-  ```bash
-  rdp add modal
-  rdp add datatable
-  ```
-
-### 3. `rdp update`
-Memeriksa dan memperbarui file inti (*core engine*) atau komponen UI bawaan yang digunakan oleh proyek Anda.
-- **Deskripsi:** Karena pendekatan RDP adalah *Own Your Code*, perintah ini **tidak akan langsung menimpa** kode lokal yang telah Anda modifikasi secara sepihak. Saat dijalankan, CLI akan menarik versi terbaru dan membandingkannya (*diff*) dengan file lokal:
-  - **Sama / Belum Dimodifikasi:** Komponen akan otomatis diperbarui ke versi terbaru.
-  - **Ada Modifikasi Lokal:** CLI akan mendeteksi perubahan Anda dan menampilkan peringatan interaktif, memberi opsi untuk: *Menimpa (Overwrite)*, *Melewati (Skip)*, atau *Menyatukan (Merge)* secara manual.
-- **Penggunaan:**
-  ```bash
-  rdp update
-  ```
-
-### 4. `rdp serve`
-Menjalankan *development server*.
-- **Deskripsi:** Merupakan pintasan cepat (alias) yang pada dasarnya mengeksekusi server bawaan Django (`python manage.py runserver`), yang juga sudah mencakup *watcher* dasar atau terintegrasi dengan utilitas *hot-reload*.
-- **Penggunaan:**
-  ```bash
-  rdp serve
-  ```
-
-### 5. `rdp make-component <nama_komponen>`
-Membuat *skeleton* atau kerangka dasar untuk komponen Cotton yang baru.
-- **Deskripsi:** Perintah ini akan secara otomatis membuat file `<nama_komponen>.html` baru di dalam direktori `templates/cotton/`, lengkap dengan pembungkus standar dan *tag* `<c-vars>` bawaan sehingga Anda bisa langsung mulai menyusun kode.
-- **Penggunaan:**
-  ```bash
-  rdp make-component widget_chart
-  ```
-
-## Memperbarui (Update) Alat CLI RDP
-Sistem CLI RDP (yakni alat `rdp` itu sendiri, bukan file proyek) adalah aplikasi terpisah yang terinstal secara global di sistem Anda (misalnya di `C:\Users\nama_user\.local\bin\rdp.exe`).
-
-CLI ini memiliki fitur *self-updater* yang secara otomatis akan mengecek repositori GitHub untuk mencari rilis terbaru. Untuk memperbarui CLI Anda, cukup jalankan:
+Instal CLI secara global menggunakan `uv tool` (hanya perlu dilakukan **satu kali**):
 
 ```bash
-rdp upgrade
+uv tool install git+https://github.com/radianapp/starterkit.git
 ```
-*(Catatan: Perintah ini akan menarik executable terbaru langsung dari GitHub rilis dan tidak akan mengubah file proyek lokal yang sedang Anda kerjakan).*
 
-## Persyaratan Sistem
-- Pastikan CLI `rdp` telah terpasang di sistem (dianjurkan diinstal secara global via `uv tool install rdp-cli`).
-- Saat bekerja di dalam proyek, selalu pastikan *Virtual Environment* Python telah aktif (contoh: `source .venv/bin/activate` atau menggunakan perintah `uv run`).
+Setelah instalasi selesai, perintah `rdp` akan tersedia secara global di sistem Anda dari folder mana pun.
+
+**Prasyarat:**
+- [uv](https://docs.astral.sh/uv/) sudah terinstal
+- [Git](https://git-scm.com) sudah terinstal dan bisa diakses dari terminal
+- Koneksi internet (untuk mengunduh template dari GitHub saat `rdp new`)
+
+---
+
+## Daftar Perintah
+
+### `rdp new <nama-proyek>`
+
+Bootstrap proyek Django baru dari template RDP secara interaktif.
+
+**Penggunaan:**
+```bash
+rdp new portal-analytic
+rdp new datahub-internal
+```
+
+**Wizard akan menanyakan:**
+1. **Nama Proyek** -- dikonfirmasi dari argumen atau diisi ulang
+2. **Deskripsi** -- deskripsi singkat proyek untuk `pyproject.toml`
+3. **Warna Aksen** -- pilih dari: `teal`, `coral`, `purple`, `amber`, `gold`, `navy`
+4. **Halaman Contact Us** -- halaman publik formulir kontak (opsional)
+5. **Halaman FAQ** -- halaman publik pertanyaan umum (opsional)
+
+**Apa yang dilakukan secara otomatis:**
+- Meng-*clone* template terbaru dari [github.com/radianapp/starterkit](https://github.com/radianapp/starterkit.git)
+- Menghapus riwayat `.git/` template agar proyek Anda bersih
+- Men-*generate* `SECRET_KEY` baru yang aman secara acak
+- Membuat file `.env` yang sudah dikonfigurasi (`SITE_NAME`, `RDP_APP_ACCENT`, dll)
+- Memperbarui `pyproject.toml` dengan nama dan deskripsi proyek Anda
+- Menambahkan *route* dan template HTML untuk halaman opsional yang dipilih
+
+**Langkah selanjutnya setelah wizard selesai:**
+```bash
+cd nama-proyek-anda
+uv sync --all-groups
+uv run python manage.py migrate
+uv run python manage.py loaddemodata   # muat data sampel (opsional)
+uv run python manage.py createsuperuser
+uv run python manage.py runserver
+```
+
+Buka **http://localhost:8000** -- selesai!
+
+---
+
+### `rdp --version`
+
+Tampilkan versi CLI yang terinstal.
+
+```bash
+rdp --version
+# Output: rdp v0.2.0
+```
+
+---
+
+### `rdp --help`
+
+Tampilkan pesan bantuan dan daftar perintah yang tersedia.
+
+```bash
+rdp --help
+rdp -h
+```
+
+---
+
+## Memperbarui CLI
+
+Untuk mendapatkan versi terbaru dari CLI:
+
+```bash
+uv tool upgrade rdp-starter-kit
+```
+
+---
+
+## Troubleshooting
+
+| Masalah | Solusi |
+|---|---|
+| `rdp: command not found` | Pastikan `~/.local/bin` ada di `PATH` Anda, atau jalankan `uv tool update-shell` |
+| `git: command not found` | Instal Git dari [git-scm.com](https://git-scm.com) |
+| Error koneksi saat `rdp new` | Periksa koneksi internet Anda; repositori GitHub harus bisa diakses |
+| Direktori sudah ada | Hapus folder target terlebih dahulu atau pilih nama proyek yang berbeda |
+
+---
+
+*Dokumentasi ini berlaku untuk RDP CLI v0.2.0+*
