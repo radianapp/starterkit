@@ -92,43 +92,43 @@
 
 /* Variants override */
 .rdp-timeline-item--success .rdp-timeline-item__dot {
-  border-color: #28a745;
-  background-color: #28a745;
+  border-color: var(--rdp-color-success, var(--rdp-primary));
+  background-color: var(--rdp-color-success, var(--rdp-primary));
 }
 .rdp-timeline-item--success .rdp-timeline-item__icon {
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-  color: #155724;
+  background-color: var(--rdp-color-success-soft, var(--rdp-primary-soft));
+  border-color: var(--rdp-color-success-border, var(--rdp-border));
+  color: var(--rdp-color-success-text, var(--rdp-primary));
 }
 
 .rdp-timeline-item--warning .rdp-timeline-item__dot {
-  border-color: #ffc107;
-  background-color: #ffc107;
+  border-color: var(--rdp-color-warning, #f59e0b);
+  background-color: var(--rdp-color-warning, #f59e0b);
 }
 .rdp-timeline-item--warning .rdp-timeline-item__icon {
-  background-color: #fff3cd;
-  border-color: #ffeeba;
-  color: #856404;
+  background-color: var(--rdp-color-warning-soft, rgba(245, 158, 11, 0.15));
+  border-color: var(--rdp-color-warning-border, var(--rdp-border));
+  color: var(--rdp-color-warning-text, var(--rdp-color-warning, #92400e));
 }
 
 .rdp-timeline-item--danger .rdp-timeline-item__dot {
-  border-color: #dc3545;
-  background-color: #dc3545;
+  border-color: var(--rdp-color-danger, #ef4444);
+  background-color: var(--rdp-color-danger, #ef4444);
 }
 .rdp-timeline-item--danger .rdp-timeline-item__icon {
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  color: #721c24;
+  background-color: var(--rdp-color-danger-soft, rgba(239, 68, 68, 0.15));
+  border-color: var(--rdp-color-danger-border, var(--rdp-border));
+  color: var(--rdp-color-danger-text, var(--rdp-color-danger, #7f1d1d));
 }
 
 .rdp-timeline-item--neutral .rdp-timeline-item__dot {
-  border-color: #6c757d;
-  background-color: #6c757d;
+  border-color: var(--rdp-text-muted);
+  background-color: var(--rdp-text-muted);
 }
 .rdp-timeline-item--neutral .rdp-timeline-item__icon {
-  background-color: #e2e3e5;
-  border-color: #d6d8db;
-  color: #383d41;
+  background-color: var(--rdp-surface-sunken, var(--rdp-surface));
+  border-color: var(--rdp-border);
+  color: var(--rdp-text-muted);
 }
 
 /* Dark mode compatibility override */

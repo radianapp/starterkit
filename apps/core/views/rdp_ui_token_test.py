@@ -6,7 +6,6 @@ US: Phase 1 & 2 — Token & Theme showcase
 
 from django.views.generic import TemplateView
 
-
 THEMES = [
     {"id": "default",   "label": "Default",    "swatch": "#15654E", "dark": False, "desc": "Warm paper · RDP original"},
     {"id": "light",     "label": "Light",      "swatch": "#2A5FA8", "dark": False, "desc": "Neutral cool blue"},

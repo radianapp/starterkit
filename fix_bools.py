@@ -1,4 +1,5 @@
-import os, glob
+import glob
+
 files = glob.glob('templates/cotton/rdp/**/*.html', recursive=True)
 for f in files:
     content = open(f, encoding='utf-8').read()

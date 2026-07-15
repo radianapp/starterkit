@@ -1,3 +1,3 @@
-from .htmx import is_htmx, htmx_redirect, htmx_refresh, htmx_trigger
+from .htmx import htmx_redirect, htmx_refresh, htmx_trigger, is_htmx
 
-__all__ = ["is_htmx", "htmx_redirect", "htmx_refresh", "htmx_trigger"]
+__all__ = ["htmx_redirect", "htmx_refresh", "htmx_trigger", "is_htmx"]

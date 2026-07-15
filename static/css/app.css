@@ -10,7 +10,7 @@
     padding: 0 10px;
     margin: 0;           /* reset PicoCSS default margin pada <a> */
     border-radius: 8px;
-    color: #55514A;
+    color: var(--rdp-text-muted);
     font-size: 13.5px;
     font-weight: 500;
     text-decoration: none;
@@ -19,36 +19,36 @@
 }
 
 .sidebar-link:hover {
-    background: #F2F0EC;
-    color: #1C1B18;
+    background: var(--rdp-surface-hover, var(--rdp-surface-raised));
+    color: var(--rdp-text);
 }
 
 .sidebar-link.active {
-    background: #EDF4F0;
-    color: #10513F;
+    background: var(--rdp-primary-soft);
+    color: var(--rdp-primary);
     font-weight: 600;
 }
 
 .sidebar-link .icon-square {
-    width: 16px; height: 16px; border: 1.75px solid #8A857C; border-radius: 4px;
+    width: 16px; height: 16px; border: 1.75px solid var(--rdp-border-strong, var(--rdp-border)); border-radius: 4px;
     flex-shrink: 0;
     transition: border-color 0.2s;
 }
-.sidebar-link.active .icon-square { border-color: #10513F; }
+.sidebar-link.active .icon-square { border-color: var(--rdp-primary); }
 
 .sidebar-link .icon-circle {
-    width: 16px; height: 16px; border: 1.75px solid #8A857C; border-radius: 99px;
+    width: 16px; height: 16px; border: 1.75px solid var(--rdp-border-strong, var(--rdp-border)); border-radius: 99px;
     flex-shrink: 0;
     transition: border-color 0.2s;
 }
-.sidebar-link.active .icon-circle { border-color: #10513F; }
+.sidebar-link.active .icon-circle { border-color: var(--rdp-primary); }
 
 .sidebar-link .icon-diamond {
-    width: 16px; height: 16px; border: 1.75px solid #8A857C; border-radius: 4px; transform: rotate(45deg);
+    width: 16px; height: 16px; border: 1.75px solid var(--rdp-border-strong, var(--rdp-border)); border-radius: 4px; transform: rotate(45deg);
     flex-shrink: 0;
     transition: border-color 0.2s;
 }
-.sidebar-link.active .icon-diamond { border-color: #10513F; }
+.sidebar-link.active .icon-diamond { border-color: var(--rdp-primary); }
 
 /* Dark mode variations for sidebar-link */
 [data-rdp-theme="dark"] .sidebar-link,
@@ -56,7 +56,7 @@
 [data-rdp-theme="terminal"] .sidebar-link,
 [data-rdp-theme="nord"] .sidebar-link,
 [data-rdp-theme="dracula"] .sidebar-link {
-    color: #A1A1AA;
+    color: var(--rdp-text-muted);
 }
 [data-rdp-theme="dark"] .sidebar-link:hover,
 [data-rdp-theme="midnight"] .sidebar-link:hover,
@@ -64,7 +64,7 @@
 [data-rdp-theme="nord"] .sidebar-link:hover,
 [data-rdp-theme="dracula"] .sidebar-link:hover {
     background: rgba(255,255,255,0.08);
-    color: #F4F4F5;
+    color: var(--rdp-text);
 }
 [data-rdp-theme="dark"] .sidebar-link.active,
 [data-rdp-theme="midnight"] .sidebar-link.active,
@@ -72,7 +72,7 @@
 [data-rdp-theme="nord"] .sidebar-link.active,
 [data-rdp-theme="dracula"] .sidebar-link.active {
     background: rgba(16, 81, 63, 0.3);
-    color: #34D399;
+    color: var(--rdp-primary-light, var(--rdp-primary));
 }
 [data-rdp-theme="dark"] .sidebar-link .icon-square,
 [data-rdp-theme="dark"] .sidebar-link .icon-circle,
@@ -89,7 +89,7 @@
 [data-rdp-theme="dracula"] .sidebar-link .icon-square,
 [data-rdp-theme="dracula"] .sidebar-link .icon-circle,
 [data-rdp-theme="dracula"] .sidebar-link .icon-diamond {
-    border-color: #71717A;
+    border-color: var(--rdp-border-strong, var(--rdp-border));
 }
 
 /* ==========================================================================
@@ -127,9 +127,9 @@
     align-items: center;
     gap: 8px;
     padding: 0 12px;
-    background: var(--rdp-surface-sunken, #F2F0EC);
+    background: var(--rdp-surface-sunken, var(--rdp-surface));
     border-radius: 8px;
-    color: #8A857C;
+    color: var(--rdp-text-muted);
     font-size: 13px;
     border: 1px solid var(--rdp-border);
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -178,9 +178,9 @@
     align-items: center;
     gap: 8px;
     padding: 0 12px;
-    background: var(--rdp-surface-sunken, #F2F0EC);
+    background: var(--rdp-surface-sunken, var(--rdp-surface));
     border-radius: 8px;
-    color: #8A857C;
+    color: var(--rdp-text-muted);
     font-size: 13px;
     border: 1px solid var(--rdp-border);
 }
@@ -205,8 +205,8 @@
     width: 34px;
     height: 34px;
     border-radius: 99px;
-    background: #D6E7DF;
-    color: #10513F;
+    background: var(--rdp-primary-soft);
+    color: var(--rdp-primary);
     align-items: center;
     justify-content: center;
     font-size: 11px;

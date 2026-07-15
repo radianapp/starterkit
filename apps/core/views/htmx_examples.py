@@ -219,7 +219,7 @@ class InfiniteScrollView(TemplateView):
     """
 
     template_name = "htmx_examples/infinite_scroll.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Halaman 1 langsung dirender di awal (tidak usah lazy load)
@@ -306,12 +306,12 @@ class ToastDemoView(View):
     def post(self, request, *args, **kwargs):
         response = HttpResponse("")
         import json
-        
+
         # Ambil tipe toast dari request (default success)
         toast_type = request.POST.get("type", "success")
         message = request.POST.get("message", "Aksi berhasil dieksekusi!")
         position = request.POST.get("position", "bottom-right") # default di layout css
-        
+
         response["HX-Trigger"] = json.dumps(
             {"showToast": {"message": message, "type": toast_type, "position": position}}
         )

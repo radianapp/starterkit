@@ -25,9 +25,9 @@ urlpatterns = [
     # US-006: Logout
     path("logout/", views.user_logout, name="logout"),
     # US-008: Verifikasi email
-    path("verify-email/<str:token>/", views.verify_email_view, name="verify_email"),
     path("verify-email/resend/", views.resend_verification_view, name="resend_verification"),
     path("verify-email/required/", views.email_verify_required_view, name="verify_required"),
+    path("verify-email/<str:token>/", views.verify_email_view, name="verify_email"),
     # US-009: Edit profil & avatar
     path("profile/", views.profile_view, name="profile"),
     path("profile/avatar/", views.avatar_upload_view, name="avatar_upload"),

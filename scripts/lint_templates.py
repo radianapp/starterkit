@@ -131,6 +131,9 @@ def main():  # noqa: C901
             "templates/cotton/",
             "templates/accounts/",
             "templates/dev_components.html",
+            # Halaman showcase/demo internal — inline style adalah intentional
+            # untuk menampilkan token/komponen secara dinamis
+            "templates/rdp_ui/",
         ]
         for root, _, files in os.walk(templates_dir):
             for file in files:
@@ -150,6 +153,8 @@ def main():  # noqa: C901
     # Lint CSS files (excluding vendor files)
     if os.path.exists(css_dir):
         print(f"Linting CSS files in {css_dir}...")
+        # File CSS yang diizinkan menggunakan hex karena mendefinisikan
+        # design token / variabel CSS mereka sendiri secara eksplisit.
         core_css_files = {
             "base.css",
             "dashboard.css",
@@ -159,6 +164,10 @@ def main():  # noqa: C901
             "accounts.css",
             "errors.css",
             "components.css",
+            # Landing page RDP-UI: punya sistem variabel --lp-* sendiri
+            "rdp-ui-landing.css",
+            # File CSS showcase token — mendefinisikan token preview secara visual
+            "token-test.css",
         }
         for root, _, files in os.walk(css_dir):
             # Skip any vendor folders

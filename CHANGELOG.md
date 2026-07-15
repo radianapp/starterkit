@@ -9,6 +9,8 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-07-15
+
 - **RDP UI Framework extras**:
   - Menambahkan sistem tema dinamis (terang/gelap + 9 pilihan aksen warna kustom yang di-persist di localStorage).
   - Menambahkan 3 komponen kustom baru: `<c-rdp.theme_picker>` (widget pemilih tema), `<c-rdp.rating>` (rating bintang interaktif), dan `<c-rdp.timeline>`/`<c-rdp.timeline_item>` (linimasa kronologis vertikal).

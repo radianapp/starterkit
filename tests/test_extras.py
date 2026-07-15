@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.test import Client, SimpleTestCase
 from django.urls import reverse
 
-from apps.core.utils.htmx import is_htmx, htmx_redirect, htmx_refresh, htmx_trigger
+from apps.core.utils.htmx import htmx_redirect, htmx_refresh, htmx_trigger, is_htmx
 
 
 class TestExtras(SimpleTestCase):

@@ -24,7 +24,7 @@
 
                 </nav>
                 {# Nav mobile: hanya tampilkan CTA #}
-                <div class="lp-nav__links" style="display:flex;margin-left:auto;" aria-hidden="true">
+                <div class="lp-nav__links" aria-hidden="true">
                     {% if request.user.is_authenticated %}
                         <a href="{% url 'dashboard:index' %}" class="lp-nav__auth-cta" id="nav-dashboard-cta">Dashboard</a>
                     {% else %}
@@ -144,7 +144,7 @@
             <div class="lp-docs__inner">
                 <div class="lp-section-label">
                     <span class="lp-section-label__text">DOCS</span>
-                    <span class="lp-section-label__rule" style="background:#DEDBD4;"></span>
+                    <span class="lp-section-label__rule"></span>
                 </div>
                 <h2 class="lp-section-title">Design specification</h2>
                 <p class="lp-section-desc">

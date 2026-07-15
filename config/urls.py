@@ -12,8 +12,8 @@ from django.shortcuts import redirect
 from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
 
+from apps.core.views import RdpUiComponentsTestView, RdpUiLayoutTestView, RdpUiTokenTestView
 from apps.core.views import htmx_examples as htmx_views
-from apps.core.views import RdpUiTokenTestView, RdpUiLayoutTestView, RdpUiComponentsTestView
 
 
 def home_view(request):
@@ -29,17 +29,17 @@ urlpatterns = [
 
     # RDP-UI Landing sudah digabung ke /. Redirect agar tidak ada broken link.
     path("rdp-ui/", RedirectView.as_view(url="/", permanent=False), name="rdp-ui-landing"),
-    
+
     # RDP-UI Token & Theme Showcase (Phase 1 & 2)
     path("rdp-ui/tokens/", RdpUiTokenTestView.as_view(), name="rdp_ui_token_test"),
     path("rdp-ui/layout/", RdpUiLayoutTestView.as_view(), name="rdp_ui_layout_test"),
     path("rdp-ui/components/", RdpUiComponentsTestView.as_view(), name="rdp_ui_components_test"),
-    
+
     # Halaman Publik (US-031)
     path("about/", TemplateView.as_view(template_name="public/about.html"), name="about"),
     path("terms/", TemplateView.as_view(template_name="public/terms.html"), name="terms"),
     path("privacy/", TemplateView.as_view(template_name="public/privacy.html"), name="privacy"),
-    
+
     # Showcase 10 Pola HTMX (US-036)
     path("examples/htmx/", htmx_views.HtmxExamplesIndexView.as_view(), name="htmx-examples"),
     path(
@@ -83,13 +83,13 @@ urlpatterns = [
         name="htmx-infinite-scroll-rows",
     ),
     path("examples/htmx/polling/", htmx_views.JobStatusPollingView.as_view(), name="htmx-polling"),
-    
+
     # App URLs
     path("admin/", admin.site.urls),
     path("accounts/", include("apps.accounts.urls")),
     path("dashboard/", include("apps.dashboard.urls")),
     path("api-auth/", include("rest_framework.urls")),
-    
+
 ]
 
 # Serve media files di development
