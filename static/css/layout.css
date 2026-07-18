@@ -143,3 +143,16 @@
     from { opacity: 1; }
     to { opacity: 0; }
 }
+
+/* ==========================================================================
+   Micro-Animations & Glassmorphism (UX Enhancements)
+   ========================================================================== */
+
+.rdp-topnav, .rdp-sidebar {
+    background-color: var(--card-background-color) !important;
+    opacity: 0.95;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--pico-muted-border-color);
+}
+

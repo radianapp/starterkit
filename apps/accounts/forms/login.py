@@ -2,15 +2,14 @@
 Form untuk login.
 US: US-005 — Login
 
-TUJUAN: Validasi email + password saat login.
+TUJUAN: Validasi identifier (email atau username) + password saat login.
 
 ALUR:
-  1. Input email dan password
-  2. Validasi format email
-  3. Autentikasi user (cek credentials di DB)
-  4. Cek user aktif (is_active)
+  1. Input identifier (email atau username) dan password
+  2. Autentikasi user — dicoba via email dulu, fallback ke username
+  3. Cek user aktif (is_active)
 
-DIPANGGIL DARI: apps.accounts.views.login.UserLoginView
+DIPANGGIL DARI: apps.accounts.views.login.user_login
 """
 
 from django import forms
@@ -20,19 +19,25 @@ from django.utils.translation import gettext_lazy as _
 
 class LoginForm(forms.Form):
     """
-    TUJUAN: Form login dengan email dan password.
+    TUJUAN: Form login yang menerima email atau username sebagai identifier.
 
     ALUR:
-      1. Terima email + password
-      2. clean() → authenticate() → set self.user jika valid
+      1. Terima identifier (email/username) + password
+      2. clean() → authenticate() via EmailOrUsernameBackend → set self.user jika valid
       3. View ambil self.user untuk login()
 
-    DIPANGGIL DARI: apps.accounts.views.login.UserLoginView
+    DIPANGGIL DARI: apps.accounts.views.login.user_login
     """
 
-    email = forms.EmailField(
-        label=_("Email"),
-        widget=forms.EmailInput(attrs={"autocomplete": "email", "autofocus": True}),
+    identifier = forms.CharField(
+        label=_("Email atau Username"),
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "username",
+                "autofocus": True,
+                "placeholder": _("nama@contoh.com atau username"),
+            }
+        ),
     )
     password = forms.CharField(
         label=_("Password"),
@@ -56,20 +61,24 @@ class LoginForm(forms.Form):
         TUJUAN: Autentikasi credentials dan set self.user.
 
         ALUR:
-          1. Ambil email + password dari cleaned_data
-          2. authenticate() — return user atau None
+          1. Ambil identifier + password dari cleaned_data
+          2. authenticate() — memanggil EmailOrUsernameBackend
+             (coba email dulu, fallback ke username)
           3. Cek user.is_active
           4. Simpan ke self.user untuk diambil view
+
+        CATATAN: authenticate() meneruskan 'identifier' sebagai 'username'
+                 ke backend karena itulah konvensi Django.
         """
         cleaned = super().clean()
-        email = cleaned.get("email", "").lower().strip()
+        identifier = cleaned.get("identifier", "").strip()
         password = cleaned.get("password", "")
 
-        if email and password:
-            self.user = authenticate(self.request, username=email, password=password)
+        if identifier and password:
+            self.user = authenticate(self.request, username=identifier, password=password)
             if self.user is None:
                 raise forms.ValidationError(
-                    _("Email atau password salah. Silakan coba lagi."),
+                    _("Email/username atau password salah. Silakan coba lagi."),
                     code="invalid_login",
                 )
             if not self.user.is_active:
@@ -83,6 +92,6 @@ class LoginForm(forms.Form):
         """
         TUJUAN: Return authenticated user setelah form valid.
 
-        DIPANGGIL DARI: apps.accounts.views.login.UserLoginView.form_valid()
+        DIPANGGIL DARI: apps.accounts.views.login.user_login
         """
         return self.user

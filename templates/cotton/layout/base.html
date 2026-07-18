@@ -27,7 +27,7 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
         <link rel="stylesheet" href="{% static 'vendor/rdp-ui/rdp.css' %}">
     {% else %}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-        <link rel="stylesheet" href="https://cdn.radian.web.id/{{ RDP_UI_VERSION|default:'v1.0' }}/assets/rdp.css">
+        <link rel="stylesheet" href="https://ui.radian.web.id/{{ RDP_UI_VERSION|default:'v1.0' }}/assets/rdp.css">
     {% endif %}
 
     {# Dynamic theme CSS loader — loads themes/*.css sesuai data-rdp-theme #}
@@ -35,14 +35,22 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
         var t = document.documentElement.getAttribute('data-rdp-theme') || 'default';
         var l = document.createElement('link');
         l.rel = 'stylesheet'; l.id = 'rdp-theme-css';
+        {% if RDP_UI_SELF_HOST %}
         l.href = '{% static "vendor/rdp-ui/themes/" %}' + t + '.css';
+        {% else %}
+        l.href = 'https://ui.radian.web.id/{{ RDP_UI_VERSION|default:"v1.0" }}/assets/themes/' + t + '.css';
+        {% endif %}
         document.head.appendChild(l);
     }());</script>
     
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
-    {% if RDP_DEBUG_OVERLAY %}
+    
+    <!-- Pustaka UI/UX Tambahan -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css">
+    {% if DEBUG %}
         <link rel="stylesheet" href="{% static 'css/debug.css' %}">
     {% endif %}
     <meta name="csrf-token" content="{{ csrf_token }}">
@@ -54,7 +62,7 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
     {{ slot }}
 
     <!-- Debug Overlay Panel -->
-    {% if RDP_DEBUG_OVERLAY %}
+    {% if DEBUG %}
         <div x-data="debugState('{{ layout_name }}')" class="rdp-debug-overlay">
             <div class="rdp-debug-overlay__header" @click="open = !open">
                 🛠️ Debug (Layout: <span x-text="layout"></span>)
@@ -84,8 +92,12 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
     {% else %}
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script type="module" src="https://cdn.radian.web.id/{{ RDP_UI_VERSION }}/assets/rdp.js" defer></script>
+        <script type="module" src="https://ui.radian.web.id/{{ RDP_UI_VERSION|default:'v1.0' }}/assets/rdp.js" defer></script>
     {% endif %}
+    
+    <!-- Pustaka UI/UX Tambahan -->
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.all.min.js"></script>
     <script src="{% static 'js/theme.js' %}"></script>
     <script src="{% static 'js/toast.js' %}"></script>
     <script src="{% static 'js/modal-global.js' %}"></script>

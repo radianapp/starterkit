@@ -9,31 +9,7 @@
 
     <div class="lp-root">
 
-        {# ============ NAV ============ #}
-        <header class="lp-nav">
-            <div class="lp-nav__inner">
-                <a href="/" class="lp-nav__brand">
-                    <span class="lp-nav__logo">R</span>
-                    <span class="lp-nav__name">RDP UI</span>
-                </a>
-                <nav class="lp-nav__links" aria-label="Landing navigation">
-                    <a href="#get-started" class="lp-nav__link">Get started</a>
-                    <a href="#docs" class="lp-nav__link">Docs</a>
-                    <a href="#examples" class="lp-nav__link">Examples</a>
-                    <a href="/rdp-ui/tokens/" class="lp-nav__link">Themes</a>
-
-                </nav>
-                {# Nav mobile: hanya tampilkan CTA #}
-                <div class="lp-nav__links" aria-hidden="true">
-                    {% if request.user.is_authenticated %}
-                        <a href="{% url 'dashboard:index' %}" class="lp-nav__auth-cta" id="nav-dashboard-cta">Dashboard</a>
-                    {% else %}
-                        <a href="{% url 'accounts:login' %}" class="lp-nav__auth-link">Masuk</a>
-                        <a href="{% url 'accounts:register' %}" class="lp-nav__auth-cta" id="nav-register-cta">Daftar</a>
-                    {% endif %}
-                </div>
-            </div>
-        </header>
+        <c-landing.nav />
 
         {# ============ HERO ============ #}
         <section id="top" class="lp-hero">
@@ -152,35 +128,75 @@
                 </p>
 
                 <div class="lp-docs__grid">
-                    <a href="/rdp-ui/tokens/" class="lp-doc-card" id="doc-theme-architecture">
+                    <a href="/about/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">01</span>
+                        <span class="lp-doc-card__title">Product Foundation</span>
+                        <span class="lp-doc-card__desc">Positioning, personas, and the 7 design principles.</span>
+                    </a>
+                    <a href="/rdp-ui/foundations/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">02</span>
+                        <span class="lp-doc-card__title">Foundations</span>
+                        <span class="lp-doc-card__desc">Color, typography, spacing, radius, elevation, icons.</span>
+                    </a>
+                    <a href="/rdp-ui/tokens/" class="lp-doc-card">
                         <span class="lp-doc-card__num">03</span>
                         <span class="lp-doc-card__title">Theme Architecture</span>
                         <span class="lp-doc-card__desc">Token inheritance model and the 11-theme gallery.</span>
                     </a>
-                    <a href="/rdp-ui/layout/" class="lp-doc-card" id="doc-layout-system">
+                    <a href="/rdp-ui/layout/" class="lp-doc-card">
                         <span class="lp-doc-card__num">04</span>
                         <span class="lp-doc-card__title">Layout System</span>
                         <span class="lp-doc-card__desc">Container, 12-col grid, app shell, responsive strategy.</span>
                     </a>
-                    <a href="/rdp-ui/components/" class="lp-doc-card" id="doc-component-showcase">
+                    <a href="/rdp-ui/components/" class="lp-doc-card">
                         <span class="lp-doc-card__num">05</span>
                         <span class="lp-doc-card__title">Component Showcase</span>
                         <span class="lp-doc-card__desc">Buttons, badges, alerts, toasts, tooltips, progress.</span>
                     </a>
-                    <a href="/examples/htmx/" class="lp-doc-card" id="doc-htmx-patterns">
-                        <span class="lp-doc-card__num">10</span>
-                        <span class="lp-doc-card__title">HTMX Interaction Patterns</span>
-                        <span class="lp-doc-card__desc">12 server-first patterns with motion guidelines.</span>
+                    <a href="/rdp-ui/forms/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">06</span>
+                        <span class="lp-doc-card__title">Forms</span>
+                        <span class="lp-doc-card__desc">Inputs, selects, switches, validation, HTMX 422 states.</span>
                     </a>
-                    <a href="/dev/components/" class="lp-doc-card" id="doc-dev-components">
+                    <a href="/rdp-ui/navigation/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">07</span>
+                        <span class="lp-doc-card__title">Overlays & Navigation</span>
+                        <span class="lp-doc-card__desc">Modal, drawer, dropdown, tabs, sidebar, pagination.</span>
+                    </a>
+                    <a href="/rdp-ui/data-display/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">08</span>
+                        <span class="lp-doc-card__title">Data Display</span>
+                        <span class="lp-doc-card__desc">Tables, cards, stats, avatars, timelines, empty states.</span>
+                    </a>
+                    <a href="/dev/components/" class="lp-doc-card">
                         <span class="lp-doc-card__num">09</span>
                         <span class="lp-doc-card__title">Component Architecture</span>
                         <span class="lp-doc-card__desc">Anatomy, slots, and the Django Cotton mapping.</span>
                     </a>
-                    <a href="/about/" class="lp-doc-card" id="doc-product-foundation">
-                        <span class="lp-doc-card__num">01</span>
-                        <span class="lp-doc-card__title">Product Foundation</span>
-                        <span class="lp-doc-card__desc">Positioning, personas, and the 7 design principles.</span>
+                    <a href="/examples/htmx/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">10</span>
+                        <span class="lp-doc-card__title">HTMX Interaction Patterns</span>
+                        <span class="lp-doc-card__desc">12 server-first patterns with motion guidelines.</span>
+                    </a>
+                    <a href="/accessibility/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">11</span>
+                        <span class="lp-doc-card__title">Accessibility Guidelines</span>
+                        <span class="lp-doc-card__desc">WCAG AA commitments, keyboard maps, ARIA, focus rules.</span>
+                    </a>
+                    <a href="/rdp-ui/docs-landing/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">12</span>
+                        <span class="lp-doc-card__title">Docs Site — Landing</span>
+                        <span class="lp-doc-card__desc">The documentation website landing page design.</span>
+                    </a>
+                    <a href="/rdp-ui/docs-structure/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">13</span>
+                        <span class="lp-doc-card__title">Docs Site — Structure</span>
+                        <span class="lp-doc-card__desc">Information architecture and the component-page template.</span>
+                    </a>
+                    <a href="/roadmap/" class="lp-doc-card">
+                        <span class="lp-doc-card__num">14</span>
+                        <span class="lp-doc-card__title">Roadmap & Vision</span>
+                        <span class="lp-doc-card__desc">v0.x → v2.0 phases and the future of RDP UI.</span>
                     </a>
                 </div>
             </div>
@@ -199,77 +215,36 @@
                 </p>
 
                 <div class="lp-examples__grid">
-                    <a href="/dashboard/" class="lp-example-card" id="example-dashboard">
+                    <a href="/dashboard/" class="lp-example-card">
                         <span class="lp-example-card__glyph">▦</span>
                         <span class="lp-example-card__title">Admin Dashboard</span>
-                        <span class="lp-example-card__desc">KPI stat cards, activity table, quick actions — starter kit flagship.</span>
+                        <span class="lp-example-card__desc">KPI stat cards, revenue chart, activity table, quick actions — the flagship screenshot.</span>
                     </a>
-                    <a href="{% url 'accounts:login' %}" class="lp-example-card" id="example-auth">
+                    <a href="{% url 'accounts:login' %}" class="lp-example-card">
                         <span class="lp-example-card__glyph">◈</span>
                         <span class="lp-example-card__title">Authentication</span>
-                        <span class="lp-example-card__desc">Login, register, forgot password, dan profile settings.</span>
+                        <span class="lp-example-card__desc">Login, register, forgot password, and profile settings.</span>
                     </a>
-                    <a href="/examples/htmx/" class="lp-example-card" id="example-htmx">
+                    <a href="/examples/crm/" class="lp-example-card">
                         <span class="lp-example-card__glyph">◎</span>
-                        <span class="lp-example-card__title">HTMX Patterns</span>
-                        <span class="lp-example-card__desc">10 pola interaksi server-first: create, delete, search, scroll, polling.</span>
+                        <span class="lp-example-card__title">CRM</span>
+                        <span class="lp-example-card__desc">Contact list with filters, detail with timeline, pipeline kanban.</span>
                     </a>
-                    <a href="/rdp-ui/components/" class="lp-example-card" id="example-components">
+                    <a href="/examples/invoice/" class="lp-example-card">
                         <span class="lp-example-card__glyph">▤</span>
-                        <span class="lp-example-card__title">Component Library</span>
-                        <span class="lp-example-card__desc">Seluruh komponen Cotton yang tersedia dengan props dan slot docs.</span>
+                        <span class="lp-example-card__title">Invoicing</span>
+                        <span class="lp-example-card__desc">Invoice list, print-friendly detail, create form with line items.</span>
                     </a>
-                    <a href="/rdp-ui/tokens/" class="lp-example-card" id="example-themes">
+                    <a href="/examples/hrm/" class="lp-example-card">
                         <span class="lp-example-card__glyph">◐</span>
-                        <span class="lp-example-card__title">Theme Gallery</span>
-                        <span class="lp-example-card__desc">11 tema siap pakai: default, dark, midnight, ocean, forest, dan lainnya.</span>
+                        <span class="lp-example-card__title">HRM</span>
+                        <span class="lp-example-card__desc">Employee directory, employee profile, leave requests.</span>
                     </a>
                 </div>
             </div>
         </section>
 
-        {# ============ FOOTER ============ #}
-        <footer class="lp-footer">
-            <div class="lp-footer__inner">
-                <div class="lp-footer__top">
-                    <div class="lp-footer__brand">
-                        <div class="lp-footer__brand-row">
-                            <span class="lp-footer__logo">R</span>
-                            <span class="lp-footer__brand-name">RDP UI</span>
-                        </div>
-                        <p class="lp-footer__brand-desc">Modern UI Framework for Django. HTML first · Server first · Theme first.</p>
-                    </div>
-                    <div class="lp-footer__links">
-                        <div class="lp-footer__col">
-                            <span class="lp-footer__col-label">PROJECT</span>
-                            <a href="#get-started" class="lp-footer__col-link">Get started</a>
-                            <a href="/rdp-ui/tokens/" class="lp-footer__col-link">Theme gallery</a>
-                            <a href="/about/" class="lp-footer__col-link">About</a>
-                        </div>
-                        <div class="lp-footer__col">
-                            <span class="lp-footer__col-label">RESOURCES</span>
-                            <a href="#docs" class="lp-footer__col-link">Docs</a>
-                            <a href="#examples" class="lp-footer__col-link">Examples</a>
-                            <a href="/examples/htmx/" class="lp-footer__col-link">HTMX Patterns</a>
-                        </div>
-                        <div class="lp-footer__col">
-                            <span class="lp-footer__col-label">ACCOUNT</span>
-                            {% if request.user.is_authenticated %}
-                                <a href="{% url 'dashboard:index' %}" class="lp-footer__col-link">Dashboard</a>
-                                <a href="{% url 'accounts:logout' %}" class="lp-footer__col-link">Keluar</a>
-                            {% else %}
-                                <a href="{% url 'accounts:login' %}" class="lp-footer__col-link">Masuk</a>
-                                <a href="{% url 'accounts:register' %}" class="lp-footer__col-link">Daftar</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="lp-footer__bottom">
-                    <span class="lp-footer__copy">© {{ COPYRIGHT_YEAR }} {{ COMPANY_NAME }} · rdpui.radian.web.id</span>
-                    <span class="lp-footer__license">MIT LICENSE · MADE FOR DJANGO</span>
-                </div>
-            </div>
-        </footer>
+        <c-landing.footer />
 
     </div>
 </c-layout.base>

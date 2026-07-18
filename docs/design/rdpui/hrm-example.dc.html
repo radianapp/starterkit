@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+    input::placeholder { color: #757067; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= 1 · EMPLOYEE DIRECTORY ================= -->
+  <div data-screen-label="HRM — employee directory" style="width: 1280px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">N</span>
+      <span style="font-size: 14px; font-weight: 700;">Northwind HR</span>
+      <span style="display: inline-flex; gap: 2px; margin-left: 16px; font-size: 13px;">
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 600; color: #10513F; background: #EDF4F0;">People</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Leave</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Payroll</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Reports</span>
+      </span>
+      <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">MB</span>
+    </div>
+
+    <div style="padding: 24px 28px 28px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <h1 style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Employees <span style="font-size: 13px; font-weight: 500; color: #6B665E;">· 248</span></h1>
+        <div style="margin-left: auto; display: flex; gap: 10px;">
+          <button style="height: 38px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;">Export</button>
+          <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">+ Add employee</button>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; width: 300px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>
+          <span style="font-size: 13.5px; color: #757067;">Search name, role, email…</span>
+        </div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border: 1px solid #E5E2DC; background: #FFFFFF; border-radius: 8px; font-size: 12.5px; color: #55514A;">Department: All <span style="font-size: 9px; color: #8A857C;">▾</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border: 1px solid #E5E2DC; background: #FFFFFF; border-radius: 8px; font-size: 12.5px; color: #55514A;">Location: All <span style="font-size: 9px; color: #8A857C;">▾</span></span>
+        <span style="font-size: 11.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 5px 12px;">Status: Active ×</span>
+        <span style="margin-left: auto; display: inline-flex; border: 1px solid #E5E2DC; border-radius: 8px; overflow: hidden; font-size: 12px; font-weight: 600;">
+          <span style="padding: 8px 12px; background: #15654E; color: #FFFFFF;">Cards</span>
+          <span style="padding: 8px 12px; background: #FFFFFF; color: #55514A;">Table</span>
+        </span>
+      </div>
+
+      <!-- card grid -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">PO</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Priya Okafor</a><span style="display: block; font-size: 12px; color: #6B665E;">Engineering Manager</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Engineering</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Lagos · Remote</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>priya@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">DK</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Daan Kuiper</a><span style="display: block; font-size: 12px; color: #6B665E;">Product Designer</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #6B4FA0; background: #EDE9F5; border-radius: 99px; padding: 3px 10px;">Design</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Amsterdam</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>daan@northwind.co</span><span style="color: #7A5407; font-weight: 600;">On leave</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">MS</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Marta Silva</a><span style="display: block; font-size: 12px; color: #6B665E;">Payroll Specialist</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Finance</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Lisbon</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>marta@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">JT</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Jonas Thal</a><span style="display: block; font-size: 12px; color: #6B665E;">Backend Engineer</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Engineering</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Berlin</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>jonas@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #F9ECEA; color: #B3382C; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">AH</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Aisha Haddad</a><span style="display: block; font-size: 12px; color: #6B665E;">People Ops Lead</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #B3382C; background: #F9ECEA; border-radius: 99px; padding: 3px 10px;">People</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Dubai</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>aisha@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">LW</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Lena Wirth</a><span style="display: block; font-size: 12px; color: #6B665E;">QA Engineer</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Engineering</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Vienna</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>lena@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">RS</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Ravi Sharma</a><span style="display: block; font-size: 12px; color: #6B665E;">Sales Executive</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 3px 10px;">Sales</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Mumbai</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>ravi@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 18px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 44px; height: 44px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">CB</span>
+            <span><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Chloé Bernard</a><span style="display: block; font-size: 12px; color: #6B665E;">Marketing Lead</span></span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 600; color: #6B4FA0; background: #EDE9F5; border-radius: 99px; padding: 3px 10px;">Marketing</span>
+            <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 3px 10px;">Paris · Hybrid</span>
+          </div>
+          <div style="font-size: 12px; color: #6B665E; border-top: 1px solid #F5F3EF; padding-top: 10px; display: flex; justify-content: space-between;"><span>chloe@northwind.co</span><span style="color: #10513F; font-weight: 600;">Active</span></div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 4px 0; font-size: 12.5px; color: #6B665E;">
+        <span>Showing 1–8 of 248</span>
+        <span style="display: inline-flex; gap: 5px; align-items: center;">
+          <span style="height: 32px; padding: 0 11px; display: inline-flex; align-items: center; color: #8A857C; border: 1px solid #E5E2DC; border-radius: 7px;">← Prev</span>
+          <span style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">1</span>
+          <span style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: #55514A; border: 1px solid #E5E2DC; border-radius: 7px;">2</span>
+          <span style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: #55514A; border: 1px solid #E5E2DC; border-radius: 7px;">3</span>
+          <span style="height: 32px; padding: 0 11px; display: inline-flex; align-items: center; color: #55514A; border: 1px solid #E5E2DC; border-radius: 7px;">Next →</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 2 · EMPLOYEE PROFILE ================= -->
+  <div data-screen-label="HRM — employee profile" style="width: 1280px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">N</span>
+      <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #6B665E;"><a href="#directory">People</a><span style="color: #B0ABA1;">/</span><span style="font-weight: 600; color: #1C1B18;">Priya Okafor</span></span>
+      <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">MB</span>
+    </div>
+
+    <div style="display: flex;">
+      <div style="flex: 1; min-width: 0; padding: 28px 32px;">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 22px;">
+          <span style="width: 56px; height: 56px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;">PO</span>
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em;">Priya Okafor</span><span style="font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Active</span></div>
+            <div style="font-size: 13px; color: #6B665E; margin-top: 2px;">Engineering Manager · Engineering · Lagos (Remote)</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button style="height: 38px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;">Edit profile</button>
+            <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">Request leave</button>
+          </div>
+        </div>
+
+        <div style="border-bottom: 1px solid #E5E2DC; display: flex; gap: 4px; margin-bottom: 22px;">
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 600; color: #10513F; border-bottom: 2px solid #15654E; margin-bottom: -1px;">Overview</span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Documents <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 2px 7px; margin-left: 4px;">6</span></span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Leave</span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Performance</span>
+        </div>
+
+        <!-- personal info -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px;">
+          <h2 style="font-size: 13px; font-weight: 700; margin: 0 0 16px; letter-spacing: 0.02em;">Personal information</h2>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 24px; font-size: 13px;">
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Work email</span><span style="font-weight: 500;">priya@northwind.co</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Phone</span><span style="font-weight: 500;">+234 803 555 0114</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Date of birth</span><span style="font-weight: 500;">14 March 1989</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Location</span><span style="font-weight: 500;">Lagos, Nigeria</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Work mode</span><span style="font-weight: 500;">Remote</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Emergency contact</span><span style="font-weight: 500;">Chidi Okafor · +234 802 555 0987</span></div>
+          </div>
+        </div>
+
+        <!-- employment -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px;">
+          <h2 style="font-size: 13px; font-weight: 700; margin: 0 0 16px; letter-spacing: 0.02em;">Employment</h2>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 24px; font-size: 13px;">
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Employee ID</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">NW-0042</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Start date</span><span style="font-weight: 500;">02 May 2021 · 5 yrs</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Contract</span><span style="font-weight: 500;">Full-time · Permanent</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Department</span><span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Engineering</span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Reports to</span><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 20px; height: 20px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 8.5px; font-weight: 700;">SO</span><a href="#profile" style="font-weight: 500;">Sam Oyelaran, CTO</a></span></div>
+            <div><span style="display: block; font-size: 11.5px; color: #6B665E; margin-bottom: 3px;">Direct reports</span><span style="font-weight: 500;">8 people</span></div>
+          </div>
+        </div>
+
+        <!-- recent activity -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 20px 24px;">
+          <h2 style="font-size: 13px; font-weight: 700; margin: 0 0 16px; letter-spacing: 0.02em;">Recent activity</h2>
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; gap: 14px;">
+              <div style="display: flex; flex-direction: column; align-items: center;"><span style="width: 10px; height: 10px; border-radius: 99px; background: #15654E; margin-top: 4px;"></span><span style="flex: 1; width: 2px; background: #E5E2DC;"></span></div>
+              <div style="padding-bottom: 18px; font-size: 13px;"><span style="font-weight: 600;">Annual leave approved</span> — 12–16 Aug · by Aisha Haddad<span style="display: block; font-size: 11.5px; color: #8A857C; margin-top: 2px;">2 days ago</span></div>
+            </div>
+            <div style="display: flex; gap: 14px;">
+              <div style="display: flex; flex-direction: column; align-items: center;"><span style="width: 10px; height: 10px; border-radius: 99px; background: #B0ABA1; margin-top: 4px;"></span><span style="flex: 1; width: 2px; background: #E5E2DC;"></span></div>
+              <div style="padding-bottom: 18px; font-size: 13px;"><span style="font-weight: 600;">Compensation updated</span> — annual review cycle<span style="display: block; font-size: 11.5px; color: #8A857C; margin-top: 2px;">3 weeks ago</span></div>
+            </div>
+            <div style="display: flex; gap: 14px;">
+              <div style="display: flex; flex-direction: column; align-items: center;"><span style="width: 10px; height: 10px; border-radius: 99px; background: #B0ABA1; margin-top: 4px;"></span></div>
+              <div style="font-size: 13px;"><span style="font-weight: 600;">Promoted to Engineering Manager</span><span style="display: block; font-size: 11.5px; color: #8A857C; margin-top: 2px;">Jan 2026</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right rail -->
+      <div style="width: 300px; flex-shrink: 0; border-left: 1px solid #E5E2DC; background: #FFFFFF; padding: 24px;">
+        <h2 style="font-size: 12px; font-weight: 700; margin: 0 0 12px; color: #6B665E; letter-spacing: 0.04em; text-transform: uppercase;">Leave balance</h2>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+          <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 8px;"><span style="font-weight: 600;">Annual leave</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #55514A;">14 / 25 days</span></div>
+            <div style="height: 6px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><span style="display: block; height: 100%; width: 56%; background: #15654E; border-radius: 99px;"></span></div>
+          </div>
+          <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 8px;"><span style="font-weight: 600;">Sick leave</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #55514A;">2 / 10 days</span></div>
+            <div style="height: 6px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><span style="display: block; height: 100%; width: 20%; background: #C08A1C; border-radius: 99px;"></span></div>
+          </div>
+        </div>
+
+        <h2 style="font-size: 12px; font-weight: 700; margin: 0 0 12px; color: #6B665E; letter-spacing: 0.04em; text-transform: uppercase;">Upcoming time off</h2>
+        <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px; margin-bottom: 24px; font-size: 12.5px;">
+          <span style="font-weight: 600;">12 – 16 Aug 2026</span>
+          <span style="display: block; color: #6B665E; margin-top: 2px;">Annual leave · 5 days</span>
+          <span style="display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Approved</span>
+        </div>
+
+        <h2 style="font-size: 12px; font-weight: 700; margin: 0 0 12px; color: #6B665E; letter-spacing: 0.04em; text-transform: uppercase;">Documents</h2>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;">
+          <a href="#doc" style="display: flex; align-items: center; gap: 8px; color: #1C1B18;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg>Employment contract.pdf</a>
+          <a href="#doc" style="display: flex; align-items: center; gap: 8px; color: #1C1B18;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg>Promotion letter 2026.pdf</a>
+          <a href="#doc" style="display: flex; align-items: center; gap: 8px; color: #1C1B18;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg>NDA — signed.pdf</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 3 · LEAVE REQUESTS ================= -->
+  <div data-screen-label="HRM — leave requests" style="width: 1280px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">N</span>
+      <span style="font-size: 14px; font-weight: 700;">Northwind HR</span>
+      <span style="display: inline-flex; gap: 2px; margin-left: 16px; font-size: 13px;">
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">People</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 600; color: #10513F; background: #EDF4F0;">Leave</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Payroll</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Reports</span>
+      </span>
+      <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">MB</span>
+    </div>
+
+    <div style="padding: 24px 28px 28px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+        <h1 style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Leave requests</h1>
+        <div style="margin-left: auto; display: flex; gap: 10px;">
+          <button style="height: 38px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;">Team calendar</button>
+          <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">+ New request</button>
+        </div>
+      </div>
+
+      <!-- summary strip -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 20px;">
+          <span style="display: block; font-size: 11.5px; font-weight: 600; color: #6B665E; margin-bottom: 4px;">Pending approval</span>
+          <span style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em;">6</span>
+          <span style="font-size: 11.5px; color: #7A5407; font-weight: 600; margin-left: 8px;">2 overdue &gt; 48 h</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 20px;">
+          <span style="display: block; font-size: 11.5px; font-weight: 600; color: #6B665E; margin-bottom: 4px;">On leave today</span>
+          <span style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em;">4</span>
+          <span style="font-size: 11.5px; color: #6B665E; margin-left: 8px;">of 248 employees</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 20px;">
+          <span style="display: block; font-size: 11.5px; font-weight: 600; color: #6B665E; margin-bottom: 4px;">Upcoming this week</span>
+          <span style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em;">9</span>
+          <span style="font-size: 11.5px; color: #6B665E; margin-left: 8px;">3 in Engineering</span>
+        </div>
+      </div>
+
+      <!-- filter tabs -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px; font-size: 12.5px; font-weight: 600;">
+        <span style="padding: 7px 14px; border-radius: 99px; background: #15654E; color: #FFFFFF;">Pending · 6</span>
+        <span style="padding: 7px 14px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">Approved</span>
+        <span style="padding: 7px 14px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">Declined</span>
+        <span style="padding: 7px 14px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">All</span>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr>
+              <th style="padding: 10px 12px 10px 20px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Employee</th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Type</th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Dates</th>
+              <th style="padding: 10px 12px; text-align: right; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Days</th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Balance after</th>
+              <th style="padding: 10px 20px; text-align: right; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 13px 12px 13px 20px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">DK</span><span><a href="#profile" style="font-weight: 600; color: #1C1B18;">Daan Kuiper</a><span style="font-size: 11.5px; color: #6B665E; display: block;">Design</span></span></span></td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF;"><span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Annual</span></td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF; font-weight: 500;">20 – 24 Jul <span style="color: #6B665E; font-weight: 400;">· Mon–Fri</span></td>
+              <td style="padding: 13px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; border-bottom: 1px solid #F5F3EF;">5</td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF; color: #55514A;">11 days left</td>
+              <td style="padding: 13px 20px; text-align: right; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; gap: 8px;"><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; cursor: pointer;">Approve</button><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 7px; cursor: pointer;">Decline</button></span></td>
+            </tr>
+            <tr style="background: #FCF9F2;">
+              <td style="padding: 13px 12px 13px 20px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">RS</span><span><a href="#profile" style="font-weight: 600; color: #1C1B18;">Ravi Sharma</a><span style="font-size: 11.5px; color: #6B665E; display: block;">Sales · <span style="color: #7A5407; font-weight: 600;">waiting 3 days</span></span></span></span></td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF;"><span style="font-size: 11px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 3px 10px;">Sick</span></td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF; font-weight: 500;">10 – 11 Jul <span style="color: #6B665E; font-weight: 400;">· retro</span></td>
+              <td style="padding: 13px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; border-bottom: 1px solid #F5F3EF;">2</td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF; color: #55514A;">6 days left</td>
+              <td style="padding: 13px 20px; text-align: right; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; gap: 8px;"><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; cursor: pointer;">Approve</button><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 7px; cursor: pointer;">Decline</button></span></td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 12px 13px 20px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">JT</span><span><a href="#profile" style="font-weight: 600; color: #1C1B18;">Jonas Thal</a><span style="font-size: 11.5px; color: #6B665E; display: block;">Engineering</span></span></span></td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF;"><span style="font-size: 11px; font-weight: 600; color: #6B4FA0; background: #EDE9F5; border-radius: 99px; padding: 3px 10px;">Parental</span></td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF; font-weight: 500;">01 Sep – 30 Nov</td>
+              <td style="padding: 13px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; border-bottom: 1px solid #F5F3EF;">65</td>
+              <td style="padding: 13px 12px; border-bottom: 1px solid #F5F3EF; color: #55514A;">statutory</td>
+              <td style="padding: 13px 20px; text-align: right; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; gap: 8px;"><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; cursor: pointer;">Approve</button><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 7px; cursor: pointer;">Decline</button></span></td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 12px 13px 20px;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">LW</span><span><a href="#profile" style="font-weight: 600; color: #1C1B18;">Lena Wirth</a><span style="font-size: 11.5px; color: #6B665E; display: block;">Engineering</span></span></span></td>
+              <td style="padding: 13px 12px;"><span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Annual</span></td>
+              <td style="padding: 13px 12px; font-weight: 500;">03 – 07 Aug</td>
+              <td style="padding: 13px 12px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px;">5</td>
+              <td style="padding: 13px 12px; color: #55514A;">15 days left</td>
+              <td style="padding: 13px 20px; text-align: right;"><span style="display: inline-flex; gap: 8px;"><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; cursor: pointer;">Approve</button><button style="height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 7px; cursor: pointer;">Decline</button></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid #E5E2DC; font-size: 12.5px; color: #6B665E;">
+          <span aria-live="polite">Showing 4 of 6 pending requests</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">hx-get="/leave?status=pending&amp;page=2" · hx-target="#requests"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 4 · MOBILE ================= -->
+  <div data-screen-label="HRM — mobile screens" style="display: flex; gap: 40px; align-items: flex-start;">
+
+    <!-- mobile directory -->
+    <div style="width: 390px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 28px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 18px 20px 12px;">
+        <span style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #E5E2DC; border-radius: 10px; background: #FFFFFF;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></span>
+        <span style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">Employees</span>
+        <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">MB</span>
+      </div>
+      <div style="padding: 0 20px 12px;">
+        <div style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 10px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>
+          <span style="font-size: 14px; color: #757067;">Search people…</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 10px; font-size: 12px; font-weight: 600;">
+          <span style="padding: 7px 13px; border-radius: 99px; background: #15654E; color: #FFFFFF;">All</span>
+          <span style="padding: 7px 13px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">Engineering</span>
+          <span style="padding: 7px 13px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">Design</span>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border-top: 1px solid #E5E2DC;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F5F3EF; min-height: 44px;">
+          <span style="width: 40px; height: 40px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">PO</span>
+          <span style="flex: 1;"><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Priya Okafor</a><span style="display: block; font-size: 12px; color: #6B665E;">Engineering Manager</span></span>
+          <span style="color: #B0ABA1;">›</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F5F3EF; min-height: 44px;">
+          <span style="width: 40px; height: 40px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">DK</span>
+          <span style="flex: 1;"><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Daan Kuiper</a><span style="display: block; font-size: 12px; color: #6B665E;">Product Designer · <span style="color: #7A5407; font-weight: 600;">On leave</span></span></span>
+          <span style="color: #B0ABA1;">›</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F5F3EF; min-height: 44px;">
+          <span style="width: 40px; height: 40px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">MS</span>
+          <span style="flex: 1;"><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Marta Silva</a><span style="display: block; font-size: 12px; color: #6B665E;">Payroll Specialist</span></span>
+          <span style="color: #B0ABA1;">›</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F5F3EF; min-height: 44px;">
+          <span style="width: 40px; height: 40px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">JT</span>
+          <span style="flex: 1;"><a href="#profile" style="font-weight: 600; color: #1C1B18; font-size: 14px;">Jonas Thal</a><span style="display: block; font-size: 12px; color: #6B665E;">Backend Engineer</span></span>
+          <span style="color: #B0ABA1;">›</span>
+        </div>
+        <div style="padding: 14px 20px; text-align: center; font-size: 12.5px; color: #8A857C;">Loading more…<span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-top: 2px;">hx-trigger="revealed"</span></div>
+      </div>
+      <div style="display: flex; border-top: 1px solid #E5E2DC; background: #FFFFFF; padding: 10px 8px 22px;">
+        <span style="flex: 1; text-align: center; font-size: 10.5px; font-weight: 700; color: #10513F;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto 3px;"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9.5" cy="7" r="4"></circle><path d="M21 21v-2a4 4 0 0 0-3-3.85"></path></svg>People</span>
+        <span style="flex: 1; text-align: center; font-size: 10.5px; font-weight: 500; color: #6B665E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto 3px;"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M8 2v4M16 2v4M3 9h18"></path></svg>Leave</span>
+        <span style="flex: 1; text-align: center; font-size: 10.5px; font-weight: 500; color: #6B665E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto 3px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Payroll</span>
+        <span style="flex: 1; text-align: center; font-size: 10.5px; font-weight: 500; color: #6B665E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block; margin: 0 auto 3px;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Settings</span>
+      </div>
+    </div>
+
+    <!-- mobile profile -->
+    <div style="width: 390px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 28px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 18px 20px 12px;">
+        <span style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #E5E2DC; border-radius: 10px; background: #FFFFFF;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></span>
+        <span style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">Profile</span>
+        <span style="margin-left: auto; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #E5E2DC; border-radius: 10px; background: #FFFFFF; color: #55514A; letter-spacing: 1px;">⋯</span>
+      </div>
+      <div style="padding: 12px 20px 20px; text-align: center;">
+        <span style="width: 72px; height: 72px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700;">PO</span>
+        <div style="font-size: 19px; font-weight: 700; letter-spacing: -0.02em; margin-top: 10px;">Priya Okafor</div>
+        <div style="font-size: 13px; color: #6B665E; margin-top: 2px;">Engineering Manager · Lagos</div>
+        <span style="display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Active</span>
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+          <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 10px; cursor: pointer;">Edit profile</button>
+          <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 10px; cursor: pointer;">Request leave</button>
+        </div>
+      </div>
+      <div style="display: flex; gap: 4px; padding: 0 20px; border-bottom: 1px solid #E5E2DC; font-size: 13px;">
+        <span style="padding: 10px 12px; font-weight: 600; color: #10513F; border-bottom: 2px solid #15654E; margin-bottom: -1px;">Overview</span>
+        <span style="padding: 10px 12px; font-weight: 500; color: #6B665E;">Documents</span>
+        <span style="padding: 10px 12px; font-weight: 500; color: #6B665E;">Leave</span>
+      </div>
+      <div style="padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 8px;"><span style="font-weight: 600;">Annual leave</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #55514A;">14 / 25 days</span></div>
+          <div style="height: 6px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><span style="display: block; height: 100%; width: 56%; background: #15654E; border-radius: 99px;"></span></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 14px 16px; font-size: 13px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6B665E;">Work email</span><span style="font-weight: 500;">priya@northwind.co</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6B665E;">Phone</span><span style="font-weight: 500;">+234 803 555 0114</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6B665E;">Start date</span><span style="font-weight: 500;">02 May 2021</span></div>
+          <div style="display: flex; justify-content: space-between;"><span style="color: #6B665E;">Reports to</span><a href="#profile" style="font-weight: 500;">Sam Oyelaran</a></div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 14px 16px; font-size: 12.5px;">
+          <span style="font-weight: 600;">Upcoming: 12 – 16 Aug</span>
+          <span style="display: block; color: #6B665E; margin-top: 2px;">Annual leave · 5 days · <span style="color: #10513F; font-weight: 600;">Approved</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile leave approvals -->
+    <div style="width: 390px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 28px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 18px 20px 12px;">
+        <span style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">Leave requests</span>
+        <span style="margin-left: auto; font-size: 11px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 4px 11px;">6 pending</span>
+      </div>
+      <div style="display: flex; gap: 8px; padding: 4px 20px 14px; font-size: 12px; font-weight: 600;">
+        <span style="padding: 7px 13px; border-radius: 99px; background: #15654E; color: #FFFFFF;">Pending</span>
+        <span style="padding: 7px 13px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">Approved</span>
+        <span style="padding: 7px 13px; border-radius: 99px; background: #FFFFFF; border: 1px solid #E5E2DC; color: #55514A;">All</span>
+      </div>
+      <div style="padding: 0 16px 24px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 16px;">
+          <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 10px;">
+            <span style="width: 38px; height: 38px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700;">DK</span>
+            <span style="flex: 1;"><span style="font-weight: 600; font-size: 14px;">Daan Kuiper</span><span style="display: block; font-size: 12px; color: #6B665E;">Design</span></span>
+            <span style="font-size: 11px; font-weight: 600; color: #2A5FA8; background: #EBF1F9; border-radius: 99px; padding: 3px 10px;">Annual</span>
+          </div>
+          <div style="font-size: 13px; margin-bottom: 12px;"><span style="font-weight: 600;">20 – 24 Jul</span> <span style="color: #6B665E;">· 5 days · 11 left after</span></div>
+          <div style="display: flex; gap: 8px;">
+            <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 10px; cursor: pointer;">Approve</button>
+            <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 10px; cursor: pointer;">Decline</button>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #EAD9B8; border-radius: 14px; padding: 16px;">
+          <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 10px;">
+            <span style="width: 38px; height: 38px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700;">RS</span>
+            <span style="flex: 1;"><span style="font-weight: 600; font-size: 14px;">Ravi Sharma</span><span style="display: block; font-size: 12px; color: #7A5407; font-weight: 600;">Waiting 3 days</span></span>
+            <span style="font-size: 11px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 3px 10px;">Sick</span>
+          </div>
+          <div style="font-size: 13px; margin-bottom: 12px;"><span style="font-weight: 600;">10 – 11 Jul</span> <span style="color: #6B665E;">· 2 days · retroactive</span></div>
+          <div style="display: flex; gap: 8px;">
+            <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 10px; cursor: pointer;">Approve</button>
+            <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 10px; cursor: pointer;">Decline</button>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 16px;">
+          <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 10px;">
+            <span style="width: 38px; height: 38px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700;">JT</span>
+            <span style="flex: 1;"><span style="font-weight: 600; font-size: 14px;">Jonas Thal</span><span style="display: block; font-size: 12px; color: #6B665E;">Engineering</span></span>
+            <span style="font-size: 11px; font-weight: 600; color: #6B4FA0; background: #EDE9F5; border-radius: 99px; padding: 3px 10px;">Parental</span>
+          </div>
+          <div style="font-size: 13px; margin-bottom: 12px;"><span style="font-weight: 600;">01 Sep – 30 Nov</span> <span style="color: #6B665E;">· 65 days · statutory</span></div>
+          <div style="display: flex; gap: 8px;">
+            <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 10px; cursor: pointer;">Approve</button>
+            <button style="flex: 1; height: 44px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: #B3382C; background: #FFFFFF; border: 1px solid #E8C7C2; border-radius: 10px; cursor: pointer;">Decline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

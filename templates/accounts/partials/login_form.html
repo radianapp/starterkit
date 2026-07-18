@@ -22,14 +22,14 @@
         {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
 
         <c-rdp.form.input
-            name="email"
-            type="email"
-            label="Email"
-            value="{{ form.email.value|default:'' }}"
-            error="{{ form.email.errors.0|default:'' }}"
+            name="identifier"
+            type="text"
+            label="Email atau Username"
+            value="{{ form.identifier.value|default:'' }}"
+            error="{{ form.identifier.errors.0|default:'' }}"
             required="true"
             autofocus="true"
-            placeholder="nama@contoh.com"
+            placeholder="nama@contoh.com atau username"
         />
 
         <c-rdp.form.input

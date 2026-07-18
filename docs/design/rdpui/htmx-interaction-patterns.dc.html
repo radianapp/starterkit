@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+    @keyframes rdp-spin { to { transform: rotate(360deg); } }
+    @keyframes rdp-shimmer { 0% { background-position: -200px 0; } 100% { background-position: 200px 0; } }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 24 · PATTERNS 1–6 ================= -->
+  <div data-screen-label="24 HTMX patterns 1-6" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI × HTMX · Sheet 24</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · patterns 1–6</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Interaction patterns</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 76ch;">Each pattern is a documented recipe: which components, which hx-attributes, and exactly what the user sees at every step. States read left → right.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+      <!-- P1 modal via hx-get -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">1 · Modal via hx-get</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">modal · skeleton · button</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">hx-get="/edit" hx-target="#modal-body" · dialog.showModal()</div>
+        <div style="display: grid; grid-template-columns: 1fr 14px 1fr 14px 1fr; gap: 6px; align-items: stretch;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">idle</span><button style="height: 26px; font-size: 11px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 6px; cursor: pointer; align-self: flex-start; padding: 0 10px;">Edit</button></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: rgba(28,27,24,0.45); border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #E9E7E2; text-transform: uppercase; letter-spacing: 0.1em;">loading</span><span style="background: #FFFFFF; border-radius: 7px; padding: 8px; display: flex; flex-direction: column; gap: 5px;"><span style="height: 7px; width: 50%; border-radius: 3px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 200px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span><span style="height: 7px; width: 80%; border-radius: 3px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 200px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span></span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: rgba(28,27,24,0.45); border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #E9E7E2; text-transform: uppercase; letter-spacing: 0.1em;">loaded</span><span style="background: #FFFFFF; border-radius: 7px; padding: 8px; display: flex; flex-direction: column; gap: 5px;"><span style="font-size: 10px; font-weight: 700;">Edit customer</span><span style="height: 16px; border: 1px solid #D2CEC6; border-radius: 4px;"></span></span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Shell opens instantly (&lt;50ms) with skeleton; content swaps in. Focus moves into the dialog only after content lands.</div>
+      </div>
+
+      <!-- P2 delete confirm -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">2 · Delete confirmation</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">confirm · button · toast</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">hx-delete + confirm="…" · row removed with swap:200ms</div>
+        <div style="display: grid; grid-template-columns: 1fr 14px 1fr 14px 1fr; gap: 6px; align-items: stretch;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">confirm</span><span style="background: #FFFFFF; border-radius: 7px; padding: 8px; box-shadow: 0 2px 6px rgba(28,27,24,0.08);"><span style="font-size: 10px; font-weight: 700; display: block;">Delete Ana?</span><span style="display: flex; gap: 4px; margin-top: 6px;"><span style="flex: 1; height: 18px; border: 1px solid #D2CEC6; border-radius: 4px; font-size: 8.5px; display: inline-flex; align-items: center; justify-content: center;">Cancel</span><span style="flex: 1; height: 18px; background: #B3382D; border-radius: 4px; color: #FFFFFF; font-size: 8.5px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center;">Delete</span></span></span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">pending</span><span style="background: #FFFFFF; border: 1px solid #EFEDE8; border-radius: 6px; padding: 6px 8px; display: flex; align-items: center; gap: 6px; opacity: 0.5;"><span style="width: 10px; height: 10px; border: 1.5px solid #E5E2DC; border-top-color: #6B665E; border-radius: 99px; animation: rdp-spin 0.7s linear infinite;"></span><span style="font-size: 9.5px;">Ana Lima</span></span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">done</span><span style="background: #1C1B18; border-radius: 6px; padding: 6px 8px; display: flex; align-items: center; gap: 6px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7DC79C" stroke-width="3" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg><span style="font-size: 9.5px; color: #FFFFFF;">Deleted · <span style="text-decoration: underline;">Undo</span></span></span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Row dims while pending — never disappears optimistically. Toast offers Undo for 8s (soft delete server-side).</div>
+      </div>
+
+      <!-- P3 inline edit -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">3 · Inline edit</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">input · button</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">click → hx-get form fragment · Enter/blur → hx-put · Esc cancels</div>
+        <div style="display: grid; grid-template-columns: 1fr 14px 1fr 14px 1fr; gap: 6px; align-items: stretch;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">display</span><span style="font-size: 11px; padding: 4px 6px; border-radius: 5px; background: #FFFFFF; border: 1px dashed #D2CEC6;">Ana Lima <span style="color: #8A857C;">✎</span></span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">editing</span><span style="font-size: 11px; padding: 4px 6px; border-radius: 5px; background: #FFFFFF; border: 1px solid #15654E; box-shadow: 0 0 0 2px rgba(21,101,78,0.15);">Ana Lima de Souza</span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">saved</span><span style="font-size: 11px; padding: 4px 6px; border-radius: 5px; background: #E4F2EA; transition: background 0.2s;">Ana Lima de Souza <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="3" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg></span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Saved value flashes success-soft for 600ms then settles. On 422 the fragment returns in editing state with the error inline.</div>
+      </div>
+
+      <!-- P4 active search -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">4 · Active search</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">input · table · empty</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">hx-trigger="input changed delay:300ms" hx-target="tbody"</div>
+        <div style="display: grid; grid-template-columns: 1fr 14px 1fr 14px 1fr; gap: 6px; align-items: stretch;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">typing</span><span style="height: 22px; display: flex; align-items: center; gap: 4px; padding: 0 8px; font-size: 10px; background: #FFFFFF; border: 1px solid #15654E; border-radius: 6px;">an<span style="width: 1px; height: 11px; background: #1C1B18;"></span></span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">searching</span><span style="height: 22px; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; font-size: 10px; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 6px;">ana<span style="width: 10px; height: 10px; border: 1.5px solid #E5E2DC; border-top-color: #6B665E; border-radius: 99px; animation: rdp-spin 0.7s linear infinite;"></span></span><span style="font-size: 9px; color: #8A857C;">old results stay, dimmed 60%</span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">results</span><span style="display: flex; flex-direction: column; gap: 3px;"><span style="font-size: 9.5px; background: #FFFFFF; border: 1px solid #EFEDE8; border-radius: 5px; padding: 3px 6px;"><strong>Ana</strong> Lima</span><span style="font-size: 9.5px; background: #FFFFFF; border: 1px solid #EFEDE8; border-radius: 5px; padding: 3px 6px;"><strong>Ana</strong>tolia Corp</span></span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">300ms debounce; stale results never blank out. Result count announced via <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;">aria-live="polite"</span>; zero results = empty state with "clear search".</div>
+      </div>
+
+      <!-- P5 filtering -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">5 · Filtering</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">select · badge · table</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">filters form hx-get · hx-push-url="true" — filters live in the URL</div>
+        <div style="display: grid; grid-template-columns: 1fr 14px 1fr; gap: 6px; align-items: stretch;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">applied</span><span style="display: flex; gap: 4px; flex-wrap: wrap;"><span style="font-size: 9px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 8px;">Status: Active ×</span><span style="font-size: 9px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 8px;">Plan: Scale ×</span><span style="font-size: 9px; color: #6B665E; padding: 3px 4px; text-decoration: underline;">Clear all</span></span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">url</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #55514A; background: #FFFFFF; border: 1px solid #EFEDE8; border-radius: 5px; padding: 5px 7px; word-break: break-all;">/customers?status=active&amp;plan=scale</span><span style="font-size: 9px; color: #8A857C;">shareable · back-button works · server renders same view</span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Every filter is a chip with an × affordance; the table body swaps, the chip row re-renders with it (hx-swap-oob).</div>
+      </div>
+
+      <!-- P6 pagination -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">6 · Pagination &amp; infinite scroll</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">pagination · table · spinner</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">pages: hx-get + push-url · infinite: hx-trigger="revealed" on last row</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: stretch;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">paged (default)</span><span style="display: flex; gap: 3px;"><span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 5px;">1</span><span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; border: 1px solid #E5E2DC; border-radius: 5px;">2</span><span style="width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; border: 1px solid #E5E2DC; border-radius: 5px;">3</span></span><span style="font-size: 9px; color: #8A857C;">admin tables, anything with totals</span></div>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">infinite (feeds)</span><span style="display: flex; flex-direction: column; gap: 3px;"><span style="height: 12px; background: #FFFFFF; border: 1px solid #EFEDE8; border-radius: 4px;"></span><span style="height: 12px; background: #FFFFFF; border: 1px solid #EFEDE8; border-radius: 4px;"></span><span style="display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 9px; color: #6B665E; padding: 3px;"><span style="width: 9px; height: 9px; border: 1.5px solid #E5E2DC; border-top-color: #6B665E; border-radius: 99px; animation: rdp-spin 0.7s linear infinite;"></span>Loading more…</span></span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Infinite scroll only for feeds/timelines — never where users need to reach the footer. Sentinel row carries the spinner; keyboard users get a visible "Load more" button too.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 25 · PATTERNS 7–12 ================= -->
+  <div data-screen-label="25 HTMX patterns 7-12" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI × HTMX · Sheet 25</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · patterns 7–12</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 28px;">Feedback &amp; server-driven patterns</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+      <!-- P7 toast -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">7 · Toast after actions</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">toast</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">server sends HX-Trigger: {"rdp:toast": {…}} response header</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="background: #1C1B18; border-radius: 9px; padding: 9px 12px; display: flex; align-items: center; gap: 8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7DC79C" stroke-width="2.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg><span style="font-size: 11.5px; color: #FFFFFF; flex: 1;">Customer saved</span><span style="font-size: 12px; color: #8A857C;">×</span></div>
+          <div style="background: #1C1B18; border-radius: 9px; padding: 9px 12px; display: flex; align-items: center; gap: 8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E8918A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.2"></path></svg><span style="font-size: 11.5px; color: #FFFFFF; flex: 1;">Export failed — <span style="text-decoration: underline;">retry</span></span><span style="font-size: 12px; color: #8A857C;">×</span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">One dark toast style for all severities (icon carries meaning). Bottom-left, max 3 stacked, 5s auto-dismiss (errors persist), hover pauses. <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;">role="status"</span> / errors <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;">role="alert"</span>.</div>
+      </div>
+
+      <!-- P8 indicators -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">8 · Loading indicators</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">spinner · skeleton · progress</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">hx-indicator — every request shows exactly one indicator</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11.5px; color: #55514A;">
+          <div style="display: flex; align-items: center; gap: 10px;"><button style="height: 28px; padding: 0 12px; display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; opacity: 0.75;"><span style="width: 10px; height: 10px; border: 1.5px solid rgba(255,255,255,0.35); border-top-color: #FFFFFF; border-radius: 99px; animation: rdp-spin 0.7s linear infinite;"></span>Saving…</button><span><strong style="color: #1C1B18;">In the trigger</strong> — buttons swap label + spinner, keep width.</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: 0 0 84px; height: 22px; border-radius: 5px; background: linear-gradient(90deg, #F2F0EC 25%, #E9E7E2 50%, #F2F0EC 75%); background-size: 200px 100%; animation: rdp-shimmer 1.6s linear infinite;"></span><span><strong style="color: #1C1B18;">In the target</strong> — skeletons for region loads &gt;300ms.</span></div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="flex: 0 0 84px; height: 3px; border-radius: 99px; background: #F2F0EC; overflow: hidden;"><span style="display: block; width: 55%; height: 100%; background: #15654E;"></span></span><span><strong style="color: #1C1B18;">Global bar</strong> — 3px top bar only for full-page navigations.</span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Indicators appear only after 150ms (no flicker on fast responses) and stay ≥300ms once shown.</div>
+      </div>
+
+      <!-- P9 422 -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">9 · Validation via 422 partial</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">field · alert · button</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">hx-post → 422 → form fragment re-swapped · values preserved</div>
+        <div style="display: grid; grid-template-columns: 1fr 14px 1fr; gap: 6px;">
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 5px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #8A857C; text-transform: uppercase; letter-spacing: 0.1em;">submit</span><span style="height: 18px; border: 1px solid #D2CEC6; border-radius: 4px; background: #FFFFFF; font-size: 9px; display: flex; align-items: center; padding: 0 6px; color: #55514A;">ana@</span><span style="height: 20px; background: #15654E; border-radius: 5px; opacity: 0.75; color: #FFFFFF; font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px;"><span style="width: 8px; height: 8px; border: 1.5px solid rgba(255,255,255,0.35); border-top-color: #FFFFFF; border-radius: 99px; animation: rdp-spin 0.7s linear infinite;"></span>Creating…</span></div>
+          <span style="align-self: center; color: #B0ABA1;">→</span>
+          <div style="background: #FAF9F7; border: 1px solid #EFEDE8; border-radius: 9px; padding: 10px; display: flex; flex-direction: column; gap: 5px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; color: #B3382D; text-transform: uppercase; letter-spacing: 0.1em;">422 re-render</span><span style="height: 18px; border: 1.5px solid #B3382D; border-radius: 4px; background: #FFFFFF; font-size: 9px; display: flex; align-items: center; padding: 0 6px;">ana@</span><span style="font-size: 8.5px; color: #B3382D; font-weight: 500;">⚠ Enter a full email address</span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Full recipe on <a href="Forms Showcase.dc.html">Sheet 16</a> — summary alert, focus to first invalid, help-line slot swap.</div>
+      </div>
+
+      <!-- P10 upload -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">10 · File upload with progress</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">upload · progress · toast</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">hx-encoding="multipart/form-data" · htmx:xhr:progress → progress bar</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #EFEDE8; border-radius: 8px; padding: 7px 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 4px; padding: 2px 5px;">CSV</span><span style="flex: 1; font-size: 11px; font-weight: 500;">customers-q3.csv</span><span style="width: 70px; height: 5px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><span style="display: block; width: 64%; height: 100%; background: #15654E; border-radius: 99px;"></span></span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #6B665E;">64%</span></div>
+          <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #EFEDE8; border-radius: 8px; padding: 7px 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 4px; padding: 2px 5px;">CSV</span><span style="flex: 1; font-size: 11px; font-weight: 500;">orders-q3.csv</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="2.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg></div>
+          <div style="display: flex; align-items: center; gap: 8px; border: 1px solid #E8C5C0; background: #FCF7F6; border-radius: 8px; padding: 7px 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 8.5px; font-weight: 600; color: #B3382D; background: #F7E9E7; border-radius: 4px; padding: 2px 5px;">ZIP</span><span style="flex: 1; font-size: 11px; font-weight: 500;">backup.zip</span><span style="font-size: 10px; color: #B3382D; font-weight: 500;">Too large (32MB) · <span style="text-decoration: underline;">remove</span></span></div>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.55; color: #55514A; margin-top: 10px;">Per-file rows; client-side size/type checks fail fast before upload; server validates again. Cancel is available while in flight.</div>
+      </div>
+
+      <!-- P11 server pushed -->
+      <div style="border: 1px solid #E5E2DC; border-radius: 14px; padding: 20px 22px; grid-column: 1 / -1;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;"><span style="font-size: 15px; font-weight: 700;">11 · Server-pushed notifications</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">badge · toast · timeline</span></div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #15654E; margin-bottom: 12px;">default: hx-trigger="every 30s" polling · upgrade path: SSE extension — same markup, no redesign</div>
+        <div style="display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="position: relative; display: inline-flex;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4E4A44" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span style="position: absolute; top: -4px; right: -6px; min-width: 15px; height: 15px; border-radius: 99px; background: #B3382D; color: #FFFFFF; font-size: 9px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; padding: 0 3px; border: 2px solid #FFFFFF;">3</span></span>
+            <span style="font-size: 11.5px; color: #55514A; max-width: 30ch; line-height: 1.5;">Badge count swaps via <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px;">hx-swap-oob</span> on any response — piggybacks on normal traffic.</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11.5px; line-height: 1.55; color: #55514A;">
+            <div><strong style="color: #1C1B18;">Passive events</strong> (new comment, import finished) → badge increments silently; panel lists them. No toast interruptions.</div>
+            <div><strong style="color: #1C1B18;">Events needing action</strong> (payment failed, approval requested) → toast with an action link, plus the badge.</div>
+            <div><strong style="color: #1C1B18;">Never</strong> — auto-opening panels, sounds, browser notifications without explicit opt-in.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 26 · GUIDELINES ================= -->
+  <div data-screen-label="26 Interaction &amp; motion guidelines" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI × HTMX · Sheet 26</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · interaction + motion guidelines</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 28px;">Interaction &amp; motion guidelines</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <!-- interaction -->
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 14px;">Interaction rules</div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">I1</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Feedback timing.</strong> &lt;100ms: no indicator. 100ms–1s: inline spinner. &gt;1s: skeleton or progress. &gt;10s: move to background + notify on completion.</div></div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">I2</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Server-confirmed by default.</strong> UI changes when the server says so. Optimistic updates only for reversible, private, high-frequency actions (toggling a star) — never for money, deletion, or shared state.</div></div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">I3</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Disabled while pending.</strong> The triggering control disables during flight (<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">hx-disabled-elt="this"</span>); the rest of the page stays interactive. Double-submits are impossible by construction.</div></div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">I4</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Error recovery.</strong> Every failure leaves a retry path in place: the form keeps its values, the toast offers retry, the region shows an error state with a button. Reloading the page is never the recovery mechanism.</div></div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">I5</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">URL is state.</strong> Anything worth bookmarking (filters, page, open record) lives in the URL via <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">hx-push-url</span>. Back always works.</div></div>
+        </div>
+      </div>
+
+      <!-- motion -->
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 14px;">Motion tokens</div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden; margin-bottom: 18px;">
+          <div style="display: grid; grid-template-columns: 1.4fr 0.6fr 1.4fr; font-size: 12px;">
+            <div style="padding: 9px 14px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Token</div>
+            <div style="padding: 9px 14px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Value</div>
+            <div style="padding: 9px 14px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Use</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #15654E;">--rdp-duration-fast</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px;">120ms</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A;">hover, focus ring, chevrons</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #15654E;">--rdp-duration-base</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px;">200ms</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A;">swaps, dropdowns, toasts</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #15654E;">--rdp-duration-slow</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px;">300ms</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A;">modal, drawer, accordion</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #15654E;">--rdp-ease-out</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10px;">cubic-bezier(0.16,1,0.3,1)</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; color: #55514A;">entrances (default)</div>
+            <div style="padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #15654E;">--rdp-ease-in</div><div style="padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px;">cubic-bezier(0.7,0,0.84,0)</div><div style="padding: 8px 14px; color: #55514A;">exits — faster than entrances</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">M1</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Only opacity and transform animate.</strong> Fades, small translates (≤8px), scale 0.98→1. Never width/height/top/left, never color cycling, never layout-shifting motion.</div></div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">M2</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Never animates:</strong> text while reading, tables during sort/filter (instant swap), focus movement, anything on initial page load. Motion explains change; it doesn't decorate.</div></div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">M3</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">prefers-reduced-motion:</strong> all durations drop to 1ms globally — states still change, nothing travels. Spinners become static progress text updated via aria-live.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #F2F0EC; border-radius: 10px; padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.9; color: #4E4A44; margin-top: 28px;">
+      <span style="color: #8A857C;">/* htmx defaults shipped by RDP */</span> hx-swap="innerHTML swap:200ms settle:100ms" · hx-disabled-elt="this" · hx-indicator auto-wired per component · rdp.css styles .htmx-request / .htmx-swapping out of the box
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — HTMX interaction patterns · Sheets 24–26</div>
+</div>
+
+</x-dc>
+</body>
+</html>

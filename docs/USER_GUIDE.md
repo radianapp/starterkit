@@ -8,6 +8,7 @@ RDP UI adalah sistem desain kustom yang dibangun di atas Django Cotton dan varia
 Gunakan komponen Cotton bawaan RDP UI untuk elemen primitif dan umpan balik:
 
 - **Button**: `<c-rdp.button variant="primary" size="md">Simpan</c-rdp.button>`
+  - *Tip: Tambahkan atribut `href` untuk merender button sebagai tautan (`<a>`):* `<c-rdp.button href="/dashboard/">Buka Dashboard</c-rdp.button>`
 - **Badge**: `<c-rdp.badge variant="success" pill="True">Active</c-rdp.badge>`
 - **Alert**: `<c-rdp.alert variant="warning" title="Perhatian">Sistem akan maintenance.</c-rdp.alert>`
 - **Toast**: `<c-rdp.toast title="Sukses">Data berhasil disimpan.</c-rdp.toast>`
@@ -71,6 +72,7 @@ Untuk menyajikan data terstruktur:
     </c-slot>
   </c-rdp.card>
   ```
+  - *Tip: Gunakan argumen `clickable="True"` beserta `href="URL"` untuk merender keseluruhan kartu sebagai tautan `<a>`.*
 - **Stat Card**: `<c-rdp.stat_card label="Pendapatan" value="$1,200" trend="+5%" trend_up="True" />`
 - **Accordion**: `<c-rdp.accordion title="Detail">Konten tersembunyi...</c-rdp.accordion>`
 - **Timeline**:
@@ -154,3 +156,54 @@ Alur untuk programmer atau pengguna yang ingin menggunakan RDP Framework untuk m
   - `rdp update`: Memeriksa pembaruan versi *core* atau komponen. Jika ada komponen UI lokal yang sudah diubah secara signifikan oleh pengguna, CLI akan memberi tahu dan memberikan opsi untuk menimpa, mengabaikan, atau menampilkan file perbedaan (*diff*).
   - `rdp serve`: Pintasan untuk menjalankan server pengembangan sekaligus melakukan hot-reload (mirip `python manage.py runserver`).
   - `rdp make-component <nama>`: Membuat struktur dasar (skeleton) komponen Cotton baru secara instan di dalam `templates/cotton/`.
+
+---
+
+## Sistem Versi & Changelog
+
+### Memahami Versi Framework vs Versi Lokal
+
+RDP Starter Kit memiliki dua variabel versi yang berbeda:
+
+| Variabel | Deskripsi | Di mana diset |
+|---|---|---|
+| `FRAMEWORK_VERSION` | Versi dari *template sumber* di GitHub | `.env` (diisi developer saat clone) |
+| `LOCAL_APP_VERSION` | Versi *aplikasi Anda* sendiri | `.env` (diupdate setiap deploy baru) |
+
+Contoh isi `.env`:
+```ini
+# Versi framework yang Anda pakai dari GitHub
+FRAMEWORK_VERSION=0.3.0
+
+# Versi aplikasi lokal Anda (update setiap rilis baru)
+LOCAL_APP_VERSION=1.2.0
+```
+
+### Melihat Changelog
+
+1. Login ke aplikasi.
+2. Buka sidebar → klik **Changelog**.
+3. Atau akses langsung: `/changelog/`
+
+Di halaman ini, Anda akan melihat:
+- **Version Info Bar** — menampilkan versi framework dan versi lokal secara berdampingan.
+- **Daftar log pembaruan** — setiap entri memuat versi, judul, tipe update, dan deskripsi.
+
+### Menambah Log Pembaruan (Admin)
+
+1. Masuk ke Admin Panel (`/admin/`).
+2. Pilih **Dashboard → System Updates → + Add**.
+3. Isi:
+   - **Version**: versi rilis (contoh: `v1.2.0`).
+   - **Title**: judul singkat pembaruan.
+   - **Description**: penjelasan apa yang berubah.
+   - **Update Type**: pilih antara `Core Update`, `Page Update`, `Bugfix`, atau `New Feature`.
+4. Simpan → entri langsung muncul di halaman Changelog.
+
+### Konvensi Versi
+
+Gunakan format **Semantic Versioning** (`MAJOR.MINOR.PATCH`):
+- `MAJOR` — perubahan besar yang memutus kompatibilitas.
+- `MINOR` — fitur baru yang backward-compatible.
+- `PATCH` — perbaikan bug kecil.
+

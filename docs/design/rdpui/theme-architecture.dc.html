@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 07 · THEME ARCHITECTURE ================= -->
+  <div data-screen-label="07 Theme architecture" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 07</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Theme architecture</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 74ch;">A theme is <strong>only a set of CSS variable overrides</strong> on <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">[data-rdp-theme="…"]</span> — no selectors, no component rules, no extra CSS. If a theme needs anything else, the component tokens are missing one.</p>
+
+    <div style="display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="background: #1C1B18; border-radius: 12px; padding: 18px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.85; color: #D6E7DF;">
+          <div style="color: #8A857C;">/* ocean.css — the ENTIRE theme */</div>
+          <div><span style="color: #D9A441;">[data-rdp-theme="ocean"]</span> {</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-primary</span>: #0E7490;</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-primary-hover</span>: #0A5B72;</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-background</span>: #F2F7F8;</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-surface</span>: #FFFFFF;</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-text</span>: #123641;</div>
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">--rdp-border</span>: #D7E3E6;</div>
+          <div>&nbsp;&nbsp;<span style="color: #8A857C;">/* …≈ 24 tokens total */</span></div>
+          <div>}</div>
+        </div>
+        <div style="background: #F2F0EC; border-radius: 12px; padding: 16px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.85; color: #4E4A44;">
+          <div style="color: #8A857C;">&lt;!-- switching = one attribute --&gt;</div>
+          <div>&lt;html <span style="color: #15654E;">data-rdp-theme="ocean"</span>&gt;</div>
+          <div style="color: #8A857C;">&lt;!-- themes nest per subtree --&gt;</div>
+          <div>&lt;aside <span style="color: #15654E;">data-rdp-theme="dark"</span>&gt;…&lt;/aside&gt;</div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C;">Token inheritance model</div>
+        <div style="display: grid; grid-template-columns: 1fr 24px 1fr 24px 1fr; gap: 8px; align-items: stretch;">
+          <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 13.5px; font-weight: 700;">1 · Primitive tokens</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Raw scales. Theme-agnostic, never used by components directly.</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; line-height: 1.9; color: #4E4A44; background: #FAF9F7; border-radius: 8px; padding: 10px 12px;">--rdp-green-600: #15654E<br>--rdp-neutral-900: #1C1B18<br>--rdp-space-4: 16px</div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; font-size: 18px; color: #B0ABA1;">→</div>
+          <div style="border: 1.5px solid #15654E; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; background: #FBFDFC;">
+            <div style="font-size: 13.5px; font-weight: 700; color: #10513F;">2 · Semantic tokens</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Meaning, not color. <strong style="color: #10513F;">This is the layer themes override.</strong></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; line-height: 1.9; color: #4E4A44; background: #EDF4F0; border-radius: 8px; padding: 10px 12px;">--rdp-primary:<br>&nbsp;&nbsp;var(--rdp-green-600)<br>--rdp-text · --rdp-surface</div>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; font-size: 18px; color: #B0ABA1;">→</div>
+          <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 13.5px; font-weight: 700;">3 · Component tokens</div>
+            <div style="font-size: 11.5px; line-height: 1.55; color: #6B665E;">Per-component knobs, defaulting to semantics. Escape hatch, rarely themed.</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; line-height: 1.9; color: #4E4A44; background: #FAF9F7; border-radius: 8px; padding: 10px 12px;">--rdp-button-bg:<br>&nbsp;&nbsp;var(--rdp-primary)<br>--rdp-card-radius</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="display: flex; gap: 10px; align-items: baseline; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">R1</span><span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">A theme file contains variables only — a linter rejects any other rule.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">R2</span><span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Override semantics, not components. Component tokens are for surgical exceptions.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">R3</span><span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Dark mode is not special — it is just a theme. No media-query forks in components.</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 14px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E;">R4</span><span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Every theme must keep WCAG AA on all semantic text/surface pairs to ship as built-in.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 08 · THEME GALLERY ================= -->
+  <div data-screen-label="08 Theme gallery" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Foundations · Sheet 08</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · 11 built-in themes</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Theme gallery</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 20px; max-width: 74ch;">One composition — card, form, buttons — identical markup in every theme. Click any theme to load it into the live preview.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+      <sc-for list="{{ themes }}" as="t" hint-placeholder-count="11">
+        <button style="{{ t.chipStyle }}" onClick="{{ t.onSelect }}">{{ t.name }}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 330px; gap: 20px; align-items: stretch; margin-bottom: 36px;">
+      <div style="{{ heroStyle }}">
+        <div style="max-width: 520px; margin: 0 auto; font-family: var(--rdp-font, 'Instrument Sans', sans-serif);">
+          <div style="background: var(--rdp-surface, #FFFFFF); border: 1px solid var(--rdp-border, #E5E2DC); border-radius: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.05); overflow: hidden;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 24px 0;">
+              <div style="font-size: 17px; font-weight: 700; letter-spacing: -0.01em; color: var(--rdp-text, #1C1B18);">Invite a teammate</div>
+              <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: var(--rdp-primary, #15654E); background: var(--rdp-primary-soft, #EDF4F0); border-radius: 99px; padding: 4px 10px;">Admin</span>
+            </div>
+            <div style="padding: 6px 24px 0; font-size: 13px; line-height: 1.55; color: var(--rdp-text-muted, #6B665E);">They'll get an email with a link to join your workspace.</div>
+            <div style="display: flex; flex-direction: column; gap: 16px; padding: 20px 24px;">
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 13px; font-weight: 600; color: var(--rdp-text, #1C1B18);">Email address</label>
+                <input placeholder="ana@acme.dev" style="height: 40px; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--rdp-text, #1C1B18); background: var(--rdp-background, #FAF9F7); border: 1px solid var(--rdp-border, #E5E2DC); border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 13px; font-weight: 600; color: var(--rdp-text, #1C1B18);">Role</label>
+                <div style="height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 14px; color: var(--rdp-text, #1C1B18); background: var(--rdp-background, #FAF9F7); border: 1px solid var(--rdp-border, #E5E2DC); border-radius: 8px;"><span>Member</span><span style="color: var(--rdp-text-muted, #6B665E); font-size: 11px;">▾</span></div>
+                <div style="font-size: 12px; line-height: 1.5; color: var(--rdp-text-muted, #6B665E);">Members can view and edit, but not manage billing.</div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid var(--rdp-border, #E5E2DC);">
+              <button style="height: 38px; padding: 0 16px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: var(--rdp-text, #1C1B18); background: transparent; border: 1px solid var(--rdp-border, #E5E2DC); border-radius: 8px; cursor: pointer;">Cancel</button>
+              <button style="height: 38px; padding: 0 18px; font-size: 13.5px; font-weight: 600; font-family: inherit; color: var(--rdp-on-primary, #FFFFFF); background: var(--rdp-primary, #15654E); border: none; border-radius: 8px; cursor: pointer;" style-hover="background: var(--rdp-primary-hover, #10513F)">Send invite</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #1C1B18; border-radius: 14px; padding: 20px 22px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.9; color: #D6E7DF; overflow: hidden;">
+        <div style="color: #8A857C;">/* live theme — variables only */</div>
+        <div><span style="color: #D9A441;">[data-rdp-theme="{{ currentId }}"]</span> {</div>
+        <sc-for list="{{ varList }}" as="v" hint-placeholder-count="10">
+          <div>&nbsp;&nbsp;<span style="color: #7DB3A0;">{{ v.k }}</span>: {{ v.v }};</div>
+        </sc-for>
+        <div>}</div>
+      </div>
+    </div>
+
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">All 11 themes · same markup</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+      <sc-for list="{{ themes }}" as="t" hint-placeholder-count="11">
+        <div style="{{ t.cardStyle }}" onClick="{{ t.onSelect }}">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 0; font-family: var(--rdp-font, 'Instrument Sans', sans-serif);">
+            <span style="font-size: 12.5px; font-weight: 700; color: var(--rdp-text);">{{ t.name }}</span>
+            <span style="display: inline-flex; gap: 4px;"><span style="width: 10px; height: 10px; border-radius: 99px; background: var(--rdp-primary);"></span><span style="width: 10px; height: 10px; border-radius: 99px; background: var(--rdp-text);"></span><span style="width: 10px; height: 10px; border-radius: 99px; background: var(--rdp-border);"></span></span>
+          </div>
+          <div style="margin: 10px 14px 14px; background: var(--rdp-surface); border: 1px solid var(--rdp-border); border-radius: 9px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-family: var(--rdp-font, 'Instrument Sans', sans-serif);">
+            <div style="display: flex; align-items: center; justify-content: space-between;"><span style="font-size: 11.5px; font-weight: 600; color: var(--rdp-text);">Invite a teammate</span><span style="width: 26px; height: 12px; border-radius: 99px; background: var(--rdp-primary-soft);"></span></div>
+            <div style="height: 24px; border-radius: 6px; background: var(--rdp-background); border: 1px solid var(--rdp-border); display: flex; align-items: center; padding: 0 8px; font-size: 10px; color: var(--rdp-text-muted);">ana@acme.dev</div>
+            <div style="display: flex; justify-content: flex-end; gap: 6px;">
+              <span style="height: 22px; padding: 0 9px; display: inline-flex; align-items: center; font-size: 10px; font-weight: 600; color: var(--rdp-text); border: 1px solid var(--rdp-border); border-radius: 6px;">Cancel</span>
+              <span style="height: 22px; padding: 0 9px; display: inline-flex; align-items: center; font-size: 10px; font-weight: 600; color: var(--rdp-on-primary); background: var(--rdp-primary); border-radius: 6px;">Send</span>
+            </div>
+          </div>
+          <div style="padding: 0 14px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: var(--rdp-text-muted);">{{ t.note }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <p style="font-size: 12px; line-height: 1.6; color: #8A857C; margin: 20px 0 0;">Nord, Dracula and GitHub follow their canonical palettes; all others are original RDP palettes. Every built-in passes the R4 contrast gate.</p>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Theme architecture · Sheets 07–08</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { themeId: 'default' };
+
+  themes() {
+    return [
+      { id: 'default', name: 'Default', note: 'warm paper · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#FAF9F7', surface: '#FFFFFF', sunken: '#F2F0EC', text: '#1C1B18', muted: '#6B665E', border: '#E5E2DC', primary: '#15654E', primaryHover: '#10513F', onPrimary: '#FFFFFF', soft: '#EDF4F0' } },
+      { id: 'light', name: 'Light', note: 'neutral cool · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#FAFAFB', surface: '#FFFFFF', sunken: '#F1F1F3', text: '#1A1A1E', muted: '#66666E', border: '#E4E4E9', primary: '#2A5FA8', primaryHover: '#224D89', onPrimary: '#FFFFFF', soft: '#EBF1F9' } },
+      { id: 'dark', name: 'Dark', note: 'warm ink · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#171614', surface: '#1F1E1B', sunken: '#131210', text: '#F2F0EC', muted: '#B0ABA1', border: '#33302C', primary: '#5FA98C', primaryHover: '#78BCA2', onPrimary: '#082A21', soft: '#12352A' } },
+      { id: 'corporate', name: 'Corporate', note: 'slate + navy · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#F5F7FA', surface: '#FFFFFF', sunken: '#EDF0F5', text: '#17233A', muted: '#5B6779', border: '#DCE2EB', primary: '#24427C', primaryHover: '#1B3462', onPrimary: '#FFFFFF', soft: '#E9EEF7' } },
+      { id: 'ocean', name: 'Ocean', note: 'sea glass · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#F2F7F8', surface: '#FFFFFF', sunken: '#E9F1F3', text: '#123641', muted: '#557079', border: '#D7E3E6', primary: '#0E7490', primaryHover: '#0A5B72', onPrimary: '#FFFFFF', soft: '#E3F1F5' } },
+      { id: 'forest', name: 'Forest', note: 'moss + linen · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#F4F6F0', surface: '#FFFFFF', sunken: '#EBEFE3', text: '#1F2A1D', muted: '#5F6D58', border: '#DCE2D2', primary: '#2F6B3C', primaryHover: '#25552F', onPrimary: '#FFFFFF', soft: '#E7F0E4' } },
+      { id: 'midnight', name: 'Midnight', note: 'deep indigo · RDP original', font: "'Instrument Sans', sans-serif",
+        v: { background: '#0E1220', surface: '#161B2E', sunken: '#0A0D18', text: '#E6E9F5', muted: '#98A1C0', border: '#262E4A', primary: '#8FA8EC', primaryHover: '#A9BCF2', onPrimary: '#0E1220', soft: '#1B2340' } },
+      { id: 'terminal', name: 'Terminal', note: 'phosphor green · RDP original', font: "'IBM Plex Mono', monospace",
+        v: { background: '#0A0F0A', surface: '#101810', sunken: '#060B06', text: '#B9E6B4', muted: '#6FA671', border: '#1E2F1E', primary: '#4ADE80', primaryHover: '#74E8A0', onPrimary: '#04220F', soft: '#123A22' } },
+      { id: 'nord', name: 'Nord', note: 'canonical nord palette', font: "'Instrument Sans', sans-serif",
+        v: { background: '#2E3440', surface: '#3B4252', sunken: '#272C37', text: '#ECEFF4', muted: '#AEB8CC', border: '#4C566A', primary: '#88C0D0', primaryHover: '#A3D2DF', onPrimary: '#2E3440', soft: '#3F4C5A' } },
+      { id: 'dracula', name: 'Dracula', note: 'canonical dracula palette', font: "'Instrument Sans', sans-serif",
+        v: { background: '#282A36', surface: '#313442', sunken: '#21222C', text: '#F8F8F2', muted: '#A9AFC6', border: '#44475A', primary: '#BD93F9', primaryHover: '#CFB0FB', onPrimary: '#282A36', soft: '#3A3450' } },
+      { id: 'github', name: 'GitHub', note: 'canonical github light', font: "'Instrument Sans', sans-serif",
+        v: { background: '#F6F8FA', surface: '#FFFFFF', sunken: '#EAEEF2', text: '#1F2328', muted: '#59636E', border: '#D1D9E0', primary: '#1F883D', primaryHover: '#1A7F37', onPrimary: '#FFFFFF', soft: '#DAFBE1' } }
+    ];
+  }
+
+  cssVars(t) {
+    return {
+      '--rdp-background': t.v.background, '--rdp-surface': t.v.surface, '--rdp-surface-sunken': t.v.sunken,
+      '--rdp-text': t.v.text, '--rdp-text-muted': t.v.muted, '--rdp-border': t.v.border,
+      '--rdp-primary': t.v.primary, '--rdp-primary-hover': t.v.primaryHover,
+      '--rdp-on-primary': t.v.onPrimary, '--rdp-primary-soft': t.v.soft, '--rdp-font': t.font
+    };
+  }
+
+  renderVals() {
+    const all = this.themes();
+    const cur = all.find(t => t.id === this.state.themeId) || all[0];
+    const themes = all.map(t => {
+      const sel = t.id === this.state.themeId;
+      return {
+        name: t.name, note: t.note,
+        onSelect: () => this.setState({ themeId: t.id }),
+        chipStyle: {
+          height: '32px', padding: '0 14px', fontSize: '12.5px', fontWeight: 600,
+          fontFamily: "'Instrument Sans', sans-serif", cursor: 'pointer', borderRadius: '99px',
+          border: sel ? '1.5px solid #15654E' : '1px solid #D2CEC6',
+          background: sel ? '#EDF4F0' : '#FFFFFF', color: sel ? '#10513F' : '#4E4A44'
+        },
+        cardStyle: Object.assign({}, this.cssVars(t), {
+          background: t.v.background, border: '1px solid #DEDBD4', borderRadius: '12px',
+          cursor: 'pointer', overflow: 'hidden',
+          boxShadow: sel ? '0 0 0 2px #15654E' : '0 1px 2px rgba(28,27,24,0.05)'
+        })
+      };
+    });
+    const keyNames = {
+      background: '--rdp-background', surface: '--rdp-surface', sunken: '--rdp-surface-sunken',
+      text: '--rdp-text', muted: '--rdp-text-muted', border: '--rdp-border', primary: '--rdp-primary',
+      primaryHover: '--rdp-primary-hover', onPrimary: '--rdp-on-primary', soft: '--rdp-primary-soft'
+    };
+    return {
+      themes,
+      currentId: cur.id,
+      varList: Object.keys(keyNames).map(k => ({ k: keyNames[k], v: cur.v[k] })),
+      heroStyle: Object.assign({}, this.cssVars(cur), {
+        background: cur.v.background, border: '1px solid #DEDBD4', borderRadius: '14px',
+        padding: '36px 28px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'background 0.25s ease'
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

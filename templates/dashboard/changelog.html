@@ -1,0 +1,159 @@
+{# Template Changelog / Deploy Log - menampilkan daftar System Updates #}
+{% load static %}
+{% load cotton %}
+
+<c-layout.app title="Changelog" navbar_brand="Changelog">
+
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    </c-slot>
+
+    <c-slot name="sidebar">
+        <a href="/" class="rdp-sidebar__brand">
+            <span class="rdp-sidebar__brand-icon">⬡</span>
+            <span class="rdp-sidebar__brand-text">{{ APP_BRAND_SHORT }}</span>
+        </a>
+
+        <nav class="rdp-sidebar__nav" aria-label="Main navigation">
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Menu Utama</div>
+                <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">📊</span>
+                    <span class="rdp-sidebar__link-text">Dashboard</span>
+                </a>
+                <a href="{% url 'dashboard:changelog' %}" class="rdp-sidebar__link active" aria-current="page">
+                    <span class="rdp-sidebar__link-icon">📋</span>
+                    <span class="rdp-sidebar__link-text">Changelog</span>
+                </a>
+            </div>
+
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Pengaturan</div>
+                <a href="/admin/" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">⚙️</span>
+                    <span class="rdp-sidebar__link-text">Admin Panel</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="rdp-sidebar__footer" x-data="{ open: false }" @click.away="open = false">
+            <button type="button" class="rdp-sidebar__link rdp-sidebar__user-btn"
+                    @click="open = !open" :aria-expanded="open" aria-haspopup="true">
+                <div class="rdp-avatar rdp-avatar--sm rdp-sidebar__footer-avatar">
+                    <span class="rdp-avatar__initials">{{ user.get_full_name|default:user.email|slice:":2"|upper }}</span>
+                </div>
+                <span class="rdp-sidebar__link-text">{{ user.get_full_name|default:user.email }}</span>
+                <span class="rdp-sidebar__user-chevron" :class="{ 'is-open': open }">▲</span>
+            </button>
+            <div x-show="open" class="rdp-user-menu" role="menu">
+                <a href="{% url 'accounts:profile' %}" class="rdp-user-menu__item" role="menuitem">
+                    <span class="rdp-user-menu__icon">👤</span> Profil
+                </a>
+                <div class="rdp-user-menu__divider" role="separator"></div>
+                <form method="post" action="{% url 'accounts:logout' %}" class="rdp-user-menu__form">
+                    {% csrf_token %}
+                    <button type="submit" class="rdp-user-menu__item rdp-user-menu__item--danger" role="menuitem">
+                        <span class="rdp-user-menu__icon">🚪</span> Keluar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </c-slot>
+
+    {# ========== Main content ========== #}
+
+    <nav aria-label="Breadcrumb" class="rdp-dashboard-breadcrumb">
+        <ul class="rdp-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+            <li>Changelog</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-dashboard-content">
+        <div class="rdp-page-header">
+            <h2 class="rdp-page-header__title">Changelog &amp; Deploy Log</h2>
+            <div class="rdp-page-header__actions">
+                {% if user.is_staff %}
+                <c-rdp.button variant="primary" onclick="window.location.href='/admin/dashboard/systemupdate/add/'">
+                    + Tambah Entry
+                </c-rdp.button>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Version Info Bar #}
+        {% if DEBUG %}
+        <div class="version-info-bar" role="status" aria-label="Informasi Versi">
+            <div class="version-info-bar__item">
+                <span class="version-info-bar__label">🔧 Framework (GitHub):</span>
+                <span class="version-info-bar__value">v{{ FRAMEWORK_VERSION }}</span>
+            </div>
+            <div class="version-info-bar__sep"></div>
+            <div class="version-info-bar__item">
+                <span class="version-info-bar__label">🏠 Versi Lokal:</span>
+                <span class="version-info-bar__value">v{{ LOCAL_APP_VERSION }}</span>
+            </div>
+            <div class="version-info-bar__sep"></div>
+            <div class="version-info-bar__item">
+                <span class="version-info-bar__label">📦 Total Update:</span>
+                <span class="version-info-bar__value">{{ updates.paginator.count }} entri</span>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Changelog Entries #}
+        <c-rdp.card>
+            <c-slot name="header">
+                <div class="changelog-header-flex">
+                    <h3 class="changelog-header-title">Riwayat Pembaruan</h3>
+                    <span class="changelog-header-subtitle">
+                        Diurutkan dari terbaru
+                    </span>
+                </div>
+            </c-slot>
+
+            {% if updates %}
+                <div>
+                    {% for update in updates %}
+                    <div class="changelog-entry">
+                        <div class="changelog-entry__timeline">
+                            <div class="changelog-entry__dot"></div>
+                            <div class="changelog-entry__date">
+                                {{ update.release_date|date:"d M Y" }}<br>
+                                <span class="changelog-entry__time">{{ update.release_date|date:"H:i" }}</span>
+                            </div>
+                        </div>
+                        <div class="changelog-entry__body">
+                            <div class="changelog-entry__title">
+                                <span class="changelog-version-pill">{{ update.version }}</span>
+                                {{ update.title }}
+                                <span class="changelog-badge changelog-badge--{{ update.update_type }}">
+                                    {% if update.update_type == 'feature' %}✨{% elif update.update_type == 'core' %}⚙️{% elif update.update_type == 'page' %}🎨{% elif update.update_type == 'bugfix' %}🐛{% endif %}
+                                    {{ update.get_update_type_display }}
+                                </span>
+                            </div>
+                            <p class="changelog-entry__desc">{{ update.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {# Pagination #}
+                {% if updates.has_other_pages %}
+                <div class="changelog-pagination-wrap">
+                    <c-rdp.pagination page_obj="{{ updates }}" />
+                </div>
+                {% endif %}
+
+            {% else %}
+                <c-rdp.empty_state
+                    icon="📋"
+                    title="Belum Ada Entri Changelog"
+                    description="Tambahkan entri pertama melalui Admin Panel untuk mencatat pembaruan sistem." />
+            {% endif %}
+        </c-rdp.card>
+    </div>
+
+</c-layout.app>

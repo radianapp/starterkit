@@ -13,4 +13,6 @@ app_name = "dashboard"
 
 urlpatterns = [
     path("", views.dashboard_index, name="index"),
+    path("api/stats/", views.dashboard_stats_htmx, name="stats"),
+    path("changelog/", views.SystemUpdateListView.as_view(), name="changelog"),
 ]

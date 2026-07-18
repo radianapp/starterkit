@@ -6,7 +6,7 @@
             <th>Aktivitas</th>
             <th>Pengguna</th>
             <th>Status</th>
-            <th style="text-align: right;">Nilai</th>
+            <th class="rdp-text-right">Nilai</th>
         </tr>
     </thead>
     <tbody>
@@ -16,7 +16,7 @@
                 <td>
                     <strong>{{ activity.title }}</strong>
                     {% if activity.description %}
-                        <br><small style="color: var(--pico-muted-color);">{{ activity.description }}</small>
+                        <br><small class="rdp-text-muted">{{ activity.description }}</small>
                     {% endif %}
                 </td>
                 <td>{{ activity.user.get_full_name|default:activity.user.email }}</td>
@@ -29,7 +29,7 @@
                         <c-rdp.badge variant="danger">Gagal</c-rdp.badge>
                     {% endif %}
                 </td>
-                <td style="text-align: right; font-family: monospace; font-weight: 600;">
+                <td class="rdp-text-right rdp-font-mono-bold">
                     {% if activity.amount > 0 %}
                         Rp {{ activity.amount|floatformat:2 }}
                     {% else %}
@@ -39,7 +39,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="5" style="text-align: center; padding: 24px;">
+                <td colspan="5" class="rdp-text-center rdp-p-24">
                     <c-rdp.empty_state icon="📭" title="Belum ada aktivitas" />
                 </td>
             </tr>
@@ -48,7 +48,7 @@
 </c-rdp.table>
 
 {% if page_obj.has_other_pages %}
-    <div style="margin-top: 16px;">
+    <div class="rdp-mt-16">
         <c-rdp.pagination page_obj="{{ page_obj }}" url_pattern="/dashboard/?page=" />
     </div>
 {% endif %}

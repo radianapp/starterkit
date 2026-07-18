@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #FAF9F7; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; -webkit-font-smoothing: antialiased; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; }
+  </style>
+</helmet>
+
+<div data-screen-label="RDP UI official landing" style="min-height: 100vh;">
+
+  <!-- ============ NAV ============ -->
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(250,249,247,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid #E5E2DC;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 28px;">
+      <a href="#top" style="display: flex; align-items: center; gap: 10px; color: #1C1B18;">
+        <span style="width: 28px; height: 28px; border-radius: 8px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">R</span>
+        <span style="font-size: 15px; font-weight: 700; letter-spacing: 0.02em;">RDP UI</span>
+      </a>
+      <nav style="display: flex; gap: 22px; margin-left: auto; align-items: center;">
+        <a href="#get-started" style="font-size: 13.5px; font-weight: 500; color: #55514A;" style-hover="color: #15654E;">Get started</a>
+        <a href="#docs" style="font-size: 13.5px; font-weight: 500; color: #55514A;" style-hover="color: #15654E;">Docs</a>
+        <a href="#examples" style="font-size: 13.5px; font-weight: 500; color: #55514A;" style-hover="color: #15654E;">Examples</a>
+        <a href="https://rdpui.radian.web.id" style="font-size: 13px; font-weight: 600; color: #FFFFFF; background: #1C1B18; border-radius: 8px; padding: 8px 16px;" style-hover="background: #33312C; color: #FFFFFF;">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" style="background: #E9E7E2; border-bottom: 1px solid #DEDBD4;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 96px 32px 88px; text-align: center;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 99px; padding: 6px 14px; margin-bottom: 28px;">
+        <span style="width: 7px; height: 7px; border-radius: 99px; background: #15654E;"></span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #55514A; letter-spacing: 0.05em;">v0.x · DESIGN SPEC COMPLETE</span>
+      </div>
+      <h1 style="font-size: clamp(40px, 6vw, 64px); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; margin: 0 0 20px;">Modern UI Framework<br>for Django</h1>
+      <p style="font-size: 18px; line-height: 1.6; color: #55514A; max-width: 56ch; margin: 0 auto 36px;">A complete ecosystem — design system, CSS framework, Django Cotton components, and HTMX patterns. HTML first, server first, zero build step. Beautiful Django apps without a frontend team.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="#get-started" style="font-size: 15px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 10px; padding: 14px 28px; box-shadow: 0 1px 2px rgba(28,27,24,0.1);" style-hover="background: #10513F; color: #FFFFFF;">Get Started</a>
+        <a href="#docs" style="font-size: 15px; font-weight: 600; color: #1C1B18; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 10px; padding: 14px 28px;" style-hover="border-color: #B0ABA1; color: #1C1B18;">Browse the Docs</a>
+      </div>
+      <div style="display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-top: 44px; font-size: 13px; color: #6B665E;">
+        <span style="display: flex; align-items: center; gap: 7px;"><span style="color: #15654E; font-weight: 700;">✓</span> No React, no build step</span>
+        <span style="display: flex; align-items: center; gap: 7px;"><span style="color: #15654E; font-weight: 700;">✓</span> 11 themes, CSS variables only</span>
+        <span style="display: flex; align-items: center; gap: 7px;"><span style="color: #15654E; font-weight: 700;">✓</span> WCAG AA accessible</span>
+        <span style="display: flex; align-items: center; gap: 7px;"><span style="color: #15654E; font-weight: 700;">✓</span> HTMX native</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW TO USE ============ -->
+  <section id="get-started" style="border-bottom: 1px solid #E5E2DC;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 88px 32px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; letter-spacing: 0.08em;">GET STARTED</span>
+        <span style="flex: 1; height: 1px; background: #E5E2DC;"></span>
+      </div>
+      <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 10px;">Up and running in three steps</h2>
+      <p style="font-size: 15.5px; line-height: 1.6; color: #55514A; max-width: 60ch; margin: 0 0 44px;">RDP UI is plain CSS plus Django Cotton components. If you can write a Django template, you already know how to use it.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+
+        <!-- step 1 -->
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 26px; height: 26px; border-radius: 99px; background: #EDF4F0; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700;">1</span>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Install</h3>
+          </div>
+          <p style="font-size: 13.5px; line-height: 1.6; color: #55514A; margin: 0;">One pip package brings the CSS, the component library, and the icon set.</p>
+          <div style="background: #1C1B18; border-radius: 10px; padding: 16px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; line-height: 1.8; color: #D8D4CC; overflow-x: auto;">
+            <div><span style="color: #8A857C;">$</span> pip install rdp-ui</div>
+            <div style="color: #8A857C;"># settings.py</div>
+            <div>INSTALLED_APPS = [</div>
+            <div>&nbsp;&nbsp;<span style="color: #9FCBBC;">"rdp_ui"</span>, <span style="color: #9FCBBC;">"django_cotton"</span>,</div>
+            <div>]</div>
+          </div>
+        </div>
+
+        <!-- step 2 -->
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 26px; height: 26px; border-radius: 99px; background: #EDF4F0; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700;">2</span>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Load the theme</h3>
+          </div>
+          <p style="font-size: 13.5px; line-height: 1.6; color: #55514A; margin: 0;">One stylesheet, one attribute. Swap the theme by changing a single token set.</p>
+          <div style="background: #1C1B18; border-radius: 10px; padding: 16px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; line-height: 1.8; color: #D8D4CC; overflow-x: auto;">
+            <div>&lt;<span style="color: #9FCBBC;">link</span> rel=<span style="color: #C8B48A;">"stylesheet"</span></div>
+            <div>&nbsp;&nbsp;href=<span style="color: #C8B48A;">"{% static 'rdp/rdp.css' %}"</span>&gt;</div>
+            <div>&lt;<span style="color: #9FCBBC;">body</span> data-rdp-theme=<span style="color: #C8B48A;">"default"</span>&gt;</div>
+          </div>
+        </div>
+
+        <!-- step 3 -->
+        <div style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 26px; height: 26px; border-radius: 99px; background: #EDF4F0; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700;">3</span>
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Use components</h3>
+          </div>
+          <p style="font-size: 13.5px; line-height: 1.6; color: #55514A; margin: 0;">Every component is a Cotton tag with attributes as props and named slots.</p>
+          <div style="background: #1C1B18; border-radius: 10px; padding: 16px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; line-height: 1.8; color: #D8D4CC; overflow-x: auto;">
+            <div>&lt;<span style="color: #9FCBBC;">c-rdp.card</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #9FCBBC;">c-slot</span> name=<span style="color: #C8B48A;">"header"</span>&gt;Team&lt;/<span style="color: #9FCBBC;">c-slot</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #9FCBBC;">c-rdp.button</span> variant=<span style="color: #C8B48A;">"primary"</span>&gt;</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;Save&lt;/<span style="color: #9FCBBC;">c-rdp.button</span>&gt;</div>
+            <div>&lt;/<span style="color: #9FCBBC;">c-rdp.card</span>&gt;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- htmx note -->
+      <div style="margin-top: 24px; background: #EDF4F0; border: 1px solid #CDE0D8; border-radius: 14px; padding: 20px 26px; display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #10513F; letter-spacing: 0.06em;">INTERACTIVITY</span>
+        <p style="font-size: 13.5px; line-height: 1.6; color: #33413B; margin: 0; flex: 1; min-width: 300px;">Need dynamic behavior? Add <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">hx-get</span> / <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">hx-post</span> to any component — loading states, validation re-renders, and toasts are built in. See the <a href="htmx-interaction-patterns.dc.html" style="font-weight: 600;">HTMX Interaction Patterns</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOCS ============ -->
+  <section id="docs" style="background: #E9E7E2; border-bottom: 1px solid #DEDBD4;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 88px 32px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; letter-spacing: 0.08em;">DOCS</span>
+        <span style="flex: 1; height: 1px; background: #DEDBD4;"></span>
+      </div>
+      <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 10px;">Design specification</h2>
+      <p style="font-size: 15.5px; line-height: 1.6; color: #55514A; max-width: 60ch; margin: 0 0 40px;">The complete product design — from tokens to component contracts to accessibility rules.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+        <sc-for list="{{ docs }}" as="d" hint-placeholder-count="6">
+          <a href="{{ d.href }}" style="background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 12px; padding: 20px 22px; display: flex; flex-direction: column; gap: 6px; color: #1C1B18; transition: border-color 120ms ease, box-shadow 120ms ease;" style-hover="border-color: #15654E; box-shadow: 0 4px 14px rgba(28,27,24,0.07); color: #1C1B18; text-decoration: none;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C; letter-spacing: 0.08em;">{{ d.num }}</span>
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: -0.01em;">{{ d.title }}</span>
+            <span style="font-size: 12.5px; line-height: 1.5; color: #6B665E;">{{ d.desc }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXAMPLES ============ -->
+  <section id="examples" style="border-bottom: 1px solid #E5E2DC;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 88px 32px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; letter-spacing: 0.08em;">EXAMPLES</span>
+        <span style="flex: 1; height: 1px; background: #E5E2DC;"></span>
+      </div>
+      <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 10px;">Example applications</h2>
+      <p style="font-size: 15.5px; line-height: 1.6; color: #55514A; max-width: 60ch; margin: 0 0 40px;">Five complete apps built entirely from RDP UI components — desktop and mobile.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+        <sc-for list="{{ examples }}" as="e" hint-placeholder-count="5">
+          <a href="{{ e.href }}" style="background: #FAF9F7; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 8px; color: #1C1B18; transition: border-color 120ms ease, box-shadow 120ms ease;" style-hover="border-color: #15654E; box-shadow: 0 6px 18px rgba(28,27,24,0.08); color: #1C1B18; text-decoration: none;">
+            <span style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; margin-bottom: 6px;">{{ e.glyph }}</span>
+            <span style="font-size: 17px; font-weight: 700; letter-spacing: -0.01em;">{{ e.title }}</span>
+            <span style="font-size: 13px; line-height: 1.6; color: #6B665E;">{{ e.desc }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background: #1C1B18;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 56px 32px 40px; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 26px; height: 26px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">R</span>
+            <span style="font-size: 14px; font-weight: 700; color: #FAF9F7;">RDP UI</span>
+          </div>
+          <p style="font-size: 12.5px; color: #8A857C; margin: 0; max-width: 36ch; line-height: 1.6;">Modern UI Framework for Django. HTML first · Server first · Theme first.</p>
+        </div>
+        <div style="display: flex; gap: 56px; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C; letter-spacing: 0.1em;">PROJECT</span>
+            <a href="#get-started" style="font-size: 13px; color: #D8D4CC;" style-hover="color: #9FCBBC;">Get started</a>
+            <a href="roadmap-and-vision.dc.html" style="font-size: 13px; color: #D8D4CC;" style-hover="color: #9FCBBC;">Roadmap</a>
+            <a href="product-foundation.dc.html" style="font-size: 13px; color: #D8D4CC;" style-hover="color: #9FCBBC;">Product foundation</a>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C; letter-spacing: 0.1em;">RESOURCES</span>
+            <a href="#docs" style="font-size: 13px; color: #D8D4CC;" style-hover="color: #9FCBBC;">Docs</a>
+            <a href="#examples" style="font-size: 13px; color: #D8D4CC;" style-hover="color: #9FCBBC;">Examples</a>
+            <a href="accessibility-guidelines.dc.html" style="font-size: 13px; color: #D8D4CC;" style-hover="color: #9FCBBC;">Accessibility</a>
+          </div>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #33312C; padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <span style="font-size: 11.5px; color: #8A857C;">© 2026 RDP UI · rdpui.radian.web.id</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">MIT LICENSE · MADE FOR DJANGO</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      docs: [
+        { num: "01", title: "Product Foundation", desc: "Positioning, personas, and the 7 design principles.", href: "product-foundation.dc.html" },
+        { num: "02", title: "Foundations", desc: "Color, typography, spacing, radius, elevation, icons.", href: "foundations.dc.html" },
+        { num: "03", title: "Theme Architecture", desc: "Token inheritance model and the 11-theme gallery.", href: "theme-architecture.dc.html" },
+        { num: "04", title: "Layout System", desc: "Container, 12-col grid, app shell, responsive strategy.", href: "layout-system.dc.html" },
+        { num: "05", title: "Component Showcase", desc: "Buttons, badges, alerts, toasts, tooltips, progress.", href: "component-showcase.dc.html" },
+        { num: "06", title: "Forms", desc: "Inputs, selects, switches, validation, HTMX 422 states.", href: "forms-showcase.dc.html" },
+        { num: "07", title: "Overlays & Navigation", desc: "Modal, drawer, dropdown, tabs, sidebar, pagination.", href: "overlays-and-navigation.dc.html" },
+        { num: "08", title: "Data Display", desc: "Tables, cards, stats, avatars, timelines, empty states.", href: "data-display.dc.html" },
+        { num: "09", title: "Component Architecture", desc: "Anatomy, slots, and the Django Cotton mapping.", href: "component-architecture.dc.html" },
+        { num: "10", title: "HTMX Interaction Patterns", desc: "12 server-first patterns with motion guidelines.", href: "htmx-interaction-patterns.dc.html" },
+        { num: "11", title: "Accessibility Guidelines", desc: "WCAG AA commitments, keyboard maps, ARIA, focus rules.", href: "accessibility-guidelines.dc.html" },
+        { num: "12", title: "Docs Site — Landing", desc: "The documentation website landing page design.", href: "docs-site-landing.dc.html" },
+        { num: "13", title: "Docs Site — Structure", desc: "Information architecture and the component-page template.", href: "docs-site-structure.dc.html" },
+        { num: "14", title: "Roadmap & Vision", desc: "v0.x → v2.0 phases and the future of RDP UI.", href: "roadmap-and-vision.dc.html" }
+      ],
+      examples: [
+        { glyph: "▦", title: "Admin Dashboard", desc: "KPI stat cards, revenue chart, activity table, quick actions — the flagship screenshot.", href: "admin-dashboard-example.dc.html" },
+        { glyph: "◈", title: "Authentication", desc: "Login, register, forgot password, and profile settings.", href: "auth-example.dc.html" },
+        { glyph: "◎", title: "CRM", desc: "Contact list with filters, detail with timeline, pipeline kanban.", href: "crm-example.dc.html" },
+        { glyph: "▤", title: "Invoicing", desc: "Invoice list, print-friendly detail, create form with line items.", href: "invoice-example.dc.html" },
+        { glyph: "◐", title: "HRM", desc: "Employee directory, employee profile, leave requests.", href: "hrm-example.dc.html" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

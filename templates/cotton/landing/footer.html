@@ -1,0 +1,41 @@
+<footer class="lp-footer">
+    <div class="lp-footer__inner">
+        <div class="lp-footer__top">
+            <div class="lp-footer__brand">
+                <div class="lp-footer__brand-row">
+                    <span class="lp-footer__logo">R</span>
+                    <span class="lp-footer__brand-name">RDP UI</span>
+                </div>
+                <p class="lp-footer__brand-desc">Modern UI Framework for Django. HTML first · Server first · Theme first.</p>
+            </div>
+            <div class="lp-footer__links">
+                <div class="lp-footer__col">
+                    <span class="lp-footer__col-label">PROJECT</span>
+                    <a href="/#get-started" class="lp-footer__col-link">Get started</a>
+                    <a href="/rdp-ui/tokens/" class="lp-footer__col-link">Theme gallery</a>
+                    <a href="/about/" class="lp-footer__col-link">About</a>
+                </div>
+                <div class="lp-footer__col">
+                    <span class="lp-footer__col-label">RESOURCES</span>
+                    <a href="/#docs" class="lp-footer__col-link">Docs</a>
+                    <a href="/#examples" class="lp-footer__col-link">Examples</a>
+                    <a href="/examples/htmx/" class="lp-footer__col-link">HTMX Patterns</a>
+                </div>
+                <div class="lp-footer__col">
+                    <span class="lp-footer__col-label">ACCOUNT</span>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'dashboard:index' %}" class="lp-footer__col-link">Dashboard</a>
+                        <a href="{% url 'accounts:logout' %}" class="lp-footer__col-link">Keluar</a>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="lp-footer__col-link">Masuk</a>
+                        <a href="{% url 'accounts:register' %}" class="lp-footer__col-link">Daftar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="lp-footer__bottom">
+            <span class="lp-footer__copy">© {{ COPYRIGHT_YEAR }} {{ COMPANY_NAME }} · rdpui.radian.web.id</span>
+            <span class="lp-footer__license">MIT LICENSE · MADE FOR DJANGO</span>
+        </div>
+    </div>
+</footer>

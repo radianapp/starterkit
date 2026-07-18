@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+    input::placeholder { color: #757067; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= 1 · CONTACT LIST ================= -->
+  <div data-screen-label="CRM — contact list" style="width: 1280px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">A</span>
+      <span style="font-size: 14px; font-weight: 700;">Acme CRM</span>
+      <span style="display: inline-flex; gap: 2px; margin-left: 16px; font-size: 13px;">
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 600; color: #10513F; background: #EDF4F0;">Contacts</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Pipeline</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Companies</span>
+      </span>
+      <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">AL</span>
+    </div>
+
+    <div style="padding: 24px 28px 28px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <h1 style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">Contacts <span style="font-size: 13px; font-weight: 500; color: #6B665E;">· 1,847</span></h1>
+        <div style="margin-left: auto; display: flex; gap: 10px;">
+          <button style="height: 38px; padding: 0 14px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;">Import CSV</button>
+          <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">+ New contact</button>
+        </div>
+      </div>
+
+      <!-- search + filters -->
+      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; width: 300px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B665E" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>
+          <span style="font-size: 13.5px; color: #1C1B18;">lim<span style="display: inline-block; width: 1.5px; height: 14px; background: #1C1B18; vertical-align: -2px;"></span></span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #8A857C;">300ms</span>
+        </div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border: 1px solid #E5E2DC; background: #FFFFFF; border-radius: 8px; font-size: 12.5px; color: #55514A;">Owner: Anyone <span style="font-size: 9px; color: #8A857C;">▾</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border: 1px solid #E5E2DC; background: #FFFFFF; border-radius: 8px; font-size: 12.5px; color: #55514A;">Last activity <span style="font-size: 9px; color: #8A857C;">▾</span></span>
+        <span style="font-size: 11.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 5px 12px;">Stage: Qualified ×</span>
+        <span style="font-size: 11.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 5px 12px;">Tag: Enterprise ×</span>
+        <a href="#list" style="font-size: 12px;">Clear all</a>
+        <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">/contacts?q=lim&amp;stage=qualified&amp;tag=enterprise</span>
+      </div>
+
+      <!-- table -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr>
+              <th style="width: 44px; padding: 10px 0 10px 16px; background: #FAF9F7; border-bottom: 1px solid #E5E2DC; text-align: left;"><span style="width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #B0ABA1; display: inline-block; box-sizing: border-box;"></span></th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #10513F; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;"><span style="display: inline-flex; align-items: center; gap: 5px;">Name <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10513F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 14 5-5 5 5"></path></svg></span></th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Company</th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Stage</th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Owner</th>
+              <th style="padding: 10px 12px; text-align: left; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Last activity</th>
+              <th style="padding: 10px 20px; text-align: right; font-size: 11.5px; font-weight: 600; color: #6B665E; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;">Deal value</th>
+              <th style="width: 52px; background: #FAF9F7; border-bottom: 1px solid #E5E2DC;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #FCFBF9;">
+              <td style="padding: 12px 0 12px 16px; border-bottom: 1px solid #F5F3EF;"><span style="width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #B0ABA1; display: inline-block; box-sizing: border-box;"></span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">AL</span><span><a href="#detail" style="font-weight: 600; color: #1C1B18;">Ana <mark style="background: #F8EFDC; color: inherit; border-radius: 3px; padding: 0 2px;">Lim</mark>a</a><span style="font-size: 11.5px; color: #6B665E; display: block;">ana@lumen.co</span></span></span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF; font-weight: 500;">Lumen Co</td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF;"><span style="font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Qualified</span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 22px; height: 22px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700;">KM</span><span style="color: #55514A;">Kofi</span></span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF; color: #55514A;">2 h ago · call</td>
+              <td style="padding: 12px 20px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; border-bottom: 1px solid #F5F3EF;">$24,000</td>
+              <td style="padding: 12px; text-align: center; border-bottom: 1px solid #F5F3EF;"><span style="color: #6B665E; letter-spacing: 2px; cursor: pointer;">⋯</span></td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0 12px 16px; border-bottom: 1px solid #F5F3EF;"><span style="width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #B0ABA1; display: inline-block; box-sizing: border-box;"></span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">RL</span><span><a href="#detail" style="font-weight: 600; color: #1C1B18;">Rosa <mark style="background: #F8EFDC; color: inherit; border-radius: 3px; padding: 0 2px;">Lim</mark>ón</a><span style="font-size: 11.5px; color: #6B665E; display: block;">rosa@solaris.mx</span></span></span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF; font-weight: 500;">Solaris Retail</td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF;"><span style="font-size: 11px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 3px 10px;">Negotiation</span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF;"><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 22px; height: 22px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700;">AL</span><span style="color: #55514A;">Ana</span></span></td>
+              <td style="padding: 12px; border-bottom: 1px solid #F5F3EF; color: #55514A;">Yesterday · email</td>
+              <td style="padding: 12px 20px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; border-bottom: 1px solid #F5F3EF;">$56,500</td>
+              <td style="padding: 12px; text-align: center; border-bottom: 1px solid #F5F3EF;"><span style="color: #6B665E; letter-spacing: 2px; cursor: pointer;">⋯</span></td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0 12px 16px;"><span style="width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #B0ABA1; display: inline-block; box-sizing: border-box;"></span></td>
+              <td style="padding: 12px;"><span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 28px; height: 28px; border-radius: 99px; background: #F8EFDC; color: #7A5407; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">TL</span><span><a href="#detail" style="font-weight: 600; color: #1C1B18;">Timo <mark style="background: #F8EFDC; color: inherit; border-radius: 3px; padding: 0 2px;">Lim</mark>berg</a><span style="font-size: 11.5px; color: #6B665E; display: block;">timo@fjord.no</span></span></span></td>
+              <td style="padding: 12px; font-weight: 500;">Fjord AS</td>
+              <td style="padding: 12px;"><span style="font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Qualified</span></td>
+              <td style="padding: 12px;"><span style="display: inline-flex; align-items: center; gap: 7px;"><span style="width: 22px; height: 22px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700;">KM</span><span style="color: #55514A;">Kofi</span></span></td>
+              <td style="padding: 12px; color: #55514A;">3 d ago · meeting</td>
+              <td style="padding: 12px 20px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px;">$18,200</td>
+              <td style="padding: 12px; text-align: center;"><span style="color: #6B665E; letter-spacing: 2px; cursor: pointer;">⋯</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid #E5E2DC; font-size: 12.5px; color: #6B665E;">
+          <span aria-live="polite">3 results for "lim" · filtered from 1,847</span>
+          <span style="display: inline-flex; gap: 5px; align-items: center;">
+            <span style="height: 32px; padding: 0 11px; display: inline-flex; align-items: center; color: #8A857C; border: 1px solid #E5E2DC; border-radius: 7px;">← Prev</span>
+            <span style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 7px;">1</span>
+            <span style="height: 32px; padding: 0 11px; display: inline-flex; align-items: center; color: #8A857C; border: 1px solid #E5E2DC; border-radius: 7px;">Next →</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 2 · CONTACT DETAIL ================= -->
+  <div data-screen-label="CRM — contact detail" style="width: 1280px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">A</span>
+      <span style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #6B665E;"><a href="#list">Contacts</a><span style="color: #B0ABA1;">/</span><span style="font-weight: 600; color: #1C1B18;">Ana Lima</span></span>
+      <span style="margin-left: auto; width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">AL</span>
+    </div>
+
+    <div style="display: flex;">
+      <!-- main column -->
+      <div style="flex: 1; min-width: 0; padding: 28px 32px;">
+        <!-- header -->
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 22px;">
+          <span style="width: 56px; height: 56px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;">AL</span>
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 10px;"><span style="font-size: 21px; font-weight: 700; letter-spacing: -0.02em;">Ana Lima</span><span style="font-size: 11px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Qualified</span></div>
+            <div style="font-size: 13px; color: #6B665E; margin-top: 2px;">VP Operations · Lumen Co · São Paulo</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button style="height: 38px; padding: 0 14px; display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m3 8 9 6 9-6"></path></svg>Email</button>
+            <button style="height: 38px; padding: 0 14px; display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; font-family: inherit; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px; cursor: pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path></svg>Call</button>
+            <button style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 8px; cursor: pointer;">Log activity</button>
+          </div>
+        </div>
+
+        <!-- tabs -->
+        <div style="border-bottom: 1px solid #E5E2DC; display: flex; gap: 4px; margin-bottom: 20px;">
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 600; color: #10513F; border-bottom: 2px solid #15654E; margin-bottom: -1px;">Activity</span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Notes <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 2px 7px; margin-left: 4px;">4</span></span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Deals <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 2px 7px; margin-left: 4px;">2</span></span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Emails</span>
+          <span style="padding: 10px 14px; font-size: 13.5px; font-weight: 500; color: #6B665E;">Files</span>
+        </div>
+
+        <!-- composer -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 14px 16px; margin-bottom: 22px;">
+          <div style="font-size: 13.5px; color: #757067; padding-bottom: 22px;">Log a call, meeting or note… <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #B0ABA1;">supports markdown</span></div>
+          <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #EFEDE8; padding-top: 10px;">
+            <span style="font-size: 11.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 3px 10px;">Call</span>
+            <span style="font-size: 11.5px; font-weight: 500; color: #55514A; border: 1px solid #E5E2DC; border-radius: 99px; padding: 3px 10px;">Meeting</span>
+            <span style="font-size: 11.5px; font-weight: 500; color: #55514A; border: 1px solid #E5E2DC; border-radius: 99px; padding: 3px 10px;">Note</span>
+            <button style="margin-left: auto; height: 32px; padding: 0 14px; font-size: 12.5px; font-weight: 600; font-family: inherit; color: #FFFFFF; background: #15654E; border: none; border-radius: 7px; cursor: pointer;">Save</button>
+          </div>
+        </div>
+
+        <!-- timeline -->
+        <div style="display: flex; flex-direction: column;">
+          <div style="display: flex; gap: 14px;">
+            <div style="display: flex; flex-direction: column; align-items: center;"><span style="width: 30px; height: 30px; border-radius: 99px; background: #E4F2EA; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path></svg></span><span style="width: 1.5px; flex: 1; background: #E5E2DC; min-height: 20px;"></span></div>
+            <div style="padding-bottom: 18px; flex: 1;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 12px; padding: 14px 16px;">
+                <div style="display: flex; align-items: baseline; gap: 8px;"><span style="font-size: 13.5px; font-weight: 700;">Discovery call — 24 min</span><span style="font-size: 11.5px; color: #8A857C; margin-left: auto;">Today · 09:40 · Kofi</span></div>
+                <div style="font-size: 13px; line-height: 1.6; color: #55514A; margin-top: 6px;">Interested in the POS module for 34 stores. Budget confirmed for Q3. Wants a security review doc before the pilot — sending Thursday.</div>
+                <div style="display: flex; gap: 6px; margin-top: 10px;"><span style="font-size: 10.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 2px 9px;">pilot</span><span style="font-size: 10.5px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 2px 9px;">security-review</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 14px;">
+            <div style="display: flex; flex-direction: column; align-items: center;"><span style="width: 30px; height: 30px; border-radius: 99px; background: #EBF1F9; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2A5FA8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="m3 8 9 6 9-6"></path></svg></span><span style="width: 1.5px; flex: 1; background: #E5E2DC; min-height: 20px;"></span></div>
+            <div style="padding-bottom: 18px; flex: 1;">
+              <div style="display: flex; align-items: baseline; gap: 8px; padding: 2px 2px;"><span style="font-size: 13px;"><strong>Email opened</strong> — "Lumen Co × Acme: pilot proposal" · 3 opens</span><span style="font-size: 11.5px; color: #8A857C; margin-left: auto;">Yesterday · 16:22</span></div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 14px;">
+            <span style="width: 30px; height: 30px; border-radius: 99px; background: #F2F0EC; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 30px;"><span style="width: 7px; height: 7px; border-radius: 99px; background: #8A857C;"></span></span>
+            <div style="display: flex; align-items: baseline; gap: 8px; flex: 1; padding: 2px 2px;"><span style="font-size: 13px; color: #55514A;"><strong style="color: #1C1B18;">Stage changed</strong> — Lead → Qualified by Ana</span><span style="font-size: 11.5px; color: #8A857C; margin-left: auto;">Mon · 11:05</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right rail -->
+      <aside style="width: 300px; flex: 0 0 300px; border-left: 1px solid #E5E2DC; background: #FFFFFF; padding: 24px 22px; display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 10px;">Details</div>
+          <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span style="color: #6B665E;">Email</span><a href="#detail" style="font-weight: 500;">ana@lumen.co</a></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span style="color: #6B665E;">Phone</span><span style="font-weight: 500; font-family: 'IBM Plex Mono', monospace; font-size: 12px;">+55 11 9184-2210</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span style="color: #6B665E;">Owner</span><span style="display: inline-flex; align-items: center; gap: 6px; font-weight: 500;"><span style="width: 18px; height: 18px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">KM</span>Kofi Mensah</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span style="color: #6B665E;">Source</span><span style="font-weight: 500;">Webinar · May 2026</span></div>
+            <div style="display: flex; justify-content: space-between; gap: 10px;"><span style="color: #6B665E;">Tags</span><span style="display: inline-flex; gap: 4px;"><span style="font-size: 10.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 2px 8px;">Enterprise</span><span style="font-size: 10.5px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 2px 8px;">LATAM</span></span></div>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #EFEDE8; padding-top: 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 10px;">Open deals</div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 11px 13px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 13px; font-weight: 600;">POS pilot — 34 stores</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$24,000</span></div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;"><span style="font-size: 10.5px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 2px 8px;">Qualified</span><span style="font-size: 11px; color: #8A857C;">closes Aug 15</span></div>
+            </div>
+            <div style="border: 1px solid #E5E2DC; border-radius: 10px; padding: 11px 13px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 13px; font-weight: 600;">HQ analytics add-on</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$8,400</span></div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;"><span style="font-size: 10.5px; font-weight: 600; color: #55514A; background: #F2F0EC; border-radius: 99px; padding: 2px 8px;">Lead</span><span style="font-size: 11px; color: #8A857C;">closes Sep 30</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #EFEDE8; padding-top: 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 10px;">Next step</div>
+          <div style="display: flex; align-items: center; gap: 10px; border: 1px dashed #B0ABA1; border-radius: 10px; padding: 11px 13px;">
+            <span style="width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid #B0ABA1; flex: 0 0 16px; box-sizing: border-box;"></span>
+            <span style="font-size: 12.5px; line-height: 1.5;">Send security review doc <span style="color: #B3382D; font-weight: 600;">· due Thu</span></span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ================= 3 · PIPELINE KANBAN ================= -->
+  <div data-screen-label="CRM — pipeline kanban" style="width: 1280px; background: #FAF9F7; border: 1px solid #DEDBD4; border-radius: 16px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); overflow: hidden;">
+    <div style="height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+      <span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">A</span>
+      <span style="font-size: 14px; font-weight: 700;">Acme CRM</span>
+      <span style="display: inline-flex; gap: 2px; margin-left: 16px; font-size: 13px;">
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Contacts</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 600; color: #10513F; background: #EDF4F0;">Pipeline</span>
+        <span style="padding: 7px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Companies</span>
+      </span>
+      <span style="margin-left: auto; font-size: 12.5px; color: #55514A;">Q3 pipeline · <strong style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">$214,400</strong></span>
+      <span style="width: 32px; height: 32px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">AL</span>
+    </div>
+
+    <div style="padding: 22px 24px 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: start;">
+      <!-- LEAD -->
+      <div style="background: #F2F0EC; border-radius: 12px; padding: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 4px 8px 10px;">
+          <span style="width: 8px; height: 8px; border-radius: 99px; background: #8A857C;"></span>
+          <span style="font-size: 12.5px; font-weight: 700;">Lead</span>
+          <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #FFFFFF; border-radius: 99px; padding: 1px 8px;">4</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6B665E;">$31.6k</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">HQ analytics add-on</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Lumen Co</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$8,400</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">KM</span></div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">Warehouse scanning</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Umoja IO</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$12,000</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">AL</span></div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">Loyalty program MVP</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Baita Coffee</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$11,200</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">SR</span></div>
+          </div>
+          <button style="height: 34px; font-size: 12px; font-weight: 600; font-family: inherit; color: #55514A; background: transparent; border: 1px dashed #B0ABA1; border-radius: 8px; cursor: pointer;">+ Add deal</button>
+        </div>
+      </div>
+
+      <!-- QUALIFIED -->
+      <div style="background: #F2F0EC; border-radius: 12px; padding: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 4px 8px 10px;">
+          <span style="width: 8px; height: 8px; border-radius: 99px; background: #15654E;"></span>
+          <span style="font-size: 12.5px; font-weight: 700;">Qualified</span>
+          <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #FFFFFF; border-radius: 99px; padding: 1px 8px;">3</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6B665E;">$68.2k</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- dragging card -->
+          <div style="background: #FFFFFF; border: 1px solid #15654E; border-radius: 10px; padding: 12px 13px; box-shadow: 0 8px 20px rgba(28,27,24,0.16); cursor: grabbing; transform: rotate(-1.5deg);">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">POS pilot — 34 stores</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Lumen Co · Ana Lima</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$24,000</span><span style="display: inline-flex; align-items: center; gap: 5px;"><span style="font-size: 10px; color: #B3382D; font-weight: 600;">due Thu</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">KM</span></span></div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">Fleet tracking rollout</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Fjord AS</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$18,200</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">KM</span></div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">Regional expansion pkg</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Andes Foods</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$26,000</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">AL</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEGOTIATION (drop target) -->
+      <div style="background: #EDF4F0; border: 1.5px dashed #15654E; border-radius: 12px; padding: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 4px 8px 10px;">
+          <span style="width: 8px; height: 8px; border-radius: 99px; background: #7A5407;"></span>
+          <span style="font-size: 12.5px; font-weight: 700;">Negotiation</span>
+          <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #FFFFFF; border-radius: 99px; padding: 1px 8px;">2</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6B665E;">$78.1k</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="height: 74px; border: 1.5px dashed #15654E; border-radius: 10px; background: rgba(21,101,78,0.06); display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; color: #10513F;">Drop to move — updates via hx-post</div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">Chain-wide POS refresh</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Solaris Retail · Rosa Limón</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$56,500</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">AL</span></div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04); cursor: grab;">
+            <div style="font-size: 13px; font-weight: 600; line-height: 1.4;">Support plan upgrade</div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Umoja IO</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$21,600</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #EDE9F5; color: #6B4FA0; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">SR</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WON -->
+      <div style="background: #F2F0EC; border-radius: 12px; padding: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 4px 8px 10px;">
+          <span style="width: 8px; height: 8px; border-radius: 99px; background: #1E7A46;"></span>
+          <span style="font-size: 12.5px; font-weight: 700;">Won</span>
+          <span style="font-size: 11px; font-weight: 600; color: #55514A; background: #FFFFFF; border-radius: 99px; padding: 1px 8px;">2</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6B665E;">$36.5k</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #FFFFFF; border: 1px solid #D6E7DF; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04);">
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 13px; font-weight: 600; line-height: 1.4;">Starter → Scale upgrade</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="2.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg></div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Baita Coffee · closed Jul 8</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$14,900</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">AL</span></div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #D6E7DF; border-radius: 10px; padding: 12px 13px; box-shadow: 0 1px 2px rgba(28,27,24,0.04);">
+            <div style="display: flex; align-items: center; gap: 6px;"><span style="font-size: 13px; font-weight: 600; line-height: 1.4;">Invoicing module</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1E7A46" stroke-width="2.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg></div>
+            <div style="font-size: 11.5px; color: #6B665E; margin-top: 3px;">Fjord AS · closed Jul 2</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600;">$21,600</span><span style="width: 20px; height: 20px; border-radius: 99px; background: #EBF1F9; color: #2A5FA8; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">KM</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding: 0 24px 22px; display: flex; gap: 20px; font-size: 12px; line-height: 1.6; color: #55514A;">
+      <span><strong style="color: #1C1B18;">Kanban a11y:</strong> cards are focusable; move via menu (⋯ → "Move to…") — drag is an enhancement, never the only path.</span>
+      <span><strong style="color: #1C1B18;">Server-driven:</strong> a drop fires <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;">hx-post /deals/42/stage</span>; column totals re-render out-of-band.</span>
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Example app · CRM (contact list · contact detail · pipeline kanban)</div>
+</div>
+
+</x-dc>
+</body>
+</html>

@@ -862,3 +862,16 @@ button.sidebar-link, button.rdp-sidebar__link {
 }
 
 
+
+/* NProgress Customization */
+#nprogress .bar {
+  background: var(--pico-primary) !important;
+  height: 3px !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--pico-primary), 0 0 5px var(--pico-primary) !important;
+}
+#nprogress .spinner-icon {
+  border-top-color: var(--pico-primary) !important;
+  border-left-color: var(--pico-primary) !important;
+}

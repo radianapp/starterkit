@@ -1,31 +1,56 @@
 {# US-031: About Page #}
-<c-layout.public title="Tentang Kami" navbar_brand="{{ APP_BRAND_SHORT }}">
-    <div class="container" style="max-width: 800px; padding: 40px 0;">
-        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 8px;">Tentang {{ APP_BRAND_SHORT }}</h1>
-        <p style="font-size: 1.2rem; color: var(--pico-muted-color); margin-bottom: 40px;">Misi kami adalah mempermudah pengembangan aplikasi web modern berkualitas tinggi bagi seluruh tim developer.</p>
+{% load static %}
+<c-layout.base title="Tentang Kami — RDP UI" navbar_brand="{{ APP_BRAND_SHORT }}">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/rdp-ui-landing.css' %}">
+        <style>
+            .rdp-keep { break-inside: avoid; orphans: 3; widows: 3; }
+        </style>
+    </c-slot>
 
-        <article style="margin-bottom: 40px;">
-            <header>
-                <h3 style="margin: 0; font-size: 1.25rem;">Visi & Misi</h3>
-            </header>
-            <p><strong>Visi:</strong> Menjadi platform fondasi standar industri untuk semua proyek web berbasis Django.</p>
-            <p><strong>Misi:</strong> Menghilangkan boilerplates yang tidak perlu dan menghemat ribuan jam kerja developer dengan menyediakan solusi siap pakai yang terintegrasi, andal, dan aman.</p>
-        </article>
+    <div class="lp-root">
+        <c-landing.nav />
 
-        <div class="grid" style="margin-bottom: 40px;">
-            <div>
-                <h5>Inovasi Terbuka</h5>
-                <p>Kami percaya pada kekuatan open-source dan kolaborasi global untuk mendorong standar teknologi ke tingkat berikutnya.</p>
+        <main class="lp-container" style="padding-top: 4rem; padding-bottom: 6rem; max-width: 840px;">
+            <!-- ============ MASTHEAD ============ -->
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 2px solid var(--lp-ink);">
+                <div style="font-family: var(--lp-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lp-green);">RDP UI · About</div>
             </div>
-            <div>
-                <h5>Kualitas Utama</h5>
-                <p>Setiap baris kode di starter kit ini diuji dengan ketat demi menjamin stabilitas dan keamanan di level produksi.</p>
-            </div>
-        </div>
 
-        <section style="text-align: center; margin-top: 60px;">
-            <h3 style="margin-bottom: 24px;">Siap Memulai Proyek Anda?</h3>
-            <a href="{% url 'accounts:register' %}" class="rdp-btn rdp-btn--primary" style="padding: 12px 32px; font-weight: 600;">Daftar Sekarang</a>
-        </section>
+            <h1 style="font-size: clamp(2rem, 5vw, 40px); line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; margin: 26px 0 10px; color: var(--lp-ink);">Tentang {{ APP_BRAND_SHORT|default:"RDP UI" }}</h1>
+            <p style="font-size: 15.5px; line-height: 1.6; color: var(--lp-ink-muted); margin: 0 0 34px; max-width: 58ch;">Misi kami adalah mempermudah pengembangan aplikasi web modern berkualitas tinggi bagi seluruh tim developer.</p>
+
+            <!-- ============ VISI & MISI ============ -->
+            <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid var(--lp-border); padding-top: 16px; margin-bottom: 14px;">
+                <h2 style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin: 0; color: var(--lp-ink);">Visi & Misi</h2>
+            </div>
+            
+            <p style="font-size: 16px; line-height: 1.55; font-weight: 500; margin: 0 0 8px; color: var(--lp-ink);"><strong>Visi:</strong> Menjadi platform fondasi standar industri untuk semua proyek web berbasis Django.</p>
+            <p style="font-size: 15px; line-height: 1.6; color: var(--lp-ink-muted); margin: 0 0 40px;"><strong>Misi:</strong> Menghilangkan boilerplates yang tidak perlu dan menghemat ribuan jam kerja developer dengan menyediakan solusi siap pakai yang terintegrasi, andal, dan aman.</p>
+
+            <!-- ============ PILAR ============ -->
+            <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid var(--lp-border); padding-top: 16px; margin-bottom: 14px;">
+                <h2 style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin: 0; color: var(--lp-ink);">Pilar Utama</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 48px;">
+                <div class="rdp-keep" style="border: 1px solid var(--lp-border); border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 16px; font-weight: 700; color: var(--lp-ink); margin-bottom: 8px;">Inovasi Terbuka</div>
+                    <p style="font-size: 14px; line-height: 1.6; color: var(--lp-ink-muted); margin: 0;">Kami percaya pada kekuatan open-source dan kolaborasi global untuk mendorong standar teknologi ke tingkat berikutnya.</p>
+                </div>
+                <div class="rdp-keep" style="border: 1px solid var(--lp-border); border-radius: 12px; padding: 20px;">
+                    <div style="font-size: 16px; font-weight: 700; color: var(--lp-ink); margin-bottom: 8px;">Kualitas Utama</div>
+                    <p style="font-size: 14px; line-height: 1.6; color: var(--lp-ink-muted); margin: 0;">Setiap baris kode di starter kit ini diuji dengan ketat demi menjamin stabilitas dan keamanan di level produksi.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 60px;">
+                <h3 style="font-size: 24px; font-weight: 700; color: var(--lp-ink); margin-bottom: 24px;">Siap Memulai Proyek Anda?</h3>
+                <a href="{% url 'accounts:register' %}" class="lp-btn-primary" style="display: inline-flex; align-items: center; justify-content: center; padding: 14px 32px;">Daftar Sekarang</a>
+            </div>
+
+        </main>
+
+        <c-landing.footer />
     </div>
-</c-layout.public>
+</c-layout.base>

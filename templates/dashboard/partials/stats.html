@@ -1,0 +1,5 @@
+{% load cotton %}
+<c-rdp.stat_card label="Total Pengguna" value="{{ total_users }}" trend="+100%" trend_up="true" />
+<c-rdp.stat_card label="Total Aktivitas" value="{{ total_activities }}" trend="+25%" trend_up="true" />
+<c-rdp.stat_card label="Total Pendapatan" value="Rp {{ total_revenue|floatformat:0 }}" trend="+15%" trend_up="true" />
+<c-rdp.stat_card label="Aktivitas Tertunda" value="{{ pending_activities }}" trend="-" trend_up="false" />

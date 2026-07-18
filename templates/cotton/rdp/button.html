@@ -1,4 +1,14 @@
-<c-vars variant="primary" size="md" icon_only=False disabled=False type="button" />
+<c-vars variant="primary" size="md" icon_only=False disabled=False type="button" href="" />
+{% if href %}
+<a 
+  href="{{ href }}"
+  class="rdp-btn rdp-btn--{{ variant }} rdp-btn--{{ size }} {% if icon_only %}rdp-btn--icon-only{% endif %} {{ class }}"
+  {% if disabled %}aria-disabled="true"{% endif %}
+  {{ attrs }}
+>
+  {{ slot }}
+</a>
+{% else %}
 <button 
   type="{{ type }}"
   class="rdp-btn rdp-btn--{{ variant }} rdp-btn--{{ size }} {% if icon_only %}rdp-btn--icon-only{% endif %} {{ class }}"
@@ -7,3 +17,4 @@
 >
   {{ slot }}
 </button>
+{% endif %}

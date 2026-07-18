@@ -1,0 +1,62 @@
+<header class="lp-nav" x-data="{ mobileMenuOpen: false }">
+    <div class="lp-nav__inner">
+        
+        {# Hamburger & Brand Mobile #}
+        <div class="lp-nav__mobile-left" style="display: flex; align-items: center; gap: 12px;">
+            <c-rdp.drawer side="left" title="Menu RDP UI">
+                <c-slot name="trigger">
+                    <button class="lp-nav__burger" aria-label="Toggle menu" style="background: none; border: none; padding: 4px; cursor: pointer; color: var(--lp-ink);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                </c-slot>
+                <nav style="display: flex; flex-direction: column; gap: 16px;">
+                    <a href="/#get-started" style="font-weight: 600; color: var(--lp-ink); text-decoration: none;">Get started</a>
+                    <a href="/#docs" style="font-weight: 600; color: var(--lp-ink); text-decoration: none;">Docs</a>
+                    <a href="/#examples" style="font-weight: 600; color: var(--lp-ink); text-decoration: none;">Examples</a>
+                    <a href="/rdp-ui/tokens/" style="font-weight: 600; color: var(--lp-ink); text-decoration: none;">Themes</a>
+                </nav>
+            </c-rdp.drawer>
+
+            <a href="/" class="lp-nav__brand">
+                <span class="lp-nav__logo">R</span>
+                <span class="lp-nav__name">RDP UI</span>
+            </a>
+        </div>
+
+        {# Active Feature / Title (Mobile Only) #}
+        <div class="lp-nav__mobile-title" style="display: none; font-weight: 600; font-size: 14px;">Landing Page</div>
+
+        <nav class="lp-nav__links" aria-label="Landing navigation">
+            <a href="/#get-started" class="lp-nav__link">Get started</a>
+            <a href="/#docs" class="lp-nav__link">Docs</a>
+            <a href="/#examples" class="lp-nav__link">Examples</a>
+            <a href="/rdp-ui/tokens/" class="lp-nav__link">Themes</a>
+        </nav>
+
+        {# Nav actions / Auth #}
+        <div class="lp-nav__auth">
+            {% if request.user.is_authenticated %}
+                <c-rdp.dropdown align="right">
+                    <c-slot name="trigger">
+                        <button style="background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <span class="lp-nav__user-name" style="font-size: 13.5px; font-weight: 600; color: var(--lp-ink);">{{ request.user.username }}</span>
+                            <div style="width: 32px; height: 32px; border-radius: 99px; background: var(--lp-green-tint); color: var(--lp-green-deep); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;">
+                                {{ request.user.username|make_list|first|upper }}
+                            </div>
+                        </button>
+                    </c-slot>
+                    <a href="{% url 'dashboard:index' %}" style="display: block; padding: 8px 16px; color: var(--lp-ink); text-decoration: none; font-size: 13.5px;">Dashboard</a>
+                    <a href="{% url 'accounts:profile' %}" style="display: block; padding: 8px 16px; color: var(--lp-ink); text-decoration: none; font-size: 13.5px;">Profile Settings</a>
+                    <hr style="margin: 4px 0; border: none; border-top: 1px solid var(--lp-border);">
+                    <form action="{% url 'accounts:logout' %}" method="post" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" style="width: 100%; text-align: left; background: none; border: none; padding: 8px 16px; color: #D32F2F; cursor: pointer; font-size: 13.5px;">Keluar</button>
+                    </form>
+                </c-rdp.dropdown>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="lp-nav__auth-link">Masuk</a>
+                <a href="{% url 'accounts:register' %}" class="lp-nav__auth-cta" id="nav-register-cta">Daftar</a>
+            {% endif %}
+        </div>
+    </div>
+</header>

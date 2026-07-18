@@ -11,3 +11,13 @@ A: Masalah ini terjadi jika Anda hanya memanipulasi `data-theme` (milik PicoCSS)
 
 **Q: Mengapa menu Hamburger tidak muncul pada mode Tablet (lebar >768px)?**
 A: Perilaku ini memang didesain demikian. Sesuai panduan *Responsive Strategy*, pada mode Tablet, sidebar dipadatkan menjadi *Icon Rail* dengan ukuran `224px` atau `64px`, yang berarti Navigasi Sidebar tidak sepenuhnya tersembunyi. Menu Hamburger HANYA akan muncul pada mode Mobile (`< 768px`) di mana seluruh Sidebar dipindah ke dalam *drawer/off-canvas*.
+
+**Q: Apa perbedaan `FRAMEWORK_VERSION` dan `LOCAL_APP_VERSION`?**
+A: `FRAMEWORK_VERSION` adalah versi *template sumber* RDP Starter Kit yang Anda clone dari GitHub — nilainya mencerminkan versi starter kit yang dijadikan fondasi. `LOCAL_APP_VERSION` adalah versi *aplikasi Anda sendiri* yang bisa Anda naikkan setiap kali melakukan rilis baru ke production. Keduanya dikonfigurasi via file `.env`.
+
+**Q: Halaman Changelog kosong, bagaimana mengisinya?**
+A: Halaman Changelog mengambil data dari database (model `SystemUpdate`). Tambahkan entri melalui **Admin Panel → Dashboard → System Updates → + Add**. Isi field `version`, `title`, `description`, dan `update_type`, lalu simpan. Entri akan langsung muncul di `/changelog/`.
+
+**Q: Apakah nilai versi akan otomatis berubah saat framework diupdate dari GitHub?**
+A: Tidak secara otomatis. Anda perlu memperbarui nilai `FRAMEWORK_VERSION` di file `.env` secara manual setelah melakukan `git pull` dari repository sumber. Ini adalah keputusan desain untuk menjaga transparansi dan kontrol penuh di tangan developer.
+

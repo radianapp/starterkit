@@ -146,6 +146,12 @@ Format: `US: US-{nomor} — {judul story}` — singkat, di baris pertama docstri
 - Response error form: gunakan HTTP 422 (bukan 200) agar HTMX tahu ini error
 - Full page redirect setelah sukses: gunakan header `HX-Redirect`
 
+**RESTful API (DRF)**
+- Struktur per app: tempatkan semua endpoint di folder `apps/<nama_app>/api/`.
+- Di dalam folder `api/` terdapat subfolder `views/`, `serializers/` (keduanya dengan `__init__.py`) dan file `urls.py`.
+- Gunakan `ViewSet` (seperti `ModelViewSet`) dari Django REST Framework untuk CRUD standar.
+- API namespace global di `config/api_urls.py` dan diregistrasikan ke `config/urls.py` dengan prefix `/api/v1/`.
+
 **django-cotton**
 - Komponen bawaan starter: namespace `<c-rdp.{nama}>` (misal `<c-rdp.button>`)
 - Override komponen: buat file di `templates/cotton/rdp/{nama}.html` di project ini
@@ -321,6 +327,41 @@ Proyek ini memiliki **komponen Cotton kustom** yang sudah dibuat dan terdokument
 - Selalu memisahkan inline-css ke file stylesheet (css). Misal aplikasi dashboard/, simpan di css/dashboard.css atau menurut fungsi/class yang sedang dikerjakan, misalnya pass CRUD css/dashboard-crud.css.
 - Selalu pisahkan template menjadi komponen kecil yang bisa dipakai kembali (reuseable). Termasuk untuk tampilan mobile, tablet, desktop, dan large display. Jangan di-hardcode di views, pisahkan ke folder terpisah. Contoh Sidebar, card yang berulang, dll. Simpan dalam folder partials/. Prioritaskan tampilan mobile terlebih dahulu.
 - Selalu memisahkan inline-javascript ke file javascript. Misal aplikasi dashboard/, simpan di js/dashboard.js. Kalau ada fungsi yang reuseable/general, pisahkan ke folder utils atau folder khusus lainnya.
+
+## Sinkronisasi ke RDP-UI
+
+Project UI terpisah di `C:\Users\rahad\Work\org\rdp\publish\ui.radian.web.id` (repo: [radianapp/ui](https://github.com/radianapp/ui)).
+Claude Code bisa akses kedua folder dalam satu session via `additionalDirectories`.
+
+### Kapan Sync Wajib
+
+| Perubahan di Starterkit | Sync ke UI |
+|---|---|
+| `static/vendor/rdp-ui/rdp.css` atau `rdp.js` | `assets/rdp.css`, `assets/rdp.js` |
+| `static/css/components/*.css` | `assets/components/*.css` |
+| `static/vendor/rdp-ui/themes/*.css` | `assets/themes/*.css` |
+| Komponen Cotton baru `templates/cotton/rdp/*.html` | Buat contoh penggunaan di `docs/components/{nama}.html` |
+
+### Aturan Sync
+
+1. **Komponen baru** → tulis CSS di starterkit **dan** buat halaman contoh di UI repo `docs/components/{nama}.html`.
+2. **Update core** (`rdp.css`, `rdp.js`) → copy ke UI repo `assets/` setelah selesai.
+3. **Commit terpisah** — starterkit dan UI repo masing-masing commit sendiri dengan pesan yang sinkron.
+4. **Versi CDN di `base.html`** harus diupdate kalau ada breaking change di `rdp.css`.
+
+### Pemetaan Path
+
+```text
+Starterkit                              →  UI Repo (ui.radian.web.id)
+─────────────────────────────────────────────────────────────────────
+static/vendor/rdp-ui/rdp.css           →  assets/rdp.css
+static/vendor/rdp-ui/rdp.js            →  assets/rdp.js
+static/vendor/rdp-ui/themes/*.css      →  assets/themes/*.css
+static/css/components/{nama}.css       →  assets/components/{nama}.css
+templates/cotton/rdp/{nama}.html       →  docs/components/{nama}.html (contoh)
+```
+
+---
 
 ## Hal yang TIDAK Boleh Dilakukan
 

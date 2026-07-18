@@ -11,6 +11,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from apps.core.views import RdpUiComponentsTestView, RdpUiLayoutTestView, RdpUiTokenTestView
 from apps.core.views import htmx_examples as htmx_views
@@ -39,6 +40,9 @@ urlpatterns = [
     path("about/", TemplateView.as_view(template_name="public/about.html"), name="about"),
     path("terms/", TemplateView.as_view(template_name="public/terms.html"), name="terms"),
     path("privacy/", TemplateView.as_view(template_name="public/privacy.html"), name="privacy"),
+
+    # Docs
+    path("docs/", TemplateView.as_view(template_name="docs/product_foundation.html"), name="docs_index"),
 
     # Showcase 10 Pola HTMX (US-036)
     path("examples/htmx/", htmx_views.HtmxExamplesIndexView.as_view(), name="htmx-examples"),
@@ -90,6 +94,13 @@ urlpatterns = [
     path("dashboard/", include("apps.dashboard.urls")),
     path("api-auth/", include("rest_framework.urls")),
 
+    # API v1 Global Router
+    path("api/v1/", include("config.api_urls")),
+
+    # API Documentation (drf-spectacular)
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
 
 # Serve media files di development

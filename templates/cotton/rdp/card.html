@@ -1,5 +1,10 @@
-{# US-011: Komponen card — container untuk grouped content #}<c-vars title="" variant="" clickable=False />
+<c-vars title="" variant="" clickable=False href="" />
+{% if href %}
+<a href="{{ href }}" class="rdp-card {% if variant %}rdp-card--{{ variant }}{% endif %} {% if clickable %}rdp-card--clickable{% endif %}" {{ attrs }}>
+{% else %}
 <div class="rdp-card {% if variant %}rdp-card--{{ variant }}{% endif %} {% if clickable %}rdp-card--clickable{% endif %}" {{ attrs }}>
+{% endif %}
+
   {% if title or header %}
     <div class="rdp-card__header">
       {% if title %}<h3 class="rdp-card__title">{{ title }}</h3>{% endif %}
@@ -16,4 +21,9 @@
       {{ footer }}
     </div>
   {% endif %}
+
+{% if href %}
+</a>
+{% else %}
 </div>
+{% endif %}

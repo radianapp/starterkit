@@ -1,0 +1,85 @@
+{# US-031: Product Foundation (Docs) #}
+{% load static %}
+<c-layout.base title="Product Foundation — RDP UI" navbar_brand="{{ APP_BRAND_SHORT }}">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/rdp-ui-landing.css' %}">
+        <style>
+            .rdp-keep { break-inside: avoid; orphans: 3; widows: 3; }
+        </style>
+    </c-slot>
+
+    <div class="lp-root">
+        <c-landing.nav />
+
+        <main class="lp-container" style="padding-top: 4rem; padding-bottom: 6rem; max-width: 840px;">
+            <!-- ============ MASTHEAD ============ -->
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 2px solid var(--lp-ink);">
+                <div style="font-family: var(--lp-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lp-green);">RDP UI · Product Foundation</div>
+                <div style="font-family: var(--lp-mono); font-size: 10.5px; color: var(--lp-ink-hint);">v0.1 · July 2026</div>
+            </div>
+
+            <h1 style="font-size: clamp(2rem, 5vw, 40px); line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; margin: 26px 0 10px; color: var(--lp-ink);">The UI framework Django never shipped.</h1>
+            <p style="font-size: 15.5px; line-height: 1.6; color: var(--lp-ink-muted); margin: 0 0 34px; max-width: 58ch;">A complete, server-first UI ecosystem — design system, CSS framework, Cotton components, HTMX patterns, themes, and templates — built natively for Django. <em>Modern UI Framework for Django.</em></p>
+
+            <!-- ============ 1 · POSITIONING ============ -->
+            <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid var(--lp-border); padding-top: 16px; margin-bottom: 14px;">
+                <span style="font-family: var(--lp-mono); font-size: 12px; font-weight: 600; color: var(--lp-green);">01</span>
+                <h2 style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin: 0; color: var(--lp-ink);">Product positioning</h2>
+            </div>
+
+            <p style="font-size: 17px; line-height: 1.55; font-weight: 500; margin: 0 0 8px; max-width: 62ch; color: var(--lp-ink);">For Django teams who want a polished product without adopting a frontend stack, RDP UI is the UI framework that turns semantic HTML into a finished interface — components, themes, and interaction patterns that speak Django natively.</p>
+            <p style="font-size: 14px; line-height: 1.6; color: var(--lp-ink-muted); margin: 0 0 20px; max-width: 66ch;">Unlike CSS toolkits that stop at styling, or component libraries that assume React, RDP UI covers the whole surface of a real product — from a button to a billing page — inside the templates Django developers already write.</p>
+
+            <div style="overflow-x: auto; margin-bottom: 16px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; line-height: 1.5; min-width: 600px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; font-family: var(--lp-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lp-ink-hint); padding: 0 12px 8px 0; border-bottom: 1px solid var(--lp-ink); width: 16%;">Framework</th>
+                            <th style="text-align: left; font-family: var(--lp-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lp-ink-hint); padding: 0 12px 8px 0; border-bottom: 1px solid var(--lp-ink); width: 38%;">What it is</th>
+                            <th style="text-align: left; font-family: var(--lp-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lp-ink-hint); padding: 0 0 8px 0; border-bottom: 1px solid var(--lp-ink);">Why it falls short for Django teams</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); vertical-align: top; color: var(--lp-ink);">Tailwind UI</td>
+                            <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Paid component gallery on utility-class CSS</td>
+                            <td style="padding: 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Utility-class soup in templates; React/Alpine-leaning; no Django integration</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); vertical-align: top; color: var(--lp-ink);">shadcn/ui</td>
+                            <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Copy-paste React components</td>
+                            <td style="padding: 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Requires the React + build-tool stack Django teams are avoiding</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); vertical-align: top; color: var(--lp-ink);">PicoCSS</td>
+                            <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Elegant classless CSS for semantic HTML</td>
+                            <td style="padding: 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Stops at primitives — no components, patterns, or product templates</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); vertical-align: top; color: var(--lp-ink);">Bootstrap</td>
+                            <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">The long-standing default CSS framework</td>
+                            <td style="padding: 9px 0; border-bottom: 1px solid var(--lp-border); color: var(--lp-ink-muted); vertical-align: top;">Instantly recognizable, dated look; no server-first interaction story</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 700; padding: 10px 12px 10px 0; color: var(--lp-green); vertical-align: top;">RDP UI</td>
+                            <td style="padding: 10px 12px 10px 0; font-weight: 500; vertical-align: top; color: var(--lp-ink);">Complete UI ecosystem for Django</td>
+                            <td style="padding: 10px 0; font-weight: 500; vertical-align: top; color: var(--lp-ink);">Design system → CSS → Cotton components → HTMX patterns → themes → templates, one coherent stack</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="rdp-keep" style="background: var(--lp-green-tint); border-radius: 12px; padding: 20px 24px; margin-bottom: 36px;">
+                <div style="font-family: var(--lp-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lp-green); margin-bottom: 6px;">The wedge</div>
+                <p style="font-size: 16.5px; line-height: 1.5; font-weight: 600; margin: 0; color: var(--lp-ink);">The only complete UI ecosystem natively built for Django + Cotton + HTMX. Every component is one tag away — <span style="font-family: var(--lp-mono); font-size: 14px; font-weight: 500; color: var(--lp-green);">&lt;c-rdp.button&gt;</span> — with server-first interactivity and zero build step.</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; gap: 16px; margin-top: 48px; border-top: 1px solid var(--lp-border); padding-top: 24px; font-family: var(--lp-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lp-ink-hint);">
+                <span>RDP UI — Modern UI Framework for Django</span>
+                <span>Foundation · Phase 1 of the design program</span>
+            </div>
+        </main>
+
+        <c-landing.footer />
+    </div>
+</c-layout.base>

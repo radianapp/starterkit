@@ -46,6 +46,10 @@
                     <span class="rdp-sidebar__link-icon">🧪</span>
                     <span class="rdp-sidebar__link-text">Testing</span>
                 </a>
+                <a href="{% url 'dashboard:changelog' %}" class="rdp-sidebar__link">
+                    <span class="rdp-sidebar__link-icon">📋</span>
+                    <span class="rdp-sidebar__link-text">Changelog</span>
+                </a>
             </div>
 
             <div class="rdp-sidebar__section">
@@ -93,7 +97,7 @@
                     <span class="rdp-user-menu__icon">⚙️</span> Pengaturan
                 </a>
                 <div class="rdp-user-menu__divider" role="separator"></div>
-                <form method="post" action="{% url 'accounts:logout' %}" style="margin:0">
+                <form method="post" action="{% url 'accounts:logout' %}" class="rdp-user-menu__form">
                     {% csrf_token %}
                     <button type="submit" class="rdp-user-menu__item rdp-user-menu__item--danger" role="menuitem">
                         <span class="rdp-user-menu__icon">🚪</span> Keluar
@@ -101,6 +105,16 @@
                 </form>
             </div>
         </div>
+
+        {# Versi Info di bawah sidebar #}
+        {% if DEBUG %}
+        <div class="rdp-sidebar__version-info">
+            <a href="{% url 'dashboard:changelog' %}" class="rdp-sidebar__version-link">
+                <span>🔧 Framework: <strong class="rdp-sidebar__version-value">v{{ FRAMEWORK_VERSION }}</strong></span>
+                <span>🏠 Lokal: <strong class="rdp-sidebar__version-value">v{{ LOCAL_APP_VERSION }}</strong></span>
+            </a>
+        </div>
+        {% endif %}
     </c-slot>
 
     {# ========== Main content (default slot) ========== #}
@@ -122,11 +136,11 @@
             </div>
         </div>
 
-        <div class="rdp-dashboard-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 24px;">
-            <c-rdp.stat_card label="Total Pengguna" value="{{ total_users }}" trend="+100%" trend_up="true" />
-            <c-rdp.stat_card label="Total Aktivitas" value="{{ total_activities }}" trend="+25%" trend_up="true" />
-            <c-rdp.stat_card label="Total Pendapatan" value="Rp {{ total_revenue|floatformat:0 }}" trend="+15%" trend_up="true" />
-            <c-rdp.stat_card label="Aktivitas Tertunda" value="{{ pending_activities }}" trend="-" trend_up="false" />
+        <div class="rdp-dashboard-stats" hx-get="{% url 'dashboard:stats' %}" hx-trigger="load">
+            <c-rdp.skeleton type="card" class="rdp-stat-card-skeleton" />
+            <c-rdp.skeleton type="card" class="rdp-stat-card-skeleton" />
+            <c-rdp.skeleton type="card" class="rdp-stat-card-skeleton" />
+            <c-rdp.skeleton type="card" class="rdp-stat-card-skeleton" />
         </div>
 
         <div class="rdp-alert rdp-alert--info" role="alert" x-data="{ show: true }" x-show="show">
@@ -136,13 +150,13 @@
             <button class="rdp-alert__close" @click="show = false" aria-label="Tutup">&times;</button>
         </div>
 
-        <div class="rdp-dashboard-grid" style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+        <div class="rdp-dashboard-grid rdp-dashboard-grid--single">
             <!-- Aktivitas Terbaru dengan HTMX Pagination -->
             <c-rdp.card>
                 <c-slot name="header">
-                    <div class="rdp-dashboard-header" style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3 class="rdp-dashboard-header__title" style="margin: 0;">Aktivitas Terbaru</h3>
-                        <span style="font-size: 0.85rem; color: var(--pico-muted-color);">Terupdate otomatis</span>
+                    <div class="rdp-dashboard-header">
+                        <h3 class="rdp-dashboard-header__title">Aktivitas Terbaru</h3>
+                        <span class="rdp-header-subtitle">Terupdate otomatis</span>
                     </div>
                 </c-slot>
                 <div id="page-content">
@@ -150,15 +164,15 @@
                 </div>
             </c-rdp.card>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+            <div class="rdp-dashboard-grid--cards">
                 <!-- Tren Transaksi Chart -->
                 <c-rdp.card>
                     <c-slot name="header">
-                        <h3 class="rdp-dashboard-header__title" style="margin: 0;">Tren Transaksi (Revenue)</h3>
+                        <h3 class="rdp-dashboard-header__title">Tren Transaksi (Revenue)</h3>
                     </c-slot>
-                    <div class="chart-container" style="padding: 16px 0;">
+                    <div class="rdp-chart-container">
                         <!-- Beautiful SVG Area Chart -->
-                        <svg viewBox="0 0 500 200" style="width: 100%; height: auto; display: block;">
+                        <svg viewBox="0 0 500 200" class="rdp-chart-svg">
                             <defs>
                                 <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="0%" stop-color="var(--pico-primary)" stop-opacity="0.3"/>
@@ -178,7 +192,7 @@
                             <circle cx="300" cy="80" r="5" fill="var(--pico-primary)" />
                             <circle cx="500" cy="50" r="5" fill="var(--pico-primary)" />
                         </svg>
-                        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: var(--pico-muted-color);">
+                        <div class="rdp-chart-labels">
                             <span>Jan</span>
                             <span>Feb</span>
                             <span>Mar</span>
@@ -192,12 +206,12 @@
                 <!-- Tech Stack Info -->
                 <c-rdp.card>
                     <c-slot name="header">
-                        <h3 class="rdp-techstack__title" style="margin: 0;">Tech Stack</h3>
+                        <h3 class="rdp-techstack__title">Tech Stack</h3>
                     </c-slot>
-                    <div class="rdp-techstack" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="rdp-techstack">
                         <div class="rdp-techstack-group">
                             <strong class="rdp-techstack__group-title">🖥️ Backend</strong>
-                            <ul class="rdp-techstack__list" style="padding-left: 20px; margin: 8px 0 0 0;">
+                            <ul class="rdp-techstack__list">
                                 <li>Django 5.1+</li>
                                 <li>PostgreSQL / SQLite</li>
                                 <li>Redis Cache</li>
@@ -206,7 +220,7 @@
                         </div>
                         <div class="rdp-techstack-group">
                             <strong class="rdp-techstack__group-title">🎨 Frontend</strong>
-                            <ul class="rdp-techstack__list" style="padding-left: 20px; margin: 8px 0 0 0;">
+                            <ul class="rdp-techstack__list">
                                 <li>Django-Cotton</li>
                                 <li>RDP-UI CDN</li>
                                 <li>HTMX</li>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #E9E7E2; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; text-decoration: underline; }
+  </style>
+</helmet>
+
+<div style="display: flex; flex-direction: column; align-items: center; gap: 56px; padding: 56px 40px;">
+
+  <!-- ================= SHEET 27 · COMMITMENTS + KEYBOARD MAP ================= -->
+  <div data-screen-label="27 A11y commitments &amp; keyboard map" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Accessibility · Sheet 27</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · commitments · keyboard map</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 6px;">Accessibility guidelines</h2>
+    <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 28px; max-width: 76ch;">Accessibility is a component contract, not a checklist at the end. Every <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">&lt;c-rdp.*&gt;</span> ships these behaviors by default — a developer has to work to make an RDP app inaccessible.</p>
+
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">WCAG 2.2 AA commitments</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 32px;">
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">1.4.3 · Contrast</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Text ≥ 4.5:1, large text &amp; UI graphics ≥ 3:1 — enforced per theme in CI. Every built-in theme ships a published contrast report.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">2.1.1 · Keyboard</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Everything operable by keyboard alone, no traps except intentional dialog traps. Skip-link is the first tab stop of every app shell.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">2.4.7 / 2.4.11 · Focus</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">2px ring, 2px offset, on every control — never <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">outline: none</span> without replacement. Focused element never hidden under sticky chrome.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">2.5.8 · Target size</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Interactive targets ≥ 24px always; ≥ 44px on coarse pointers via <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">@media (pointer: coarse)</span> baked into the tokens.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">1.3.1 · Semantics</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Real elements first: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">button, nav, table, dialog, details</span>. ARIA only where HTML has no native answer.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">4.1.3 · Status messages</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Every async result is announced: toasts, search counts, validation summaries — via live regions, without moving focus.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">1.4.10 / 1.4.4 · Reflow</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;">Layouts reflow to 320px and survive 200% text zoom — sizes in rem, no fixed-height text containers.</div>
+      </div>
+      <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #15654E; margin-bottom: 6px;">2.3.3 · Motion</div>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #55514A;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">prefers-reduced-motion</span> collapses all durations to 1ms (<a href="HTMX Interaction Patterns.dc.html">Sheet 26</a>). No parallax, no autoplay.</div>
+      </div>
+    </div>
+
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Keyboard interaction map</div>
+    <div style="border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 0.7fr 1fr 1fr 1.3fr; font-size: 12.5px;">
+        <div style="padding: 10px 16px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Component</div>
+        <div style="padding: 10px 16px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Tab</div>
+        <div style="padding: 10px 16px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Esc</div>
+        <div style="padding: 10px 16px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Arrows / other</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Modal / Drawer</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Trapped, cycles inside</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Closes (confirm if dirty)</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">—</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Confirm dialog</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Between the two buttons</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Cancels — never confirms</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Enter = focused button only</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Menu / Dropdown</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Skips past (one stop: trigger)</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Closes, focus → trigger</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">↓↑ move · Home/End · type-ahead · Enter activates</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Tabs</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">One stop (active tab) → panel</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">—</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">←→ move + activate · Home/End</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Select</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">One stop</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Closes listbox</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">↓↑ options · type-ahead · Enter/Space selects</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Accordion</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Each header is a stop</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">—</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Enter/Space toggles (native details)</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Table</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Headers, row checkboxes, row actions</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Closes open row menu</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Space toggles row · Shift+click range · Enter sorts on header</div>
+
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Sidebar</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Each item is a stop (it's a nav of links)</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Closes mobile drawer</div>
+        <div style="padding: 9px 16px; border-bottom: 1px solid #EFEDE8; color: #55514A;">Enter follows link · rail tooltips show on focus</div>
+
+        <div style="padding: 9px 16px; font-weight: 600;">Toast</div>
+        <div style="padding: 9px 16px; color: #55514A;">Never steals focus; reachable via F6 region hop</div>
+        <div style="padding: 9px 16px; color: #55514A;">Dismisses focused toast</div>
+        <div style="padding: 9px 16px; color: #55514A;">Action link is a real link/button</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SHEET 28 · ARIA + FOCUS + COLOR ================= -->
+  <div data-screen-label="28 ARIA, focus &amp; color rules" style="width: 1180px; background: #FFFFFF; border: 1px solid #DEDBD4; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.08); padding: 56px 64px 48px; box-sizing: border-box;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #1C1B18; padding-bottom: 14px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #15654E;">RDP UI Accessibility · Sheet 28</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · ARIA contract · focus management · color independence</div>
+    </div>
+    <h2 style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em; margin: 22px 0 28px;">ARIA contract &amp; focus rules</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <!-- ARIA -->
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">ARIA each component must render</div>
+        <div style="border: 1px solid #E5E2DC; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 0.65fr 1.35fr; font-size: 12px;">
+            <div style="padding: 9px 14px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Component</div>
+            <div style="padding: 9px 14px; background: #FAF9F7; font-weight: 600; border-bottom: 1px solid #E5E2DC;">Required attributes</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Modal</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">&lt;dialog&gt; aria-labelledby=title · aria-modal (implicit)</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Confirm</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">role="alertdialog" aria-describedby=body</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Menu</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">trigger: aria-haspopup="menu" aria-expanded · list: role="menu" · items: role="menuitem"</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Tabs</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">role="tablist/tab/tabpanel" · aria-selected · aria-controls</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Field</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">label[for] · aria-describedby=help|error · aria-invalid · aria-required</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Table</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">caption (visually-hidden ok) · th[scope] · aria-sort on sorted header</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Nav / Sidebar</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">&lt;nav aria-label&gt; · aria-current="page" on active item</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Toast region</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">role="status" aria-live="polite" · errors: role="alert"</div>
+            <div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-weight: 600;">Progress</div><div style="padding: 8px 14px; border-bottom: 1px solid #EFEDE8; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">&lt;progress&gt; or role="progressbar" aria-valuenow/min/max</div>
+            <div style="padding: 8px 14px; font-weight: 600;">Icon button</div><div style="padding: 8px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #15654E;">aria-label required — component errors loudly without it</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; line-height: 1.6; color: #55514A; margin-top: 10px;">Cotton components render these automatically from their props — <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">&lt;c-rdp.field :field="form.email"&gt;</span> wires label, ids, describedby and invalid state with zero developer effort.</div>
+      </div>
+
+      <!-- focus + color -->
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Focus management — overlays</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">F1</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Open:</strong> modal/drawer focus goes to the first meaningful control — never the close ×, never a destructive button. If content loads via HTMX, focus waits for the swap.</div></div>
+            <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">F2</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">While open:</strong> background is <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">inert</span>; screen-reader virtual cursor can't wander out; scroll is locked.</div></div>
+            <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">F3</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Close:</strong> focus returns to the trigger. If the trigger was removed by a swap (e.g. deleted row), focus moves to the nearest surviving sibling, else the region heading.</div></div>
+            <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">F4</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">Toasts never take focus.</strong> They announce via live region; their actions are reachable but optional. Anything requiring a decision is a dialog, not a toast.</div></div>
+            <div style="display: flex; gap: 12px;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #15654E; flex: 0 0 26px;">F5</span><div style="font-size: 13px; line-height: 1.6; color: #55514A;"><strong style="color: #1C1B18;">HTMX swaps preserve focus</strong> when the focused element survives (matched by id); otherwise focus lands on the swapped region's first heading or the validation summary.</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 12px;">Color independence</div>
+          <div style="border: 1px solid #E5E2DC; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #1E7A46; background: #E4F2EA; border-radius: 99px; padding: 3px 10px;"><span style="width: 6px; height: 6px; border-radius: 99px; background: #1E7A46;"></span>Active</span>
+              <span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Status = color <strong>+ text</strong> (+ dot shape). Never a bare colored dot.</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="display: inline-flex; gap: 5px; align-items: baseline; font-size: 12px; color: #B3382D; font-weight: 500;"><span>⚠</span>Enter a full email</span>
+              <span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Errors = red <strong>+ icon + message + aria-invalid</strong>, never border color alone.</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #10513F;">MRR <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10513F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 14 5-5 5 5"></path></svg></span>
+              <span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Sorted column = color <strong>+ arrow + aria-sort</strong>; deltas = color + ↑↓ glyph.</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <a href="#28" style="font-size: 12.5px; text-decoration: underline;">Text links</a>
+              <span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Links inside prose are underlined — color is never the only cue.</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="display: inline-flex; gap: 4px;"><span style="width: 14px; height: 14px; border-radius: 4px; background: #15654E;"></span><span style="width: 14px; height: 14px; border-radius: 4px; background: #D9A441;"></span><span style="width: 14px; height: 14px; border-radius: 4px; background: #2A5FA8;"></span></span>
+              <span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">Chart series pair color with <strong>direct labels or patterns</strong> — legends alone don't survive greyscale.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #F2F0EC; border-radius: 10px; padding: 14px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.9; color: #4E4A44; margin-top: 28px;">
+      <span style="color: #8A857C;">/* enforcement */</span> axe-core run on every docs example in CI · theme contrast matrix published per release · keyboard map is part of each component's acceptance criteria · icon-only buttons without aria-label fail loudly in DEBUG
+    </div>
+  </div>
+
+  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding-bottom: 24px;">RDP UI — Accessibility · Sheets 27–28</div>
+</div>
+
+</x-dc>
+</body>
+</html>

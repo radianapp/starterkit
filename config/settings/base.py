@@ -64,6 +64,10 @@ RDP_UI_VERSION = env_var("RDP_UI_VERSION", "v1.0")
 RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")
 RDP_APP_ACCENT = env_var("RDP_APP_ACCENT", "navy")
 
+# ⚙️ KONFIGURASI: Framework & App Versions
+FRAMEWORK_VERSION = env_var("FRAMEWORK_VERSION", "0.3.0")
+LOCAL_APP_VERSION = env_var("LOCAL_APP_VERSION", "1.0.0")
+
 
 # ⚙️ KONFIGURASI: White label — brand bisa dikustom via .env
 SITE_NAME = env_var("SITE_NAME", "RDP Starter Kit")
@@ -183,9 +187,13 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework",
     "django_cotton",  # django-cotton component framework
+    "drf_spectacular",
+    "storages",
 ]
 
 LOCAL_APPS = [
+    "apps.inventory",
+    "apps.test_app",
     "apps.core.apps.CoreConfig",
     "apps.accounts.apps.AccountsConfig",
     "apps.dashboard.apps.DashboardConfig",
@@ -195,6 +203,12 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # ⚙️ KONFIGURASI: Custom User model
 AUTH_USER_MODEL = "accounts.User"
+
+# ⚙️ KONFIGURASI: Custom Authentication Backend (Support Email/Username Login)
+AUTHENTICATION_BACKENDS = [
+    "apps.accounts.backends.EmailOrUsernameBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # ⚙️ KONFIGURASI: US-012 — Jazzmin admin theme
 # KEPUTUSAN TEKNIS: Pakai jazzmin untuk tema admin kustom
@@ -440,9 +454,44 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+# ⚙️ KONFIGURASI: API Documentation (drf-spectacular)
+SPECTACULAR_SETTINGS = {
+    "TITLE": f"{APP_BRAND_SHORT} API",
+    "DESCRIPTION": f"Dokumentasi API untuk {COMPANY_NAME}",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # Menghapus endpoints dari format schema yang tidak perlu
+    "COMPONENT_SPLIT_REQUEST": True,
+}
+
+# ⚙️ KONFIGURASI: Celery
+# KEPUTUSAN TEKNIS: Redis sebagai broker dan result backend.
+CELERY_BROKER_URL = env_var("CELERY_BROKER_URL", "redis://localhost:6379/1")
+CELERY_RESULT_BACKEND = env_var("CELERY_RESULT_BACKEND", "redis://localhost:6379/2")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
 
 # ⚙️ KONFIGURASI: Django-Cotton
 COTTON_COMPONENTS_DIR = "templates/cotton"
 
 logger = logging.getLogger(__name__)
+
+# ⚙️ KONFIGURASI: Cloud Storage (S3 / MinIO)
+USE_S3 = env_var("USE_S3", "False").lower() in ("true", "1", "yes")
+if USE_S3:
+    # Konfigurasi django-storages
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_ACCESS_KEY_ID = env_var("AWS_ACCESS_KEY_ID", "")
+    AWS_SECRET_ACCESS_KEY = env_var("AWS_SECRET_ACCESS_KEY", "")
+    AWS_STORAGE_BUCKET_NAME = env_var("AWS_STORAGE_BUCKET_NAME", "")
+    AWS_S3_ENDPOINT_URL = env_var("AWS_S3_ENDPOINT_URL", None) # Untuk MinIO/R2
+    AWS_S3_REGION_NAME = env_var("AWS_S3_REGION_NAME", None)
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    AWS_S3_VERIFY = env_var("AWS_S3_VERIFY", "True").lower() in ("true", "1", "yes") # Set False jika pakai MinIO localhost tanpa SSL
+

@@ -650,4 +650,236 @@ html.dark .rdp-topnav__action-btn {
   background: var(--color-bg-secondary, #2a2a2a);
 }
 
+/* ============================================================ */
+/* CHANGELOG PAGE STYLING                                       */
+/* ============================================================ */
+
+.changelog-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  gap: 5px;
+}
+.changelog-badge--feature  { background: #dbeafe; color: #1d4ed8; }
+.changelog-badge--core     { background: #fef3c7; color: #92400e; }
+.changelog-badge--page     { background: #ede9fe; color: #5b21b6; }
+.changelog-badge--bugfix   { background: #dcfce7; color: #166534; }
+
+.changelog-version-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--rdp-border);
+  color: var(--rdp-text);
+  letter-spacing: 0.04em;
+}
+
+.changelog-entry {
+  display: flex;
+  gap: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rdp-border);
+  align-items: flex-start;
+}
+.changelog-entry:last-child { border-bottom: none; }
+
+.changelog-entry__timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+  padding-top: 4px;
+}
+.changelog-entry__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pico-primary);
+  flex-shrink: 0;
+}
+.changelog-entry__date {
+  font-size: 0.72rem;
+  color: var(--pico-muted-color);
+  text-align: center;
+  line-height: 1.4;
+}
+.changelog-entry__time {
+  font-size: 0.68rem;
+}
+.changelog-entry__body { flex: 1; }
+.changelog-entry__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  color: var(--rdp-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.changelog-entry__desc {
+  font-size: 0.88rem;
+  color: var(--pico-muted-color);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.version-info-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 20px;
+  border-radius: 10px;
+  background: var(--pico-card-background-color);
+  border: 1px solid var(--rdp-border);
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+}
+.version-info-bar__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.version-info-bar__label { color: var(--pico-muted-color); }
+.version-info-bar__value {
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--rdp-text);
+}
+.version-info-bar__sep {
+  width: 1px;
+  height: 16px;
+  background: var(--rdp-border);
+}
+
+/* Extra utility classes for changelog */
+.changelog-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.changelog-header-title {
+  margin: 0;
+}
+.changelog-header-subtitle {
+  font-size: 0.82rem;
+  color: var(--pico-muted-color);
+}
+.changelog-pagination-wrap {
+  margin-top: 16px;
+}
+.rdp-user-menu__form {
+  margin: 0;
+}
+/* ============================================================ */
+/* INDEX PAGE UTILITIES (Extract from inline styles)             */
+/* ============================================================ */
+
+.rdp-sidebar__version-info {
+  padding: 10px 16px;
+  border-top: 1px solid var(--rdp-border);
+  font-size: 0.72rem;
+  color: var(--pico-muted-color);
+  line-height: 1.8;
+}
+
+.rdp-sidebar__version-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rdp-sidebar__version-value {
+  font-family: monospace;
+}
+
+.rdp-dashboard-grid--single {
+  grid-template-columns: 1fr;
+}
+
+.rdp-dashboard-grid--cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.rdp-chart-container {
+  padding: 16px 0;
+}
+
+.rdp-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.rdp-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--pico-muted-color);
+}
+
+.rdp-header-subtitle {
+  font-size: 0.85rem;
+  color: var(--pico-muted-color);
+}
+
+/* ============================================================ */
+/* TABLE & LIST UTILITIES (Extract from inline styles)          */
+/* ============================================================ */
+.rdp-text-right { text-align: right; }
+.rdp-text-center { text-align: center; }
+.rdp-text-muted { color: var(--pico-muted-color); }
+.rdp-font-mono-bold { font-family: monospace; font-weight: 600; }
+.rdp-p-24 { padding: 24px; }
+.rdp-mt-16 { margin-top: 16px; }
+
+/* ============================================================ */
+/* SIDEBAR BRAND & ACTIVE LINK FIXES                            */
+/* ============================================================ */
+
+/* Menyesuaikan tinggi logo agar sejajar dengan navbar top (60px) */
+.rdp-sidebar__brand {
+  display: flex;
+  align-items: center;
+  height: 60px; 
+  padding: 0 20px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--rdp-border);
+}
+
+.rdp-sidebar__brand-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--rdp-text);
+  margin-left: 10px;
+}
+
+/* Penanda state aktif di menu sidebar */
+.rdp-sidebar__link.active {
+  background-color: var(--rdp-primary-soft, rgba(0, 102, 204, 0.1));
+  color: var(--rdp-primary, #0066cc);
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* Hover state untuk active link jika diperlukan */
+.rdp-sidebar__link.active:hover {
+  background-color: var(--rdp-primary-soft, rgba(0, 102, 204, 0.15));
+}
 

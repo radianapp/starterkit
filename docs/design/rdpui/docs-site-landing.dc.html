@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #FAF9F7; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B18; -webkit-font-smoothing: antialiased; }
+    a { color: #15654E; text-decoration: none; }
+    a:hover { color: #10513F; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: #FAF9F7;">
+
+  <!-- announcement -->
+  <sc-if value="{{ showAnnouncement }}" hint-placeholder-val="{{ true }}">
+    <div style="background: #1C1B18; color: #E9E7E2; font-size: 13px; text-align: center; padding: 9px 16px;">RDP UI v1.0 is here — Cotton components, 11 themes, zero build step. <a href="#docs" style="color: #7DC79C; text-decoration: underline;">Read the announcement</a></div>
+  </sc-if>
+
+  <!-- nav -->
+  <nav aria-label="Main" style="position: sticky; top: 0; z-index: 20; background: rgba(250,249,247,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid #E5E2DC;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 28px;">
+      <span style="display: inline-flex; align-items: center; gap: 10px;"><span style="width: 26px; height: 26px; border-radius: 8px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">R</span><span style="font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em;">RDP UI</span></span>
+      <div style="display: flex; gap: 2px; font-size: 14px;">
+        <a href="#docs" style="padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Docs</a>
+        <a href="#components" style="padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Components</a>
+        <a href="#themes" style="padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Themes</a>
+        <a href="#examples" style="padding: 8px 12px; border-radius: 8px; font-weight: 500; color: #55514A;">Examples</a>
+      </div>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+        <span style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border: 1px solid #E5E2DC; border-radius: 8px; font-size: 13px; color: #6B665E; background: #FFFFFF; white-space: nowrap; flex-shrink: 0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>Search docs<span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C; margin-left: 6px;">⌘K</span></span>
+        <a href="#github" aria-label="GitHub" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; color: #1C1B18;"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg></a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <header style="max-width: 1120px; margin: 0 auto; padding: 96px 24px 72px; text-align: center;">
+    <div style="display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 500; color: #10513F; background: #EDF4F0; border: 1px solid #D6E7DF; border-radius: 99px; padding: 6px 14px; margin-bottom: 28px;">pip install rdp-ui <span style="color: #7DB3A0;">·</span> zero build step</div>
+    <h1 style="font-size: clamp(40px, 6vw, 64px); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; margin: 0 0 20px; text-wrap: balance;">Modern UI Framework<br>for Django</h1>
+    <p style="font-size: 18px; line-height: 1.6; color: #55514A; max-width: 58ch; margin: 0 auto 36px; text-wrap: pretty;">Semantic HTML, Django Cotton components, and HTMX interactivity — a complete design system that speaks your stack. No React, no bundler, no utility-class soup.</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="#docs" style="height: 48px; padding: 0 26px; display: inline-flex; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 10px; box-shadow: 0 1px 2px rgba(28,27,24,0.1);" style-hover="background: #10513F; color: #FFFFFF;">Get started</a>
+      <a href="#github" style="height: 48px; padding: 0 22px; display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 10px;" style-hover="background: #F2F0EC; color: #1C1B18;"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg>GitHub</a>
+    </div>
+  </header>
+
+  <!-- features -->
+  <section style="max-width: 1120px; margin: 0 auto; padding: 0 24px 80px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px 26px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-5 6 5 6M16 6l5 6-5 6"></path></svg></div>
+        <div style="font-size: 15.5px; font-weight: 700; margin-bottom: 6px;">HTML first</div>
+        <div style="font-size: 13.5px; line-height: 1.6; color: #55514A;">Style semantic elements, not class soup. A <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">&lt;button&gt;</span> looks right with zero classes.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px 26px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="13" width="8" height="8" rx="2"></rect><path d="M13 7h4M7 13v4"></path></svg></div>
+        <div style="font-size: 15.5px; font-weight: 700; margin-bottom: 6px;">Cotton components</div>
+        <div style="font-size: 13.5px; line-height: 1.6; color: #55514A;">Every component is a Django Cotton tag — <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">&lt;c-rdp.card&gt;</span>, props and slots included.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px 26px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7z"></path></svg></div>
+        <div style="font-size: 15.5px; font-weight: 700; margin-bottom: 6px;">HTMX native</div>
+        <div style="font-size: 13.5px; line-height: 1.6; color: #55514A;">Loading states, swaps, validation re-renders — designed in, not bolted on. The server is the app.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px 26px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 0 0 18"></path><path d="M3 12h18"></path></svg></div>
+        <div style="font-size: 15.5px; font-weight: 700; margin-bottom: 6px;">11 themes</div>
+        <div style="font-size: 13.5px; line-height: 1.6; color: #55514A;">Every color is a CSS variable. Switch with one attribute: <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">data-rdp-theme="nord"</span>.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px 26px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-3.3 3.6-5 8-5s8 1.7 8 5"></path></svg></div>
+        <div style="font-size: 15.5px; font-weight: 700; margin-bottom: 6px;">Accessible by default</div>
+        <div style="font-size: 13.5px; line-height: 1.6; color: #55514A;">WCAG AA contrast in every theme, keyboard maps, focus traps, ARIA wired by the components.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 24px 26px;">
+        <div style="width: 36px; height: 36px; border-radius: 10px; background: #EDF4F0; display: flex; align-items: center; justify-content: center; margin-bottom: 14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17l9-10"></path></svg></div>
+        <div style="font-size: 15.5px; font-weight: 700; margin-bottom: 6px;">Zero build step</div>
+        <div style="font-size: 13.5px; line-height: 1.6; color: #55514A;">One CSS file + Django templates. <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px;">collectstatic</span> and ship — no Node in your Django repo.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- component strip -->
+  <section id="components" style="border-top: 1px solid #E5E2DC; border-bottom: 1px solid #E5E2DC; background: #FFFFFF; padding: 64px 0;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;">
+        <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">40+ components, one vocabulary</h2>
+        <a href="#components" style="font-size: 14px; font-weight: 600;">Browse all components →</a>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: stretch; flex-wrap: wrap;">
+        <div style="flex: 1 1 240px; border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px; justify-content: center;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="height: 36px; padding: 0 15px; display: inline-flex; align-items: center; font-size: 13.5px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 8px;">Primary</span>
+            <span style="height: 36px; padding: 0 15px; display: inline-flex; align-items: center; font-size: 13.5px; font-weight: 600; color: #1C1B18; background: #FFFFFF; border: 1px solid #D2CEC6; border-radius: 8px;">Outline</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <span style="font-size: 11.5px; font-weight: 600; color: #1E7A46; background: #E4F2EA; border-radius: 99px; padding: 3px 10px;">Active</span>
+            <span style="font-size: 11.5px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 3px 10px;">Trial</span>
+            <span style="font-size: 11.5px; font-weight: 600; color: #B3382D; background: #F7E9E7; border-radius: 99px; padding: 3px 10px;">Churned</span>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">buttons · badges</div>
+        </div>
+        <div style="flex: 1 1 260px; border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 8px; justify-content: center;">
+          <label style="font-size: 12.5px; font-weight: 600;">Work email</label>
+          <input placeholder="ana@acme.dev" style="height: 38px; padding: 0 12px; font-size: 13.5px; font-family: inherit; border: 1px solid #D2CEC6; border-radius: 8px; outline: none; width: 100%; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #55514A;"><span style="width: 30px; height: 18px; border-radius: 99px; background: #15654E; position: relative; flex: 0 0 30px;"><span style="position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; border-radius: 99px; background: #FFFFFF;"></span></span>Email me product updates</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">inputs · switches</div>
+        </div>
+        <div style="flex: 1 1 260px; border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px; justify-content: center;">
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="width: 30px; height: 30px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">AL</span><span style="flex: 1;"><span style="font-size: 13px; font-weight: 600; display: block;">Ana Lima</span><span style="font-size: 11.5px; color: #6B665E;">Scale · $490/mo</span></span><span style="font-size: 11.5px; font-weight: 600; color: #1E7A46; background: #E4F2EA; border-radius: 99px; padding: 3px 9px;">Paid</span></div>
+          <div style="height: 7px; background: #F2F0EC; border-radius: 99px; overflow: hidden;"><div style="width: 71%; height: 100%; background: #15654E; border-radius: 99px;"></div></div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">avatars · progress · list rows</div>
+        </div>
+        <div style="flex: 1 1 220px; border: 1px solid #E5E2DC; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 8px; justify-content: center;">
+          <div style="background: #1C1B18; border-radius: 9px; padding: 9px 12px; display: flex; align-items: center; gap: 8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7DC79C" stroke-width="2.5" stroke-linecap="round"><path d="m5 12.5 5 5L19 7"></path></svg><span style="font-size: 12px; color: #FFFFFF;">Customer saved</span></div>
+          <div style="display: inline-flex; gap: 4px; background: #F2F0EC; border-radius: 9px; padding: 3px; align-self: flex-start;"><span style="padding: 5px 12px; font-size: 12px; font-weight: 600; background: #FFFFFF; border-radius: 6px; box-shadow: 0 1px 2px rgba(28,27,24,0.05);">Monthly</span><span style="padding: 5px 12px; font-size: 12px; font-weight: 500; color: #6B665E;">Yearly</span></div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;">toasts · tabs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- theme switcher -->
+  <section id="themes" style="max-width: 1120px; margin: 0 auto; padding: 80px 24px;">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 10px;">One attribute, a whole new app</h2>
+      <p style="font-size: 15px; color: #55514A; margin: 0;">Themes are pure CSS variable overrides. Try it live:</p>
+    </div>
+    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;">
+      <sc-for list="{{ themeList }}" as="t" hint-placeholder-count="6">
+        <button onClick="{{ t.select }}" style="height: 36px; padding: 0 16px; font-size: 13px; font-weight: 600; font-family: inherit; color: {{ t.chipFg }}; background: {{ t.chipBg }}; border: 1px solid {{ t.chipBorder }}; border-radius: 99px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;"><span style="width: 10px; height: 10px; border-radius: 99px; background: {{ t.dot }};"></span>{{ t.label }}</button>
+      </sc-for>
+      <a href="Theme Architecture.dc.html" style="height: 36px; padding: 0 16px; font-size: 13px; font-weight: 600; color: #55514A; border: 1px dashed #B0ABA1; border-radius: 99px; display: inline-flex; align-items: center; white-space: nowrap;">+5 more themes →</a>
+    </div>
+    <div style="border-radius: 18px; border: 1px solid {{ tBorder }}; background: {{ tBg }}; padding: 36px; transition: background 0.25s, border-color 0.25s; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.07);">
+      <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1 1 300px; background: {{ tSurface }}; border: 1px solid {{ tBorder }}; border-radius: 14px; padding: 22px; transition: background 0.25s;">
+          <div style="font-size: 16px; font-weight: 700; color: {{ tText }}; margin-bottom: 4px;">Create your account</div>
+          <div style="font-size: 12.5px; color: {{ tMuted }}; margin-bottom: 16px;">Free for 14 days. No card required.</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+            <label style="font-size: 12.5px; font-weight: 600; color: {{ tText }};">Work email</label>
+            <div style="height: 38px; display: flex; align-items: center; padding: 0 12px; font-size: 13px; color: {{ tMuted }}; background: {{ tBg }}; border: 1px solid {{ tBorder }}; border-radius: 8px;">ana@acme.dev</div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <span style="flex: 1; height: 40px; display: inline-flex; align-items: center; justify-content: center; font-size: 13.5px; font-weight: 600; color: {{ tPrimaryFg }}; background: {{ tPrimary }}; border-radius: 8px;">Create account</span>
+            <span style="height: 40px; padding: 0 14px; display: inline-flex; align-items: center; font-size: 13.5px; font-weight: 600; color: {{ tText }}; border: 1px solid {{ tBorder }}; border-radius: 8px;">Docs</span>
+          </div>
+        </div>
+        <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="background: {{ tSurface }}; border: 1px solid {{ tBorder }}; border-radius: 14px; padding: 18px 20px; transition: background 0.25s;">
+            <div style="font-size: 12px; color: {{ tMuted }}; margin-bottom: 6px;">Monthly revenue</div>
+            <div style="display: flex; align-items: baseline; gap: 10px;"><span style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: {{ tText }};">$48,210</span><span style="font-size: 12px; font-weight: 600; color: {{ tPositive }};">↑ 12.4%</span></div>
+          </div>
+          <div style="background: {{ tSurface }}; border: 1px solid {{ tBorder }}; border-radius: 14px; padding: 18px 20px; flex: 1; transition: background 0.25s;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;"><span style="font-size: 13px; font-weight: 700; color: {{ tText }};">API usage</span><span style="font-size: 11px; font-weight: 600; color: {{ tSoftFg }}; background: {{ tSoft }}; border-radius: 99px; padding: 3px 9px;">71%</span></div>
+            <div style="height: 8px; background: {{ tBg }}; border-radius: 99px; overflow: hidden; margin-bottom: 10px;"><div style="width: 71%; height: 100%; background: {{ tPrimary }}; border-radius: 99px;"></div></div>
+            <div style="font-size: 12px; color: {{ tMuted }};">14.2M requests · resets Aug 1</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{ tMuted }};">&lt;html data-rdp-theme="{{ themeKey }}"&gt;</div>
+    </div>
+  </section>
+
+  <!-- dashboard preview -->
+  <section style="background: #1C1B18; padding: 80px 0;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px;">
+      <div style="text-align: center; margin-bottom: 36px;">
+        <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 10px; color: #FAF9F7;">Enterprise-ready out of the box</h2>
+        <p style="font-size: 15px; color: #B0ABA1; margin: 0;">The canonical app shell: sidebar, topbar, tables, stats — dashboards, CRMs, admin panels.</p>
+      </div>
+      <div style="background: #FAF9F7; border-radius: 16px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.4); display: flex; min-height: 420px;">
+        <div style="width: 200px; flex: 0 0 200px; background: #FFFFFF; border-right: 1px solid #E5E2DC; padding: 16px 10px; display: flex; flex-direction: column; gap: 2px;">
+          <div style="display: flex; align-items: center; gap: 8px; padding: 0 10px 14px;"><span style="width: 22px; height: 22px; border-radius: 6px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">A</span><span style="font-size: 13px; font-weight: 700;">Acme Ops</span></div>
+          <div style="display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 10px; border-radius: 8px; background: #EDF4F0; color: #10513F; font-size: 12.5px; font-weight: 600;"><span style="width: 13px; height: 13px; border: 1.75px solid #10513F; border-radius: 4px;"></span>Dashboard</div>
+          <div style="display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 10px; border-radius: 8px; color: #55514A; font-size: 12.5px; font-weight: 500;"><span style="width: 13px; height: 13px; border: 1.75px solid #8A857C; border-radius: 99px;"></span>Orders <span style="margin-left: auto; font-size: 10px; font-weight: 600; color: #10513F; background: #EDF4F0; border-radius: 99px; padding: 1px 7px;">12</span></div>
+          <div style="display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 10px; border-radius: 8px; color: #55514A; font-size: 12.5px; font-weight: 500;"><span style="width: 13px; height: 13px; border: 1.75px solid #8A857C; border-radius: 4px; transform: rotate(45deg);"></span>Customers</div>
+          <div style="display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 10px; border-radius: 8px; color: #55514A; font-size: 12.5px; font-weight: 500;"><span style="width: 13px; height: 13px; border: 1.75px solid #8A857C; border-radius: 2px;"></span>Invoices</div>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+          <div style="height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: #FFFFFF; border-bottom: 1px solid #E5E2DC;">
+            <span style="font-size: 14px; font-weight: 700;">Dashboard</span>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border: 1px solid #E5E2DC; border-radius: 7px; font-size: 12px; color: #6B665E;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"></circle><path d="m15.5 15.5 4.5 4.5"></path></svg>Search</span>
+            <span style="width: 28px; height: 28px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700;">AL</span>
+          </div>
+          <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><div style="font-size: 11px; color: #6B665E; margin-bottom: 5px;">Revenue</div><div style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">$48,210 <span style="font-size: 11px; font-weight: 600; color: #1E7A46;">↑12%</span></div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><div style="font-size: 11px; color: #6B665E; margin-bottom: 5px;">Orders</div><div style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">1,284 <span style="font-size: 11px; font-weight: 600; color: #1E7A46;">↑3%</span></div></div>
+              <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; padding: 14px 16px;"><div style="font-size: 11px; color: #6B665E; margin-bottom: 5px;">Churn</div><div style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">2.1% <span style="font-size: 11px; font-weight: 600; color: #B3382D;">↑0.4</span></div></div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 10px; overflow: hidden;">
+              <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 0.8fr; font-size: 12px; padding: 9px 14px; background: #FAF9F7; border-bottom: 1px solid #E5E2DC; font-weight: 600; color: #6B665E;"><span>Customer</span><span>Status</span><span>Plan</span><span style="text-align: right;">MRR</span></div>
+              <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 0.8fr; font-size: 12.5px; padding: 10px 14px; border-bottom: 1px solid #EFEDE8; align-items: center;"><span style="font-weight: 600;">Ana Lima</span><span><span style="font-size: 10.5px; font-weight: 600; color: #1E7A46; background: #E4F2EA; border-radius: 99px; padding: 2px 8px;">Active</span></span><span style="color: #55514A;">Scale</span><span style="text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">$490</span></div>
+              <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 0.8fr; font-size: 12.5px; padding: 10px 14px; align-items: center;"><span style="font-weight: 600;">Kofi Mensah</span><span><span style="font-size: 10.5px; font-weight: 600; color: #7A5407; background: #F8EFDC; border-radius: 99px; padding: 2px 8px;">Trial</span></span><span style="color: #55514A;">Starter</span><span style="text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;">$0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- why -->
+  <section style="max-width: 1120px; margin: 0 auto; padding: 80px 24px;">
+    <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 28px; text-align: center;">Why RDP UI</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;">
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px 28px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #8A857C; margin-bottom: 10px;">vs. writing custom CSS</div>
+        <div style="font-size: 14px; line-height: 1.65; color: #55514A;">A design system takes months to get right — tokens, dark mode, focus states, contrast. RDP UI is that system, already audited, already themed, maintained for you.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px 28px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #8A857C; margin-bottom: 10px;">vs. Bootstrap</div>
+        <div style="font-size: 14px; line-height: 1.65; color: #55514A;">No 2014 look, no jQuery-era patterns, no fighting the theme. RDP UI is variable-driven, soft and modern — and its components are Django templates, not copy-paste markup.</div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; padding: 26px 28px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #8A857C; margin-bottom: 10px;">vs. React component libraries</div>
+        <div style="font-size: 14px; line-height: 1.65; color: #55514A;">shadcn and Chakra are excellent — for React. RDP UI gives Django the same caliber of components without a JS build, a second router, or an API layer you didn't need.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- code example -->
+  <section id="examples" style="background: #FFFFFF; border-top: 1px solid #E5E2DC; border-bottom: 1px solid #E5E2DC; padding: 80px 0;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px;">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 10px;">Three ways in, one component</h2>
+        <p style="font-size: 15px; color: #55514A; margin: 0;">Start with plain HTML, graduate to Cotton, add HTMX when you need it.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #55514A; margin-bottom: 10px;">1 · Plain HTML</div>
+          <div style="background: #1C1B18; border-radius: 12px; padding: 18px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.9; color: #D6E7DF; overflow-x: auto;">
+            <div>&lt;<span style="color: #D9A441;">article</span> <span style="color: #7DB3A0;">class</span>=<span style="color: #E8B4A8;">"rdp-card"</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #D9A441;">header</span>&gt;API usage&lt;/<span style="color: #D9A441;">header</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #D9A441;">p</span>&gt;71% of quota used.&lt;/<span style="color: #D9A441;">p</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #D9A441;">footer</span>&gt;</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">button</span>&gt;Upgrade&lt;/<span style="color: #D9A441;">button</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;/<span style="color: #D9A441;">footer</span>&gt;</div>
+            <div>&lt;/<span style="color: #D9A441;">article</span>&gt;</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #55514A; margin-bottom: 10px;">2 · Django Cotton</div>
+          <div style="background: #1C1B18; border-radius: 12px; padding: 18px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.9; color: #D6E7DF; overflow-x: auto;">
+            <div>&lt;<span style="color: #D9A441;">c-rdp.card</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"header"</span>&gt;API usage&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+            <div>&nbsp;&nbsp;71% of quota used.</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"footer"</span>&gt;</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.button</span> variant=<span style="color: #E8B4A8;">"primary"</span>&gt;Upgrade&lt;/<span style="color: #D9A441;">c-rdp.button</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+            <div>&lt;/<span style="color: #D9A441;">c-rdp.card</span>&gt;</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #55514A; margin-bottom: 10px;">3 · + HTMX</div>
+          <div style="background: #1C1B18; border-radius: 12px; padding: 18px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.9; color: #D6E7DF; overflow-x: auto;">
+            <div>&lt;<span style="color: #D9A441;">c-rdp.card</span> <span style="color: #7DB3A0;">hx-get</span>=<span style="color: #E8B4A8;">"/usage"</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #7DB3A0;">hx-trigger</span>=<span style="color: #E8B4A8;">"every 30s"</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #7DB3A0;">c-slot</span> name=<span style="color: #E8B4A8;">"header"</span>&gt;API usage&lt;/<span style="color: #7DB3A0;">c-slot</span>&gt;</div>
+            <div>&nbsp;&nbsp;&lt;<span style="color: #D9A441;">c-rdp.skeleton</span> lines=<span style="color: #E8B4A8;">"2"</span> /&gt;</div>
+            <div>&lt;/<span style="color: #D9A441;">c-rdp.card</span>&gt;</div>
+            <div style="color: #8A857C;">&lt;!-- server renders the fragment --&gt;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- docs preview -->
+  <section id="docs" style="max-width: 1120px; margin: 0 auto; padding: 80px 24px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 40px; align-items: center;">
+      <div>
+        <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 14px;">Docs you can actually finish</h2>
+        <p style="font-size: 15px; line-height: 1.65; color: #55514A; margin: 0 0 20px;">Minimal API means minimal docs — every component fits on one page: live preview, the three code forms, props, slots, keyboard map, and tokens. Nothing else to learn.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #55514A;">
+          <span style="display: flex; align-items: center; gap: 10px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 5 5L19 7"></path></svg>5-minute quickstart — installed to first themed page</span>
+          <span style="display: flex; align-items: center; gap: 10px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 5 5L19 7"></path></svg>Copy-paste recipes for every HTMX pattern</span>
+          <span style="display: flex; align-items: center; gap: 10px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#15654E" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 5 5L19 7"></path></svg>Full example apps: CRM, admin, SaaS billing</span>
+        </div>
+        <a href="#docs" style="display: inline-flex; align-items: center; height: 44px; padding: 0 20px; margin-top: 24px; font-size: 14px; font-weight: 600; color: #FFFFFF; background: #15654E; border-radius: 9px;" style-hover="background: #10513F; color: #FFFFFF;">Read the docs</a>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E2DC; border-radius: 14px; box-shadow: 0 2px 6px rgba(28,27,24,0.05), 0 16px 40px rgba(28,27,24,0.07); overflow: hidden;">
+        <div style="display: flex; border-bottom: 1px solid #E5E2DC;">
+          <div style="width: 150px; flex: 0 0 150px; border-right: 1px solid #EFEDE8; padding: 14px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #55514A;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C; padding: 0 8px;">Components</span>
+            <span style="padding: 5px 8px; border-radius: 6px;">Button</span>
+            <span style="padding: 5px 8px; border-radius: 6px; background: #EDF4F0; color: #10513F; font-weight: 600;">Card</span>
+            <span style="padding: 5px 8px; border-radius: 6px;">Modal</span>
+            <span style="padding: 5px 8px; border-radius: 6px;">Table</span>
+          </div>
+          <div style="flex: 1; padding: 18px 20px;">
+            <div style="font-size: 17px; font-weight: 700; margin-bottom: 4px;">Card</div>
+            <div style="font-size: 12px; color: #6B665E; margin-bottom: 12px;">A surface with header, body and footer slots.</div>
+            <div style="border: 1px solid #E5E2DC; border-radius: 9px; padding: 12px; margin-bottom: 10px;">
+              <div style="font-size: 12px; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid #EFEDE8; margin-bottom: 8px;">API usage</div>
+              <div style="font-size: 11.5px; color: #55514A;">71% of quota used.</div>
+            </div>
+            <div style="background: #1C1B18; border-radius: 8px; padding: 10px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #D6E7DF;">&lt;c-rdp.card&gt;…&lt;/c-rdp.card&gt;</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 14px; padding: 10px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A857C;"><span>Props ↓</span><span>Slots ↓</span><span>Keyboard ↓</span><span>Tokens ↓</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- community -->
+  <section id="github" style="background: #EDF4F0; border-top: 1px solid #D6E7DF; padding: 72px 0;">
+    <div style="max-width: 720px; margin: 0 auto; padding: 0 24px; text-align: center;">
+      <h2 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 12px; color: #10513F;">Built in the open</h2>
+      <p style="font-size: 15px; line-height: 1.6; color: #35524A; margin: 0 0 28px;">MIT licensed. Roadmap, RFCs and releases all happen on GitHub — issues and first PRs welcome.</p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="#github" style="height: 46px; padding: 0 22px; display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; font-size: 14.5px; font-weight: 600; color: #FFFFFF; background: #1C1B18; border-radius: 10px;" style-hover="background: #33302C; color: #FFFFFF;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.57 2.34 1.12 2.91.85.09-.66.35-1.12.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"></path></svg>Star on GitHub</a>
+        <a href="#github" style="height: 46px; padding: 0 20px; display: inline-flex; align-items: center; white-space: nowrap; font-size: 14.5px; font-weight: 600; color: #10513F; background: #FFFFFF; border: 1px solid #C4DACF; border-radius: 10px;" style-hover="background: #FAF9F7; color: #10513F;">Join the discussions</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer style="background: #1C1B18; color: #B0ABA1; padding: 48px 0 40px;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap;">
+      <div style="max-width: 260px;">
+        <span style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 12px;"><span style="width: 24px; height: 24px; border-radius: 7px; background: #15654E; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">R</span><span style="font-size: 14.5px; font-weight: 700; color: #FAF9F7;">RDP UI</span></span>
+        <div style="font-size: 12.5px; line-height: 1.6;">Modern UI Framework for Django. HTML first, server first, accessible by default.</div>
+      </div>
+      <div style="display: flex; gap: 56px; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E;">Product</span>
+          <a href="#docs" style="color: #B0ABA1;">Documentation</a><a href="#components" style="color: #B0ABA1;">Components</a><a href="#themes" style="color: #B0ABA1;">Themes</a><a href="#examples" style="color: #B0ABA1;">Examples</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E;">Community</span>
+          <a href="#github" style="color: #B0ABA1;">GitHub</a><a href="#github" style="color: #B0ABA1;">Discussions</a><a href="#github" style="color: #B0ABA1;">Changelog</a><a href="#github" style="color: #B0ABA1;">Contributing</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B665E;">Ecosystem</span>
+          <a href="#docs" style="color: #B0ABA1;">Django Cotton</a><a href="#docs" style="color: #B0ABA1;">HTMX</a><a href="#docs" style="color: #B0ABA1;">Figma kit</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1120px; margin: 36px auto 0; padding: 20px 24px 0; border-top: 1px solid #33302C; font-size: 12px; color: #6B665E; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <span>© 2026 RDP UI · MIT License</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">v1.0.0</span>
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnouncement&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Header&quot;}}">
+class Component extends DCLogic {
+  state = { theme: 'default' };
+
+  themes = {
+    default:  { label: 'Default',  bg: '#FAF9F7', surface: '#FFFFFF', text: '#1C1B18', muted: '#6B665E', border: '#E5E2DC', primary: '#15654E', primaryFg: '#FFFFFF', soft: '#EDF4F0', softFg: '#10513F', positive: '#1E7A46', dot: '#15654E' },
+    dark:     { label: 'Dark',     bg: '#171614', surface: '#1F1E1B', text: '#F0EEE9', muted: '#A39E94', border: '#33302C', primary: '#3FA47F', primaryFg: '#0D1F18', soft: '#1E2B26', softFg: '#7DC79C', positive: '#7DC79C', dot: '#1F1E1B' },
+    ocean:    { label: 'Ocean',    bg: '#F5F8FA', surface: '#FFFFFF', text: '#16232B', muted: '#5E7079', border: '#DDE6EB', primary: '#186B8A', primaryFg: '#FFFFFF', soft: '#E5F0F5', softFg: '#125269', positive: '#1E7A46', dot: '#186B8A' },
+    midnight: { label: 'Midnight', bg: '#12141F', surface: '#1A1D2C', text: '#E8EAF2', muted: '#9CA1B8', border: '#2A2E42', primary: '#7B8CFF', primaryFg: '#10122B', soft: '#232742', softFg: '#A9B4FF', positive: '#7DC79C', dot: '#1A1D2C' },
+    nord:     { label: 'Nord',     bg: '#ECEFF4', surface: '#FFFFFF', text: '#2E3440', muted: '#616E88', border: '#D8DEE9', primary: '#5E81AC', primaryFg: '#ECEFF4', soft: '#E1E7F0', softFg: '#4C6A92', positive: '#4C9067', dot: '#5E81AC' },
+    dracula:  { label: 'Dracula',  bg: '#21222C', surface: '#282A36', text: '#F8F8F2', muted: '#9DA0B8', border: '#3B3D51', primary: '#BD93F9', primaryFg: '#1E1329', soft: '#332E4E', softFg: '#CFB3FF', positive: '#69D08A', dot: '#282A36' },
+  };
+
+  renderVals() {
+    const key = this.state.theme;
+    const t = this.themes[key];
+    const themeList = Object.entries(this.themes).map(([k, v]) => ({
+      label: v.label,
+      dot: k === key ? (v.primaryFg === '#FFFFFF' || v.primaryFg.startsWith('#EC') ? v.primary : v.primary) : v.primary,
+      chipBg: k === key ? '#1C1B18' : '#FFFFFF',
+      chipFg: k === key ? '#FAF9F7' : '#1C1B18',
+      chipBorder: k === key ? '#1C1B18' : '#D2CEC6',
+      select: () => this.setState({ theme: k }),
+    }));
+    return {
+      showAnnouncement: this.props.showAnnouncement ?? true,
+      themeKey: key,
+      themeList,
+      tBg: t.bg, tSurface: t.surface, tText: t.text, tMuted: t.muted, tBorder: t.border,
+      tPrimary: t.primary, tPrimaryFg: t.primaryFg, tSoft: t.soft, tSoftFg: t.softFg, tPositive: t.positive,
+    };
+  }
+}
+</script>
+</body>
+</html>
