@@ -1,10 +1,9 @@
-{# Landing page publik RDP UI Framework — menggabungkan / dengan /rdp-ui/ #}
-{# Mengikuti design handoff: docs/design_handoff_rdp_ui/index.dc.html #}
+{# US-010: Halaman publik Starter Kit — apa itu, cara pakai, fitur bawaan #}
 {% load static %}
-<c-layout.base title="RDP UI — Modern UI Framework for Django" navbar_brand="RDP UI">
+<c-layout.base title="RDP Starter Kit — Django Project Template" navbar_brand="RDP Starter">
     <c-slot name="head">
         <link rel="stylesheet" href="{% static 'css/rdp-ui-landing.css' %}">
-        <meta name="description" content="A complete UI ecosystem — design system, CSS framework, Django Cotton components, and HTMX patterns. HTML first, server first, zero build step.">
+        <meta name="description" content="Template project Django production-ready. Clone dan langsung fokus ke fitur bisnis dalam 5 menit.">
     </c-slot>
 
     <div class="lp-root">
@@ -16,230 +15,188 @@
             <div class="lp-hero__inner">
                 <div class="lp-hero__badge">
                     <span class="lp-hero__badge-dot"></span>
-                    <span class="lp-hero__badge-text">v0.x · DESIGN SPEC COMPLETE</span>
+                    <span class="lp-hero__badge-text">v0.2 · BETA</span>
                 </div>
-                <h1 class="lp-hero__title">Modern UI Framework<br>for Django</h1>
+                <h1 class="lp-hero__title">Django Starter Kit<br>siap production</h1>
                 <p class="lp-hero__subtitle">
-                    A complete ecosystem — design system, CSS framework, Django Cotton components, and HTMX patterns. HTML first, server first, zero build step. Beautiful Django apps without a frontend team.
+                    Clone, config .env, dan langsung fokus ke fitur bisnis. Auth, dashboard, UI system, dan deployment sudah tersedia — tanpa setup dari nol.
                 </p>
                 <div class="lp-hero__actions">
-                    <a href="#get-started" class="lp-btn-primary" id="hero-get-started">Get Started</a>
-                    <a href="#docs" class="lp-btn-ghost" id="hero-browse-docs">Browse the Docs</a>
+                    <a href="https://github.com/radianapp/starterkit" class="lp-btn-primary" target="_blank">Clone di GitHub</a>
+                    <a href="{% url 'dashboard:index' %}" class="lp-btn-ghost">Lihat Dashboard</a>
                 </div>
                 <div class="lp-hero__checklist">
                     <span class="lp-hero__check-item">
-                        <span class="lp-hero__check-icon">✓</span>No React, no build step
+                        <span class="lp-hero__check-icon">✓</span>Custom User model siap
                     </span>
                     <span class="lp-hero__check-item">
-                        <span class="lp-hero__check-icon">✓</span>11 themes, CSS variables only
+                        <span class="lp-hero__check-icon">✓</span>Auth lengkap (login, register, profil)
                     </span>
                     <span class="lp-hero__check-item">
-                        <span class="lp-hero__check-icon">✓</span>WCAG AA accessible
+                        <span class="lp-hero__check-icon">✓</span>RDP-UI + HTMX + Alpine.js
                     </span>
                     <span class="lp-hero__check-item">
-                        <span class="lp-hero__check-icon">✓</span>HTMX native
+                        <span class="lp-hero__check-icon">✓</span>Deploy-ready (Gunicorn + WhiteNoise)
                     </span>
                 </div>
             </div>
         </section>
 
-        {# ============ GET STARTED ============ #}
+        {# ============ CARA PAKAI ============ #}
         <section id="get-started" class="lp-started">
             <div class="lp-started__inner">
                 <div class="lp-section-label">
-                    <span class="lp-section-label__text">GET STARTED</span>
+                    <span class="lp-section-label__text">MULAI</span>
                     <span class="lp-section-label__rule"></span>
                 </div>
-                <h2 class="lp-section-title">Up and running in three steps</h2>
+                <h2 class="lp-section-title">Jalan dalam 3 langkah</h2>
                 <p class="lp-section-desc">
-                    RDP UI is plain CSS plus Django Cotton components. If you can write a Django template, you already know how to use it.
+                    Tidak perlu setup dari nol. Clone, isi .env, migrate — langsung jalan.
                 </p>
 
                 <div class="lp-steps">
 
-                    {# Step 1 #}
                     <div class="lp-step-card">
                         <div class="lp-step-card__header">
                             <span class="lp-step-card__num">1</span>
-                            <h3 class="lp-step-card__title">Install</h3>
+                            <h3 class="lp-step-card__title">Clone & install</h3>
                         </div>
-                        <p class="lp-step-card__desc">One pip package brings the CSS, the component library, and the icon set.</p>
+                        <p class="lp-step-card__desc">Butuh Python 3.11+ dan uv. Semua dependency dikelola via uv.</p>
                         <div class="lp-code">
-                            <div><span class="lp-code__prompt">$</span> pip install rdp-ui</div>
-                            <div class="lp-code__comment"># settings.py</div>
-                            <div>INSTALLED_APPS = [</div>
-                            <div>&nbsp;&nbsp;<span class="lp-code__tag">"rdp_ui"</span>, <span class="lp-code__tag">"django_cotton"</span>,</div>
-                            <div>]</div>
+                            <div><span class="lp-code__prompt">$</span> git clone https://github.com/radianapp/starterkit</div>
+                            <div><span class="lp-code__prompt">$</span> cd starterkit && uv sync</div>
                         </div>
                     </div>
 
-                    {# Step 2 #}
                     <div class="lp-step-card">
                         <div class="lp-step-card__header">
                             <span class="lp-step-card__num">2</span>
-                            <h3 class="lp-step-card__title">Load the theme</h3>
+                            <h3 class="lp-step-card__title">Config .env</h3>
                         </div>
-                        <p class="lp-step-card__desc">One stylesheet, one attribute. Swap the theme by changing a single token set.</p>
+                        <p class="lp-step-card__desc">Salin .env.example, isi SECRET_KEY dan database. Semua setting via environment variable.</p>
                         <div class="lp-code">
-                            <div>&lt;<span class="lp-code__tag">link</span> rel=<span class="lp-code__string">"stylesheet"</span></div>
-                            <div>&nbsp;&nbsp;href=<span class="lp-code__string">"{% verbatim %}{% static 'rdp/rdp.css' %}{% endverbatim %}"</span>&gt;</div>
-                            <div>&lt;<span class="lp-code__tag">body</span> data-rdp-theme=<span class="lp-code__string">"default"</span>&gt;</div>
+                            <div><span class="lp-code__prompt">$</span> cp .env.example .env</div>
+                            <div><span class="lp-code__comment"># Edit SECRET_KEY, DATABASE_URL</span></div>
+                            <div><span class="lp-code__prompt">$</span> uv run python manage.py migrate</div>
                         </div>
                     </div>
 
-                    {# Step 3 #}
                     <div class="lp-step-card">
                         <div class="lp-step-card__header">
                             <span class="lp-step-card__num">3</span>
-                            <h3 class="lp-step-card__title">Use components</h3>
+                            <h3 class="lp-step-card__title">Jalankan</h3>
                         </div>
-                        <p class="lp-step-card__desc">Every component is a Cotton tag with attributes as props and named slots.</p>
+                        <p class="lp-step-card__desc">Dev server langsung jalan. Tambah app baru via <code>uv run python manage.py startapp</code>.</p>
                         <div class="lp-code">
-                            <div>&lt;<span class="lp-code__tag">c-rdp.card</span>&gt;</div>
-                            <div>&nbsp;&nbsp;&lt;<span class="lp-code__tag">c-slot</span> name=<span class="lp-code__string">"header"</span>&gt;Team&lt;/<span class="lp-code__tag">c-slot</span>&gt;</div>
-                            <div>&nbsp;&nbsp;&lt;<span class="lp-code__tag">c-rdp.button</span> variant=<span class="lp-code__string">"primary"</span>&gt;</div>
-                            <div>&nbsp;&nbsp;&nbsp;&nbsp;Save&lt;/<span class="lp-code__tag">c-rdp.button</span>&gt;</div>
-                            <div>&lt;/<span class="lp-code__tag">c-rdp.card</span>&gt;</div>
+                            <div><span class="lp-code__prompt">$</span> uv run python manage.py createsuperuser</div>
+                            <div><span class="lp-code__prompt">$</span> uv run python manage.py runserver</div>
                         </div>
                     </div>
 
                 </div>
-
-                {# HTMX note #}
-                <div class="lp-htmx-note">
-                    <span class="lp-htmx-note__label">INTERACTIVITY</span>
-                    <p class="lp-htmx-note__text">
-                        Need dynamic behavior? Add <code>hx-get</code> / <code>hx-post</code> to any component — loading states, validation re-renders, and toasts are built in. See <a href="/examples/htmx/">HTMX Interaction Patterns</a>.
-                    </p>
-                </div>
             </div>
         </section>
 
-        {# ============ DOCS ============ #}
-        <section id="docs" class="lp-docs">
+        {# ============ FITUR BAWAAN ============ #}
+        <section id="features" class="lp-docs">
             <div class="lp-docs__inner">
                 <div class="lp-section-label">
-                    <span class="lp-section-label__text">DOCS</span>
+                    <span class="lp-section-label__text">FITUR BAWAAN</span>
                     <span class="lp-section-label__rule"></span>
                 </div>
-                <h2 class="lp-section-title">Design specification</h2>
+                <h2 class="lp-section-title">Sudah tersedia sejak clone</h2>
                 <p class="lp-section-desc">
-                    The complete product design — from tokens to component contracts to accessibility rules.
+                    Semua yang biasanya habiskan waktu di awal project sudah ada dan sudah dikonfigurasi.
                 </p>
 
                 <div class="lp-docs__grid">
-                    <a href="/about/" class="lp-doc-card">
+                    <a href="{% url 'accounts:login' %}" class="lp-doc-card">
                         <span class="lp-doc-card__num">01</span>
-                        <span class="lp-doc-card__title">Product Foundation</span>
-                        <span class="lp-doc-card__desc">Positioning, personas, and the 7 design principles.</span>
+                        <span class="lp-doc-card__title">Auth Lengkap</span>
+                        <span class="lp-doc-card__desc">Login, register, logout, forgot password, profile settings. Custom User model siap extend.</span>
                     </a>
-                    <a href="/rdp-ui/foundations/" class="lp-doc-card">
+                    <a href="{% url 'dashboard:index' %}" class="lp-doc-card">
                         <span class="lp-doc-card__num">02</span>
-                        <span class="lp-doc-card__title">Foundations</span>
-                        <span class="lp-doc-card__desc">Color, typography, spacing, radius, elevation, icons.</span>
+                        <span class="lp-doc-card__title">Dashboard</span>
+                        <span class="lp-doc-card__desc">Halaman utama post-login dengan sidebar, stat cards, dan activity table.</span>
                     </a>
-                    <a href="/rdp-ui/tokens/" class="lp-doc-card">
+                    <a href="https://ui.radian.web.id" class="lp-doc-card" target="_blank">
                         <span class="lp-doc-card__num">03</span>
-                        <span class="lp-doc-card__title">Theme Architecture</span>
-                        <span class="lp-doc-card__desc">Token inheritance model and the 11-theme gallery.</span>
+                        <span class="lp-doc-card__title">RDP-UI Terintegrasi</span>
+                        <span class="lp-doc-card__desc">CSS framework + 11 tema + komponen Cotton siap pakai. CDN atau self-host.</span>
                     </a>
-                    <a href="/rdp-ui/layout/" class="lp-doc-card">
+                    <div class="lp-doc-card">
                         <span class="lp-doc-card__num">04</span>
-                        <span class="lp-doc-card__title">Layout System</span>
-                        <span class="lp-doc-card__desc">Container, 12-col grid, app shell, responsive strategy.</span>
-                    </a>
-                    <a href="/rdp-ui/components/" class="lp-doc-card">
+                        <span class="lp-doc-card__title">HTMX + Alpine.js</span>
+                        <span class="lp-doc-card__desc">Interaktivitas tanpa React. Partial render, toast, modal, drawer sudah terkonfigurasi.</span>
+                    </div>
+                    <div class="lp-doc-card">
                         <span class="lp-doc-card__num">05</span>
-                        <span class="lp-doc-card__title">Component Showcase</span>
-                        <span class="lp-doc-card__desc">Buttons, badges, alerts, toasts, tooltips, progress.</span>
-                    </a>
-                    <a href="/rdp-ui/forms/" class="lp-doc-card">
+                        <span class="lp-doc-card__title">Settings per Environment</span>
+                        <span class="lp-doc-card__desc">base / dev / production sudah dipisah. SQLite dev, PostgreSQL production, SMTP ready.</span>
+                    </div>
+                    <div class="lp-doc-card">
                         <span class="lp-doc-card__num">06</span>
-                        <span class="lp-doc-card__title">Forms</span>
-                        <span class="lp-doc-card__desc">Inputs, selects, switches, validation, HTMX 422 states.</span>
-                    </a>
-                    <a href="/rdp-ui/navigation/" class="lp-doc-card">
+                        <span class="lp-doc-card__title">Django-Cotton</span>
+                        <span class="lp-doc-card__desc">Komponen reusable via <code>&lt;c-rdp.button&gt;</code>, <code>&lt;c-rdp.card&gt;</code>, layout <code>&lt;c-layout.app&gt;</code>.</span>
+                    </div>
+                    <div class="lp-doc-card">
                         <span class="lp-doc-card__num">07</span>
-                        <span class="lp-doc-card__title">Overlays & Navigation</span>
-                        <span class="lp-doc-card__desc">Modal, drawer, dropdown, tabs, sidebar, pagination.</span>
-                    </a>
-                    <a href="/rdp-ui/data-display/" class="lp-doc-card">
+                        <span class="lp-doc-card__title">Struktur Package</span>
+                        <span class="lp-doc-card__desc">models/, views/, services/, forms/ per app. Logic bisnis di services/, bukan di views.</span>
+                    </div>
+                    <div class="lp-doc-card">
                         <span class="lp-doc-card__num">08</span>
-                        <span class="lp-doc-card__title">Data Display</span>
-                        <span class="lp-doc-card__desc">Tables, cards, stats, avatars, timelines, empty states.</span>
-                    </a>
-                    <a href="/dev/components/" class="lp-doc-card">
+                        <span class="lp-doc-card__title">Deploy Ready</span>
+                        <span class="lp-doc-card__desc">Gunicorn + WhiteNoise untuk static files. Security headers production sudah aktif.</span>
+                    </div>
+                    <div class="lp-doc-card">
                         <span class="lp-doc-card__num">09</span>
-                        <span class="lp-doc-card__title">Component Architecture</span>
-                        <span class="lp-doc-card__desc">Anatomy, slots, and the Django Cotton mapping.</span>
-                    </a>
-                    <a href="/examples/htmx/" class="lp-doc-card">
-                        <span class="lp-doc-card__num">10</span>
-                        <span class="lp-doc-card__title">HTMX Interaction Patterns</span>
-                        <span class="lp-doc-card__desc">12 server-first patterns with motion guidelines.</span>
-                    </a>
-                    <a href="/accessibility/" class="lp-doc-card">
-                        <span class="lp-doc-card__num">11</span>
-                        <span class="lp-doc-card__title">Accessibility Guidelines</span>
-                        <span class="lp-doc-card__desc">WCAG AA commitments, keyboard maps, ARIA, focus rules.</span>
-                    </a>
-                    <a href="/rdp-ui/docs-landing/" class="lp-doc-card">
-                        <span class="lp-doc-card__num">12</span>
-                        <span class="lp-doc-card__title">Docs Site — Landing</span>
-                        <span class="lp-doc-card__desc">The documentation website landing page design.</span>
-                    </a>
-                    <a href="/rdp-ui/docs-structure/" class="lp-doc-card">
-                        <span class="lp-doc-card__num">13</span>
-                        <span class="lp-doc-card__title">Docs Site — Structure</span>
-                        <span class="lp-doc-card__desc">Information architecture and the component-page template.</span>
-                    </a>
-                    <a href="/roadmap/" class="lp-doc-card">
-                        <span class="lp-doc-card__num">14</span>
-                        <span class="lp-doc-card__title">Roadmap & Vision</span>
-                        <span class="lp-doc-card__desc">v0.x → v2.0 phases and the future of RDP UI.</span>
-                    </a>
+                        <span class="lp-doc-card__title">Linting & Testing</span>
+                        <span class="lp-doc-card__desc">Ruff untuk format + lint. Pytest + pytest-cov. CI workflow GitHub Actions sudah ada.</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        {# ============ EXAMPLES ============ #}
-        <section id="examples" class="lp-examples">
+        {# ============ TECH STACK ============ #}
+        <section id="stack" class="lp-examples">
             <div class="lp-examples__inner">
                 <div class="lp-section-label">
-                    <span class="lp-section-label__text">EXAMPLES</span>
+                    <span class="lp-section-label__text">STACK</span>
                     <span class="lp-section-label__rule"></span>
                 </div>
-                <h2 class="lp-section-title">Example applications</h2>
+                <h2 class="lp-section-title">Teknologi yang dipakai</h2>
                 <p class="lp-section-desc">
-                    Complete apps built entirely from RDP UI components — desktop and mobile ready.
+                    Dipilih untuk keandalan, produktivitas solo developer, dan deployment ke VPS tanpa vendor lock-in.
                 </p>
 
                 <div class="lp-examples__grid">
-                    <a href="/dashboard/" class="lp-example-card">
-                        <span class="lp-example-card__glyph">▦</span>
-                        <span class="lp-example-card__title">Admin Dashboard</span>
-                        <span class="lp-example-card__desc">KPI stat cards, revenue chart, activity table, quick actions — the flagship screenshot.</span>
-                    </a>
-                    <a href="{% url 'accounts:login' %}" class="lp-example-card">
+                    <div class="lp-example-card">
                         <span class="lp-example-card__glyph">◈</span>
-                        <span class="lp-example-card__title">Authentication</span>
-                        <span class="lp-example-card__desc">Login, register, forgot password, and profile settings.</span>
-                    </a>
-                    <a href="/examples/crm/" class="lp-example-card">
+                        <span class="lp-example-card__title">Django</span>
+                        <span class="lp-example-card__desc">Latest stable. CBV untuk CRUD, function view untuk HTMX endpoint.</span>
+                    </div>
+                    <div class="lp-example-card">
+                        <span class="lp-example-card__glyph">▦</span>
+                        <span class="lp-example-card__title">uv</span>
+                        <span class="lp-example-card__desc">Package manager 10-100x lebih cepat dari pip. Lock file untuk reproducible build.</span>
+                    </div>
+                    <div class="lp-example-card">
                         <span class="lp-example-card__glyph">◎</span>
-                        <span class="lp-example-card__title">CRM</span>
-                        <span class="lp-example-card__desc">Contact list with filters, detail with timeline, pipeline kanban.</span>
-                    </a>
-                    <a href="/examples/invoice/" class="lp-example-card">
+                        <span class="lp-example-card__title">PostgreSQL</span>
+                        <span class="lp-example-card__desc">Production. SQLite untuk development — tidak perlu Docker hanya untuk dev.</span>
+                    </div>
+                    <div class="lp-example-card">
                         <span class="lp-example-card__glyph">▤</span>
-                        <span class="lp-example-card__title">Invoicing</span>
-                        <span class="lp-example-card__desc">Invoice list, print-friendly detail, create form with line items.</span>
-                    </a>
-                    <a href="/examples/hrm/" class="lp-example-card">
+                        <span class="lp-example-card__title">RDP-UI + PicoCSS</span>
+                        <span class="lp-example-card__desc">Zero build step. CSS variables, 11 tema, komponen Cotton — tidak butuh Node.js.</span>
+                    </div>
+                    <div class="lp-example-card">
                         <span class="lp-example-card__glyph">◐</span>
-                        <span class="lp-example-card__title">HRM</span>
-                        <span class="lp-example-card__desc">Employee directory, employee profile, leave requests.</span>
-                    </a>
+                        <span class="lp-example-card__title">Gunicorn + WhiteNoise</span>
+                        <span class="lp-example-card__desc">Deploy ke VPS langsung. Static files via WhiteNoise — tidak butuh Nginx untuk static.</span>
+                    </div>
                 </div>
             </div>
         </section>
