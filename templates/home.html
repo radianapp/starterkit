@@ -6,6 +6,22 @@
         <meta name="description" content="Template project Django production-ready. Clone dan langsung fokus ke fitur bisnis dalam 5 menit.">
     </c-slot>
 
+    <c-slot name="extra_js">
+        <script>
+            var DARK_THEMES = ['dark','midnight','dracula','nord','terminal'];
+            function rdpSetTheme(name) {
+                document.documentElement.setAttribute('data-rdp-theme', name);
+                document.documentElement.setAttribute('data-theme', DARK_THEMES.indexOf(name) >= 0 ? 'dark' : 'light');
+                var el = document.getElementById('rdp-theme-css');
+                if (el) el.href = el.href.replace(/themes\/[^.]+\.css/, 'themes/' + name + '.css');
+                document.querySelectorAll('#themeSwitcher button').forEach(function(b) {
+                    b.classList.toggle('active', b.textContent.trim().toLowerCase() === name);
+                });
+                try { localStorage.setItem('rdp-rdp-theme', name); } catch(e) {}
+            }
+        </script>
+    </c-slot>
+
     <div class="lp-root">
 
         <c-landing.nav />
@@ -125,36 +141,36 @@
                         <span class="lp-doc-card__title">RDP-UI Terintegrasi</span>
                         <span class="lp-doc-card__desc">CSS framework + 11 tema + komponen Cotton siap pakai. CDN atau self-host.</span>
                     </a>
-                    <div class="lp-doc-card">
+                    <a href="#" class="lp-doc-card">
                         <span class="lp-doc-card__num">04</span>
                         <span class="lp-doc-card__title">HTMX + Alpine.js</span>
                         <span class="lp-doc-card__desc">Interaktivitas tanpa React. Partial render, toast, modal, drawer sudah terkonfigurasi.</span>
-                    </div>
-                    <div class="lp-doc-card">
+                    </a>
+                    <a href="#" class="lp-doc-card">
                         <span class="lp-doc-card__num">05</span>
                         <span class="lp-doc-card__title">Settings per Environment</span>
                         <span class="lp-doc-card__desc">base / dev / production sudah dipisah. SQLite dev, PostgreSQL production, SMTP ready.</span>
-                    </div>
-                    <div class="lp-doc-card">
+                    </a>
+                    <a href="#" class="lp-doc-card">
                         <span class="lp-doc-card__num">06</span>
                         <span class="lp-doc-card__title">Django-Cotton</span>
                         <span class="lp-doc-card__desc">Komponen reusable via <code>&lt;c-rdp.button&gt;</code>, <code>&lt;c-rdp.card&gt;</code>, layout <code>&lt;c-layout.app&gt;</code>.</span>
-                    </div>
-                    <div class="lp-doc-card">
+                    </a>
+                    <a href="#" class="lp-doc-card">
                         <span class="lp-doc-card__num">07</span>
                         <span class="lp-doc-card__title">Struktur Package</span>
                         <span class="lp-doc-card__desc">models/, views/, services/, forms/ per app. Logic bisnis di services/, bukan di views.</span>
-                    </div>
-                    <div class="lp-doc-card">
+                    </a>
+                    <a href="#" class="lp-doc-card">
                         <span class="lp-doc-card__num">08</span>
                         <span class="lp-doc-card__title">Deploy Ready</span>
                         <span class="lp-doc-card__desc">Gunicorn + WhiteNoise untuk static files. Security headers production sudah aktif.</span>
-                    </div>
-                    <div class="lp-doc-card">
+                    </a>
+                    <a href="#" class="lp-doc-card">
                         <span class="lp-doc-card__num">09</span>
                         <span class="lp-doc-card__title">Linting & Testing</span>
                         <span class="lp-doc-card__desc">Ruff untuk format + lint. Pytest + pytest-cov. CI workflow GitHub Actions sudah ada.</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -172,31 +188,51 @@
                 </p>
 
                 <div class="lp-examples__grid">
-                    <div class="lp-example-card">
+                    <a href="#" class="lp-example-card">
                         <span class="lp-example-card__glyph">◈</span>
                         <span class="lp-example-card__title">Django</span>
                         <span class="lp-example-card__desc">Latest stable. CBV untuk CRUD, function view untuk HTMX endpoint.</span>
-                    </div>
-                    <div class="lp-example-card">
+                    </a>
+                    <a href="#" class="lp-example-card">
                         <span class="lp-example-card__glyph">▦</span>
                         <span class="lp-example-card__title">uv</span>
                         <span class="lp-example-card__desc">Package manager 10-100x lebih cepat dari pip. Lock file untuk reproducible build.</span>
-                    </div>
-                    <div class="lp-example-card">
+                    </a>
+                    <a href="#" class="lp-example-card">
                         <span class="lp-example-card__glyph">◎</span>
                         <span class="lp-example-card__title">PostgreSQL</span>
                         <span class="lp-example-card__desc">Production. SQLite untuk development — tidak perlu Docker hanya untuk dev.</span>
-                    </div>
-                    <div class="lp-example-card">
+                    </a>
+                    <a href="#" class="lp-example-card">
                         <span class="lp-example-card__glyph">▤</span>
                         <span class="lp-example-card__title">RDP-UI + PicoCSS</span>
                         <span class="lp-example-card__desc">Zero build step. CSS variables, 11 tema, komponen Cotton — tidak butuh Node.js.</span>
-                    </div>
-                    <div class="lp-example-card">
+                    </a>
+                    <a href="#" class="lp-example-card">
                         <span class="lp-example-card__glyph">◐</span>
                         <span class="lp-example-card__title">Gunicorn + WhiteNoise</span>
                         <span class="lp-example-card__desc">Deploy ke VPS langsung. Static files via WhiteNoise — tidak butuh Nginx untuk static.</span>
-                    </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        {# ============ THEME SWITCHER ============ #}
+        <section class="lp-theme-switcher">
+            <div class="lp-theme-switcher__inner">
+                <p class="lp-theme-switcher__label">RDP-UI — 11 tema bawaan. Coba langsung:</p>
+                <div class="lp-theme-switcher__btns" id="themeSwitcher">
+                    <button onclick="rdpSetTheme('default')" class="active">Default</button>
+                    <button onclick="rdpSetTheme('light')">Light</button>
+                    <button onclick="rdpSetTheme('dark')">Dark</button>
+                    <button onclick="rdpSetTheme('midnight')">Midnight</button>
+                    <button onclick="rdpSetTheme('nord')">Nord</button>
+                    <button onclick="rdpSetTheme('dracula')">Dracula</button>
+                    <button onclick="rdpSetTheme('forest')">Forest</button>
+                    <button onclick="rdpSetTheme('ocean')">Ocean</button>
+                    <button onclick="rdpSetTheme('corporate')">Corporate</button>
+                    <button onclick="rdpSetTheme('github')">GitHub</button>
+                    <button onclick="rdpSetTheme('terminal')">Terminal</button>
                 </div>
             </div>
         </section>
