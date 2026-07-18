@@ -13,7 +13,6 @@ from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from apps.core.views import RdpUiComponentsTestView, RdpUiLayoutTestView, RdpUiTokenTestView
 from apps.core.views import htmx_examples as htmx_views
 
 
@@ -28,13 +27,11 @@ urlpatterns = [
     # Root → landing page publik (redirect dashboard jika sudah login)
     path("", home_view, name="home"),
 
-    # RDP-UI Landing sudah digabung ke /. Redirect agar tidak ada broken link.
-    path("rdp-ui/", RedirectView.as_view(url="/", permanent=False), name="rdp-ui-landing"),
-
-    # RDP-UI Token & Theme Showcase (Phase 1 & 2)
-    path("rdp-ui/tokens/", RdpUiTokenTestView.as_view(), name="rdp_ui_token_test"),
-    path("rdp-ui/layout/", RdpUiLayoutTestView.as_view(), name="rdp_ui_layout_test"),
-    path("rdp-ui/components/", RdpUiComponentsTestView.as_view(), name="rdp_ui_components_test"),
+    # rdp-ui/* redirect ke ui.radian.web.id (CSS framework sudah dipisah ke repo sendiri)
+    path("rdp-ui/", RedirectView.as_view(url="https://ui.radian.web.id", permanent=False), name="rdp-ui-landing"),
+    path("rdp-ui/tokens/", RedirectView.as_view(url="https://ui.radian.web.id/docs/", permanent=False), name="rdp_ui_token_test"),
+    path("rdp-ui/layout/", RedirectView.as_view(url="https://ui.radian.web.id/docs/", permanent=False), name="rdp_ui_layout_test"),
+    path("rdp-ui/components/", RedirectView.as_view(url="https://ui.radian.web.id/docs/", permanent=False), name="rdp_ui_components_test"),
 
     # Halaman Publik (US-031)
     path("about/", TemplateView.as_view(template_name="public/about.html"), name="about"),
