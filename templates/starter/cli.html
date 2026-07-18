@@ -1,0 +1,406 @@
+{# US-024: Dokumentasi RDP CLI — daftar perintah, contoh, kelompok fungsi #}
+<c-layout.app title="RDP CLI — RDP Starter Kit" navbar_brand="Starter Kit">
+  <c-slot name="sidebar">
+    <c-sidebar.brand title="Starter Kit" initial="S" />
+    <c-sidebar.search placeholder="Cari perintah…" />
+    <c-sidebar.nav>
+      <c-sidebar.section title="Starter Kit" />
+      <c-sidebar.link href="/" icon="🏠">Beranda</c-sidebar.link>
+      <c-sidebar.link href="/starter/layout/" icon="▦">Layout System</c-sidebar.link>
+      <c-sidebar.link href="/starter/components/" icon="◈">Komponen</c-sidebar.link>
+      <c-sidebar.link href="/starter/cli/" icon="⌨" active="true">RDP CLI</c-sidebar.link>
+      <c-sidebar.link href="/accounts/login/" icon="🔑">Auth</c-sidebar.link>
+      <c-sidebar.link href="/dashboard/" icon="◎">Dashboard</c-sidebar.link>
+      <c-sidebar.section title="Grup Perintah" />
+      <c-sidebar.link href="#project">Proyek Baru</c-sidebar.link>
+      <c-sidebar.link href="#generator">Generator Kode</c-sidebar.link>
+      <c-sidebar.link href="#django">Django Wrapper</c-sidebar.link>
+      <c-sidebar.link href="#quality">Quality & DB</c-sidebar.link>
+      <c-sidebar.link href="#deploy">Deploy & Rilis</c-sidebar.link>
+    </c-sidebar.nav>
+  </c-slot>
+
+  <div style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 3rem;">
+
+    {# ── INTRO ── #}
+    <div>
+      <h1>RDP CLI</h1>
+      <p style="color: var(--rdp-text-muted); font-size: 1.05rem; max-width: 680px;">
+        CLI global untuk Radian Data Platform. Bootstrap project baru, generate kode boilerplate,
+        jalankan perintah Django — semuanya dari terminal tanpa buka editor.
+      </p>
+
+      <div style="background: var(--rdp-bg-subtle); border-radius: 10px; padding: 1.25rem 1.5rem; margin-top: 1.5rem;">
+        <p style="margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--rdp-text-muted);">Install global via uv:</p>
+        <code style="font-size: 0.95rem;">uv tool install git+https://github.com/radianapp/starterkit.git</code>
+        <p style="margin: 1rem 0 0.5rem; font-size: 0.85rem; color: var(--rdp-text-muted);">Verifikasi:</p>
+        <code style="font-size: 0.95rem;">rdp --version</code>
+      </div>
+    </div>
+
+    {# ═══════════════════════════════════════════════════════ #}
+    {# 1. PROYEK BARU #}
+    {# ═══════════════════════════════════════════════════════ #}
+    <section id="project">
+      <h2 style="border-bottom: 2px solid var(--rdp-primary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.1rem;">⚡</span> Proyek Baru
+      </h2>
+      <p style="color: var(--rdp-text-muted); margin-bottom: 1.5rem;">
+        Perintah untuk bootstrap project Django baru dari template RDP atau memperbarui project yang ada.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+
+        <c-rdp.card title="rdp new &lt;nama-proyek&gt;">
+          <p style="font-size: 0.9rem; color: var(--rdp-text-muted); margin-bottom: 1rem;">
+            Wizard interaktif untuk membuat project Django baru dari awal. Clone template, setup .env, pilih fitur a-la-carte.
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.85rem; line-height: 1.9; margin-bottom: 1rem;">
+            $ rdp new portal-analytic<br>
+            <span style="color: var(--rdp-text-muted)"># Wizard akan tanya: nama, deskripsi, warna aksen, fitur</span><br>
+            <span style="color: var(--rdp-text-muted)"># ✓ Landing Page? ✓ Auth UI? ✓ Dashboard UI?</span>
+          </div>
+          <div style="font-size: 0.85rem;">
+            <strong>Apa yang dilakukan:</strong>
+            <ol style="margin: 0.5rem 0 0 1.2rem; line-height: 1.8; color: var(--rdp-text-muted);">
+              <li>Clone <code>radianapp/starterkit</code> dari GitHub (shallow clone)</li>
+              <li>Hapus .git/ — project baru bersih, tidak terhubung ke repo template</li>
+              <li>Generate <code>SECRET_KEY</code> baru + isi .env otomatis</li>
+              <li>Update <code>pyproject.toml</code> dengan nama & deskripsi project</li>
+              <li>Hapus modul yang tidak dipilih (landing/auth/dashboard bisa opt-out)</li>
+            </ol>
+          </div>
+          <c-slot name="footer">
+            <c-rdp.badge variant="info">Butuh Git + koneksi internet</c-rdp.badge>
+          </c-slot>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp update">
+          <p style="font-size: 0.9rem; color: var(--rdp-text-muted); margin-bottom: 1rem;">
+            Update project yang sudah ada dengan versi template terbaru. Jalankan dari root project (sejajar <code>manage.py</code>).
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.85rem; line-height: 1.9;">
+            $ cd nama-project<br>
+            $ rdp update<br>
+            <span style="color: var(--rdp-text-muted)"># File berbeda → ditanya: overwrite? [y/N/d (diff)]</span>
+          </div>
+        </c-rdp.card>
+
+      </div>
+    </section>
+
+    {# ═══════════════════════════════════════════════════════ #}
+    {# 2. GENERATOR KODE #}
+    {# ═══════════════════════════════════════════════════════ #}
+    <section id="generator">
+      <h2 style="border-bottom: 2px solid var(--rdp-primary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.1rem;">◈</span> Generator Kode
+      </h2>
+      <p style="color: var(--rdp-text-muted); margin-bottom: 1.5rem;">
+        Generate file boilerplate sesuai konvensi RDP. Semua <code>rdp new *</code> di bawah ini dijalankan dari
+        root project. Flag <code>-a &lt;nama-app&gt;</code> menentukan app target.
+      </p>
+
+      {# Tabel ringkas #}
+      <div style="overflow-x: auto; margin-bottom: 2rem;">
+        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--rdp-border); text-align: left;">
+              <th style="padding: 0.5rem 0.75rem; color: var(--rdp-text-muted); font-weight: 600;">Perintah</th>
+              <th style="padding: 0.5rem 0.75rem; color: var(--rdp-text-muted); font-weight: 600;">Buat apa</th>
+              <th style="padding: 0.5rem 0.75rem; color: var(--rdp-text-muted); font-weight: 600;">Contoh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new app &lt;nama&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Django app dengan struktur package (models/, views/, services/, forms/, admin/, tests/)</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new app products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new model &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">File model di <code>apps/{app}/models/{nama}.py</code> + auto-export di <code>__init__.py</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new model product -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new crud &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">ListView + CreateView + UpdateView + DeleteView + template list & form</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new crud product -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new api &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Skeleton DRF: folder <code>api/views/</code>, <code>api/serializers/</code>, <code>api/urls.py</code> dengan router</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new api products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new htmx &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">TemplateView + partial HTML di <code>templates/{app}/partials/{nama}.html</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new htmx product_table -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new service &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Class service di <code>apps/{app}/services/{nama}.py</code> dengan <code>@transaction.atomic</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new service stock_manager -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new task &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Celery <code>@shared_task</code> di <code>apps/{app}/tasks.py</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new task sync_stock -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new command &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Custom management command di <code>apps/{app}/management/commands/{nama}.py</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new command import_csv -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new test &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">File pytest di <code>apps/{app}/tests/test_{nama}.py</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new test product_service -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new component &lt;nama&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">File HTML Django-Cotton di <code>templates/cotton/rdp/{nama}.html</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new component price_tag</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new page &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Template HTML halaman penuh dengan <code>&lt;c-layout.app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new page report -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new seeder &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Management command seeder berbasis Faker untuk mengisi data awal</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new seeder product -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new permission &lt;nama&gt; -a &lt;app&gt;</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Class DRF permission (CanView, CanCreate, CanUpdate, CanDelete) di <code>permissions.py</code></td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new permission product -a products</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new env</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Salin .env.example ke .env.development, .env.production, .env.staging, .env.testing</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new env</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new docker</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Dockerfile + docker-compose.yml siap pakai (Python 3.12, PostgreSQL 15)</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new docker</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--rdp-border);">
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new deploy</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Konfigurasi deployment: nginx.conf + gunicorn.service (systemd)</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new deploy</code></td>
+            </tr>
+            <tr>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new docs</code></td>
+              <td style="padding: 0.6rem 0.75rem; color: var(--rdp-text-muted);">Template dokumentasi: API.md, CHANGELOG.md, CONTRIBUTING.md, README.md</td>
+              <td style="padding: 0.6rem 0.75rem;"><code>rdp new docs</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {# Shortcut: make + scaffold #}
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+        <c-rdp.card title="rdp make">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted);">
+            Wizard interaktif — pilih apa yang mau dibuat dari menu bernomor. Cocok kalau lupa sintaks.
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8; margin-top: 0.75rem;">
+            $ rdp make<br>
+            <span style="color: var(--rdp-text-muted)">1. App  2. Model  3. CRUD<br>4. API  5. Component  6. Task<br>7. Service  8. Test</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp scaffold &lt;nama&gt; -a &lt;app&gt;">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted);">
+            Mega generator — jalankan <strong>model + crud + api + test</strong> sekaligus dalam satu perintah.
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8; margin-top: 0.75rem;">
+            $ rdp scaffold product -a products<br>
+            <span style="color: var(--rdp-text-muted)"># → model + crud + api + test dibuat sekaligus</span>
+          </div>
+        </c-rdp.card>
+      </div>
+    </section>
+
+    {# ═══════════════════════════════════════════════════════ #}
+    {# 3. DJANGO WRAPPER #}
+    {# ═══════════════════════════════════════════════════════ #}
+    <section id="django">
+      <h2 style="border-bottom: 2px solid var(--rdp-primary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.1rem;">▦</span> Django Wrapper
+      </h2>
+      <p style="color: var(--rdp-text-muted); margin-bottom: 1.5rem;">
+        Shorthand untuk perintah <code>uv run python manage.py …</code> yang sering dipakai.
+        Semua dijalankan dari root project.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <c-rdp.card title="rdp runserver (atau: rdp r)">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Jalankan dev server Django.</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp r<br>
+            <span style="color: var(--rdp-text-muted)"># → uv run python manage.py runserver</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp migrate (atau: rdp m)">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Terapkan migrasi database.</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp m<br>
+            <span style="color: var(--rdp-text-muted)"># → uv run python manage.py migrate</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp makemigrations (atau: rdp mm)">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Buat file migrasi baru dari perubahan model.</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp mm<br>
+            <span style="color: var(--rdp-text-muted)"># → uv run python manage.py makemigrations</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp shell (atau: rdp s)">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Buka shell interaktif Django.</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp s<br>
+            <span style="color: var(--rdp-text-muted)"># → uv run python manage.py shell</span>
+          </div>
+        </c-rdp.card>
+      </div>
+    </section>
+
+    {# ═══════════════════════════════════════════════════════ #}
+    {# 4. QUALITY & DATABASE #}
+    {# ═══════════════════════════════════════════════════════ #}
+    <section id="quality">
+      <h2 style="border-bottom: 2px solid var(--rdp-primary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.1rem;">◎</span> Quality & Database
+      </h2>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <c-rdp.card title="rdp lint">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Jalankan Ruff: linter + formatter sekaligus.</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp lint<br>
+            <span style="color: var(--rdp-text-muted)"># ruff check . && ruff format .</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp doctor">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Health check: versi Python, Django check, migrasi yang terlewat.</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp doctor<br>
+            <span style="color: var(--rdp-text-muted)"># [1/3] Python  [2/3] Django check<br># [3/3] Cek migrasi pending</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp upgrade">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Cek library yang perlu di-update (<code>uv pip list --outdated</code>).</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp upgrade
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp monitor">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">Status disk sistem dasar (total / used / free).</p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp monitor
+          </div>
+        </c-rdp.card>
+      </div>
+
+      <c-rdp.card title="rdp db &lt;subcommand&gt;">
+        <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 1rem;">Utilitas database — backup, restore, reset, seed, shell.</p>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; font-size: 0.83rem; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--rdp-border);">
+                <th style="padding: 0.4rem 0.6rem; text-align: left; color: var(--rdp-text-muted);">Sub-perintah</th>
+                <th style="padding: 0.4rem 0.6rem; text-align: left; color: var(--rdp-text-muted);">Fungsi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--rdp-border);"><td style="padding: 0.4rem 0.6rem;"><code>rdp db backup [file]</code></td><td style="padding: 0.4rem 0.6rem; color: var(--rdp-text-muted);">Export seluruh data ke JSON (dumpdata)</td></tr>
+              <tr style="border-bottom: 1px solid var(--rdp-border);"><td style="padding: 0.4rem 0.6rem;"><code>rdp db restore &lt;file&gt;</code></td><td style="padding: 0.4rem 0.6rem; color: var(--rdp-text-muted);">Import data dari file JSON (loaddata)</td></tr>
+              <tr style="border-bottom: 1px solid var(--rdp-border);"><td style="padding: 0.4rem 0.6rem;"><code>rdp db reset</code></td><td style="padding: 0.4rem 0.6rem; color: var(--rdp-text-muted);">Hapus db.sqlite3 + migrate ulang (dengan konfirmasi)</td></tr>
+              <tr style="border-bottom: 1px solid var(--rdp-border);"><td style="padding: 0.4rem 0.6rem;"><code>rdp db seed</code></td><td style="padding: 0.4rem 0.6rem; color: var(--rdp-text-muted);">Jalankan <code>loaddemodata</code> management command</td></tr>
+              <tr><td style="padding: 0.4rem 0.6rem;"><code>rdp db shell</code></td><td style="padding: 0.4rem 0.6rem; color: var(--rdp-text-muted);">Buka database shell langsung (dbshell)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </c-rdp.card>
+    </section>
+
+    {# ═══════════════════════════════════════════════════════ #}
+    {# 5. DEPLOY & RILIS #}
+    {# ═══════════════════════════════════════════════════════ #}
+    <section id="deploy">
+      <h2 style="border-bottom: 2px solid var(--rdp-primary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.1rem;">◐</span> Deploy & Rilis
+      </h2>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        <c-rdp.card title="rdp assets">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+            Kumpulkan static files (<code>collectstatic</code>) + kompres (<code>compress</code>).
+            Dijalankan sebelum deploy production.
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp assets
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp release">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+            Pipeline rilis: <strong>lint → pytest → doctor</strong>. Gagal di salah satu langkah → proses berhenti.
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp release<br>
+            <span style="color: var(--rdp-text-muted)"># [1/3] lint  [2/3] pytest  [3/3] doctor</span>
+          </div>
+        </c-rdp.card>
+
+        <c-rdp.card title="rdp build-demo">
+          <p style="font-size: 0.88rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+            Bangun app demo <code>inventory</code> lengkap — app + api + komponen + service + task + test.
+            Berguna untuk eksplorasi semua generator sekaligus.
+          </p>
+          <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.6rem 1rem; font-family: monospace; font-size: 0.82rem;">
+            $ rdp build-demo
+          </div>
+        </c-rdp.card>
+      </div>
+    </section>
+
+    {# ── REFERENSI CEPAT ── #}
+    <section>
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.25rem;">Referensi Cepat</h2>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 10px; padding: 1.25rem 1.5rem; font-family: monospace; font-size: 0.82rem; line-height: 2;">
+        <span style="color: var(--rdp-text-muted)"># Bootstrap project baru</span><br>
+        rdp new nama-project<br>
+        <br>
+        <span style="color: var(--rdp-text-muted)"># Tambah app baru</span><br>
+        rdp new app orders<br>
+        <br>
+        <span style="color: var(--rdp-text-muted)"># Scaffold lengkap (model + crud + api + test)</span><br>
+        rdp scaffold order -a orders<br>
+        <br>
+        <span style="color: var(--rdp-text-muted)"># Dev workflow harian</span><br>
+        rdp r&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--rdp-text-muted)"># runserver</span><br>
+        rdp mm &amp;&amp; rdp m&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--rdp-text-muted)"># makemigrations + migrate</span><br>
+        rdp s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: var(--rdp-text-muted)"># shell</span><br>
+        <br>
+        <span style="color: var(--rdp-text-muted)"># Sebelum push</span><br>
+        rdp lint &amp;&amp; rdp release<br>
+        <br>
+        <span style="color: var(--rdp-text-muted)"># Bantuan</span><br>
+        rdp --help<br>
+        rdp --version
+      </div>
+    </section>
+
+  </div>
+</c-layout.app>

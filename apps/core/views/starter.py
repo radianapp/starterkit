@@ -20,4 +20,10 @@ class StarterComponentsView(TemplateView):
     """
     template_name = "starter/components.html"
 
-    pass
+
+class StarterCliView(TemplateView):
+    """
+    Dokumentasi RDP CLI — daftar perintah, grup fungsi, contoh penggunaan.
+    US: US-024 — CLI rdp
+    """
+    template_name = "starter/cli.html"

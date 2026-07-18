@@ -13,7 +13,7 @@ from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from apps.core.views import StarterComponentsView, StarterLayoutView
+from apps.core.views import StarterCliView, StarterComponentsView, StarterLayoutView
 from apps.core.views import htmx_examples as htmx_views
 
 
@@ -31,6 +31,7 @@ urlpatterns = [
     # Starter Kit showcase — layout system dan komponen Cotton
     path("starter/layout/", StarterLayoutView.as_view(), name="starter_layout"),
     path("starter/components/", StarterComponentsView.as_view(), name="starter_components"),
+    path("starter/cli/", StarterCliView.as_view(), name="starter_cli"),
     path("starter/auth/", RedirectView.as_view(url="/accounts/login/", permanent=False), name="starter_auth"),
     path("starter/dashboard/", RedirectView.as_view(url="/dashboard/", permanent=False), name="starter_dashboard"),
 
