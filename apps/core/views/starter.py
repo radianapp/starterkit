@@ -1,8 +1,24 @@
 """
-Views untuk halaman showcase Starter Kit — layout dan komponen Cotton.
+Views untuk halaman Docs dan Examples Starter Kit.
 """
 
 from django.views.generic import TemplateView
+
+
+class StarterDocsView(TemplateView):
+    """
+    Dokumentasi lengkap RDP Starter Kit — instalasi, layout, komponen, auth, CLI, deploy.
+    US: US-010, US-024, US-035
+    """
+    template_name = "starter/docs.html"
+
+
+class StarterExamplesView(TemplateView):
+    """
+    Index semua contoh dan demo interaktif Starter Kit.
+    US: US-036
+    """
+    template_name = "starter/examples.html"
 
 
 class StarterLayoutView(TemplateView):
@@ -19,11 +35,3 @@ class StarterComponentsView(TemplateView):
     US: US-035 — Dokumentasi komponen
     """
     template_name = "starter/components.html"
-
-
-class StarterCliView(TemplateView):
-    """
-    Dokumentasi RDP CLI — daftar perintah, grup fungsi, contoh penggunaan.
-    US: US-024 — CLI rdp
-    """
-    template_name = "starter/cli.html"

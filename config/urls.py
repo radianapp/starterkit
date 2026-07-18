@@ -13,7 +13,7 @@ from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from apps.core.views import StarterCliView, StarterComponentsView, StarterLayoutView
+from apps.core.views import StarterDocsView, StarterExamplesView, StarterComponentsView, StarterLayoutView
 from apps.core.views import htmx_examples as htmx_views
 
 
@@ -28,14 +28,20 @@ urlpatterns = [
     # Root → landing page publik (redirect dashboard jika sudah login)
     path("", home_view, name="home"),
 
-    # Starter Kit showcase — layout system dan komponen Cotton
-    path("starter/layout/", StarterLayoutView.as_view(), name="starter_layout"),
-    path("starter/components/", StarterComponentsView.as_view(), name="starter_components"),
-    path("starter/cli/", StarterCliView.as_view(), name="starter_cli"),
-    path("starter/auth/", RedirectView.as_view(url="/accounts/login/", permanent=False), name="starter_auth"),
-    path("starter/dashboard/", RedirectView.as_view(url="/dashboard/", permanent=False), name="starter_dashboard"),
+    # Docs & Examples — 2 halaman utama navbar
+    path("docs/", StarterDocsView.as_view(), name="docs_index"),
+    path("examples/", StarterExamplesView.as_view(), name="examples_index"),
 
-    # rdp-ui/* redirect ke ui.radian.web.id (CSS framework sudah dipisah ke repo sendiri)
+    # Examples sub-pages
+    path("examples/layout/", StarterLayoutView.as_view(), name="examples_layout"),
+    path("examples/components/", StarterComponentsView.as_view(), name="examples_components"),
+
+    # Redirect lama agar tidak 404
+    path("starter/layout/", RedirectView.as_view(url="/examples/layout/", permanent=True), name="starter_layout"),
+    path("starter/components/", RedirectView.as_view(url="/examples/components/", permanent=True), name="starter_components"),
+    path("starter/cli/", RedirectView.as_view(url="/docs/#cli", permanent=True), name="starter_cli"),
+    path("starter/auth/", RedirectView.as_view(url="/accounts/login/", permanent=True), name="starter_auth"),
+    path("starter/dashboard/", RedirectView.as_view(url="/dashboard/", permanent=True), name="starter_dashboard"),
     path("rdp-ui/", RedirectView.as_view(url="https://ui.radian.web.id", permanent=False), name="rdp-ui-landing"),
     path("rdp-ui/tokens/", RedirectView.as_view(url="https://ui.radian.web.id/docs/", permanent=False), name="rdp_ui_token_test"),
     path("rdp-ui/layout/", RedirectView.as_view(url="https://ui.radian.web.id/docs/", permanent=False), name="rdp_ui_layout_test"),
@@ -46,10 +52,7 @@ urlpatterns = [
     path("terms/", TemplateView.as_view(template_name="public/terms.html"), name="terms"),
     path("privacy/", TemplateView.as_view(template_name="public/privacy.html"), name="privacy"),
 
-    # Docs
-    path("docs/", TemplateView.as_view(template_name="docs/product_foundation.html"), name="docs_index"),
-
-    # Showcase 10 Pola HTMX (US-036)
+    # HTMX Examples (US-036)
     path("examples/htmx/", htmx_views.HtmxExamplesIndexView.as_view(), name="htmx-examples"),
     path(
         "examples/htmx/contact/create/",

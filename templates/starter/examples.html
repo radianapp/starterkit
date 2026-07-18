@@ -1,0 +1,104 @@
+{# Halaman index semua contoh / demo interaktif RDP Starter Kit #}
+{% load static %}
+<c-layout.base title="Examples — RDP Starter Kit" navbar_brand="RDP Starter">
+  <c-slot name="head">
+    <link rel="stylesheet" href="{% static 'css/rdp-ui-landing.css' %}">
+    <style>
+      .ex-root { max-width: 900px; margin: 0 auto; padding: 5rem 1.5rem 4rem; }
+      .ex-root h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+      .ex-root > p { color: var(--lp-ink-muted); font-size: 1.05rem; margin-bottom: 3rem; }
+      .ex-group { margin-bottom: 3rem; }
+      .ex-group h2 { font-size: 1.1rem; font-weight: 700; color: var(--lp-ink-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--lp-border); }
+      .ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+      .ex-card {
+        display: block; text-decoration: none; border: 1px solid var(--lp-border);
+        border-radius: 12px; padding: 1.25rem 1.5rem;
+        background: var(--lp-bg); transition: border-color 0.15s, box-shadow 0.15s;
+        color: inherit;
+      }
+      .ex-card:hover { border-color: var(--lp-green-deep); box-shadow: 0 0 0 3px var(--lp-green-tint); }
+      .ex-card__icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+      .ex-card__title { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; }
+      .ex-card__desc { font-size: 0.85rem; color: var(--lp-ink-muted); line-height: 1.6; }
+      .ex-card__badge { display: inline-block; margin-top: 0.75rem; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 99px; background: var(--lp-green-tint); color: var(--lp-green-deep); }
+      .ex-card__badge--ext { background: var(--lp-border); color: var(--lp-ink-muted); }
+    </style>
+  </c-slot>
+
+  <c-landing.nav />
+
+  <div class="ex-root">
+    <h1>Examples</h1>
+    <p>Contoh dan demo interaktif semua fitur RDP Starter Kit — komponen, pola HTMX, auth, dashboard, dan lebih banyak lagi.</p>
+
+    {# ── UI COMPONENTS ── #}
+    <div class="ex-group">
+      <h2>UI &amp; Komponen</h2>
+      <div class="ex-grid">
+        <a href="/examples/components/" class="ex-card">
+          <div class="ex-card__icon">◈</div>
+          <div class="ex-card__title">Komponen Cotton</div>
+          <div class="ex-card__desc">Catalog semua komponen &lt;c-rdp.*&gt; — button, badge, card, form, stat, avatar, tabs, timeline, dan lainnya.</div>
+          <span class="ex-card__badge">interaktif</span>
+        </a>
+        <a href="/examples/layout/" class="ex-card">
+          <div class="ex-card__icon">▦</div>
+          <div class="ex-card__title">Layout System</div>
+          <div class="ex-card__desc">Demo 4 layout Cotton: blank, landing, app, base — dengan contoh slot dan struktur template.</div>
+          <span class="ex-card__badge">interaktif</span>
+        </a>
+        <a href="https://ui.radian.web.id" class="ex-card" target="_blank">
+          <div class="ex-card__icon">▤</div>
+          <div class="ex-card__title">RDP-UI CSS Framework</div>
+          <div class="ex-card__desc">Design tokens, 11 tema, dan referensi CSS lengkap di situs terpisah.</div>
+          <span class="ex-card__badge ex-card__badge--ext">↗ eksternal</span>
+        </a>
+      </div>
+    </div>
+
+    {# ── HTMX ── #}
+    <div class="ex-group">
+      <h2>HTMX Patterns</h2>
+      <div class="ex-grid">
+        <a href="/examples/htmx/" class="ex-card">
+          <div class="ex-card__icon">⚡</div>
+          <div class="ex-card__title">10 Pola HTMX</div>
+          <div class="ex-card__desc">Inline edit, live search, toast, infinite scroll, polling, wizard, lazy load, modal — semua dengan contoh kode.</div>
+          <span class="ex-card__badge">interaktif</span>
+        </a>
+      </div>
+    </div>
+
+    {# ── AUTH & APP ── #}
+    <div class="ex-group">
+      <h2>Auth &amp; App</h2>
+      <div class="ex-grid">
+        <a href="/accounts/login/" class="ex-card">
+          <div class="ex-card__icon">🔑</div>
+          <div class="ex-card__title">Login</div>
+          <div class="ex-card__desc">Halaman login dengan form validasi, redirect otomatis jika sudah masuk.</div>
+          <span class="ex-card__badge">live</span>
+        </a>
+        <a href="/accounts/register/" class="ex-card">
+          <div class="ex-card__icon">✉</div>
+          <div class="ex-card__title">Register</div>
+          <div class="ex-card__desc">Form registrasi dengan validasi email, username, dan password.</div>
+          <span class="ex-card__badge">live</span>
+        </a>
+        <a href="/dashboard/" class="ex-card">
+          <div class="ex-card__icon">◎</div>
+          <div class="ex-card__title">Dashboard</div>
+          <div class="ex-card__desc">Halaman post-login dengan sidebar, stat cards, dan activity table. Butuh login.</div>
+          <span class="ex-card__badge">live · login required</span>
+        </a>
+        <a href="/accounts/profile/" class="ex-card">
+          <div class="ex-card__icon">◐</div>
+          <div class="ex-card__title">Profil &amp; Settings</div>
+          <div class="ex-card__desc">Edit profil, ganti password, pengaturan akun. Butuh login.</div>
+          <span class="ex-card__badge">live · login required</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</c-layout.base>
