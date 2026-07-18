@@ -1,0 +1,249 @@
+{# US-035: Katalog komponen Cotton <c-rdp.*> bawaan Starter Kit #}
+<c-layout.app title="Komponen — RDP Starter Kit" navbar_brand="Starter Kit">
+  <c-slot name="sidebar">
+    <c-sidebar.brand title="Starter Kit" initial="S" />
+    <c-sidebar.search placeholder="Cari komponen…" />
+    <c-sidebar.nav>
+      <c-sidebar.section title="Starter Kit" />
+      <c-sidebar.link href="/" icon="🏠">Beranda</c-sidebar.link>
+      <c-sidebar.link href="/starter/layout/" icon="▦">Layout System</c-sidebar.link>
+      <c-sidebar.link href="/starter/components/" icon="◈" active="true">Komponen</c-sidebar.link>
+      <c-sidebar.link href="/accounts/login/" icon="🔑">Auth</c-sidebar.link>
+      <c-sidebar.link href="/dashboard/" icon="◎">Dashboard</c-sidebar.link>
+      <c-sidebar.section title="Kelompok" />
+      <c-sidebar.link href="#feedback">Feedback</c-sidebar.link>
+      <c-sidebar.link href="#forms">Form Controls</c-sidebar.link>
+      <c-sidebar.link href="#data">Data Display</c-sidebar.link>
+      <c-sidebar.link href="#nav">Navigasi</c-sidebar.link>
+      <c-sidebar.link href="#sidebar-comp">Sidebar</c-sidebar.link>
+    </c-sidebar.nav>
+  </c-slot>
+
+  <div style="max-width: 960px; margin: 0 auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 3rem;">
+
+    <div>
+      <h1>Komponen Cotton</h1>
+      <p style="color: var(--rdp-text-muted);">
+        Semua komponen dipanggil via tag <code>&lt;c-rdp.{nama}&gt;</code>. Source ada di
+        <code>templates/cotton/rdp/</code>.
+      </p>
+    </div>
+
+    {# ══════════════════════════════════════════════════ #}
+    {# BUTTONS #}
+    {# ══════════════════════════════════════════════════ #}
+    <section id="feedback">
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Buttons</h2>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <c-rdp.button variant="primary">Primary</c-rdp.button>
+        <c-rdp.button variant="secondary">Secondary</c-rdp.button>
+        <c-rdp.button variant="ghost">Ghost</c-rdp.button>
+        <c-rdp.button variant="danger">Danger</c-rdp.button>
+        <c-rdp.button variant="primary" size="sm">Small</c-rdp.button>
+        <c-rdp.button variant="primary" disabled="true">Disabled</c-rdp.button>
+      </div>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8;">
+        &lt;c-rdp.button variant="primary"&gt;Label&lt;/c-rdp.button&gt;<br>
+        &lt;c-rdp.button variant="ghost" size="sm"&gt;Kecil&lt;/c-rdp.button&gt;<br>
+        &lt;c-rdp.button variant="danger" disabled="true"&gt;Nonaktif&lt;/c-rdp.button&gt;<br>
+        &lt;c-rdp.button href="/url/"&gt;Sebagai link&lt;/c-rdp.button&gt;
+      </div>
+    </section>
+
+    {# BADGES #}
+    <section>
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Badges & Status</h2>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <c-rdp.badge>Default</c-rdp.badge>
+        <c-rdp.badge variant="success">Success</c-rdp.badge>
+        <c-rdp.badge variant="warning">Warning</c-rdp.badge>
+        <c-rdp.badge variant="danger">Danger</c-rdp.badge>
+        <c-rdp.badge variant="info">Info</c-rdp.badge>
+        <c-rdp.status_badge status="active">Aktif</c-rdp.status_badge>
+        <c-rdp.status_badge status="inactive">Nonaktif</c-rdp.status_badge>
+        <c-rdp.status_badge status="pending">Pending</c-rdp.status_badge>
+      </div>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8;">
+        &lt;c-rdp.badge variant="success"&gt;Success&lt;/c-rdp.badge&gt;<br>
+        &lt;c-rdp.status_badge status="active"&gt;Aktif&lt;/c-rdp.status_badge&gt;
+      </div>
+    </section>
+
+    {# ALERTS #}
+    <section>
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Alerts</h2>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem;">
+        <c-rdp.alert variant="success">Data berhasil disimpan.</c-rdp.alert>
+        <c-rdp.alert variant="warning">Periksa kembali sebelum melanjutkan.</c-rdp.alert>
+        <c-rdp.alert variant="danger">Terjadi kesalahan. Coba lagi.</c-rdp.alert>
+        <c-rdp.alert variant="info">Informasi tambahan tersedia di pengaturan.</c-rdp.alert>
+      </div>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8;">
+        &lt;c-rdp.alert variant="success"&gt;Pesan sukses&lt;/c-rdp.alert&gt;<br>
+        &lt;c-rdp.alert variant="danger"&gt;Pesan error&lt;/c-rdp.alert&gt;
+      </div>
+    </section>
+
+    {# CARD #}
+    <section>
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Cards</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <c-rdp.card title="Card Standar">
+          <p style="font-size: 0.87rem; color: var(--rdp-text-muted);">Konten card bisa berupa teks, form, tabel, atau komponen lain.</p>
+          <c-slot name="footer">
+            <c-rdp.button variant="primary" size="sm">Aksi</c-rdp.button>
+          </c-slot>
+        </c-rdp.card>
+        <c-rdp.card title="Card Clickable" clickable="true" href="#">
+          <p style="font-size: 0.87rem; color: var(--rdp-text-muted);">Card ini bisa diklik — render sebagai &lt;a&gt; tag.</p>
+        </c-rdp.card>
+      </div>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8;">
+        &lt;c-rdp.card title="Judul"&gt;<br>
+        &nbsp;&nbsp;Konten<br>
+        &nbsp;&nbsp;&lt;c-slot name="footer"&gt;…&lt;/c-slot&gt;<br>
+        &lt;/c-rdp.card&gt;
+      </div>
+    </section>
+
+    {# STAT CARDS #}
+    <section>
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Stat Cards</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <c-rdp.stat_card label="Total User" value="1,248" trend="+12%" trend_up="true" />
+        <c-rdp.stat_card label="Pendapatan" value="Rp 4.2M" trend="+8%" trend_up="true" />
+        <c-rdp.stat_card label="Bounce Rate" value="34%" trend="-2%" trend_up="false" />
+        <c-rdp.stat_card label="Tiket Terbuka" value="7" />
+      </div>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem;">
+        &lt;c-rdp.stat_card label="Total User" value="1,248" trend="+12%" trend_up="true" /&gt;
+      </div>
+    </section>
+
+    {# ══════════════════════════════════════════════════ #}
+    {# FORMS #}
+    {# ══════════════════════════════════════════════════ #}
+    <section id="forms">
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Form Controls</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <c-rdp.form.input name="email" label="Email" type="email" placeholder="nama@email.com" />
+        <c-rdp.form.input name="password" label="Password" type="password" placeholder="••••••••" />
+        <c-rdp.form.select name="role" label="Role">
+          <option value="">Pilih role…</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </c-rdp.form.select>
+        <c-rdp.form.textarea name="notes" label="Catatan" placeholder="Tulis catatan…" rows="3" />
+        <c-rdp.form.checkbox name="agree" label="Setuju dengan syarat dan ketentuan" />
+        <c-rdp.form.switch name="notif" label="Aktifkan notifikasi email" />
+      </div>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 0.75rem 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.8;">
+        &lt;c-rdp.form.input name="email" label="Email" type="email" /&gt;<br>
+        &lt;c-rdp.form.select name="role" label="Role"&gt;…&lt;/c-rdp.form.select&gt;<br>
+        &lt;c-rdp.form.checkbox name="agree" label="Setuju…" /&gt;<br>
+        &lt;c-rdp.form.switch name="notif" label="Aktifkan notifikasi" /&gt;
+      </div>
+    </section>
+
+    {# ══════════════════════════════════════════════════ #}
+    {# DATA DISPLAY #}
+    {# ══════════════════════════════════════════════════ #}
+    <section id="data">
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Data Display</h2>
+
+      {# AVATAR #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Avatar</h3>
+      <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
+        <c-rdp.avatar name="Budi Santoso" size="sm" />
+        <c-rdp.avatar name="Ani Rahayu" size="md" />
+        <c-rdp.avatar name="Citra Dewi" size="lg" />
+        <c-rdp.avatar name="D" size="md" color="success" />
+      </div>
+
+      {# PROGRESS #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Progress</h3>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <c-rdp.progress value="75" label="Upload" />
+        <c-rdp.progress value="40" variant="warning" label="Storage" />
+        <c-rdp.progress value="90" variant="success" label="Selesai" />
+      </div>
+
+      {# STEPS #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Steps</h3>
+      <div style="margin-bottom: 1.5rem;">
+        <c-rdp.steps items="{{ step_items }}" current="1" />
+      </div>
+
+      {# TIMELINE #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Timeline</h3>
+      <div style="margin-bottom: 1rem;">
+        {% for item in timeline_items %}
+          <c-rdp.timeline_item title="{{ item.title }}" time="{{ item.time }}">
+            {{ item.desc }}
+          </c-rdp.timeline_item>
+        {% endfor %}
+      </div>
+
+      {# EMPTY STATE #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Empty State</h3>
+      <c-rdp.empty_state title="Belum ada data" description="Tambahkan item pertama untuk memulai.">
+        <c-rdp.button variant="primary" size="sm">Tambah Item</c-rdp.button>
+      </c-rdp.empty_state>
+    </section>
+
+    {# ══════════════════════════════════════════════════ #}
+    {# OVERLAYS & NAV #}
+    {# ══════════════════════════════════════════════════ #}
+    <section id="nav">
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Overlays & Navigasi</h2>
+
+      {# TABS #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Tabs</h3>
+      <div style="margin-bottom: 1.5rem;">
+        <c-rdp.tabs items="{{ tab_items }}" active="tab-overview">
+          <div id="tab-overview">Konten tab Overview.</div>
+          <div id="tab-settings" style="display:none">Konten tab Settings.</div>
+          <div id="tab-activity" style="display:none">Konten tab Activity.</div>
+        </c-rdp.tabs>
+      </div>
+
+      {# TOOLTIP #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Tooltip</h3>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+        <c-rdp.tooltip text="Ini tooltip atas" position="top">
+          <c-rdp.button variant="ghost" size="sm">Hover Atas</c-rdp.button>
+        </c-rdp.tooltip>
+        <c-rdp.tooltip text="Ini tooltip bawah" position="bottom">
+          <c-rdp.button variant="ghost" size="sm">Hover Bawah</c-rdp.button>
+        </c-rdp.tooltip>
+      </div>
+
+      {# BREADCRUMB #}
+      <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Breadcrumb</h3>
+      <div style="margin-bottom: 1rem;">
+        <c-rdp.breadcrumb items='[{"label": "Beranda", "href": "/"}, {"label": "Starter", "href": "/starter/"}, {"label": "Komponen"}]' />
+      </div>
+    </section>
+
+    {# ══════════════════════════════════════════════════ #}
+    {# SIDEBAR COMPONENTS #}
+    {# ══════════════════════════════════════════════════ #}
+    <section id="sidebar-comp">
+      <h2 style="border-bottom: 1px solid var(--rdp-border); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Sidebar Components</h2>
+      <p style="color: var(--rdp-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+        Komponen sidebar dipakai di dalam <code>&lt;c-slot name="sidebar"&gt;</code> pada layout <code>app</code>.
+        Sidebar di halaman ini adalah contoh penggunaannya.
+      </p>
+      <div style="background: var(--rdp-bg-subtle); border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 0.8rem; line-height: 1.9;">
+        &lt;c-sidebar.brand title="App" initial="A" /&gt;<br>
+        &lt;c-sidebar.search placeholder="Cari…" /&gt;<br>
+        &lt;c-sidebar.nav&gt;<br>
+        &nbsp;&nbsp;&lt;c-sidebar.section title="Menu Utama" /&gt;<br>
+        &nbsp;&nbsp;&lt;c-sidebar.link href="/" icon="🏠" active="true"&gt;Beranda&lt;/c-sidebar.link&gt;<br>
+        &nbsp;&nbsp;&lt;c-sidebar.link href="/dashboard/" icon="◎"&gt;Dashboard&lt;/c-sidebar.link&gt;<br>
+        &lt;/c-sidebar.nav&gt;
+      </div>
+    </section>
+
+  </div>
+</c-layout.app>

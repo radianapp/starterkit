@@ -13,6 +13,7 @@ from django.urls import include, path
 from django.views.generic import RedirectView, TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+from apps.core.views import StarterComponentsView, StarterLayoutView
 from apps.core.views import htmx_examples as htmx_views
 
 
@@ -26,6 +27,12 @@ def home_view(request):
 urlpatterns = [
     # Root → landing page publik (redirect dashboard jika sudah login)
     path("", home_view, name="home"),
+
+    # Starter Kit showcase — layout system dan komponen Cotton
+    path("starter/layout/", StarterLayoutView.as_view(), name="starter_layout"),
+    path("starter/components/", StarterComponentsView.as_view(), name="starter_components"),
+    path("starter/auth/", RedirectView.as_view(url="/accounts/login/", permanent=False), name="starter_auth"),
+    path("starter/dashboard/", RedirectView.as_view(url="/dashboard/", permanent=False), name="starter_dashboard"),
 
     # rdp-ui/* redirect ke ui.radian.web.id (CSS framework sudah dipisah ke repo sendiri)
     path("rdp-ui/", RedirectView.as_view(url="https://ui.radian.web.id", permanent=False), name="rdp-ui-landing"),

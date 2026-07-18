@@ -1,0 +1,148 @@
+{# US-010, US-011: Demo layout system Cotton bawaan Starter Kit #}
+<c-layout.app title="Layout System — RDP Starter Kit" navbar_brand="Starter Kit">
+  <c-slot name="sidebar">
+    <c-sidebar.brand title="Starter Kit" initial="S" />
+    <c-sidebar.search placeholder="Cari halaman…" />
+    <c-sidebar.nav>
+      <c-sidebar.section title="Starter Kit" />
+      <c-sidebar.link href="/" icon="🏠">Beranda</c-sidebar.link>
+      <c-sidebar.link href="/starter/layout/" icon="▦" active="true">Layout System</c-sidebar.link>
+      <c-sidebar.link href="/starter/components/" icon="◈">Komponen</c-sidebar.link>
+      <c-sidebar.link href="/accounts/login/" icon="🔑">Auth</c-sidebar.link>
+      <c-sidebar.link href="/dashboard/" icon="◎">Dashboard</c-sidebar.link>
+      <c-sidebar.section title="RDP-UI" />
+      <c-sidebar.link href="https://ui.radian.web.id" icon="↗">CSS Framework</c-sidebar.link>
+      <c-sidebar.link href="https://ui.radian.web.id/docs/" icon="↗">Docs</c-sidebar.link>
+    </c-sidebar.nav>
+  </c-slot>
+
+  <div class="rdp-container" style="max-width: 960px; margin: 0 auto; padding: 2rem 1rem;">
+
+    <h1>Layout System</h1>
+    <p style="color: var(--rdp-text-muted); margin-bottom: 2rem;">
+      4 layout Cotton berlapis — pilih sesuai konteks halaman. Semua extend <code>&lt;c-layout.base&gt;</code>.
+    </p>
+
+    {# ── 4 LAYOUT CARDS ── #}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 3rem;">
+
+      <c-rdp.card title="c-layout.blank">
+        <c-slot name="header">
+          <span style="font-family: monospace; font-size: 0.9rem; font-weight: 700;">&lt;c-layout.blank&gt;</span>
+        </c-slot>
+        <p style="font-size: 0.87rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+          Halaman tanpa navigasi. Cocok untuk: login, register, reset password, halaman error.
+        </p>
+        <c-rdp.badge variant="info">Tidak ada navbar/sidebar</c-rdp.badge>
+        <div style="margin-top: 1rem;">
+          <div style="background: var(--rdp-bg-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.78rem; font-family: monospace;">
+            &lt;c-layout.blank title="Masuk"&gt;<br>
+            &nbsp;&nbsp;{# konten halaman #}<br>
+            &lt;/c-layout.blank&gt;
+          </div>
+        </div>
+        <c-slot name="footer">
+          <a href="/accounts/login/" class="rdp-btn rdp-btn--ghost rdp-btn--sm">Lihat Contoh →</a>
+        </c-slot>
+      </c-rdp.card>
+
+      <c-rdp.card title="c-layout.landing">
+        <c-slot name="header">
+          <span style="font-family: monospace; font-size: 0.9rem; font-weight: 700;">&lt;c-layout.landing&gt;</span>
+        </c-slot>
+        <p style="font-size: 0.87rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+          Halaman publik. Cocok untuk: home, about, pricing, privacy policy.
+        </p>
+        <c-rdp.badge variant="success">Navbar publik (Login/Daftar)</c-rdp.badge>
+        <div style="margin-top: 1rem;">
+          <div style="background: var(--rdp-bg-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.78rem; font-family: monospace;">
+            &lt;c-layout.landing title="Beranda"&gt;<br>
+            &nbsp;&nbsp;{# konten halaman #}<br>
+            &lt;/c-layout.landing&gt;
+          </div>
+        </div>
+        <c-slot name="footer">
+          <a href="/" class="rdp-btn rdp-btn--ghost rdp-btn--sm">Lihat Contoh →</a>
+        </c-slot>
+      </c-rdp.card>
+
+      <c-rdp.card title="c-layout.app">
+        <c-slot name="header">
+          <span style="font-family: monospace; font-size: 0.9rem; font-weight: 700;">&lt;c-layout.app&gt;</span>
+        </c-slot>
+        <p style="font-size: 0.87rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+          Halaman terproteksi. Cocok untuk: dashboard, settings, semua fitur app post-login.
+        </p>
+        <c-rdp.badge variant="warning">Navbar + sidebar (login-required)</c-rdp.badge>
+        <div style="margin-top: 1rem;">
+          <div style="background: var(--rdp-bg-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.78rem; font-family: monospace;">
+            &lt;c-layout.app title="Dashboard"&gt;<br>
+            &nbsp;&nbsp;&lt;c-slot name="sidebar"&gt;…&lt;/c-slot&gt;<br>
+            &nbsp;&nbsp;{# konten #}<br>
+            &lt;/c-layout.app&gt;
+          </div>
+        </div>
+        <c-slot name="footer">
+          <a href="/dashboard/" class="rdp-btn rdp-btn--ghost rdp-btn--sm">Lihat Contoh →</a>
+        </c-slot>
+      </c-rdp.card>
+
+      <c-rdp.card title="c-layout.base">
+        <c-slot name="header">
+          <span style="font-family: monospace; font-size: 0.9rem; font-weight: 700;">&lt;c-layout.base&gt;</span>
+        </c-slot>
+        <p style="font-size: 0.87rem; color: var(--rdp-text-muted); margin-bottom: 0.75rem;">
+          HTML shell (head, CDN, body). Foundation semua layout lain. Jangan dipakai langsung di halaman.
+        </p>
+        <c-rdp.badge>Internal — jangan dipakai di template halaman</c-rdp.badge>
+        <div style="margin-top: 1rem;">
+          <div style="background: var(--rdp-bg-subtle); border-radius: 6px; padding: 0.75rem; font-size: 0.78rem; font-family: monospace;">
+            {# blank/landing/app semua extend base #}<br>
+            {# secara otomatis — tidak perlu extend manual #}
+          </div>
+        </div>
+        <c-slot name="footer">
+          <a href="https://github.com/radianapp/starterkit" class="rdp-btn rdp-btn--ghost rdp-btn--sm" target="_blank">Lihat Source →</a>
+        </c-slot>
+      </c-rdp.card>
+
+    </div>
+
+    {# ── SLOT SYSTEM ── #}
+    <h2 style="margin-bottom: 1rem;">Slot System</h2>
+    <p style="color: var(--rdp-text-muted); margin-bottom: 1.25rem; font-size: 0.95rem;">
+      Layout <code>app</code> punya slot yang bisa diisi dari template halaman:
+    </p>
+    <div style="background: var(--rdp-bg-subtle); border-radius: 10px; padding: 1.5rem; font-family: monospace; font-size: 0.83rem; line-height: 1.8; margin-bottom: 3rem;">
+      &lt;c-layout.app title="Halaman Saya"&gt;<br>
+      &nbsp;&nbsp;<span style="color: var(--rdp-primary);">&lt;c-slot name="sidebar"&gt;</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;c-sidebar.brand title="App" /&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;c-sidebar.nav&gt;…&lt;/c-sidebar.nav&gt;<br>
+      &nbsp;&nbsp;<span style="color: var(--rdp-primary);">&lt;/c-slot&gt;</span><br>
+      <br>
+      &nbsp;&nbsp;<span style="color: var(--rdp-primary);">&lt;c-slot name="navbar_actions"&gt;</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;c-rdp.button variant="primary"&gt;Simpan&lt;/c-rdp.button&gt;<br>
+      &nbsp;&nbsp;<span style="color: var(--rdp-primary);">&lt;/c-slot&gt;</span><br>
+      <br>
+      &nbsp;&nbsp;<span style="color: var(--rdp-primary);">&lt;c-slot name="head"&gt;</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&lt;link rel="stylesheet" href="…page-specific.css"&gt;<br>
+      &nbsp;&nbsp;<span style="color: var(--rdp-primary);">&lt;/c-slot&gt;</span><br>
+      <br>
+      &nbsp;&nbsp;{# konten utama halaman di sini #}<br>
+      &lt;/c-layout.app&gt;
+    </div>
+
+    {# ── STRUKTUR TEMPLATE ── #}
+    <h2 style="margin-bottom: 1rem;">Struktur Folder Template</h2>
+    <div style="background: var(--rdp-bg-subtle); border-radius: 10px; padding: 1.5rem; font-family: monospace; font-size: 0.83rem; line-height: 1.8;">
+      templates/<br>
+      ├── cotton/layout/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← <span style="color: var(--rdp-text-muted);">base, blank, landing, app</span><br>
+      ├── apps/<br>
+      │&nbsp;&nbsp; ├── accounts/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← <span style="color: var(--rdp-text-muted);">login, register, profil</span><br>
+      │&nbsp;&nbsp; └── dashboard/&nbsp;&nbsp;&nbsp;&nbsp;← <span style="color: var(--rdp-text-muted);">index, partials/</span><br>
+      ├── public/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← <span style="color: var(--rdp-text-muted);">about, terms, privacy</span><br>
+      └── home.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← <span style="color: var(--rdp-text-muted);">landing page publik</span>
+    </div>
+
+  </div>
+</c-layout.app>
