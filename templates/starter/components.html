@@ -171,17 +171,30 @@
       {# STEPS #}
       <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Steps</h3>
       <div style="margin-bottom: 1.5rem;">
-        <c-rdp.steps items="{{ step_items }}" current="1" />
+        <div class="rdp-steps">
+          <div class="rdp-steps__item rdp-steps__item--completed">
+            <div class="rdp-steps__indicator">✓</div>
+            <span class="rdp-steps__label">Upload Berkas</span>
+            <div class="rdp-steps__line"></div>
+          </div>
+          <div class="rdp-steps__item rdp-steps__item--active">
+            <div class="rdp-steps__indicator">2</div>
+            <span class="rdp-steps__label">Verifikasi</span>
+            <div class="rdp-steps__line"></div>
+          </div>
+          <div class="rdp-steps__item">
+            <div class="rdp-steps__indicator">3</div>
+            <span class="rdp-steps__label">Selesai</span>
+          </div>
+        </div>
       </div>
 
       {# TIMELINE #}
       <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Timeline</h3>
       <div style="margin-bottom: 1rem;">
-        {% for item in timeline_items %}
-          <c-rdp.timeline_item title="{{ item.title }}" time="{{ item.time }}">
-            {{ item.desc }}
-          </c-rdp.timeline_item>
-        {% endfor %}
+        <c-rdp.timeline_item title="Akun dibuat" time="2 jam lalu">User mendaftar via form register.</c-rdp.timeline_item>
+        <c-rdp.timeline_item title="Email diverifikasi" time="1 jam lalu">Link verifikasi diklik.</c-rdp.timeline_item>
+        <c-rdp.timeline_item title="Login pertama" time="30 menit lalu">Masuk ke dashboard.</c-rdp.timeline_item>
       </div>
 
       {# EMPTY STATE #}
@@ -199,12 +212,17 @@
 
       {# TABS #}
       <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Tabs</h3>
-      <div style="margin-bottom: 1.5rem;">
-        <c-rdp.tabs items="{{ tab_items }}" active="tab-overview">
-          <div id="tab-overview">Konten tab Overview.</div>
-          <div id="tab-settings" style="display:none">Konten tab Settings.</div>
-          <div id="tab-activity" style="display:none">Konten tab Activity.</div>
-        </c-rdp.tabs>
+      <div style="margin-bottom: 1.5rem;" x-data="{ activeTab: 'overview' }">
+        <div class="rdp-tabs__list" role="tablist">
+          <button class="rdp-tabs__tab" :class="{ 'rdp-tabs__tab--active': activeTab === 'overview' }" @click="activeTab = 'overview'">Overview</button>
+          <button class="rdp-tabs__tab" :class="{ 'rdp-tabs__tab--active': activeTab === 'settings' }" @click="activeTab = 'settings'">Settings</button>
+          <button class="rdp-tabs__tab" :class="{ 'rdp-tabs__tab--active': activeTab === 'activity' }" @click="activeTab = 'activity'">Activity</button>
+        </div>
+        <div class="rdp-tabs__panel">
+          <div x-show="activeTab === 'overview'" style="padding: 1rem 0;">Konten tab Overview.</div>
+          <div x-show="activeTab === 'settings'" style="padding: 1rem 0;">Konten tab Settings.</div>
+          <div x-show="activeTab === 'activity'" style="padding: 1rem 0;">Konten tab Activity.</div>
+        </div>
       </div>
 
       {# TOOLTIP #}
