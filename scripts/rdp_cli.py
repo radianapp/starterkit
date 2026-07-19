@@ -128,7 +128,7 @@ def check_for_updates() -> None:
     latest = _fetch_latest_version()
     if latest and _parse_version(latest) > _parse_version(__version__):
         print(f"\n[UPDATE] Versi baru tersedia: v{latest} (kamu v{__version__})")
-        print("  Upgrade: uv tool upgrade rdp-starter-kit")
+        print("  Jalankan: rdp upgrade-cli")
         print()
 
 
@@ -176,6 +176,8 @@ PENGGUNAAN:
   rdp doctor                  Memeriksa kesehatan proyek & migrasi database
   rdp db <subcmd>             Utilitas database (backup, restore, reset, seed, shell)
   rdp upgrade                 Memeriksa pembaruan library (pip list --outdated)
+  rdp upgrade-cli             Upgrade binary CLI rdp ke versi terbaru dari GitHub
+  rdp upgrade-cli --force     Paksa upgrade meski sudah versi terbaru
   rdp monitor                 Menampilkan status monitoring sistem dasar
   rdp ai "<prompt>"           (Visi) Menggunakan AI untuk generate kode
   rdp plugin install <nama>   (Visi) Sistem manajemen plugin
@@ -2234,6 +2236,51 @@ def run_upgrade(args):
         print("  [ERROR] Gagal menjalankan pengecekan uv pip list.")
 
 
+def run_upgrade_cli(args):
+    """
+    TUJUAN: Upgrade binary CLI rdp ke versi terbaru dari GitHub.
+
+    ALUR:
+      1. Fetch versi terbaru dari GitHub
+      2. Bandingkan dengan versi lokal
+      3. Jalankan `uv tool upgrade rdp-starter-kit` jika ada update (atau --force)
+      4. Paksa upgrade jika argumen --force diberikan
+
+    DIPANGGIL DARI: main() via `rdp upgrade-cli`
+    """
+    force = "--force" in args
+
+    print("Mengecek versi terbaru dari GitHub...")
+    latest = _fetch_latest_version()
+
+    if latest:
+        local_tuple = _parse_version(__version__)
+        latest_tuple = _parse_version(latest)
+        print(f"  Versi lokal  : v{__version__}")
+        print(f"  Versi GitHub : v{latest}")
+        if latest_tuple > local_tuple:
+            print(f"\n  [UPDATE] Versi baru tersedia: v{latest}")
+        elif not force:
+            print("\n  Sudah menggunakan versi terbaru.")
+            print("  Gunakan --force untuk upgrade paksa: rdp upgrade-cli --force")
+            return
+    else:
+        print("  [WARNING] Tidak bisa mengambil versi dari GitHub (offline?).")
+        if not force:
+            return
+
+    print("\nMenjalankan: uv tool upgrade rdp-starter-kit")
+    try:
+        subprocess.run(["uv", "tool", "upgrade", "rdp-starter-kit"], check=True)
+        print("\n  [OK] CLI rdp berhasil diupgrade.")
+        print("       Restart terminal jika versi belum berubah.")
+    except subprocess.CalledProcessError:
+        print("\n  [ERROR] Upgrade gagal. Pastikan CLI diinstall via:")
+        print("          uv tool install git+https://github.com/radianapp/starterkit.git")
+    except FileNotFoundError:
+        print("\n  [ERROR] Perintah 'uv' tidak ditemukan. Install dari https://docs.astral.sh/uv/")
+
+
 def run_monitor(args):
     print("=" * 60)
     print("  RDP Monitor (Status Sistem)")
@@ -2390,6 +2437,8 @@ def main():
         run_db(args[1:])
     elif args[0] == "upgrade":
         run_upgrade(args[1:])
+    elif args[0] == "upgrade-cli":
+        run_upgrade_cli(args[1:])
     elif args[0] == "monitor":
         run_monitor(args[1:])
     elif args[0] == "ai":
