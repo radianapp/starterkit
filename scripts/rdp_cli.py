@@ -854,6 +854,7 @@ def run_new_app(args):
         f.write(f'''\
 # apps/{app_name}/models/{app_name}.py
 
+from django.conf import settings
 from django.db import models
 {model_import}
 
@@ -877,7 +878,7 @@ class {class_name}({model_base}):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Dibuat pada")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Diperbarui pada")
     created_by = models.ForeignKey(
-        "auth.User",
+        settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
