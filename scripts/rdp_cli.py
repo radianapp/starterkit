@@ -150,6 +150,7 @@ def print_help():
 rdp — CLI untuk Radian Data Platform Starter Kit v{__version__}
 
 PENGGUNAAN:
+  rdp remove app <nama_app>   Hapus aplikasi Django + templates + url + sidebar (konfirmasi berlapis)
   rdp new <nama_proyek>       Membuat proyek baru dari template RDP
   rdp new app <nama_app>      Membuat aplikasi Django baru (CLAUDE.md convention)
   rdp new api <nama_app>      Membuat skeleton REST API (DRF) di dalam aplikasi
@@ -2265,6 +2266,140 @@ class Command(BaseCommand):
     print(f"  [OK] Seeder command berhasil dibuat di {command_path}")
 
 
+def run_remove_app(args):
+    """
+    TUJUAN: Hapus aplikasi Django beserta seluruh file terkait dengan konfirmasi berlapis.
+
+    ALUR:
+      1. Validasi nama app dan pastikan folder apps/<nama> ada
+      2. Kumpulkan semua yang akan dihapus: folder app, templates, entri settings & urls
+      3. Tampilkan daftar lengkap — tidak ada yang disembunyikan
+      4. Minta user ketik ulang nama app sebagai konfirmasi (bukan Y/n)
+      5. Hapus semua, laporkan hasilnya
+
+    DIPANGGIL DARI: main() via `rdp remove app <nama-app>`
+    """
+    if not args:
+        print("[ERROR] Nama aplikasi tidak diberikan. Penggunaan: rdp remove app <nama-app>")
+        sys.exit(1)
+
+    app_name = args[0]
+    app_dir = os.path.join("apps", app_name)
+
+    if not os.path.exists(app_dir):
+        print(f"[ERROR] Aplikasi '{app_name}' tidak ditemukan di '{app_dir}'.")
+        sys.exit(1)
+
+    # Kumpulkan semua yang akan dihapus
+    targets = []
+
+    # 1. Folder app
+    targets.append(("folder", app_dir, f"apps/{app_name}/ (seluruh folder app)"))
+
+    # 2. Templates
+    for tpl_path in [
+        os.path.join("templates", "apps", app_name),
+        os.path.join("templates", app_name),
+    ]:
+        if os.path.exists(tpl_path):
+            targets.append(("folder", tpl_path, f"{tpl_path}/ (templates)"))
+
+    # 3. Entri di config/settings/base.py
+    settings_path = os.path.join("config", "settings", "base.py")
+    settings_entry = f'"apps.{app_name}"'
+    settings_hit = False
+    if os.path.exists(settings_path):
+        with open(settings_path, "r", encoding="utf-8") as f:
+            if settings_entry in f.read():
+                settings_hit = True
+                targets.append(("line", settings_path, f"{settings_path} — hapus baris {settings_entry}"))
+
+    # 4. Entri di config/urls.py
+    urls_path = os.path.join("config", "urls.py")
+    urls_entry = f'"apps.{app_name}.urls"'
+    urls_hit = False
+    if os.path.exists(urls_path):
+        with open(urls_path, "r", encoding="utf-8") as f:
+            if urls_entry in f.read():
+                urls_hit = True
+                targets.append(("line", urls_path, f"{urls_path} — hapus baris include({urls_entry})"))
+
+    # 5. Link sidebar di app.html
+    sidebar_path = os.path.join("templates", "cotton", "layout", "app.html")
+    sidebar_hit = False
+    sidebar_pattern = f'href="/{app_name}/"'
+    if os.path.exists(sidebar_path):
+        with open(sidebar_path, "r", encoding="utf-8") as f:
+            if sidebar_pattern in f.read():
+                sidebar_hit = True
+                targets.append(("line", sidebar_path, f"{sidebar_path} — hapus sidebar link /{app_name}/"))
+
+    # ── Tampilkan semua yang akan dihapus ────────────────────────────────────
+    print()
+    print("=" * 60)
+    print(f"  [PERINGATAN] rdp remove app '{app_name}'")
+    print("=" * 60)
+    print("\n  Tindakan ini TIDAK BISA DIBATALKAN. Yang akan dihapus:\n")
+    for _, _, label in targets:
+        print(f"    ✗  {label}")
+    print()
+
+    # ── Konfirmasi: ketik ulang nama app ─────────────────────────────────────
+    print(f"  Untuk melanjutkan, ketik nama aplikasi: '{app_name}'")
+    confirm = input("  > ").strip()
+    if confirm != app_name:
+        print("\n  Nama tidak cocok. Penghapusan dibatalkan.")
+        sys.exit(0)
+
+    print()
+
+    # ── Eksekusi ─────────────────────────────────────────────────────────────
+    for kind, path, label in targets:
+        if kind == "folder":
+            if os.path.exists(path):
+                shutil.rmtree(path, onerror=on_rm_error)
+                print(f"  [OK] Dihapus: {path}/")
+        elif kind == "line":
+            if path == settings_path and settings_hit:
+                with open(settings_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                # Hapus baris yang mengandung entri app (termasuk newline-nya)
+                content = re.sub(
+                    rf'[ \t]*"apps\.{re.escape(app_name)}"[^\n]*\n?', "", content
+                )
+                with open(settings_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+                print(f"  [OK] Entri dihapus dari {settings_path}")
+
+            elif path == urls_path and urls_hit:
+                with open(urls_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                content = re.sub(
+                    rf'[ \t]*path\([^)]*apps\.{re.escape(app_name)}\.urls[^)]*\),?\n?', "", content
+                )
+                with open(urls_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+                print(f"  [OK] URL dihapus dari {urls_path}")
+
+            elif path == sidebar_path and sidebar_hit:
+                with open(sidebar_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+                # Hapus blok <a ...> sampai </a> yang mengandung href="/{app_name}/"
+                content = re.sub(
+                    rf'[ \t]*<a[^>]*href="/{re.escape(app_name)}/"[^>]*>.*?</a>\n?',
+                    "",
+                    content,
+                    flags=re.DOTALL,
+                )
+                with open(sidebar_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+                print(f"  [OK] Sidebar link dihapus dari {sidebar_path}")
+
+    print()
+    print(f"  [OK] Aplikasi '{app_name}' berhasil dihapus.")
+    print(f"       Jalankan 'rdp migrate' jika ada migrasi yang perlu di-rollback.")
+
+
 def run_upgrade(args):
     print("=" * 60)
     print("  Memeriksa pembaruan pustaka (Dependencies)...")
@@ -2424,7 +2559,14 @@ def main():
         print(f"rdp v{__version__}")
         return
 
-    if args[0] == "new":
+    if args[0] == "remove":
+        if len(args) > 1 and args[1] == "app":
+            run_remove_app(args[2:])
+        else:
+            print("[ERROR] Penggunaan: rdp remove app <nama-app>")
+            sys.exit(1)
+
+    elif args[0] == "new":
         if len(args) > 1:
             if args[1] == "app":
                 run_new_app(args[2:])
