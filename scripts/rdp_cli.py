@@ -844,8 +844,8 @@ def run_new_app(args):
     model_base = "models.Model"
     model_dep = "django.db.models.Model"
     model_ordering = '"name"'
-    admin_list_display = '["name", "is_active"]'
-    admin_ordering = '["name"]'
+    admin_list_display = '["name", "is_active", "created_at", "created_by"]'
+    admin_ordering = '["-created_at"]'
     # ponytail: ganti model_base ke BaseModel dan tambah model_import
     # jika project ini pakai apps.core.models.BaseModel
 
@@ -873,10 +873,21 @@ class {class_name}({model_base}):
     description = models.TextField(blank=True, verbose_name="Deskripsi")
     is_active = models.BooleanField(default=True, verbose_name="Aktif")
 
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Dibuat pada")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Diperbarui pada")
+    created_by = models.ForeignKey(
+        "auth.User",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="{app_name}_{class_name.lower()}_created",
+        verbose_name="Dibuat oleh",
+    )
+
     class Meta:
         verbose_name = "{verbose}"
         verbose_name_plural = "{verbose}"
-        ordering = [{model_ordering}]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.name
@@ -1299,12 +1310,44 @@ urlpatterns = [
                 f.write(urls_content)
             print(f"  [OK] URL '{app_name}/' didaftarkan di config/urls.py.")
 
+    # ── Tambahkan link ke sidebar (dashboard type saja) ──────────────────────
+    sidebar_path = os.path.join("templates", "cotton", "layout", "app.html")
+    if app_type == "dashboard" and os.path.exists(sidebar_path):
+        ans = get_input(f"Tambahkan link '{verbose}' ke sidebar di templates/cotton/layout/app.html? (Y/n)", default="Y")
+        if ans.lower() in ("y", "yes"):
+            with open(sidebar_path, "r", encoding="utf-8") as f:
+                sidebar_content = f.read()
+            # Sisipkan setelah link Dashboard — cari pola href dashboard:index
+            sidebar_link = (
+                f'\n                        <a href="/{app_name}/" class="sidebar-link">\n'
+                f'                            <span class="icon-circle"></span>\n'
+                f'                            <span>{verbose}</span>\n'
+                f'                        </a>'
+            )
+            anchor = 'href="{% url \'dashboard:index\' %}"'
+            if anchor in sidebar_content:
+                # Sisipkan setelah closing </a> baris dashboard
+                insert_after = '</a>\n                        <a href="#" class="sidebar-link">'
+                if insert_after in sidebar_content:
+                    sidebar_content = sidebar_content.replace(
+                        insert_after,
+                        f'</a>{sidebar_link}\n                        <a href="#" class="sidebar-link">',
+                        1,
+                    )
+                    with open(sidebar_path, "w", encoding="utf-8") as f:
+                        f.write(sidebar_content)
+                    print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar.")
+                else:
+                    print(f"  [WARNING] Pola sidebar tidak ditemukan. Tambahkan manual di {sidebar_path}:")
+                    print(f'            <a href="/{app_name}/" class="sidebar-link">{verbose}</a>')
+            else:
+                print(f"  [WARNING] {sidebar_path} tidak punya pola sidebar standar.")
+                print(f'            Tambahkan manual: <a href="/{app_name}/" class="sidebar-link">{verbose}</a>')
+
     print()
     print(f"  Langkah selanjutnya:")
     print(f"    rdp makemigrations  ← buat migrasi untuk model {class_name}")
     print(f"    rdp migrate         ← terapkan migrasi")
-    if app_type == "dashboard":
-        print(f"    Tambahkan <c-sidebar.link href=\"/{app_name}/\">...  ke sidebar Cotton")
 
 
 def run_new_api(args):
