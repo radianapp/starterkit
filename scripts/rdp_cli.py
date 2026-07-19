@@ -49,7 +49,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -1452,30 +1452,45 @@ urlpatterns = [
             print(f"  [OK] URL '{app_name}/' didaftarkan di config/urls.py.")
 
     # ── Tambahkan link ke sidebar (dashboard type saja) ──────────────────────
-    sidebar_path = os.path.join("templates", "cotton", "layout", "app.html")
-    if app_type == "dashboard" and os.path.exists(sidebar_path):
-        ans = get_input(f"Tambahkan link '{verbose}' ke sidebar di templates/cotton/layout/app.html? (Y/n)", default="Y")
+    # Cari sidebar yang aktif: dashboard/index.html override app.html jika pakai <c-slot name="sidebar">
+    _sidebar_candidates = [
+        os.path.join("templates", "dashboard", "index.html"),
+        os.path.join("templates", "cotton", "layout", "app.html"),
+    ]
+    sidebar_path = next((p for p in _sidebar_candidates if os.path.exists(p)), None)
+    marker = "{# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}"
+
+    if app_type == "dashboard" and sidebar_path:
+        ans = get_input(f"Tambahkan link '{verbose}' ke sidebar? (Y/n)", default="Y")
         if ans.lower() in ("y", "yes"):
             with open(sidebar_path, "r", encoding="utf-8") as f:
                 sidebar_content = f.read()
-            # Sisipkan setelah link Dashboard — cari pola href dashboard:index
-            marker = "{# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}"
+            # Deteksi class yang dipakai di file target
+            link_class = "rdp-sidebar__link" if "rdp-sidebar__link" in sidebar_content else "sidebar-link"
+            icon_class = "rdp-sidebar__link-icon" if "rdp-sidebar__link-icon" in sidebar_content else "icon-circle"
+            text_class = "rdp-sidebar__link-text" if "rdp-sidebar__link-text" in sidebar_content else ""
+            icon_html = f'<span class="{icon_class}">🔗</span>'
+            text_html = (
+                f'<span class="{text_class}">{verbose}</span>' if text_class
+                else f'<span>{verbose}</span>'
+            )
+            indent = "                "
             sidebar_link = (
-                f'<a href="/{app_name}/" class="sidebar-link">\n'
-                f'                            <span class="icon-circle"></span>\n'
-                f'                            <span>{verbose}</span>\n'
-                f'                        </a>\n'
-                f'                        {marker}'
+                f'<a href="/{app_name}/" class="{link_class}">\n'
+                f'{indent}    {icon_html}\n'
+                f'{indent}    {text_html}\n'
+                f'{indent}</a>\n'
+                f'{indent}{marker}'
             )
             if marker in sidebar_content:
                 sidebar_content = sidebar_content.replace(marker, sidebar_link, 1)
                 with open(sidebar_path, "w", encoding="utf-8") as f:
                     f.write(sidebar_content)
-                print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar.")
+                print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar ({sidebar_path}).")
             else:
-                print(f"  [WARNING] Marker sidebar tidak ditemukan di {sidebar_path}.")
-                print(f"            Tambahkan manual setelah link Dashboard:")
-                print(f'            <a href="/{app_name}/" class="sidebar-link">{verbose}</a>')
+                print(f"  [WARNING] Marker tidak ditemukan di {sidebar_path}.")
+                print("            Tambahkan manual: " + marker)
+                print(f"            Lalu jalankan ulang: rdp new app {app_name}")
 
     print()
     print(f"  Langkah selanjutnya:")
@@ -2456,15 +2471,22 @@ def run_remove_app(args):
                 urls_hit = True
                 targets.append(("line", urls_path, f"{urls_path} — hapus baris include({urls_entry})"))
 
-    # 5. Link sidebar di app.html
-    sidebar_path = os.path.join("templates", "cotton", "layout", "app.html")
+    # 5. Link sidebar — cek dashboard/index.html dulu, fallback ke app.html
+    _sidebar_candidates = [
+        os.path.join("templates", "dashboard", "index.html"),
+        os.path.join("templates", "cotton", "layout", "app.html"),
+    ]
+    sidebar_path = None
     sidebar_hit = False
     sidebar_pattern = f'href="/{app_name}/"'
-    if os.path.exists(sidebar_path):
-        with open(sidebar_path, "r", encoding="utf-8") as f:
-            if sidebar_pattern in f.read():
-                sidebar_hit = True
-                targets.append(("line", sidebar_path, f"{sidebar_path} — hapus sidebar link /{app_name}/"))
+    for _sp in _sidebar_candidates:
+        if os.path.exists(_sp):
+            with open(_sp, "r", encoding="utf-8") as f:
+                if sidebar_pattern in f.read():
+                    sidebar_path = _sp
+                    sidebar_hit = True
+                    targets.append(("line", sidebar_path, f"{sidebar_path} — hapus sidebar link /{app_name}/"))
+                    break
 
     # ── Tampilkan semua yang akan dihapus ────────────────────────────────────
     print()
