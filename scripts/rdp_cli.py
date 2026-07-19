@@ -846,10 +846,16 @@ def run_new_app(args):
         model_import = "from apps.core.models import BaseModel"
         model_base = "BaseModel"
         model_dep = "apps.core.models.BaseModel"
+        model_ordering = '"-created_at"'
+        admin_list_display = '["name", "is_active", "created_at"]'
+        admin_ordering = '["-created_at"]'
     else:
         model_import = ""
         model_base = "models.Model"
         model_dep = "django.db.models.Model"
+        model_ordering = '"name"'
+        admin_list_display = '["name", "is_active"]'
+        admin_ordering = '["name"]'
 
     with open(os.path.join(models_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
         f.write(f'''\
@@ -878,7 +884,7 @@ class {class_name}({model_base}):
     class Meta:
         verbose_name = "{verbose}"
         verbose_name_plural = "{verbose}"
-        ordering = ["-created_at"]
+        ordering = [{model_ordering}]
 
     def __str__(self):
         return self.name
@@ -1111,10 +1117,10 @@ class {class_name}Admin(admin.ModelAdmin):
     DEPENDENSI: {class_name} model
     """
 
-    list_display = ["name", "is_active", "created_at"]
+    list_display = {admin_list_display}
     list_filter = ["is_active"]
     search_fields = ["name", "description"]
-    ordering = ["-created_at"]
+    ordering = {admin_ordering}
 ''')
 
     with open(os.path.join(admin_dir, "__init__.py"), "w", encoding="utf-8") as f:
