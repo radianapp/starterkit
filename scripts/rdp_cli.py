@@ -41,16 +41,95 @@ import stat
 import subprocess
 import sys
 import tempfile
+import time
+import urllib.request
 
 # Pastikan stdout selalu UTF-8 agar emoji dan karakter khusus tampil dengan benar di Windows
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
+
+# URL raw pyproject.toml di GitHub untuk cek versi terbaru
+_PYPROJECT_RAW_URL = "https://raw.githubusercontent.com/radianapp/starterkit/main/pyproject.toml"
+
+# File penanda kapan terakhir kali cek dilakukan
+_CHECK_STAMP = os.path.join(os.path.expanduser("~"), ".rdp_last_update_check")
+
+# Interval cek update: 1 hari (dalam detik)
+_CHECK_INTERVAL = 86400
+
+
+def _fetch_latest_version() -> str | None:
+    """
+    TUJUAN: Ambil versi terbaru dari pyproject.toml di GitHub tanpa install apapun.
+
+    ALUR:
+      1. HTTP GET ke raw.githubusercontent.com
+      2. Parse baris `version = "x.y.z"` dengan regex
+      3. Return string versi atau None jika gagal (offline/timeout)
+
+    DIPANGGIL DARI: check_for_updates()
+    """
+    try:
+        with urllib.request.urlopen(_PYPROJECT_RAW_URL, timeout=3) as resp:
+            content = resp.read().decode("utf-8", errors="ignore")
+        match = re.search(r'^version\s*=\s*"([^"]+)"', content, re.MULTILINE)
+        return match.group(1) if match else None
+    except Exception:
+        return None
+
+
+def _parse_version(v: str) -> tuple:
+    """'1.2.3' → (1, 2, 3) untuk perbandingan numerik."""
+    try:
+        return tuple(int(x) for x in v.split("."))
+    except ValueError:
+        return (0, 0, 0)
+
+
+def check_for_updates() -> None:
+    """
+    TUJUAN: Tampilkan notifikasi jika ada versi CLI baru, maksimal sekali per hari.
+
+    ALUR:
+      1. Baca timestamp terakhir cek dari ~/.rdp_last_update_check
+      2. Jika belum lewat _CHECK_INTERVAL → skip (silent)
+      3. Fetch versi terbaru dari GitHub
+      4. Bandingkan dengan __version__ lokal
+      5. Tampilkan pesan jika ada update, update timestamp
+
+    DIPANGGIL DARI: main() — sebelum dispatch sub-perintah
+    DEPENDENSI: urllib.request, time, re
+    """
+    now = time.time()
+
+    # Baca timestamp terakhir
+    try:
+        with open(_CHECK_STAMP, "r") as f:
+            last_check = float(f.read().strip())
+    except (OSError, ValueError):
+        last_check = 0
+
+    if now - last_check < _CHECK_INTERVAL:
+        return  # Belum waktunya cek
+
+    # Update timestamp dulu — agar gagal network pun tidak retry terus
+    try:
+        with open(_CHECK_STAMP, "w") as f:
+            f.write(str(now))
+    except OSError:
+        pass
+
+    latest = _fetch_latest_version()
+    if latest and _parse_version(latest) > _parse_version(__version__):
+        print(f"\n[UPDATE] Versi baru tersedia: v{latest} (kamu v{__version__})")
+        print("  Upgrade: uv tool upgrade rdp-starter-kit")
+        print()
 
 
 def print_banner():
@@ -707,17 +786,22 @@ def run_django_cmd(cmd, args):
         print("[ERROR] Perintah 'uv' tidak ditemukan. Pastikan uv sudah diinstal.")
         sys.exit(1)
 
+def _to_class_name(name: str) -> str:
+    """budget_item → BudgetItem"""
+    return "".join(x.capitalize() for x in name.split("_"))
+
+
 def run_new_app(args):
     """Membuat aplikasi Django baru dengan struktur CLAUDE.md."""
     if not args:
         print("[ERROR] Nama aplikasi tidak diberikan. Penggunaan: rdp new app <nama-app>")
         sys.exit(1)
-    
+
     app_name = args[0]
     if not re.match(r'^[a-zA-Z0-9_]+$', app_name):
         print("[ERROR] Nama aplikasi hanya boleh mengandung huruf, angka, dan underscore.")
         sys.exit(1)
-    
+
     apps_dir = "apps"
     if not os.path.exists(apps_dir):
         print("[ERROR] Direktori 'apps' tidak ditemukan. Jalankan perintah ini di root proyek RDP.")
@@ -728,43 +812,488 @@ def run_new_app(args):
         print(f"[ERROR] Aplikasi '{app_name}' sudah ada di '{app_dir}'.")
         sys.exit(1)
 
-    print(f"Membuat aplikasi '{app_name}' di {app_dir}/...")
-    
-    # Buat struktur folder
-    folders = ['models', 'views', 'services', 'forms', 'admin', 'tests']
-    for folder in folders:
-        folder_path = os.path.join(app_dir, folder)
-        os.makedirs(folder_path)
-        with open(os.path.join(folder_path, '__init__.py'), 'w', encoding='utf-8') as f:
-            f.write('')
+    # Tanya tipe aplikasi
+    print("\n  Tipe aplikasi:")
+    print("    1. Dashboard — dilindungi login, muncul di sidebar app")
+    print("    2. Blank     — standalone, tidak ada di sidebar")
 
-    # Generate apps.py
-    with open(os.path.join(app_dir, 'apps.py'), 'w', encoding='utf-8') as f:
-        f.write(f"from django.apps import AppConfig\n\nclass {app_name.capitalize()}Config(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'apps.{app_name}'\n")
+    app_type = "dashboard"
+    while True:
+        choice = get_input("Pilih tipe (1/2)", default="1")
+        if choice == "1":
+            app_type = "dashboard"
+            break
+        elif choice == "2":
+            app_type = "blank"
+            break
+        print("  Ketik 1 atau 2.")
 
-    # Generate urls.py
-    with open(os.path.join(app_dir, 'urls.py'), 'w', encoding='utf-8') as f:
-        f.write(f"from django.urls import path\n\napp_name = '{app_name}'\n\nurlpatterns = [\n    # path('', views.index, name='index'),\n]\n")
+    class_name = _to_class_name(app_name)           # budget → Budget, budget_item → BudgetItem
+    layout = "app" if app_type == "dashboard" else "blank"
+    verbose = " ".join(x.capitalize() for x in app_name.split("_"))
 
-    print(f"  [OK] Struktur aplikasi '{app_name}' berhasil dibuat.")
+    print(f"\nMembuat aplikasi '{app_name}' ({app_type}) di {app_dir}/...")
 
-    # Tanya untuk auto-register
-    base_settings_path = os.path.join('config', 'settings', 'base.py')
+    # ── models/ ──────────────────────────────────────────────────────────────
+    models_dir = os.path.join(app_dir, "models")
+    os.makedirs(models_dir)
+
+    with open(os.path.join(models_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/models/{app_name}.py
+
+from django.db import models
+from apps.core.models import BaseModel
+
+
+class {class_name}(BaseModel):
+    """
+    TUJUAN: Model untuk data {verbose}.
+
+    ALUR:
+      1. Simpan data {verbose} ke database
+      2. [Tambahkan field sesuai kebutuhan bisnis]
+
+    DIPANGGIL DARI: views/{app_name}.py, services/{app_name}_service.py
+    DEPENDENSI: apps.core.models.BaseModel
+    """
+
+    name = models.CharField(max_length=255, verbose_name="Nama")
+    description = models.TextField(blank=True, verbose_name="Deskripsi")
+    is_active = models.BooleanField(default=True, verbose_name="Aktif")
+
+    class Meta:
+        verbose_name = "{verbose}"
+        verbose_name_plural = "{verbose}"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.name
+''')
+
+    with open(os.path.join(models_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+from .{app_name} import {class_name}
+
+__all__ = ["{class_name}"]
+''')
+
+    # ── views/ ───────────────────────────────────────────────────────────────
+    views_dir = os.path.join(app_dir, "views")
+    os.makedirs(views_dir)
+
+    with open(os.path.join(views_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/views/{app_name}.py
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+
+from ..models import {class_name}
+from ..forms import {class_name}Form
+
+
+class {class_name}ListView(LoginRequiredMixin, ListView):
+    """
+    TUJUAN: Tampilkan daftar semua {verbose}.
+
+    DIPANGGIL DARI: urls.py → path("", ..., name="list")
+    DEPENDENSI: {class_name} model, templates/apps/{app_name}/{app_name}_list.html
+    """
+
+    model = {class_name}
+    template_name = "apps/{app_name}/{app_name}_list.html"
+    context_object_name = "items"
+
+
+class {class_name}DetailView(LoginRequiredMixin, DetailView):
+    """
+    TUJUAN: Tampilkan detail satu {verbose}.
+
+    DIPANGGIL DARI: urls.py → path("<int:pk>/", ..., name="detail")
+    """
+
+    model = {class_name}
+    template_name = "apps/{app_name}/{app_name}_detail.html"
+
+
+class {class_name}CreateView(LoginRequiredMixin, CreateView):
+    """
+    TUJUAN: Buat {verbose} baru.
+
+    DIPANGGIL DARI: urls.py → path("baru/", ..., name="create")
+    """
+
+    model = {class_name}
+    form_class = {class_name}Form
+    template_name = "apps/{app_name}/{app_name}_form.html"
+    success_url = reverse_lazy("{app_name}:list")
+
+
+class {class_name}UpdateView(LoginRequiredMixin, UpdateView):
+    """
+    TUJUAN: Edit {verbose} yang sudah ada.
+
+    DIPANGGIL DARI: urls.py → path("<int:pk>/edit/", ..., name="update")
+    """
+
+    model = {class_name}
+    form_class = {class_name}Form
+    template_name = "apps/{app_name}/{app_name}_form.html"
+    success_url = reverse_lazy("{app_name}:list")
+
+
+class {class_name}DeleteView(LoginRequiredMixin, DeleteView):
+    """
+    TUJUAN: Hapus {verbose}.
+
+    DIPANGGIL DARI: urls.py → path("<int:pk>/hapus/", ..., name="delete")
+    """
+
+    model = {class_name}
+    template_name = "apps/{app_name}/{app_name}_confirm_delete.html"
+    success_url = reverse_lazy("{app_name}:list")
+''')
+
+    with open(os.path.join(views_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+from .{app_name} import (
+    {class_name}ListView,
+    {class_name}DetailView,
+    {class_name}CreateView,
+    {class_name}UpdateView,
+    {class_name}DeleteView,
+)
+
+__all__ = [
+    "{class_name}ListView",
+    "{class_name}DetailView",
+    "{class_name}CreateView",
+    "{class_name}UpdateView",
+    "{class_name}DeleteView",
+]
+''')
+
+    # ── services/ ────────────────────────────────────────────────────────────
+    services_dir = os.path.join(app_dir, "services")
+    os.makedirs(services_dir)
+
+    with open(os.path.join(services_dir, f"{app_name}_service.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/services/{app_name}_service.py
+
+from django.db import transaction
+
+from ..models import {class_name}
+
+
+class {class_name}Service:
+    """
+    TUJUAN: Layanan bisnis untuk entitas {verbose}.
+
+    ALUR:
+      1. Terima data dari views atau Celery tasks
+      2. Proses bisnis (validasi, kalkulasi, transformasi, dll.)
+      3. Simpan ke database via model
+
+    DIPANGGIL DARI: views/{app_name}.py, tasks/ (jika ada)
+    DEPENDENSI: {class_name} model
+    """
+
+    @staticmethod
+    @transaction.atomic
+    def create(data: dict) -> "{class_name}":
+        """
+        TUJUAN: Buat {verbose} baru dengan validasi bisnis.
+
+        ALUR:
+          1. Validasi data input
+          2. Buat instance {class_name}
+          3. Return instance yang tersimpan
+        """
+        return {class_name}.objects.create(**data)
+
+    @staticmethod
+    @transaction.atomic
+    def update(instance: "{class_name}", data: dict) -> "{class_name}":
+        """
+        TUJUAN: Update data {verbose} yang sudah ada.
+        """
+        for key, value in data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
+
+    @staticmethod
+    def delete(instance: "{class_name}") -> None:
+        """
+        TUJUAN: Hapus {verbose}.
+        """
+        instance.delete()
+''')
+
+    with open(os.path.join(services_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+from .{app_name}_service import {class_name}Service
+
+__all__ = ["{class_name}Service"]
+''')
+
+    # ── forms/ ───────────────────────────────────────────────────────────────
+    forms_dir = os.path.join(app_dir, "forms")
+    os.makedirs(forms_dir)
+
+    with open(os.path.join(forms_dir, f"{app_name}_forms.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/forms/{app_name}_forms.py
+
+from django import forms
+
+from ..models import {class_name}
+
+
+class {class_name}Form(forms.ModelForm):
+    """
+    TUJUAN: Form untuk create dan update {verbose}.
+
+    DIPANGGIL DARI: views/{app_name}.py ({class_name}CreateView, {class_name}UpdateView)
+    DEPENDENSI: {class_name} model
+    """
+
+    class Meta:
+        model = {class_name}
+        fields = ["name", "description", "is_active"]
+        widgets = {{
+            "description": forms.Textarea(attrs={{"rows": 4}}),
+        }}
+''')
+
+    with open(os.path.join(forms_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+from .{app_name}_forms import {class_name}Form
+
+__all__ = ["{class_name}Form"]
+''')
+
+    # ── admin/ ───────────────────────────────────────────────────────────────
+    admin_dir = os.path.join(app_dir, "admin")
+    os.makedirs(admin_dir)
+
+    with open(os.path.join(admin_dir, f"{app_name}_admin.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/admin/{app_name}_admin.py
+
+from django.contrib import admin
+
+from ..models import {class_name}
+
+
+@admin.register({class_name})
+class {class_name}Admin(admin.ModelAdmin):
+    """
+    TUJUAN: Konfigurasi tampilan {verbose} di Django Admin.
+
+    DIPANGGIL DARI: Django admin auto-discovery
+    DEPENDENSI: {class_name} model
+    """
+
+    list_display = ["name", "is_active", "created_at"]
+    list_filter = ["is_active"]
+    search_fields = ["name", "description"]
+    ordering = ["-created_at"]
+''')
+
+    with open(os.path.join(admin_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+from .{app_name}_admin import {class_name}Admin
+
+__all__ = ["{class_name}Admin"]
+''')
+
+    # ── tests/ ───────────────────────────────────────────────────────────────
+    tests_dir = os.path.join(app_dir, "tests")
+    os.makedirs(tests_dir)
+
+    with open(os.path.join(tests_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
+
+    with open(os.path.join(tests_dir, f"test_{app_name}.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/tests/test_{app_name}.py
+
+import pytest
+from django.urls import reverse
+
+from apps.{app_name}.models import {class_name}
+
+
+@pytest.mark.django_db
+class Test{class_name}Model:
+    """Test untuk model {verbose}."""
+
+    def test_str(self):
+        obj = {class_name}(name="Test {verbose}")
+        assert str(obj) == "Test {verbose}"
+
+    def test_default_active(self):
+        obj = {class_name}.objects.create(name="Test Aktif")
+        assert obj.is_active is True
+
+
+@pytest.mark.django_db
+class Test{class_name}Views:
+    """Test untuk views {verbose}."""
+
+    def test_list_requires_login(self, client):
+        url = reverse("{app_name}:list")
+        response = client.get(url)
+        # Redirect ke halaman login jika belum login
+        assert response.status_code == 302
+''')
+
+    # ── apps.py ──────────────────────────────────────────────────────────────
+    with open(os.path.join(app_dir, "apps.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/apps.py
+
+from django.apps import AppConfig
+
+
+class {class_name}Config(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.{app_name}"
+    verbose_name = "{verbose}"
+''')
+
+    # ── urls.py ──────────────────────────────────────────────────────────────
+    with open(os.path.join(app_dir, "urls.py"), "w", encoding="utf-8") as f:
+        f.write(f'''\
+# apps/{app_name}/urls.py
+
+from django.urls import path
+
+from .views import (
+    {class_name}ListView,
+    {class_name}DetailView,
+    {class_name}CreateView,
+    {class_name}UpdateView,
+    {class_name}DeleteView,
+)
+
+app_name = "{app_name}"
+
+urlpatterns = [
+    path("", {class_name}ListView.as_view(), name="list"),
+    path("<int:pk>/", {class_name}DetailView.as_view(), name="detail"),
+    path("baru/", {class_name}CreateView.as_view(), name="create"),
+    path("<int:pk>/edit/", {class_name}UpdateView.as_view(), name="update"),
+    path("<int:pk>/hapus/", {class_name}DeleteView.as_view(), name="delete"),
+]
+''')
+
+    # ── templates/ ───────────────────────────────────────────────────────────
+    tpl_dir = os.path.join("templates", "apps", app_name)
+    os.makedirs(tpl_dir, exist_ok=True)
+
+    with open(os.path.join(tpl_dir, f"{app_name}_list.html"), "w", encoding="utf-8") as f:
+        f.write(f'''<c-layout.{layout} title="Daftar {verbose}">
+    <div class="rdp-page-header">
+        <h1>Daftar {verbose}</h1>
+        <a href="{{% url '{app_name}:create' %}}" role="button" class="rdp-btn rdp-btn--primary">
+            + Tambah {verbose}
+        </a>
+    </div>
+
+    {{% if items %}}<ul>
+        {{% for item in items %}}
+        <li>
+            <a href="{{% url '{app_name}:detail' item.pk %}}">{{{{ item.name }}}}</a>
+            &nbsp;·&nbsp;
+            <a href="{{% url '{app_name}:update' item.pk %}}">Edit</a>
+        </li>
+        {{% endfor %}}
+    </ul>
+    {{% else %}}<p>Belum ada data {verbose}.</p>
+    {{% endif %}}
+</c-layout.{layout}>
+''')
+
+    with open(os.path.join(tpl_dir, f"{app_name}_detail.html"), "w", encoding="utf-8") as f:
+        f.write(f'''<c-layout.{layout} title="Detail {{{{ object.name }}}}">
+    <h1>{{{{ object.name }}}}</h1>
+    <p>{{{{ object.description }}}}</p>
+    <a href="{{% url '{app_name}:update' object.pk %}}" role="button">Edit</a>
+    <a href="{{% url '{app_name}:list' %}}">Kembali</a>
+</c-layout.{layout}>
+''')
+
+    with open(os.path.join(tpl_dir, f"{app_name}_form.html"), "w", encoding="utf-8") as f:
+        f.write(f'''<c-layout.{layout} title="Form {verbose}">
+    <h1>{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</h1>
+    <form method="POST">
+        {{% csrf_token %}}
+        {{{{ form.as_p }}}}
+        <button type="submit">Simpan</button>
+        <a href="{{% url '{app_name}:list' %}}">Batal</a>
+    </form>
+</c-layout.{layout}>
+''')
+
+    with open(os.path.join(tpl_dir, f"{app_name}_confirm_delete.html"), "w", encoding="utf-8") as f:
+        f.write(f'''<c-layout.{layout} title="Hapus {verbose}">
+    <h1>Hapus {verbose}</h1>
+    <p>Yakin ingin menghapus <strong>{{{{ object.name }}}}</strong>?</p>
+    <form method="POST">
+        {{% csrf_token %}}
+        <button type="submit" class="rdp-btn rdp-btn--danger">Hapus</button>
+        <a href="{{% url '{app_name}:list' %}}">Batal</a>
+    </form>
+</c-layout.{layout}>
+''')
+
+    print(f"  [OK] Struktur aplikasi '{app_name}' ({app_type}) berhasil dibuat.")
+
+    # ── Daftarkan ke LOCAL_APPS ───────────────────────────────────────────────
+    base_settings_path = os.path.join("config", "settings", "base.py")
     if os.path.exists(base_settings_path):
-        ans = get_input(f"Daftarkan 'apps.{app_name}' otomatis ke LOCAL_APPS di config/settings/base.py? (Y/n)", default='Y')
-        if ans.lower() in ('y', 'yes'):
-            with open(base_settings_path, 'r', encoding='utf-8') as f:
+        ans = get_input(f"Daftarkan 'apps.{app_name}' ke LOCAL_APPS di config/settings/base.py? (Y/n)", default="Y")
+        if ans.lower() in ("y", "yes"):
+            with open(base_settings_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            # Cari LOCAL_APPS = [
-            if 'LOCAL_APPS = [' in content:
-                content = content.replace('LOCAL_APPS = [', f'LOCAL_APPS = [\n    "apps.{app_name}",')
-                with open(base_settings_path, 'w', encoding='utf-8') as f:
+            if "LOCAL_APPS = [" in content:
+                content = content.replace("LOCAL_APPS = [", f'LOCAL_APPS = [\n    "apps.{app_name}",')
+                with open(base_settings_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print("  [OK] Aplikasi didaftarkan di LOCAL_APPS.")
             else:
-                print("  [WARNING] Tidak dapat menemukan blok LOCAL_APPS. Harap daftarkan secara manual.")
+                print("  [WARNING] Blok LOCAL_APPS tidak ditemukan. Daftarkan manual.")
     else:
-        print(f"\n  [INFO] Jangan lupa untuk menambahkan 'apps.{app_name}' ke dalam LOCAL_APPS di settings Anda.")
+        print(f"\n  [INFO] Tambahkan 'apps.{app_name}' ke LOCAL_APPS di settings.")
+
+    # ── Daftarkan URL di config/urls.py ───────────────────────────────────────
+    root_urls_path = os.path.join("config", "urls.py")
+    if os.path.exists(root_urls_path):
+        ans = get_input(f"Tambahkan path('{app_name}/', ...) ke config/urls.py? (Y/n)", default="Y")
+        if ans.lower() in ("y", "yes"):
+            with open(root_urls_path, "r", encoding="utf-8") as f:
+                urls_content = f.read()
+            # Sisipkan sebelum komentar App URLs atau sebelum urlpatterns = [
+            new_path = f'    path("{app_name}/", include("apps.{app_name}.urls")),\n'
+            if "# App URLs" in urls_content:
+                urls_content = urls_content.replace("    # App URLs", f"    # App URLs\n{new_path}", 1)
+            elif "urlpatterns = [" in urls_content:
+                urls_content = urls_content.replace("urlpatterns = [", f"urlpatterns = [\n{new_path}", 1)
+            with open(root_urls_path, "w", encoding="utf-8") as f:
+                f.write(urls_content)
+            print(f"  [OK] URL '{app_name}/' didaftarkan di config/urls.py.")
+
+    print()
+    print(f"  Langkah selanjutnya:")
+    print(f"    rdp makemigrations  ← buat migrasi untuk model {class_name}")
+    print(f"    rdp migrate         ← terapkan migrasi")
+    if app_type == "dashboard":
+        print(f"    Tambahkan <c-sidebar.link href=\"/{app_name}/\">...  ke sidebar Cotton")
 
 
 def run_new_api(args):
@@ -1787,6 +2316,9 @@ def main():
     DIPANGGIL DARI: [project.scripts] entry point di pyproject.toml
     """
     args = sys.argv[1:]
+
+    # Cek update sekali per hari — non-blocking, silent jika offline
+    check_for_updates()
 
     if not args or args[0] in ("--help", "-h", "help"):
         print_help()
