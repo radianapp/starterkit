@@ -49,7 +49,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -564,7 +564,7 @@ def setup_optional_pages(target_dir: str, proj_name: str, has_contact: bool, has
         with open(os.path.join(public_templates_dir, "faq.html"), "w", encoding="utf-8") as f:
             f.write(faq_html)
 
-def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool, has_dashboard: bool):
+def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool, has_dashboard: bool, has_demo_pages: bool = True):
     """
     Menghapus file dan routing yang tidak diinginkan pengguna saat setup "a-la-carte".
     """
@@ -641,27 +641,165 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
         # Hapus dari base.py (LOCAL_APPS)
         settings_content = re.sub(r'^[ \t]*"apps\.dashboard\.apps\.DashboardConfig",\n?', '', settings_content, flags=re.MULTILINE)
 
-    # 4. ALWAYS CLEAN HTMX EXAMPLES FOR NEW PROJECTS (unless maybe we want to keep them, but usually they are just for demo)
-    # Hapus templates/htmx_examples
-    htmx_templates = os.path.join(target_dir, "templates", "htmx_examples")
-    if os.path.exists(htmx_templates):
-        shutil.rmtree(htmx_templates, onerror=on_rm_error)
-    # Hapus apps/core/views/htmx_examples.py
-    htmx_views = os.path.join(target_dir, "apps", "core", "views", "htmx_examples.py")
-    if os.path.exists(htmx_views):
-        os.remove(htmx_views)
-    # Hapus baris URL htmx
-    # Karena path HTMX bisa multiline, kita hapus dari komentar Showcase sampai komentar App URLs
-    urls_content = re.sub(r'^[ \t]*# Showcase 10 Pola HTMX.*?# App URLs', '    # App URLs', urls_content, flags=re.MULTILINE | re.DOTALL)
-    
-    # Hapus juga import htmx_views
-    urls_content = re.sub(r'^[ \t]*from apps\.core\.views import htmx_examples as htmx_views\n?', '', urls_content, flags=re.MULTILINE)
+    # 4. DEMO PAGES (docs/, examples/, htmx showcase, dev_components)
+    #    Selalu dihapus kecuali user memilih has_demo_pages=True
+    if not has_demo_pages:
+        # Hapus templates demo
+        for demo_dir in ["htmx_examples", "starter", "docs"]:
+            p = os.path.join(target_dir, "templates", demo_dir)
+            if os.path.exists(p):
+                shutil.rmtree(p, onerror=on_rm_error)
+        dev_comp = os.path.join(target_dir, "templates", "dev_components.html")
+        if os.path.exists(dev_comp):
+            os.remove(dev_comp)
+
+        # Hapus apps/core/views/htmx_examples.py
+        htmx_views_file = os.path.join(target_dir, "apps", "core", "views", "htmx_examples.py")
+        if os.path.exists(htmx_views_file):
+            os.remove(htmx_views_file)
+
+        # Hapus URL grup docs + examples + starter + rdp-ui
+        urls_content = re.sub(
+            r'\n[ \t]*# Docs & Examples.*?(?=\n[ \t]*# Halaman Publik|\n[ \t]*# App URLs)',
+            '',
+            urls_content,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        # Hapus URL grup HTMX Examples
+        urls_content = re.sub(
+            r'\n[ \t]*# HTMX Examples.*?(?=\n[ \t]*# App URLs)',
+            '',
+            urls_content,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        # Hapus import views demo dari apps.core
+        urls_content = re.sub(
+            r'^from apps\.core\.views import StarterDocsView.*?\n',
+            '',
+            urls_content,
+            flags=re.MULTILINE,
+        )
+        urls_content = re.sub(
+            r'^from apps\.core\.views import htmx_examples as htmx_views\n?',
+            '',
+            urls_content,
+            flags=re.MULTILINE,
+        )
+    else:
+        # Tetap hapus htmx_examples — sudah selalu di-strip untuk project baru sebelumnya
+        htmx_templates = os.path.join(target_dir, "templates", "htmx_examples")
+        if os.path.exists(htmx_templates):
+            shutil.rmtree(htmx_templates, onerror=on_rm_error)
+        htmx_views_file = os.path.join(target_dir, "apps", "core", "views", "htmx_examples.py")
+        if os.path.exists(htmx_views_file):
+            os.remove(htmx_views_file)
+        urls_content = re.sub(
+            r'^[ \t]*# Showcase 10 Pola HTMX.*?# App URLs',
+            '    # App URLs',
+            urls_content,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+        urls_content = re.sub(
+            r'^[ \t]*from apps\.core\.views import htmx_examples as htmx_views\n?',
+            '',
+            urls_content,
+            flags=re.MULTILINE,
+        )
+
+    # 5. DASHBOARD MINIMALIS — hapus demo content jika has_demo_pages=False dan has_dashboard=True
+    if not has_demo_pages and has_dashboard:
+        # Hapus partials demo (activity_table, stats)
+        dash_partials = os.path.join(target_dir, "templates", "dashboard", "partials")
+        if os.path.exists(dash_partials):
+            shutil.rmtree(dash_partials, onerror=on_rm_error)
+
+        # Tulis ulang dashboard/index.html dengan versi minimal
+        dash_index = os.path.join(target_dir, "templates", "dashboard", "index.html")
+        if os.path.exists(dash_index):
+            with open(dash_index, "w", encoding="utf-8") as f:
+                f.write("""\
+{# US-010: Dashboard page — halaman utama setelah login #}
+{% load static %}
+{% load cotton %}
+
+<c-layout.app title="Dashboard" navbar_brand="Dashboard">
+
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    </c-slot>
+
+    <c-slot name="sidebar">
+        <a href="/" class="rdp-sidebar__brand">
+            <span class="rdp-sidebar__brand-icon">⬡</span>
+            <span class="rdp-sidebar__brand-text">{{ APP_BRAND_SHORT }}</span>
+        </a>
+
+        <nav class="rdp-sidebar__nav" aria-label="Main navigation">
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Menu Utama</div>
+                <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link active" aria-current="page">
+                    <span class="rdp-sidebar__link-icon">📊</span>
+                    <span class="rdp-sidebar__link-text">Dashboard</span>
+                </a>
+                {# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}
+            </div>
+
+            <div class="rdp-sidebar__section">
+                <div class="rdp-sidebar__section-title">Pengaturan</div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:profile' %}" class="rdp-sidebar__link">
+                        <span class="rdp-sidebar__link-icon">👤</span>
+                        <span class="rdp-sidebar__link-text">Profil</span>
+                    </a>
+                    <a href="{% url 'admin:index' %}" class="rdp-sidebar__link">
+                        <span class="rdp-sidebar__link-icon">⚙️</span>
+                        <span class="rdp-sidebar__link-text">Admin</span>
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="rdp-sidebar__footer" x-data="{ open: false }" @click.away="open = false">
+            <button type="button" class="rdp-sidebar__link rdp-sidebar__user-btn"
+                    @click="open = !open" :aria-expanded="open" aria-haspopup="true">
+                <div class="rdp-avatar rdp-avatar--sm rdp-sidebar__footer-avatar">
+                    <span class="rdp-avatar__initials">{{ user.get_full_name|default:user.email|slice:":2"|upper }}</span>
+                </div>
+                <span class="rdp-sidebar__link-text">{{ user.get_full_name|default:user.email }}</span>
+                <span class="rdp-sidebar__user-chevron" :class="{ 'is-open': open }">▲</span>
+            </button>
+
+            <div x-show="open" class="rdp-user-menu" role="menu">
+                <a href="{% url 'accounts:profile' %}" class="rdp-user-menu__item" role="menuitem">
+                    <span class="rdp-user-menu__icon">👤</span> Profil
+                </a>
+                <div class="rdp-user-menu__divider" role="separator"></div>
+                <form method="post" action="{% url 'accounts:logout' %}" class="rdp-user-menu__form">
+                    {% csrf_token %}
+                    <button type="submit" class="rdp-user-menu__item rdp-user-menu__item--danger" role="menuitem">
+                        <span class="rdp-user-menu__icon">🚪</span> Keluar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </c-slot>
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">Selamat Datang, {{ user.get_full_name|default:user.email }}</h2>
+    </div>
+
+    <p style="color: var(--rdp-text-muted); margin-top: 8px;">
+        Aplikasi siap digunakan. Mulai tambah fitur dengan <code>rdp new app &lt;nama&gt;</code>.
+    </p>
+
+</c-layout.app>
+""")
 
     # Tulis ulang urls.py dan base.py
     if os.path.exists(urls_path):
         with open(urls_path, "w", encoding="utf-8") as f:
             f.write(urls_content)
-            
+
     if os.path.exists(settings_path):
         with open(settings_path, "w", encoding="utf-8") as f:
             f.write(settings_content)
@@ -731,6 +869,7 @@ def run_new(args: list[str]):
     has_landing = ask_yes_no("  Sertakan halaman Landing Page Publik (home, about, privacy)?", default="y")
     has_auth = ask_yes_no("  Sertakan fitur Autentikasi UI (login, register, forgot password)?", default="y")
     has_dashboard = ask_yes_no("  Sertakan fitur Dashboard UI (dashboard, profil, aktivitas)?", default="y")
+    has_demo_pages = ask_yes_no("  Sertakan halaman demo/dokumentasi (docs/, examples/, HTMX showcase)?", default="n")
 
     # Tentukan direktori target
     target_dir = os.path.join(os.getcwd(), proj_name)
@@ -757,7 +896,7 @@ def run_new(args: list[str]):
     setup_pyproject(target_dir, proj_name, proj_desc)
     
     # Hapus fitur yang tidak dipilih
-    cleanup_optional_features(target_dir, has_landing, has_auth, has_dashboard)
+    cleanup_optional_features(target_dir, has_landing, has_auth, has_dashboard, has_demo_pages)
     
     # Jika Landing Page dipilih, tambahkan contact & faq karena ini bagian dari Landing Page di setup lama
     if has_landing:
