@@ -838,15 +838,26 @@ def run_new_app(args):
     models_dir = os.path.join(app_dir, "models")
     os.makedirs(models_dir)
 
+    # Gunakan BaseModel jika apps/core tersedia, fallback ke models.Model
+    has_core = os.path.exists(os.path.join("apps", "core"))
+    if has_core:
+        model_import = "from apps.core.models import BaseModel"
+        model_base = "BaseModel"
+        model_dep = "apps.core.models.BaseModel"
+    else:
+        model_import = ""
+        model_base = "models.Model"
+        model_dep = "django.db.models.Model"
+
     with open(os.path.join(models_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
         f.write(f'''\
 # apps/{app_name}/models/{app_name}.py
 
 from django.db import models
-from apps.core.models import BaseModel
+{model_import}
 
 
-class {class_name}(BaseModel):
+class {class_name}({model_base}):
     """
     TUJUAN: Model untuk data {verbose}.
 
@@ -855,7 +866,7 @@ class {class_name}(BaseModel):
       2. [Tambahkan field sesuai kebutuhan bisnis]
 
     DIPANGGIL DARI: views/{app_name}.py, services/{app_name}_service.py
-    DEPENDENSI: apps.core.models.BaseModel
+    DEPENDENSI: {model_dep}
     """
 
     name = models.CharField(max_length=255, verbose_name="Nama")
@@ -1615,13 +1626,16 @@ def run_new_model(args):
         print(f"[ERROR] Model '{class_name}' sudah ada di {models_path}.")
         sys.exit(1)
 
-    model_content = f"""from django.db import models
-from apps.core.models import BaseModel
+    has_core = os.path.exists(os.path.join("apps", "core"))
+    base_import = "from apps.core.models import BaseModel\n" if has_core else ""
+    base_class = "BaseModel" if has_core else "models.Model"
 
-class {class_name}(BaseModel):
+    model_content = f"""from django.db import models
+{base_import}
+class {class_name}({base_class}):
     \"\"\"Model untuk {class_name}.\"\"\"
     name = models.CharField(max_length=255)
-    
+
     class Meta:
         verbose_name = "{class_name}"
         verbose_name_plural = "{class_name}s"
