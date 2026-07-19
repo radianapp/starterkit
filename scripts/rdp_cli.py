@@ -1320,31 +1320,23 @@ urlpatterns = [
             with open(sidebar_path, "r", encoding="utf-8") as f:
                 sidebar_content = f.read()
             # Sisipkan setelah link Dashboard — cari pola href dashboard:index
+            marker = "{# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}"
             sidebar_link = (
-                f'\n                        <a href="/{app_name}/" class="sidebar-link">\n'
+                f'<a href="/{app_name}/" class="sidebar-link">\n'
                 f'                            <span class="icon-circle"></span>\n'
                 f'                            <span>{verbose}</span>\n'
-                f'                        </a>'
+                f'                        </a>\n'
+                f'                        {marker}'
             )
-            anchor = 'href="{% url \'dashboard:index\' %}"'
-            if anchor in sidebar_content:
-                # Sisipkan setelah closing </a> baris dashboard
-                insert_after = '</a>\n                        <a href="#" class="sidebar-link">'
-                if insert_after in sidebar_content:
-                    sidebar_content = sidebar_content.replace(
-                        insert_after,
-                        f'</a>{sidebar_link}\n                        <a href="#" class="sidebar-link">',
-                        1,
-                    )
-                    with open(sidebar_path, "w", encoding="utf-8") as f:
-                        f.write(sidebar_content)
-                    print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar.")
-                else:
-                    print(f"  [WARNING] Pola sidebar tidak ditemukan. Tambahkan manual di {sidebar_path}:")
-                    print(f'            <a href="/{app_name}/" class="sidebar-link">{verbose}</a>')
+            if marker in sidebar_content:
+                sidebar_content = sidebar_content.replace(marker, sidebar_link, 1)
+                with open(sidebar_path, "w", encoding="utf-8") as f:
+                    f.write(sidebar_content)
+                print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar.")
             else:
-                print(f"  [WARNING] {sidebar_path} tidak punya pola sidebar standar.")
-                print(f'            Tambahkan manual: <a href="/{app_name}/" class="sidebar-link">{verbose}</a>')
+                print(f"  [WARNING] Marker sidebar tidak ditemukan di {sidebar_path}.")
+                print(f"            Tambahkan manual setelah link Dashboard:")
+                print(f'            <a href="/{app_name}/" class="sidebar-link">{verbose}</a>')
 
     print()
     print(f"  Langkah selanjutnya:")
@@ -2386,9 +2378,9 @@ def run_remove_app(args):
             elif path == sidebar_path and sidebar_hit:
                 with open(sidebar_path, "r", encoding="utf-8") as f:
                     content = f.read()
-                # Hapus blok <a ...> sampai </a> yang mengandung href="/{app_name}/"
+                # Hapus blok <a href="/{app_name}/"> ... </a> (multiline), marker tetap
                 content = re.sub(
-                    rf'[ \t]*<a[^>]*href="/{re.escape(app_name)}/"[^>]*>.*?</a>\n?',
+                    rf'<a[^>]*href="/{re.escape(app_name)}/"[^>]*>.*?</a>\n[ \t]*',
                     "",
                     content,
                     flags=re.DOTALL,
