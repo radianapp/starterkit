@@ -2256,24 +2256,19 @@ def run_upgrade_cli(args):
     """
     force = "--force" in args
 
-    print("Mengecek versi terbaru dari GitHub...")
-    latest = _fetch_latest_version()
+    print(f"  Versi lokal  : v{__version__}")
 
+    # Coba fetch versi GitHub — tapi jangan blok upgrade kalau gagal
+    latest = _fetch_latest_version()
     if latest:
-        local_tuple = _parse_version(__version__)
-        latest_tuple = _parse_version(latest)
-        print(f"  Versi lokal  : v{__version__}")
         print(f"  Versi GitHub : v{latest}")
-        if latest_tuple > local_tuple:
-            print(f"\n  [UPDATE] Versi baru tersedia: v{latest}")
-        elif not force:
+        if _parse_version(latest) <= _parse_version(__version__) and not force:
             print("\n  Sudah menggunakan versi terbaru.")
             print("  Gunakan --force untuk upgrade paksa: rdp upgrade-cli --force")
             return
     else:
-        print("  [WARNING] Tidak bisa mengambil versi dari GitHub (offline?).")
-        if not force:
-            return
+        # Fetch gagal (SSL/proxy/offline) — serahkan ke uv untuk memutuskan
+        print("  Versi GitHub : (tidak bisa dicek — uv akan menentukan)")
 
     print("\nMenjalankan: uv tool upgrade rdp-starter-kit")
     try:
