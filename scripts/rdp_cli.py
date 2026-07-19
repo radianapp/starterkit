@@ -840,22 +840,14 @@ def run_new_app(args):
     models_dir = os.path.join(app_dir, "models")
     os.makedirs(models_dir)
 
-    # Gunakan BaseModel jika apps/core tersedia, fallback ke models.Model
-    has_core = os.path.exists(os.path.join("apps", "core"))
-    if has_core:
-        model_import = "from apps.core.models import BaseModel"
-        model_base = "BaseModel"
-        model_dep = "apps.core.models.BaseModel"
-        model_ordering = '"-created_at"'
-        admin_list_display = '["name", "is_active", "created_at"]'
-        admin_ordering = '["-created_at"]'
-    else:
-        model_import = ""
-        model_base = "models.Model"
-        model_dep = "django.db.models.Model"
-        model_ordering = '"name"'
-        admin_list_display = '["name", "is_active"]'
-        admin_ordering = '["name"]'
+    model_import = ""
+    model_base = "models.Model"
+    model_dep = "django.db.models.Model"
+    model_ordering = '"name"'
+    admin_list_display = '["name", "is_active"]'
+    admin_ordering = '["name"]'
+    # ponytail: ganti model_base ke BaseModel dan tambah model_import
+    # jika project ini pakai apps.core.models.BaseModel
 
     with open(os.path.join(models_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
         f.write(f'''\
@@ -1634,9 +1626,8 @@ def run_new_model(args):
         print(f"[ERROR] Model '{class_name}' sudah ada di {models_path}.")
         sys.exit(1)
 
-    has_core = os.path.exists(os.path.join("apps", "core"))
-    base_import = "from apps.core.models import BaseModel\n" if has_core else ""
-    base_class = "BaseModel" if has_core else "models.Model"
+    base_import = ""
+    base_class = "models.Model"
 
     model_content = f"""from django.db import models
 {base_import}
