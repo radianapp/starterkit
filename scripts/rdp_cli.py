@@ -2374,8 +2374,9 @@ def run_remove_app(args):
             elif path == urls_path and urls_hit:
                 with open(urls_path, "r", encoding="utf-8") as f:
                     content = f.read()
+                # Hapus seluruh baris yang mengandung include("apps.<name>.urls")
                 content = re.sub(
-                    rf'[ \t]*path\([^)]*apps\.{re.escape(app_name)}\.urls[^)]*\),?\n?', "", content
+                    rf'[^\n]*include\(["\']apps\.{re.escape(app_name)}\.urls["\']\)[^\n]*\n?', "", content
                 )
                 with open(urls_path, "w", encoding="utf-8") as f:
                     f.write(content)
