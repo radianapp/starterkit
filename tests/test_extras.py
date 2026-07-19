@@ -56,13 +56,12 @@ class TestExtras(SimpleTestCase):
         assert "Warna Aksen" in html
 
     # 4. Test View Landing Page RDP-UI
-    # /rdp-ui/ sekarang redirect ke / karena landing sudah disatukan.
+    # /rdp-ui/ redirect ke ui.radian.web.id (external).
     def test_landing_page_view(self):
         client = Client()
-        # /rdp-ui/ harus redirect 302 ke /
         response = client.get(reverse("rdp-ui-landing"))
         assert response.status_code == 302
-        assert response["Location"] == "/"
+        assert response["Location"] == "https://ui.radian.web.id"
 
     def test_home_page_has_rdp_ui_content(self):
         """Home page (/) sekarang memuat konten landing RDP UI."""
@@ -103,70 +102,15 @@ class TestExtras(SimpleTestCase):
 
 class TestRdpUiTokenTestView(SimpleTestCase):
     """
-    Unit test untuk halaman Token Test RDP UI (/rdp-ui/tokens/).
-    Memverifikasi bahwa semua 11 tema dan token tampil dengan benar.
+    /rdp-ui/tokens/ sekarang redirect ke ui.radian.web.id/docs/ (endpoint dihapus).
     """
 
     def setUp(self):
-        """Setup client dan URL untuk semua test."""
         self.client = Client()
         self.url = reverse("rdp_ui_token_test")
 
-    def test_token_test_page_accessible(self):
-        """Verify halaman /rdp-ui/tokens/ dapat diakses tanpa login dan mengembalikan 200."""
+    def test_token_test_redirects_to_external(self):
+        """Verify /rdp-ui/tokens/ redirect ke ui.radian.web.id/docs/."""
         response = self.client.get(self.url)
-        assert response.status_code == 200
-
-    def test_token_test_uses_correct_template(self):
-        """Verify halaman menggunakan template rdp_ui/token_test.html."""
-        response = self.client.get(self.url)
-        assert "rdp_ui/token_test.html" in [t.name for t in response.templates]
-
-    def test_token_test_context_has_themes(self):
-        """Verify context mengandung daftar 11 tema dengan field yang benar."""
-        response = self.client.get(self.url)
-        themes = response.context["themes"]
-        assert len(themes) == 11
-        for theme in themes:
-            assert "id" in theme
-            assert "label" in theme
-            assert "swatch" in theme
-            assert "dark" in theme
-
-    def test_token_test_context_theme_count(self):
-        """Verify context theme_count sesuai dengan panjang daftar themes."""
-        response = self.client.get(self.url)
-        assert response.context["theme_count"] == 11
-        assert response.context["theme_count"] == len(response.context["themes"])
-
-    def test_token_test_all_theme_ids_in_html(self):
-        """
-        Verify semua ID tema hadir di HTML sebagai data-rdp-theme di card gallery.
-        Ini memastikan Theme Gallery merender card untuk setiap tema.
-        """
-        response = self.client.get(self.url)
-        html = response.content.decode("utf-8")
-        expected_ids = [
-            "default", "light", "corporate", "ocean", "forest",
-            "github", "dark", "midnight", "nord", "dracula", "terminal",
-        ]
-        for theme_id in expected_ids:
-            assert f'data-theme-id="{theme_id}"' in html, (
-                f"Theme card untuk '{theme_id}' tidak ditemukan di HTML gallery"
-            )
-
-    def test_token_test_all_theme_css_links_in_html(self):
-        """
-        Verify semua 11 file CSS tema di-load bersamaan di <head>.
-        Ini penting agar Theme Gallery dapat merender setiap card dengan warna yang benar.
-        """
-        response = self.client.get(self.url)
-        html = response.content.decode("utf-8")
-        expected_ids = [
-            "default", "light", "corporate", "ocean", "forest",
-            "github", "dark", "midnight", "nord", "dracula", "terminal",
-        ]
-        for theme_id in expected_ids:
-            assert f"{theme_id}.css" in html, (
-                f"File CSS tema '{theme_id}.css' tidak ditemukan di <head> halaman"
-            )
+        assert response.status_code == 302
+        assert response["Location"] == "https://ui.radian.web.id/docs/"

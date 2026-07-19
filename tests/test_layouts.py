@@ -34,7 +34,7 @@ class TestLayouts(SimpleTestCase):
     def test_cdn_assets_loaded_when_self_host_false(self):
         """Memastikan aset diload dari CDN ketika RDP_UI_SELF_HOST=False."""
         html = self.render_layout("base", {"RDP_UI_SELF_HOST": False, "RDP_UI_VERSION": "v1.0"})
-        assert "https://cdn.radian.web.id/v1.0/assets/rdp.css" in html
+        assert "https://ui.radian.web.id/v1.0/assets/rdp.css" in html
         assert "https://cdn.jsdelivr.net/npm/@picocss/pico" in html
         assert "https://unpkg.com/htmx.org" in html
         assert "static/css/layout.css" in html
@@ -60,12 +60,14 @@ class TestLayouts(SimpleTestCase):
         assert 'class="rdp-skip-link"' in html
         assert 'href="#main-content"' in html
 
+    @override_settings(DEBUG=True)
     def test_layout_debug_overlay_gate(self):
-        """Memastikan panel debug overlay hanya muncul jika RDP_DEBUG_OVERLAY=True."""
-        # Case 1: Overlay True
-        html_with = self.render_layout("base", {"RDP_DEBUG_OVERLAY": True})
+        """Memastikan panel debug overlay hanya muncul jika DEBUG=True."""
+        html_with = self.render_layout("base", {"DEBUG": True})
         assert "rdp-debug-overlay" in html_with
 
-        # Case 2: Overlay False
-        html_without = self.render_layout("base", {"RDP_DEBUG_OVERLAY": False})
+    @override_settings(DEBUG=False)
+    def test_layout_debug_overlay_hidden_when_debug_false(self):
+        """Memastikan panel debug overlay tidak muncul jika DEBUG=False."""
+        html_without = self.render_layout("base", {"DEBUG": False})
         assert "rdp-debug-overlay" not in html_without

@@ -372,3 +372,10 @@ templates/cotton/rdp/{nama}.html       →  docs/components/{nama}.html (contoh)
 - Jangan commit file `.env` — hanya `.env.example`
 - Jangan pakai `*` sebagai versi dependency di `pyproject.toml`
 - Jangan hapus komen dalam kode
+
+## Cara AI Berinteraksi
+
+Sebelum mengerjakan task baru yang memperluas scope:
+- Tanya dulu: "Apakah ini perlu ada?"
+- Kalau task adalah polish/UI/dokumentasi saat core belum selesai — flagging dulu, jangan langsung kerjakan
+- Kalau scope bertambah dari session sebelumnya — sebut secara eksplisit

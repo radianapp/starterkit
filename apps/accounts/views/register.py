@@ -132,7 +132,7 @@ def register_wizard(request):
             _clear_wizard(request)
             # US-008: Kirim email verifikasi setelah user dibuat
             send_verification_email(user, request)
-            login(request, user)
+            login(request, user, backend="apps.accounts.backends.EmailOrUsernameBackend")
             if is_htmx:
                 # HTMX redirect: set header HX-Redirect, return 200 kosong
                 response = render(request, "accounts/partials/step_success.html", {})

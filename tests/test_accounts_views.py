@@ -85,7 +85,7 @@ class TestUserLoginView:
         """POST dengan kredensial valid harus login dan redirect."""
         url = reverse("accounts:login")
         response = client.post(url, {
-            "email": "verified@test.local",
+            "identifier": "verified@test.local",
             "password": "StrongPass123!",
         })
         assert response.status_code == 302
@@ -94,7 +94,7 @@ class TestUserLoginView:
         """POST dengan kredensial salah harus return 422."""
         url = reverse("accounts:login")
         response = client.post(url, {
-            "email": "nobody@test.local",
+            "identifier": "nobody@test.local",
             "password": "wrongpassword",
         })
         assert response.status_code == 422
@@ -104,7 +104,7 @@ class TestUserLoginView:
         url = reverse("accounts:login")
         response = client.post(
             url,
-            {"email": "nobody@test.local", "password": "wrong"},
+            {"identifier": "nobody@test.local", "password": "wrong"},
             HTTP_HX_REQUEST="true",
         )
         assert response.status_code == 422
@@ -114,7 +114,7 @@ class TestUserLoginView:
         url = reverse("accounts:login")
         response = client.post(
             url,
-            {"email": "verified@test.local", "password": "StrongPass123!"},
+            {"identifier": "verified@test.local", "password": "StrongPass123!"},
             HTTP_HX_REQUEST="true",
         )
         assert response.status_code == 200
@@ -124,7 +124,7 @@ class TestUserLoginView:
         """POST login dengan ?next harus redirect ke next URL lokal."""
         url = reverse("accounts:login") + "?next=/dashboard/"
         response = client.post(url, {
-            "email": "verified@test.local",
+            "identifier": "verified@test.local",
             "password": "StrongPass123!",
         })
         assert response.status_code == 302
@@ -134,7 +134,7 @@ class TestUserLoginView:
         """next URL external harus diabaikan (open redirect prevention)."""
         url = reverse("accounts:login") + "?next=http://evil.com"
         response = client.post(url, {
-            "email": "verified@test.local",
+            "identifier": "verified@test.local",
             "password": "StrongPass123!",
         })
         assert response.status_code == 302
