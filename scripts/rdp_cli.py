@@ -49,7 +49,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.3.5"
+__version__ = "0.3.6"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -1547,45 +1547,42 @@ urlpatterns = [
             print(f"  [OK] URL '{app_name}/' didaftarkan di config/urls.py.")
 
     # ── Tambahkan link ke sidebar (dashboard type saja) ──────────────────────
-    # Cari sidebar yang aktif: dashboard/index.html override app.html jika pakai <c-slot name="sidebar">
+    # Insert ke SEMUA file yang punya marker — dashboard/index.html DAN app.html keduanya
+    marker = "{# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}"
     _sidebar_candidates = [
         os.path.join("templates", "dashboard", "index.html"),
         os.path.join("templates", "cotton", "layout", "app.html"),
     ]
-    sidebar_path = next((p for p in _sidebar_candidates if os.path.exists(p)), None)
-    marker = "{# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}"
+    _sidebar_files_with_marker = [p for p in _sidebar_candidates if os.path.exists(p) and marker in open(p, encoding="utf-8").read()]
 
-    if app_type == "dashboard" and sidebar_path:
+    if app_type == "dashboard" and _sidebar_files_with_marker:
         ans = get_input(f"Tambahkan link '{verbose}' ke sidebar? (Y/n)", default="Y")
         if ans.lower() in ("y", "yes"):
-            with open(sidebar_path, "r", encoding="utf-8") as f:
-                sidebar_content = f.read()
-            # Deteksi class yang dipakai di file target
-            link_class = "rdp-sidebar__link" if "rdp-sidebar__link" in sidebar_content else "sidebar-link"
-            icon_class = "rdp-sidebar__link-icon" if "rdp-sidebar__link-icon" in sidebar_content else "icon-circle"
-            text_class = "rdp-sidebar__link-text" if "rdp-sidebar__link-text" in sidebar_content else ""
-            icon_html = f'<span class="{icon_class}">🔗</span>'
-            text_html = (
-                f'<span class="{text_class}">{verbose}</span>' if text_class
-                else f'<span>{verbose}</span>'
-            )
-            indent = "                "
-            sidebar_link = (
-                f'<a href="/{app_name}/" class="{link_class}">\n'
-                f'{indent}    {icon_html}\n'
-                f'{indent}    {text_html}\n'
-                f'{indent}</a>\n'
-                f'{indent}{marker}'
-            )
-            if marker in sidebar_content:
+            for sidebar_path in _sidebar_files_with_marker:
+                with open(sidebar_path, "r", encoding="utf-8") as f:
+                    sidebar_content = f.read()
+                link_class = "rdp-sidebar__link" if "rdp-sidebar__link" in sidebar_content else "sidebar-link"
+                icon_class = "rdp-sidebar__link-icon" if "rdp-sidebar__link-icon" in sidebar_content else "icon-circle"
+                text_class = "rdp-sidebar__link-text" if "rdp-sidebar__link-text" in sidebar_content else ""
+                icon_html = f'<span class="{icon_class}">🔗</span>'
+                text_html = (
+                    f'<span class="{text_class}">{verbose}</span>' if text_class
+                    else f'<span>{verbose}</span>'
+                )
+                indent = "                "
+                sidebar_link = (
+                    f'<a href="/{app_name}/" class="{link_class}">\n'
+                    f'{indent}    {icon_html}\n'
+                    f'{indent}    {text_html}\n'
+                    f'{indent}</a>\n'
+                    f'{indent}{marker}'
+                )
                 sidebar_content = sidebar_content.replace(marker, sidebar_link, 1)
                 with open(sidebar_path, "w", encoding="utf-8") as f:
                     f.write(sidebar_content)
                 print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar ({sidebar_path}).")
-            else:
-                print(f"  [WARNING] Marker tidak ditemukan di {sidebar_path}.")
-                print("            Tambahkan manual: " + marker)
-                print(f"            Lalu jalankan ulang: rdp new app {app_name}")
+    elif app_type == "dashboard":
+        print(f"  [WARNING] Marker sidebar tidak ditemukan. Tambahkan manual: " + marker)
 
     print()
     print(f"  Langkah selanjutnya:")
