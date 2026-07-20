@@ -49,7 +49,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -1366,58 +1366,147 @@ urlpatterns = [
     os.makedirs(tpl_dir, exist_ok=True)
 
     with open(os.path.join(tpl_dir, f"{app_name}_list.html"), "w", encoding="utf-8") as f:
-        f.write(f'''<c-layout.{layout} title="Daftar {verbose}">
+        f.write(f'''\
+{{# {app_name}/templates/apps/{app_name}/{app_name}_list.html #}}
+<c-layout.{layout} title="Daftar {verbose}">
+
     <div class="rdp-page-header">
-        <h1>Daftar {verbose}</h1>
-        <a href="{{% url '{app_name}:create' %}}" role="button" class="rdp-btn rdp-btn--primary">
-            + Tambah {verbose}
-        </a>
+        <h2 class="rdp-page-header__title">Daftar {verbose}</h2>
+        <div class="rdp-page-header__actions">
+            <c-rdp.button variant="primary" href="{{% url '{app_name}:create' %}}">+ Tambah {verbose}</c-rdp.button>
+        </div>
     </div>
 
-    {{% if items %}}<ul>
-        {{% for item in items %}}
-        <li>
-            <a href="{{% url '{app_name}:detail' item.pk %}}">{{{{ item.name }}}}</a>
-            &nbsp;·&nbsp;
-            <a href="{{% url '{app_name}:update' item.pk %}}">Edit</a>
-        </li>
-        {{% endfor %}}
-    </ul>
-    {{% else %}}<p>Belum ada data {verbose}.</p>
-    {{% endif %}}
+    <c-rdp.card>
+        {{% if items %}}
+        <table class="rdp-table">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Status</th>
+                    <th>Dibuat</th>
+                    <th style="width:120px">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{% for item in items %}}
+                <tr>
+                    <td><a href="{{% url '{app_name}:detail' item.pk %}}">{{{{ item.name }}}}</a></td>
+                    <td>
+                        {{% if item.is_active %}}
+                            <span class="rdp-badge rdp-badge--success">Aktif</span>
+                        {{% else %}}
+                            <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                        {{% endif %}}
+                    </td>
+                    <td>{{{{ item.created_at|date:"d M Y" }}}}</td>
+                    <td class="rdp-table__actions">
+                        <a href="{{% url '{app_name}:update' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--secondary">Edit</a>
+                        <a href="{{% url '{app_name}:delete' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--danger">Hapus</a>
+                    </td>
+                </tr>
+                {{% endfor %}}
+            </tbody>
+        </table>
+        {{% else %}}
+        <div class="rdp-empty-state">
+            <p class="rdp-empty-state__text">Belum ada data {verbose}.</p>
+            <c-rdp.button variant="primary" href="{{% url '{app_name}:create' %}}">+ Tambah {verbose}</c-rdp.button>
+        </div>
+        {{% endif %}}
+    </c-rdp.card>
+
 </c-layout.{layout}>
 ''')
 
     with open(os.path.join(tpl_dir, f"{app_name}_detail.html"), "w", encoding="utf-8") as f:
-        f.write(f'''<c-layout.{layout} title="Detail {{{{ object.name }}}}">
-    <h1>{{{{ object.name }}}}</h1>
-    <p>{{{{ object.description }}}}</p>
-    <a href="{{% url '{app_name}:update' object.pk %}}" role="button">Edit</a>
-    <a href="{{% url '{app_name}:list' %}}">Kembali</a>
+        f.write(f'''\
+{{# {app_name}/templates/apps/{app_name}/{app_name}_detail.html #}}
+<c-layout.{layout} title="{{{{ object.name }}}}">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">{{{{ object.name }}}}</h2>
+        <div class="rdp-page-header__actions">
+            <c-rdp.button variant="secondary" href="{{% url '{app_name}:update' object.pk %}}">Edit</c-rdp.button>
+            <c-rdp.button variant="danger" href="{{% url '{app_name}:delete' object.pk %}}">Hapus</c-rdp.button>
+        </div>
+    </div>
+
+    <c-rdp.card>
+        <dl class="rdp-dl">
+            <dt>Nama</dt>
+            <dd>{{{{ object.name }}}}</dd>
+
+            <dt>Deskripsi</dt>
+            <dd>{{{{ object.description|default:"-" }}}}</dd>
+
+            <dt>Status</dt>
+            <dd>
+                {{% if object.is_active %}}
+                    <span class="rdp-badge rdp-badge--success">Aktif</span>
+                {{% else %}}
+                    <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                {{% endif %}}
+            </dd>
+
+            <dt>Dibuat pada</dt>
+            <dd>{{{{ object.created_at|date:"d M Y H:i" }}}}</dd>
+
+            {{% if object.created_by %}}
+            <dt>Dibuat oleh</dt>
+            <dd>{{{{ object.created_by }}}}</dd>
+            {{% endif %}}
+        </dl>
+    </c-rdp.card>
+
+    <div style="margin-top:16px">
+        <a href="{{% url '{app_name}:list' %}}" class="rdp-btn rdp-btn--ghost">← Kembali ke Daftar</a>
+    </div>
+
 </c-layout.{layout}>
 ''')
 
     with open(os.path.join(tpl_dir, f"{app_name}_form.html"), "w", encoding="utf-8") as f:
-        f.write(f'''<c-layout.{layout} title="Form {verbose}">
-    <h1>{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</h1>
-    <form method="POST">
-        {{% csrf_token %}}
-        {{{{ form.as_p }}}}
-        <button type="submit">Simpan</button>
-        <a href="{{% url '{app_name}:list' %}}">Batal</a>
-    </form>
+        f.write(f'''\
+{{# {app_name}/templates/apps/{app_name}/{app_name}_form.html #}}
+<c-layout.{layout} title="{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</h2>
+    </div>
+
+    <c-rdp.card>
+        <form method="POST" class="rdp-form">
+            {{% csrf_token %}}
+            {{{{ form.as_p }}}}
+            <div class="rdp-form__actions">
+                <c-rdp.button type="submit" variant="primary">Simpan</c-rdp.button>
+                <c-rdp.button variant="ghost" href="{{% url '{app_name}:list' %}}">Batal</c-rdp.button>
+            </div>
+        </form>
+    </c-rdp.card>
+
 </c-layout.{layout}>
 ''')
 
     with open(os.path.join(tpl_dir, f"{app_name}_confirm_delete.html"), "w", encoding="utf-8") as f:
-        f.write(f'''<c-layout.{layout} title="Hapus {verbose}">
-    <h1>Hapus {verbose}</h1>
-    <p>Yakin ingin menghapus <strong>{{{{ object.name }}}}</strong>?</p>
-    <form method="POST">
-        {{% csrf_token %}}
-        <button type="submit" class="rdp-btn rdp-btn--danger">Hapus</button>
-        <a href="{{% url '{app_name}:list' %}}">Batal</a>
-    </form>
+        f.write(f'''\
+{{# {app_name}/templates/apps/{app_name}/{app_name}_confirm_delete.html #}}
+<c-layout.{layout} title="Hapus {verbose}">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">Hapus {verbose}</h2>
+    </div>
+
+    <c-rdp.card>
+        <p>Yakin ingin menghapus <strong>{{{{ object.name }}}}</strong>? Tindakan ini tidak bisa dibatalkan.</p>
+        <form method="POST" style="margin-top:16px; display:flex; gap:8px">
+            {{% csrf_token %}}
+            <c-rdp.button type="submit" variant="danger">Ya, Hapus</c-rdp.button>
+            <c-rdp.button variant="ghost" href="{{% url '{app_name}:list' %}}">Batal</c-rdp.button>
+        </form>
+    </c-rdp.card>
+
 </c-layout.{layout}>
 ''')
 
