@@ -49,7 +49,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # Versi CLI — harus sinkron dengan versi di pyproject.toml
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 
 # URL template repositori resmi
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
@@ -1354,6 +1354,12 @@ urlpatterns = [
     path("<int:pk>/hapus/", {class_name}DeleteView.as_view(), name="delete"),
 ]
 ''')
+
+    # ── migrations/ ──────────────────────────────────────────────────────────
+    migrations_dir = os.path.join(app_dir, "migrations")
+    os.makedirs(migrations_dir)
+    with open(os.path.join(migrations_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
 
     # ── templates/ ───────────────────────────────────────────────────────────
     tpl_dir = os.path.join("templates", "apps", app_name)
