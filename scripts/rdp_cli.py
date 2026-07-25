@@ -24,20 +24,16 @@ Modul:
   rdp/generators/crud.py        ← new crud, new page, make, scaffold
 """
 
-import os
 import sys
 
-# Tambah scripts/ ke sys.path supaya package `rdp` (di scripts/rdp/) bisa diimpor
-sys.path.insert(0, os.path.dirname(__file__))
-
 # ── Utils & versi ─────────────────────────────────────────────────────────────
-from rdp.utils import __version__, check_for_updates, print_help, run_django_cmd
+from scripts.rdp.utils import __version__, check_for_updates, print_help, run_django_cmd
 
 # ── Operasi project ──────────────────────────────────────────────────────────
-from rdp.ops.project import run_new, run_update
+from scripts.rdp.ops.project import run_new, run_update
 
 # ── Operasi build ────────────────────────────────────────────────────────────
-from rdp.ops.build import (
+from scripts.rdp.ops.build import (
     run_assets,
     run_db,
     run_doctor,
@@ -50,13 +46,13 @@ from rdp.ops.build import (
 )
 
 # ── Operasi upgrade ───────────────────────────────────────────────────────────
-from rdp.ops.upgrade import run_ai, run_monitor, run_plugin, run_upgrade, run_upgrade_cli
+from scripts.rdp.ops.upgrade import run_ai, run_monitor, run_plugin, run_upgrade, run_upgrade_cli
 
 # ── Generator: App & API ──────────────────────────────────────────────────────
-from rdp.generators.app import run_new_api, run_new_app
+from scripts.rdp.generators.app import run_new_api, run_new_app
 
 # ── Generator: Kode ──────────────────────────────────────────────────────────
-from rdp.generators.code import (
+from scripts.rdp.generators.code import (
     run_new_command,
     run_new_component,
     run_new_htmx,
@@ -70,7 +66,7 @@ from rdp.generators.code import (
 )
 
 # ── Generator: CRUD & Page ────────────────────────────────────────────────────
-from rdp.generators.crud import run_make, run_new_crud, run_new_page, run_scaffold
+from scripts.rdp.generators.crud import run_make, run_new_crud, run_new_page, run_scaffold
 
 
 def main():

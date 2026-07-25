@@ -15,7 +15,7 @@
 import os
 import sys
 
-from rdp.utils import _to_class_name, get_app_from_args, get_input
+from ..utils import _to_class_name, get_app_from_args, get_input
 
 
 # ── Halaman yang didukung CRUD ────────────────────────────────────────────────
@@ -801,8 +801,8 @@ def run_new_page(args):
 
 def run_make(args):
     """Wizard interaktif untuk berbagai generator."""
-    from rdp.generators.app import run_new_app, run_new_api
-    from rdp.generators.code import (
+    from .app import run_new_app, run_new_api
+    from .code import (
         run_new_component, run_new_model, run_new_task,
         run_new_service, run_new_test,
     )
@@ -864,8 +864,8 @@ def run_make(args):
 
 def run_scaffold(args):
     """Membuat modul lengkap dari model, view, hingga API dan test."""
-    from rdp.generators.app import run_new_api
-    from rdp.generators.code import run_new_model, run_new_test
+    from .app import run_new_api
+    from .code import run_new_model, run_new_test
 
     name, app = get_app_from_args(args)
     if not name or not app:

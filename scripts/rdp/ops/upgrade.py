@@ -4,7 +4,7 @@
 import subprocess
 import sys
 
-from rdp.utils import _fetch_latest_version, _parse_version, __version__
+from ..utils import _fetch_latest_version, _parse_version, __version__
 
 
 def run_upgrade(args):

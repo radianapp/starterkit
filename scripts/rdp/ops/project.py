@@ -9,7 +9,7 @@ import sys
 import tempfile
 import filecmp
 
-from rdp.utils import (
+from ..utils import (
     ask_yes_no,
     check_git_available,
     clone_template,

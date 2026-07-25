@@ -112,13 +112,12 @@ ignore = [
 [tool.ruff.lint.isort]
 known-first-party = ["apps", "config"]
 
-[tool.setuptools]
-packages = ["config", "apps", "scripts"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts*", "config*", "apps*"]
 
 [tool.setuptools.package-data]
-config = ["settings/*.py", "*.py"]
-apps = ["**/*.py"]
-scripts = ["*.py"]
+"*" = ["*.py", "**/*.py"]
 
 [build-system]
 requires = ["setuptools>=68.0"]

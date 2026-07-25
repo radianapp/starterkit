@@ -4,7 +4,7 @@
 import os
 import sys
 
-from rdp.utils import _to_class_name, get_app_from_args, on_rm_error
+from ..utils import _to_class_name, get_app_from_args, on_rm_error
 
 
 def run_new_component(args):

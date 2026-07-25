@@ -5,7 +5,7 @@ import os
 import re
 import sys
 
-from rdp.utils import _to_class_name, get_input, on_rm_error
+from ..utils import _to_class_name, get_input, on_rm_error
 
 
 def run_new_app(args):

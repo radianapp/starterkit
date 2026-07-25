@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import sys
 
-from rdp.utils import ask_yes_no, get_input, run_django_cmd
+from ..utils import ask_yes_no, get_input, run_django_cmd
 
 
 def run_lint(args):
