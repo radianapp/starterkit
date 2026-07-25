@@ -59,7 +59,43 @@ uv run python manage.py runserver
 
 Buka **http://localhost:8000** — selesai! ✅
 
+#### 💡 Pengujian CLI Lokal (Development / Offline)
+
+Untuk menguji perubahan CLI dan template langsung dari *source code* starterkit lokal tanpa perlu mengunggah ke GitHub:
+
+**1. Install / Update CLI dari Project Lokal:**
+```bash
+# Dari root folder starterkit ini, install paket CLI dalam mode editable:
+uv pip install -e .
+
+# Atau jika menginstall sebagai global tool uv:
+uv tool install --editable .
+```
+
+**2. Menggunakan Flag `--local` / `-l` (Menggunakan Template Lokal):**
+```bash
+# Membuat proyek baru dari starterkit lokal saat ini:
+rdp new nama-proyek --local    # atau: rdp new nama-proyek -l
+
+# Meng-update proyek yang ada dari starterkit lokal saat ini:
+rdp update --local             # atau: rdp update -l
+```
+
+**3. Menggunakan Variabel Lingkungan `RDP_TEMPLATE_PATH`:**
+```bash
+# PowerShell:
+$env:RDP_TEMPLATE_PATH="C:\path\to\starterkit"
+
+# Bash / Zsh:
+export RDP_TEMPLATE_PATH="/path/to/starterkit"
+
+# Lalu jalankan perintah rdp biasa:
+rdp new nama-proyek
+```
+
+
 ### 3. Verify Setup
+
 
 ```bash
 # Test suite

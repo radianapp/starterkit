@@ -21,6 +21,11 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
         document.documentElement.setAttribute('data-accent', localStorage.getItem('rdp-accent') || '{{ RDP_APP_ACCENT|default:"navy" }}');
     }());</script>
 
+    <!-- Google Fonts: Instrument Sans & IBM Plex Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- PicoCSS & RDP-UI -->
     {% if RDP_UI_SELF_HOST %}
         <link rel="stylesheet" href="{% static 'vendor/picocss/pico.min.css' %}">

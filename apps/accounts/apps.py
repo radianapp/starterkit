@@ -5,6 +5,7 @@ US: US-003 — Custom User model siap pakai
 TUJUAN: Setup accounts app yang berisi user model, authentication, profile management.
 """
 
+import os
 from django.apps import AppConfig
 
 
@@ -22,6 +23,8 @@ class AccountsConfig(AppConfig):
     name = "apps.accounts"
     label = "accounts"
     verbose_name = "Accounts & Authentication"
+    path = os.path.dirname(os.path.abspath(__file__))
+
 
     def ready(self):
         """

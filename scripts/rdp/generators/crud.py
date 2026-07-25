@@ -62,14 +62,255 @@ def _parse_flags(args: list) -> dict:
     return flags
 
 
-def _inject_url(app: str, name: str, pages: list[str]):
+def _inject_form(app: str, name: str):
+    """
+    TUJUAN: Generate ModelForm jika belum ada.
+
+    DIPANGGIL DARI: run_new_crud()
+    """
+    name_lower = name.lower()
+    class_name = _to_class_name(name)
+    forms_dir = os.path.join("apps", app, "forms")
+    os.makedirs(forms_dir, exist_ok=True)
+
+    form_path = os.path.join(forms_dir, f"{name_lower}_forms.py")
+    if os.path.exists(form_path):
+        print(f"  [INFO] Form '{name_lower}_forms.py' sudah ada, dilewati.")
+        return
+
+    init_path = os.path.join(forms_dir, "__init__.py")
+    if not os.path.exists(init_path):
+        with open(init_path, 'w', encoding='utf-8') as f:
+            f.write("")
+
+    form_content = f"""\
+# apps/{app}/forms/{name_lower}_forms.py
+
+from django import forms
+
+from ..models import {class_name}
+
+
+class {class_name}Form(forms.ModelForm):
+    \"\"\"
+    TUJUAN: Form untuk create dan update {class_name}.
+
+    DIPANGGIL DARI: views/{name_lower}.py ({class_name}CreateModalView, {class_name}EditModalView)
+    DEPENDENSI: {class_name} model
+    \"\"\"
+
+    class Meta:
+        model = {class_name}
+        fields = "__all__"
+"""
+    with open(form_path, 'w', encoding='utf-8') as f:
+        f.write(form_content)
+
+    with open(init_path, 'a', encoding='utf-8') as f:
+        f.write(f"from .{name_lower}_forms import {class_name}Form\n")
+
+    print(f"  [OK] Form dibuat di {form_path}")
+
+
+def _inject_views(app: str, name: str, pages: list):
+    """
+    TUJUAN: Generate view file dan inject ke views/__init__.py.
+    Menggunakan modal views untuk HTMX (CreateModalView, EditModalView, DeleteModalView).
+
+    DIPANGGIL DARI: run_new_crud()
+    """
+    name_lower = name.lower()
+    class_name = _to_class_name(name)
+    views_dir = os.path.join("apps", app, "views")
+    os.makedirs(views_dir, exist_ok=True)
+
+    view_path = os.path.join(views_dir, f"{name_lower}.py")
+    if os.path.exists(view_path):
+        print(f"  [WARNING] View '{name_lower}.py' sudah ada, dilewati.")
+        return []  # caller harus cek — jangan inject URL untuk view yang tidak dibuat
+
+    # Buat views/__init__.py jika belum ada
+    init_path = os.path.join(views_dir, "__init__.py")
+    if not os.path.exists(init_path):
+        with open(init_path, 'w', encoding='utf-8') as f:
+            f.write("")
+
+    # Build view class content berdasarkan halaman yang diminta
+    view_lines = [
+        f"# apps/{app}/views/{name_lower}.py\n",
+        "from django.contrib.auth.mixins import LoginRequiredMixin",
+        "from django.http import HttpResponse",
+        "from django.urls import reverse_lazy",
+        "from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView",
+        "from django.template.loader import render_to_string\n",
+        f"from ..models import {class_name}",
+        f"from ..forms import {class_name}Form\n\n",
+    ]
+
+    exported = []
+
+    if "list" in pages:
+        view_lines.append(f"""\
+class {class_name}ListView(LoginRequiredMixin, ListView):
+    \"\"\"
+    TUJUAN: Tampilkan daftar semua {class_name}.
+
+    DIPANGGIL DARI: urls.py → name="{name_lower}-list"
+    DEPENDENSI: {class_name} model, templates/apps/{app}/{name_lower}_list.html
+    \"\"\"
+
+    model = {class_name}
+    template_name = "apps/{app}/{name_lower}_list.html"
+    context_object_name = "items"
+    paginate_by = 20
+
+    def get_queryset(self):
+        \"\"\"Filter queryset berdasarkan parameter q (pencarian).\"\"\"
+        qs = super().get_queryset()
+        q = self.request.GET.get("q", "").strip()
+        if q:
+            qs = qs.filter(name__icontains=q)
+        return qs
+
+""")
+        exported.append(f"{class_name}ListView")
+
+    if "create" in pages:
+        view_lines.append(f"""\
+class {class_name}CreateModalView(LoginRequiredMixin, CreateView):
+    \"\"\"
+    TUJUAN: Tampilkan modal form tambah {class_name} (HTMX partial).
+
+    DIPANGGIL DARI: urls.py → name="{name_lower}-create-modal" (GET)
+                    urls.py → name="{name_lower}-create" (POST)
+    \"\"\"
+
+    model = {class_name}
+    form_class = {class_name}Form
+    template_name = "apps/{app}/{name_lower}_create_modal.html"
+
+    def get(self, request, *args, **kwargs):
+        \"\"\"Tampilkan modal create — response partial HTML.\"\"\"
+        form = self.form_class()
+        html = render_to_string(self.template_name, {{"form": form}}, request=request)
+        return HttpResponse(html)
+
+    def form_valid(self, form):
+        \"\"\"Simpan data, trigger reload halaman via HX-Refresh.\"\"\"
+        self.object = form.save()
+        response = HttpResponse("")
+        response["HX-Refresh"] = "true"
+        return response
+
+    def form_invalid(self, form):
+        \"\"\"Kembalikan modal dengan error — HTTP 422 agar HTMX tahu ini error.\"\"\"
+        html = render_to_string(self.template_name, {{"form": form}}, request=self.request)
+        return HttpResponse(html, status=422)
+
+""")
+        exported.append(f"{class_name}CreateModalView")
+
+    if "edit" in pages:
+        view_lines.append(f"""\
+class {class_name}EditModalView(LoginRequiredMixin, UpdateView):
+    \"\"\"
+    TUJUAN: Tampilkan modal form edit {class_name} (HTMX partial).
+
+    DIPANGGIL DARI: urls.py → name="{name_lower}-edit-modal" (GET)
+                    urls.py → name="{name_lower}-edit" (POST)
+    \"\"\"
+
+    model = {class_name}
+    form_class = {class_name}Form
+    template_name = "apps/{app}/{name_lower}_edit_modal.html"
+
+    def get(self, request, *args, **kwargs):
+        \"\"\"Tampilkan modal edit dengan data yang ada — response partial HTML.\"\"\"
+        self.object = self.get_object()
+        form = self.form_class(instance=self.object)
+        html = render_to_string(self.template_name, {{"form": form, "object": self.object}}, request=request)
+        return HttpResponse(html)
+
+    def form_valid(self, form):
+        \"\"\"Simpan perubahan, trigger reload halaman.\"\"\"
+        self.object = form.save()
+        response = HttpResponse("")
+        response["HX-Refresh"] = "true"
+        return response
+
+    def form_invalid(self, form):
+        \"\"\"Kembalikan modal dengan error — HTTP 422.\"\"\"
+        html = render_to_string(self.template_name, {{"form": form, "object": self.object}}, request=self.request)
+        return HttpResponse(html, status=422)
+
+""")
+        exported.append(f"{class_name}EditModalView")
+
+    if "delete" in pages:
+        view_lines.append(f"""\
+class {class_name}DeleteModalView(LoginRequiredMixin, DeleteView):
+    \"\"\"
+    TUJUAN: Tampilkan modal konfirmasi hapus (GET) dan proses hapus (DELETE/POST).
+
+    DIPANGGIL DARI: urls.py → name="{name_lower}-delete-modal" (GET)
+                    urls.py → name="{name_lower}-delete" (DELETE/POST)
+    \"\"\"
+
+    model = {class_name}
+    template_name = "apps/{app}/{name_lower}_delete_modal.html"
+    success_url = reverse_lazy("{app}:{name_lower}-list")
+
+    def get(self, request, *args, **kwargs):
+        \"\"\"Tampilkan modal konfirmasi hapus — response partial HTML.\"\"\"
+        self.object = self.get_object()
+        html = render_to_string(self.template_name, {{"object": self.object}}, request=request)
+        return HttpResponse(html)
+
+    def delete(self, request, *args, **kwargs):
+        \"\"\"Hapus object, tutup modal + refresh halaman.\"\"\"
+        self.object = self.get_object()
+        self.object.delete()
+        response = HttpResponse("")
+        response["HX-Refresh"] = "true"
+        return response
+
+    # Alias untuk POST (karena HTMX form pakai hx-delete → method override)
+    post = delete
+
+""")
+        exported.append(f"{class_name}DeleteModalView")
+
+    if "detail" in pages:
+        view_lines.append(f"""\
+class {class_name}DetailView(LoginRequiredMixin, DetailView):
+    \"\"\"
+    TUJUAN: Tampilkan detail satu {class_name}.
+
+    DIPANGGIL DARI: urls.py → name="{name_lower}-detail"
+    \"\"\"
+
+    model = {class_name}
+    template_name = "apps/{app}/{name_lower}_detail.html"
+
+""")
+        exported.append(f"{class_name}DetailView")
+
+    with open(view_path, 'w', encoding='utf-8') as f:
+        f.write("\n".join(view_lines))
+
+    # Inject ke __init__.py
+    import_line = f"from .{name_lower} import {', '.join(exported)}\n"
+    with open(init_path, 'a', encoding='utf-8') as f:
+        f.write(import_line)
+
+    print(f"  [OK] Views dibuat di {view_path}")
+    return exported
+
+
+def _inject_url(app: str, name: str, pages: list):
     """
     TUJUAN: Inject URL patterns ke apps/{app}/urls.py.
-
-    ALUR:
-      1. Baca urls.py yang ada (atau buat baru jika belum ada)
-      2. Tambahkan import dan path untuk setiap halaman yang di-generate
-      3. Tulis ulang file
+    Sekarang juga inject URL untuk modal views (create-modal, edit-modal, delete-modal).
 
     DIPANGGIL DARI: run_new_crud()
     """
@@ -77,13 +318,32 @@ def _inject_url(app: str, name: str, pages: list[str]):
     name_lower = name.lower()
     class_name = _to_class_name(name)
 
-    # Mapping halaman → view class dan URL pattern
+    # Mapping halaman → view class dan URL pattern (termasuk modal views)
     page_map = {
-        "list":   (f"{class_name}ListView",   f'path("{name_lower}/", {class_name}ListView.as_view(), name="{name_lower}-list"),'),
-        "detail": (f"{class_name}DetailView", f'path("{name_lower}/<int:pk>/", {class_name}DetailView.as_view(), name="{name_lower}-detail"),'),
-        "create": (f"{class_name}CreateView", f'path("{name_lower}/baru/", {class_name}CreateView.as_view(), name="{name_lower}-create"),'),
-        "edit":   (f"{class_name}UpdateView", f'path("{name_lower}/<int:pk>/edit/", {class_name}UpdateView.as_view(), name="{name_lower}-update"),'),
-        "delete": (f"{class_name}DeleteView", f'path("{name_lower}/<int:pk>/hapus/", {class_name}DeleteView.as_view(), name="{name_lower}-delete"),'),
+        "list": (
+            f"{class_name}ListView",
+            (f'path("{name_lower}/", {class_name}ListView.as_view(), name="{name_lower}-list"),\n    '
+             f'path("", {class_name}ListView.as_view(), name="list"),'),
+        ),
+        "detail": (
+            f"{class_name}DetailView",
+            f'path("{name_lower}/<int:pk>/", {class_name}DetailView.as_view(), name="{name_lower}-detail"),',
+        ),
+        "create": (
+            f"{class_name}CreateModalView",
+            (f'path("{name_lower}/baru/", {class_name}CreateModalView.as_view(), name="{name_lower}-create"),\n    '
+             f'path("{name_lower}/baru/modal/", {class_name}CreateModalView.as_view(), name="{name_lower}-create-modal"),'),
+        ),
+        "edit": (
+            f"{class_name}EditModalView",
+            (f'path("{name_lower}/<int:pk>/edit/", {class_name}EditModalView.as_view(), name="{name_lower}-edit"),\n    '
+             f'path("{name_lower}/<int:pk>/edit/modal/", {class_name}EditModalView.as_view(), name="{name_lower}-edit-modal"),'),
+        ),
+        "delete": (
+            f"{class_name}DeleteModalView",
+            (f'path("{name_lower}/<int:pk>/hapus/", {class_name}DeleteModalView.as_view(), name="{name_lower}-delete"),\n    '
+             f'path("{name_lower}/<int:pk>/hapus/modal/", {class_name}DeleteModalView.as_view(), name="{name_lower}-delete-modal"),'),
+        ),
     }
 
     view_classes = [page_map[p][0] for p in pages if p in page_map]
@@ -120,12 +380,9 @@ urlpatterns = [
     # Tambah import view yang belum ada
     new_imports = [vc for vc in view_classes if vc not in existing]
     if new_imports:
-        # Cari blok from .views import ... dan tambahkan
         if "from .views import" in existing:
-            # Append ke import yang ada — cari baris terakhir blok import
-            import_line = f"from .views import (\n"
+            import_line = "from .views import (\n"
             if import_line in existing:
-                # Multi-line import — inject sebelum penutup )
                 sep = ",\n    "
                 new_imports_str = sep.join(new_imports)
                 existing = existing.replace(
@@ -134,7 +391,6 @@ urlpatterns = [
                     1,
                 )
             else:
-                # Single-line import — konversi ke multi-line
                 for vc in new_imports:
                     existing = existing.replace(
                         "from .views import",
@@ -161,187 +417,16 @@ urlpatterns = [
     print(f"  [OK] URL patterns ditambahkan ke {urls_path}")
 
 
-def _inject_views(app: str, name: str, pages: list[str]):
-    """
-    TUJUAN: Generate view file dan inject ke views/__init__.py.
-
-    DIPANGGIL DARI: run_new_crud()
-    """
-    name_lower = name.lower()
-    class_name = _to_class_name(name)
-    views_dir = os.path.join("apps", app, "views")
-    os.makedirs(views_dir, exist_ok=True)
-
-    view_path = os.path.join(views_dir, f"{name_lower}.py")
-    if os.path.exists(view_path):
-        print(f"  [WARNING] View '{name_lower}.py' sudah ada, dilewati.")
-        return []  # caller harus cek — jangan inject URL untuk view yang tidak dibuat
-
-    # Buat open() untuk views/__init__.py jika belum ada
-    init_path = os.path.join(views_dir, "__init__.py")
-    if not os.path.exists(init_path):
-        with open(init_path, 'w', encoding='utf-8') as f:
-            f.write("")
-
-    # Build view class content berdasarkan halaman yang diminta
-    view_lines = [
-        f"# apps/{app}/views/{name_lower}.py\n",
-        "from django.contrib.auth.mixins import LoginRequiredMixin",
-        "from django.urls import reverse_lazy",
-        "from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView\n",
-        f"from ..models import {class_name}",
-        f"from ..forms import {class_name}Form\n\n",
-    ]
-
-    exported = []
-
-    if "list" in pages:
-        view_lines.append(f"""\
-class {class_name}ListView(LoginRequiredMixin, ListView):
-    \"\"\"
-    TUJUAN: Tampilkan daftar semua {class_name}.
-
-    DIPANGGIL DARI: urls.py → name="{name_lower}-list"
-    DEPENDENSI: {class_name} model, templates/apps/{app}/{name_lower}_list.html
-    \"\"\"
-
-    model = {class_name}
-    template_name = "apps/{app}/{name_lower}_list.html"
-    context_object_name = "items"
-    paginate_by = 20
-
-""")
-        exported.append(f"{class_name}ListView")
-
-    if "detail" in pages:
-        view_lines.append(f"""\
-class {class_name}DetailView(LoginRequiredMixin, DetailView):
-    \"\"\"
-    TUJUAN: Tampilkan detail satu {class_name}.
-
-    DIPANGGIL DARI: urls.py → name="{name_lower}-detail"
-    \"\"\"
-
-    model = {class_name}
-    template_name = "apps/{app}/{name_lower}_detail.html"
-
-""")
-        exported.append(f"{class_name}DetailView")
-
-    if "create" in pages:
-        view_lines.append(f"""\
-class {class_name}CreateView(LoginRequiredMixin, CreateView):
-    \"\"\"
-    TUJUAN: Buat {class_name} baru.
-
-    DIPANGGIL DARI: urls.py → name="{name_lower}-create"
-    \"\"\"
-
-    model = {class_name}
-    form_class = {class_name}Form
-    template_name = "apps/{app}/{name_lower}_form.html"
-    success_url = reverse_lazy("{app}:{name_lower}-list")
-
-""")
-        exported.append(f"{class_name}CreateView")
-
-    if "edit" in pages:
-        view_lines.append(f"""\
-class {class_name}UpdateView(LoginRequiredMixin, UpdateView):
-    \"\"\"
-    TUJUAN: Edit {class_name} yang sudah ada.
-
-    DIPANGGIL DARI: urls.py → name="{name_lower}-update"
-    \"\"\"
-
-    model = {class_name}
-    form_class = {class_name}Form
-    template_name = "apps/{app}/{name_lower}_form.html"
-    success_url = reverse_lazy("{app}:{name_lower}-list")
-
-""")
-        exported.append(f"{class_name}UpdateView")
-
-    if "delete" in pages:
-        view_lines.append(f"""\
-class {class_name}DeleteView(LoginRequiredMixin, DeleteView):
-    \"\"\"
-    TUJUAN: Hapus {class_name}.
-
-    DIPANGGIL DARI: urls.py → name="{name_lower}-delete"
-    \"\"\"
-
-    model = {class_name}
-    template_name = "apps/{app}/{name_lower}_confirm_delete.html"
-    success_url = reverse_lazy("{app}:{name_lower}-list")
-
-""")
-        exported.append(f"{class_name}DeleteView")
-
-    with open(view_path, 'w', encoding='utf-8') as f:
-        f.write("\n".join(view_lines))
-
-    # Inject ke __init__.py
-    import_line = f"from .{name_lower} import {', '.join(exported)}\n"
-    with open(init_path, 'a', encoding='utf-8') as f:
-        f.write(import_line)
-
-    print(f"  [OK] Views dibuat di {view_path}")
-    return exported
-
-
-def _inject_form(app: str, name: str):
-    """
-    TUJUAN: Generate ModelForm jika belum ada.
-
-    DIPANGGIL DARI: run_new_crud()
-    """
-    name_lower = name.lower()
-    class_name = _to_class_name(name)
-    forms_dir = os.path.join("apps", app, "forms")
-    os.makedirs(forms_dir, exist_ok=True)
-
-    form_path = os.path.join(forms_dir, f"{name_lower}_forms.py")
-    if os.path.exists(form_path):
-        print(f"  [INFO] Form '{name_lower}_forms.py' sudah ada, dilewati.")
-        return
-
-    init_path = os.path.join(forms_dir, "__init__.py")
-    if not os.path.exists(init_path):
-        with open(init_path, 'w', encoding='utf-8') as f:
-            f.write("")
-
-    form_content = f"""\
-# apps/{app}/forms/{name_lower}_forms.py
-
-from django import forms
-
-from ..models import {class_name}
-
-
-class {class_name}Form(forms.ModelForm):
-    \"\"\"
-    TUJUAN: Form untuk create dan update {class_name}.
-
-    DIPANGGIL DARI: views/{name_lower}.py ({class_name}CreateView, {class_name}UpdateView)
-    DEPENDENSI: {class_name} model
-    \"\"\"
-
-    class Meta:
-        model = {class_name}
-        fields = "__all__"
-"""
-    with open(form_path, 'w', encoding='utf-8') as f:
-        f.write(form_content)
-
-    with open(init_path, 'a', encoding='utf-8') as f:
-        f.write(f"from .{name_lower}_forms import {class_name}Form\n")
-
-    print(f"  [OK] Form dibuat di {form_path}")
+# ── Template Generators ───────────────────────────────────────────────────────
 
 
 def _generate_list_template(app: str, name: str, verbose: str, style: str) -> str:
-    """Generate template list sesuai style (table/card/simple)."""
+    """
+    Generate template list sesuai style (table/card/simple).
+    Table style mengikuti design Produk List.dc.html — tabel + modal inline HTMX.
+
+    DIPANGGIL DARI: run_new_crud(), run_new_page()
+    """
     name_lower = name.lower()
 
     if style == "card":
@@ -349,44 +434,60 @@ def _generate_list_template(app: str, name: str, verbose: str, style: str) -> st
 {{# templates/apps/{app}/{name_lower}_list.html #}}
 <c-layout.app title="Daftar {verbose}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">Daftar {verbose}</h2>
-        <div class="rdp-page-header__actions">
-            <c-rdp.button variant="primary" href="{{% url '{app}:{name_lower}-create' %}}">+ Tambah {verbose}</c-rdp.button>
-        </div>
+    <ul class="rdp-breadcrumb"><li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li><li>Daftar {verbose}</li></ul>
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">Daftar {verbose}</h1>
     </div>
 
-    {{% if items %}}
-    <div class="rdp-grid rdp-grid--3col">
+    <div id="toast-area" aria-live="polite"></div>
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <button id="btn-tambah-{name_lower}" class="rdp-btn rdp-btn--primary rdp-btn--sm"
+                hx-get="{{% url '{app}:{name_lower}-create-modal' %}}"
+                hx-target="#modal-container" hx-swap="innerHTML">
+            + Tambah {verbose}
+        </button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
         {{% for item in items %}}
-        <c-rdp.card>
-            <div class="rdp-card__body">
-                <h3>{{{{ item.name }}}}</h3>
-                {{% if item.description %}}<p>{{{{ item.description|truncatewords:20 }}}}</p>{{% endif %}}
+        <div class="rdp-card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-weight:600;font-size:14px">{{{{ item.name }}}}</div>
+            {{% if item.is_active %}}
+                <span class="rdp-badge rdp-badge--success">Aktif</span>
+            {{% else %}}
+                <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+            {{% endif %}}
+            <div style="display:flex;gap:6px;margin-top:auto">
+                <button id="btn-edit-{name_lower}-{{{{ item.pk }}}}" class="rdp-btn rdp-btn--ghost rdp-btn--sm"
+                        hx-get="{{% url '{app}:{name_lower}-edit-modal' item.pk %}}"
+                        hx-target="#modal-container" hx-swap="innerHTML">Edit</button>
+                <button id="btn-hapus-{name_lower}-{{{{ item.pk }}}}" class="rdp-btn rdp-btn--ghost rdp-btn--sm" style="color:var(--rdp-danger)"
+                        hx-get="{{% url '{app}:{name_lower}-delete-modal' item.pk %}}"
+                        hx-target="#modal-container" hx-swap="innerHTML">Hapus</button>
             </div>
-            <div class="rdp-card__footer">
-                <a href="{{% url '{app}:{name_lower}-detail' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--ghost">Detail</a>
-                <a href="{{% url '{app}:{name_lower}-update' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--secondary">Edit</a>
-                <a href="{{% url '{app}:{name_lower}-delete' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--danger">Hapus</a>
-            </div>
-        </c-rdp.card>
+        </div>
+        {{% empty %}}
+        <div style="grid-column:1/-1;padding:64px 24px;text-align:center;border:1.5px dashed var(--rdp-border-strong);border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:17px;font-weight:600">Belum ada {verbose}</span>
+            <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="margin-top:6px"
+                    hx-get="{{% url '{app}:{name_lower}-create-modal' %}}"
+                    hx-target="#modal-container" hx-swap="innerHTML">+ Tambah {verbose}</button>
+        </div>
         {{% endfor %}}
     </div>
 
     {{% if is_paginated %}}
-    <div class="rdp-pagination">
-        {{% if page_obj.has_previous %}}<a href="?page={{{{ page_obj.previous_page_number }}}}" class="rdp-btn rdp-btn--ghost">← Sebelumnya</a>{{% endif %}}
-        <span>Halaman {{{{ page_obj.number }}}} dari {{{{ page_obj.paginator.num_pages }}}}</span>
-        {{% if page_obj.has_next %}}<a href="?page={{{{ page_obj.next_page_number }}}}" class="rdp-btn rdp-btn--ghost">Berikutnya →</a>{{% endif %}}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
+        <span style="font-size:12.5px;color:var(--rdp-text-muted)">Halaman {{{{ page_obj.number }}}} dari {{{{ page_obj.paginator.num_pages }}}}</span>
+        <div style="display:flex;gap:6px">
+            {{% if page_obj.has_previous %}}<a href="?page={{{{ page_obj.previous_page_number }}}}" class="rdp-btn rdp-btn--sm">Sebelumnya</a>{{% endif %}}
+            {{% if page_obj.has_next %}}<a href="?page={{{{ page_obj.next_page_number }}}}" class="rdp-btn rdp-btn--sm">Berikutnya</a>{{% endif %}}
+        </div>
     </div>
     {{% endif %}}
 
-    {{% else %}}
-    <div class="rdp-empty-state">
-        <p class="rdp-empty-state__text">Belum ada data {verbose}.</p>
-        <c-rdp.button variant="primary" href="{{% url '{app}:{name_lower}-create' %}}">+ Tambah {verbose}</c-rdp.button>
-    </div>
-    {{% endif %}}
+    <div id="modal-container"></div>
 
 </c-layout.app>
 """
@@ -396,193 +497,402 @@ def _generate_list_template(app: str, name: str, verbose: str, style: str) -> st
 {{# templates/apps/{app}/{name_lower}_list.html #}}
 <c-layout.app title="Daftar {verbose}">
 
-    <h2>Daftar {verbose}</h2>
-    <p><a href="{{% url '{app}:{name_lower}-create' %}}" class="rdp-btn rdp-btn--primary">+ Tambah {verbose}</a></p>
+    <ul class="rdp-breadcrumb"><li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li><li>Daftar {verbose}</li></ul>
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">Daftar {verbose}</h1>
+    </div>
+
+    <div id="toast-area" aria-live="polite"></div>
+
+    <button id="btn-tambah-{name_lower}" class="rdp-btn rdp-btn--primary rdp-btn--sm" style="margin-bottom:12px"
+            hx-get="{{% url '{app}:{name_lower}-create-modal' %}}"
+            hx-target="#modal-container" hx-swap="innerHTML">+ Tambah {verbose}</button>
 
     <ul>
         {{% for item in items %}}
-        <li>
-            <a href="{{% url '{app}:{name_lower}-detail' item.pk %}}">{{{{ item.name }}}}</a>
-            — <a href="{{% url '{app}:{name_lower}-update' item.pk %}}">Edit</a>
-            | <a href="{{% url '{app}:{name_lower}-delete' item.pk %}}">Hapus</a>
+        <li style="padding:8px 0;border-bottom:1px solid var(--rdp-border)">
+            {{{{ item.name }}}}
+            <button id="btn-edit-{name_lower}-{{{{ item.pk }}}}" class="rdp-btn rdp-btn--ghost rdp-btn--xs" style="margin-left:8px"
+                    hx-get="{{% url '{app}:{name_lower}-edit-modal' item.pk %}}"
+                    hx-target="#modal-container" hx-swap="innerHTML">Edit</button>
+            <button id="btn-hapus-{name_lower}-{{{{ item.pk }}}}" class="rdp-btn rdp-btn--ghost rdp-btn--xs" style="margin-left:4px;color:var(--rdp-danger)"
+                    hx-get="{{% url '{app}:{name_lower}-delete-modal' item.pk %}}"
+                    hx-target="#modal-container" hx-swap="innerHTML">Hapus</button>
         </li>
         {{% empty %}}
-        <li>Belum ada data.</li>
+        <li style="color:var(--rdp-text-muted);padding:16px 0">Belum ada data {verbose}.</li>
         {{% endfor %}}
     </ul>
+
+    <div id="modal-container"></div>
 
 </c-layout.app>
 """
 
-    else:  # table (default)
+    else:  # table (default) — presisi 1:1 dengan Produk List.dc.html
         return f"""\
 {{# templates/apps/{app}/{name_lower}_list.html #}}
+{{# US: RDP Dashboard Shell — Tabel Presisi 1:1 Produk List design #}}
 <c-layout.app title="Daftar {verbose}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">Daftar {verbose}</h2>
-        <div class="rdp-page-header__actions">
-            <c-rdp.button variant="primary" href="{{% url '{app}:{name_lower}-create' %}}">+ Tambah {verbose}</c-rdp.button>
-        </div>
+    {{# ── Breadcrumb ─────────────────────────────────────── #}}
+    <ul class="rdp-breadcrumb">
+        <li><a href="{{% url 'dashboard:index' %}}">Katalog</a></li>
+        <li>Daftar {verbose}</li>
+    </ul>
+
+    {{# ── Page Header ────────────────────────────────────── #}}
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">{verbose}</h1>
     </div>
 
-    <c-rdp.card>
-        {{% if items %}}
-        <table class="rdp-table">
+    {{# ── Toast feedback area ────────────────────────────── #}}
+    <div id="toast-area" aria-live="polite"></div>
+
+    {{# ── Filter & Search Bar ─────────────────────────────── #}}
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <form method="GET" style="display:flex;align-items:center;gap:8px;flex:1;min-width:280px;margin:0">
+            <div style="position:relative;width:260px;flex-shrink:0">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--rdp-text-muted);pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                <input class="rdp-input" name="q" placeholder="Cari {verbose}..." value="{{% if request.GET.q %}}{{{{ request.GET.q }}}}{{% endif %}}" style="width:100%;height:36px;padding:0 12px 0 32px;margin:0;font-size:13.5px;box-sizing:border-box">
+            </div>
+            <button type="submit" class="rdp-btn rdp-btn--sm" style="height:36px">Filter</button>
+        </form>
+        <div style="flex:1"></div>
+        <button id="btn-tambah-{name_lower}" class="rdp-btn rdp-btn--primary rdp-btn--sm" style="height:36px"
+                hx-get="{{% url '{app}:{name_lower}-create-modal' %}}"
+                hx-target="#modal-container"
+                hx-swap="innerHTML">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            Tambah {verbose}
+        </button>
+    </div>
+
+    {{# ── Tabel Data ──────────────────────────────────────── #}}
+    {{% if items %}}
+    <div class="rdp-table-wrapper" style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border);border-radius:12px;overflow:hidden">
+        <table class="rdp-table" style="width:100%;border-collapse:collapse">
             <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Status</th>
-                    <th>Dibuat</th>
-                    <th style="width:140px">Aksi</th>
+                <tr style="border-bottom:1px solid var(--rdp-border)">
+                    <th style="padding:10px 14px;font-size:12px;font-weight:600;color:var(--rdp-text-muted);text-transform:uppercase;letter-spacing:0.04em">Nama</th>
+                    <th style="padding:10px 14px;font-size:12px;font-weight:600;color:var(--rdp-text-muted);text-transform:uppercase;letter-spacing:0.04em">Status</th>
+                    <th style="padding:10px 14px;font-size:12px;font-weight:600;color:var(--rdp-text-muted);text-transform:uppercase;letter-spacing:0.04em">Dibuat</th>
+                    <th style="padding:10px 14px;text-align:right"></th>
                 </tr>
             </thead>
             <tbody>
                 {{% for item in items %}}
-                <tr>
-                    <td><a href="{{% url '{app}:{name_lower}-detail' item.pk %}}">{{{{ item.name }}}}</a></td>
-                    <td>
+                <tr class="pos-row" style="border-bottom:1px solid var(--rdp-border);transition:background 0.1s;cursor:pointer">
+                    <td style="padding:12px 14px;font-weight:500;font-size:13.5px;color:var(--rdp-text)">{{{{ item.name }}}}</td>
+                    <td style="padding:12px 14px">
                         {{% if item.is_active %}}
-                            <span class="rdp-badge rdp-badge--success">Aktif</span>
+                            <span class="rdp-badge rdp-badge--success" style="font-size:11px">Aktif</span>
                         {{% else %}}
-                            <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                            <span class="rdp-badge rdp-badge--neutral" style="font-size:11px">Nonaktif</span>
                         {{% endif %}}
                     </td>
-                    <td>{{{{ item.created_at|date:"d M Y" }}}}</td>
-                    <td class="rdp-table__actions">
-                        <a href="{{% url '{app}:{name_lower}-detail' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--ghost">Detail</a>
-                        <a href="{{% url '{app}:{name_lower}-update' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--secondary">Edit</a>
-                        <a href="{{% url '{app}:{name_lower}-delete' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--danger">Hapus</a>
+                    <td style="padding:12px 14px;font-family:var(--rdp-font-mono,'IBM Plex Mono',monospace);font-size:12.5px;color:var(--rdp-text-muted)">{{{{ item.created_at|date:"d M Y" }}}}</td>
+                    <td style="padding:6px 14px;text-align:right;width:100px">
+                        <span class="row-actions" style="display:inline-flex;gap:4px;justify-content:flex-end">
+                            <button id="btn-edit-{name_lower}-{{{{ item.pk }}}}" title="Edit"
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs"
+                                    style="width:28px;height:28px"
+                                    hx-get="{{% url '{app}:{name_lower}-edit-modal' item.pk %}}"
+                                    hx-target="#modal-container"
+                                    hx-swap="innerHTML">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+                            </button>
+                            <button id="btn-hapus-{name_lower}-{{{{ item.pk }}}}" title="Hapus"
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs"
+                                    style="width:28px;height:28px;color:var(--rdp-danger)"
+                                    hx-get="{{% url '{app}:{name_lower}-delete-modal' item.pk %}}"
+                                    hx-target="#modal-container"
+                                    hx-swap="innerHTML">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </span>
                     </td>
                 </tr>
                 {{% endfor %}}
             </tbody>
         </table>
+    </div>
 
-        {{% if is_paginated %}}
-        <div class="rdp-pagination">
-            {{% if page_obj.has_previous %}}<a href="?page={{{{ page_obj.previous_page_number }}}}" class="rdp-btn rdp-btn--ghost">← Sebelumnya</a>{{% endif %}}
-            <span>Halaman {{{{ page_obj.number }}}} dari {{{{ page_obj.paginator.num_pages }}}}</span>
-            {{% if page_obj.has_next %}}<a href="?page={{{{ page_obj.next_page_number }}}}" class="rdp-btn rdp-btn--ghost">Berikutnya →</a>{{% endif %}}
+    {{# ── Pagination ─────────────────────────────────────── #}}
+    {{% if is_paginated %}}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
+        <span style="font-size:12.5px;color:var(--rdp-text-muted)">Menampilkan {{{{ page_obj.start_index }}}}–{{{{ page_obj.end_index }}}} dari {{{{ page_obj.paginator.count }}}}</span>
+        <div style="display:flex;gap:6px">
+            <button class="rdp-btn rdp-btn--sm" {{% if not page_obj.has_previous %}}disabled{{% endif %}}>
+                {{% if page_obj.has_previous %}}<a href="?{{% if request.GET.q %}}q={{{{ request.GET.q }}}}&{{% endif %}}page={{{{ page_obj.previous_page_number }}}}" style="color:inherit;text-decoration:none">Sebelumnya</a>{{% else %}}Sebelumnya{{% endif %}}
+            </button>
+            <button class="rdp-btn rdp-btn--sm" {{% if not page_obj.has_next %}}disabled{{% endif %}}>
+                {{% if page_obj.has_next %}}<a href="?{{% if request.GET.q %}}q={{{{ request.GET.q }}}}&{{% endif %}}page={{{{ page_obj.next_page_number }}}}" style="color:inherit;text-decoration:none">Berikutnya</a>{{% else %}}Berikutnya{{% endif %}}
+            </button>
         </div>
-        {{% endif %}}
+    </div>
+    {{% endif %}}
 
-        {{% else %}}
-        <div class="rdp-empty-state">
-            <p class="rdp-empty-state__text">Belum ada data {verbose}.</p>
-            <c-rdp.button variant="primary" href="{{% url '{app}:{name_lower}-create' %}}">+ Tambah {verbose}</c-rdp.button>
-        </div>
-        {{% endif %}}
-    </c-rdp.card>
+    {{% else %}}
+    {{# ── Empty State ─────────────────────────────────────── #}}
+    {{% if request.GET.q %}}
+    <div style="border:1.5px dashed var(--rdp-border-strong);border-radius:14px;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <span style="font-size:14px;font-weight:600">Tidak ada {verbose} yang cocok</span>
+        <span style="font-size:13px;color:var(--rdp-text-muted)">Coba kata kunci lain.</span>
+        <a href="{{% url '{app}:{name_lower}-list' %}}" class="rdp-btn rdp-btn--ghost rdp-btn--sm">Hapus pencarian</a>
+    </div>
+    {{% else %}}
+    <div style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border);border-radius:14px;padding:72px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+        <span style="width:56px;height:56px;border-radius:28px;background:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E);display:inline-flex;align-items:center;justify-content:center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"></path><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="M12 22V12"></path><path d="m3.3 7 8.7 5 8.7-5"></path></svg>
+        </span>
+        <span style="font-size:17px;font-weight:600;color:var(--rdp-text)">Belum ada {verbose}</span>
+        <span style="font-size:13.5px;color:var(--rdp-text-muted);max-width:42ch;text-align:center;line-height:1.55">{verbose} yang kamu tambahkan akan tampil di sini. Mulai dengan menambahkan yang pertama.</span>
+        <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="margin-top:6px"
+                hx-get="{{% url '{app}:{name_lower}-create-modal' %}}"
+                hx-target="#modal-container"
+                hx-swap="innerHTML">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            Tambah {verbose}
+        </button>
+    </div>
+    {{% endif %}}
+    {{% endif %}}
+
+    {{# ── Modal container ─────────────────────────────────── #}}
+    <div id="modal-container"></div>
 
 </c-layout.app>
+"""
+
+
+def _generate_create_modal_template(app: str, name: str, verbose: str) -> str:
+    """
+    Generate partial template modal Tambah (Create) — mengikuti Tambah Produk Dialog.dc.html.
+    Ini adalah HTMX partial response, bukan full page.
+
+    DIPANGGIL DARI: run_new_crud, run_new_page
+    """
+    name_lower = name.lower()
+    return f"""\
+{{# templates/apps/{app}/{name_lower}_create_modal.html #}}
+{{# Partial HTMX — dirender oleh {name}CreateModalView, di-inject ke #modal-container #}}
+<div class="rdp-modal-backdrop"
+     style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px"
+     onclick="if(event.target===this)document.getElementById('modal-container').innerHTML=''">
+    <div class="rdp-modal rdp-modal--md"
+         style="position:relative;width:100%;max-width:560px;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:var(--rdp-surface)"
+         onclick="event.stopPropagation()">
+
+        <div class="rdp-modal__header">
+            <h2 class="rdp-modal__title">Tambah {verbose} Baru</h2>
+            <button title="Tutup" class="rdp-modal__close"
+                    onclick="document.getElementById('modal-container').innerHTML=''">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="rdp-modal__body" style="overflow-y:auto;overflow-x:hidden">
+            <form id="form-create-{name_lower}"
+                  hx-post="{{% url '{app}:{name_lower}-create' %}}"
+                  hx-target="#modal-container"
+                  hx-swap="innerHTML"
+                  style="display:flex;flex-direction:column;gap:16px">
+                {{% csrf_token %}}
+
+                {{{{ form.as_p }}}}
+
+                <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;padding-top:16px;border-top:1px solid var(--rdp-border)">
+                    <button type="button" class="rdp-btn rdp-btn--secondary"
+                            onclick="document.getElementById('modal-container').innerHTML=''">Batal</button>
+                    <button type="submit" id="btn-submit-create-{name_lower}" class="rdp-btn rdp-btn--primary" style="min-width:110px">
+                        Simpan {verbose}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+"""
+
+
+def _generate_edit_modal_template(app: str, name: str, verbose: str) -> str:
+    """
+    Generate partial template modal Edit — mengikuti Edit Produk Modal.dc.html.
+    Ini adalah HTMX partial response, bukan full page.
+
+    DIPANGGIL DARI: run_new_crud, run_new_page
+    """
+    name_lower = name.lower()
+    return f"""\
+{{# templates/apps/{app}/{name_lower}_edit_modal.html #}}
+{{# Partial HTMX — dirender oleh {name}EditModalView, di-inject ke #modal-container #}}
+<div class="rdp-modal-backdrop"
+     style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px"
+     onclick="if(event.target===this)document.getElementById('modal-container').innerHTML=''">
+    <div class="rdp-modal rdp-modal--md"
+         style="position:relative;width:100%;max-width:560px;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:var(--rdp-surface)"
+         onclick="event.stopPropagation()">
+
+        <div class="rdp-modal__header">
+            <h2 class="rdp-modal__title">Edit {verbose}: {{{{ object.name }}}}</h2>
+            <button title="Tutup" class="rdp-modal__close"
+                    onclick="document.getElementById('modal-container').innerHTML=''">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="rdp-modal__body" style="overflow-y:auto;overflow-x:hidden">
+            <form id="form-edit-{name_lower}-{{{{ object.pk }}}}"
+                  hx-post="{{% url '{app}:{name_lower}-edit' object.pk %}}"
+                  hx-target="#modal-container"
+                  hx-swap="innerHTML"
+                  style="display:flex;flex-direction:column;gap:16px">
+                {{% csrf_token %}}
+
+                {{{{ form.as_p }}}}
+
+                <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;padding-top:16px;border-top:1px solid var(--rdp-border)">
+                    <button type="button" class="rdp-btn rdp-btn--secondary"
+                            onclick="document.getElementById('modal-container').innerHTML=''">Batal</button>
+                    <button type="submit" id="btn-submit-edit-{name_lower}" class="rdp-btn rdp-btn--primary" style="min-width:110px">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 """
 
 
 def _generate_form_template(app: str, name: str, verbose: str) -> str:
-    """Generate template form (dipakai create & edit)."""
+    """
+    Alias ke _generate_create_modal_template.
+    Dipertahankan untuk backward compatibility.
+
+    DIPANGGIL DARI: run_new_crud, run_new_page
+    """
+    return _generate_create_modal_template(app, name, verbose)
+
+
+def _generate_delete_template(app: str, name: str, verbose: str) -> str:
+    """
+    Generate partial template modal Hapus — mengikuti Hapus Produk Dialog.dc.html.
+    Dialog compact dengan preview item dan konfirmasi eksplisit.
+
+    DIPANGGIL DARI: run_new_crud, run_new_page
+    """
     name_lower = name.lower()
     return f"""\
-{{# templates/apps/{app}/{name_lower}_form.html #}}
-<c-layout.app title="{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}">
+{{# templates/apps/{app}/{name_lower}_delete_modal.html #}}
+{{# Partial HTMX — dirender oleh {name}DeleteModalView, di-inject ke #modal-container #}}
+<div class="rdp-modal-backdrop"
+     style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px"
+     onclick="if(event.target===this)document.getElementById('modal-container').innerHTML=''">
+    <div class="rdp-modal rdp-modal--sm"
+         style="position:relative;width:100%;max-width:400px;display:flex;flex-direction:column;background:var(--rdp-surface)"
+         onclick="event.stopPropagation()">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</h2>
-        <div class="rdp-page-header__actions">
-            <c-rdp.button variant="ghost" href="{{% url '{app}:{name_lower}-list' %}}">← Kembali</c-rdp.button>
+        <div class="rdp-modal__body" style="padding:24px 24px 20px;display:flex;flex-direction:column;gap:12px;overflow-x:hidden">
+            <span style="width:44px;height:44px;border-radius:22px;background:var(--rdp-danger-soft,#FBEDEB);color:var(--rdp-danger);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </span>
+            <h2 style="font-size:17px;font-weight:700;margin:0;letter-spacing:-0.01em;line-height:1.35">Hapus {verbose} "{{{{ object.name }}}}"?</h2>
+            <p style="margin:0;font-size:13px;line-height:1.55;color:var(--rdp-text-muted)">Tindakan ini tidak bisa dibatalkan. Data akan dihapus secara permanen.</p>
+
+            <div style="display:flex;align-items:center;gap:10px;background:var(--rdp-surface-sunken,#F3F1EC);border:1px solid var(--rdp-border);border-radius:10px;padding:10px 12px">
+                <span style="display:flex;flex-direction:column;line-height:1.4;min-width:0;flex:1">
+                    <span style="font-size:13px;font-weight:600">{{{{ object.name }}}}</span>
+                    <span style="font-size:11.5px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted)">ID: {{{{ object.pk }}}}</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;background:var(--rdp-background,#FAF9F7);border-radius:0 0 var(--rdp-radius-lg,14px) var(--rdp-radius-lg,14px)">
+            <button class="rdp-btn rdp-btn--secondary"
+                    onclick="document.getElementById('modal-container').innerHTML=''">Batal</button>
+            <form hx-delete="{{% url '{app}:{name_lower}-delete' object.pk %}}"
+                  hx-target="#modal-container"
+                  hx-swap="innerHTML"
+                  style="margin:0">
+                {{% csrf_token %}}
+                <button type="submit" id="btn-confirm-hapus-{name_lower}" class="rdp-btn rdp-btn--danger" style="min-width:96px">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Hapus
+                </button>
+            </form>
         </div>
     </div>
-
-    <c-rdp.card>
-        <form method="POST" class="rdp-form">
-            {{% csrf_token %}}
-            {{{{ form.as_p }}}}
-            <div class="rdp-form__actions">
-                <c-rdp.button type="submit" variant="primary">Simpan</c-rdp.button>
-                <c-rdp.button variant="ghost" href="{{% url '{app}:{name_lower}-list' %}}">Batal</c-rdp.button>
-            </div>
-        </form>
-    </c-rdp.card>
-
-</c-layout.app>
+</div>
 """
 
 
 def _generate_detail_template(app: str, name: str, verbose: str) -> str:
-    """Generate template detail."""
+    """Generate template detail view."""
     name_lower = name.lower()
     return f"""\
 {{# templates/apps/{app}/{name_lower}_detail.html #}}
 <c-layout.app title="{{{{ object.name }}}}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">{{{{ object.name }}}}</h2>
+    <ul class="rdp-breadcrumb">
+        <li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li>
+        <li><a href="{{% url '{app}:{name_lower}-list' %}}">Daftar {verbose}</a></li>
+        <li>{{{{ object.name }}}}</li>
+    </ul>
+
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">{{{{ object.name }}}}</h1>
         <div class="rdp-page-header__actions">
-            <c-rdp.button variant="secondary" href="{{% url '{app}:{name_lower}-update' object.pk %}}">Edit</c-rdp.button>
-            <c-rdp.button variant="danger" href="{{% url '{app}:{name_lower}-delete' object.pk %}}">Hapus</c-rdp.button>
+            <button class="rdp-btn rdp-btn--secondary rdp-btn--sm"
+                    hx-get="{{% url '{app}:{name_lower}-edit-modal' object.pk %}}"
+                    hx-target="#modal-container"
+                    hx-swap="innerHTML">Edit</button>
+            <button class="rdp-btn rdp-btn--ghost rdp-btn--sm" style="color:var(--rdp-danger)"
+                    hx-get="{{% url '{app}:{name_lower}-delete-modal' object.pk %}}"
+                    hx-target="#modal-container"
+                    hx-swap="innerHTML">Hapus</button>
         </div>
     </div>
 
-    <c-rdp.card>
-        <dl class="rdp-dl">
-            <dt>Nama</dt>
-            <dd>{{{{ object.name }}}}</dd>
+    <div style="background:var(--rdp-surface);border:1px solid var(--rdp-border);border-radius:12px;padding:24px;max-width:640px">
+        <dl style="display:grid;grid-template-columns:140px 1fr;gap:12px 16px;margin:0;font-size:13px">
+            <dt style="font-weight:600;color:var(--rdp-text-muted)">Nama</dt>
+            <dd style="margin:0;font-weight:600">{{{{ object.name }}}}</dd>
 
-            <dt>Deskripsi</dt>
-            <dd>{{{{ object.description|default:"-" }}}}</dd>
+            <dt style="font-weight:600;color:var(--rdp-text-muted)">Deskripsi</dt>
+            <dd style="margin:0">{{{{ object.description|default:"-" }}}}</dd>
 
-            {{% if object.is_active is not None %}}
-            <dt>Status</dt>
-            <dd>
+            <dt style="font-weight:600;color:var(--rdp-text-muted)">Status</dt>
+            <dd style="margin:0">
                 {{% if object.is_active %}}
                     <span class="rdp-badge rdp-badge--success">Aktif</span>
                 {{% else %}}
                     <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
                 {{% endif %}}
             </dd>
-            {{% endif %}}
 
-            <dt>Dibuat pada</dt>
-            <dd>{{{{ object.created_at|date:"d M Y H:i" }}}}</dd>
+            <dt style="font-weight:600;color:var(--rdp-text-muted)">Dibuat pada</dt>
+            <dd style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:12px">{{{{ object.created_at|date:"d M Y H:i" }}}}</dd>
         </dl>
-    </c-rdp.card>
+    </div>
 
     <div style="margin-top:16px">
-        <a href="{{% url '{app}:{name_lower}-list' %}}" class="rdp-btn rdp-btn--ghost">← Kembali ke Daftar</a>
+        <a href="{{% url '{app}:{name_lower}-list' %}}" class="rdp-btn rdp-btn--ghost rdp-btn--sm">← Kembali ke Daftar</a>
     </div>
+
+    <div id="modal-container"></div>
 
 </c-layout.app>
 """
 
 
-def _generate_delete_template(app: str, name: str, verbose: str) -> str:
-    """Generate template konfirmasi hapus."""
-    name_lower = name.lower()
-    return f"""\
-{{# templates/apps/{app}/{name_lower}_confirm_delete.html #}}
-<c-layout.app title="Hapus {verbose}">
-
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">Hapus {verbose}</h2>
-    </div>
-
-    <c-rdp.card>
-        <p>Yakin ingin menghapus <strong>{{{{ object.name }}}}</strong>?</p>
-        <p style="color: var(--rdp-color-danger); font-size: 0.9em;">⚠️ Tindakan ini tidak bisa dibatalkan.</p>
-        <form method="POST" style="margin-top:16px; display:flex; gap:8px">
-            {{% csrf_token %}}
-            <c-rdp.button type="submit" variant="danger">Ya, Hapus</c-rdp.button>
-            <c-rdp.button variant="ghost" href="{{% url '{app}:{name_lower}-list' %}}">Batal</c-rdp.button>
-        </form>
-    </c-rdp.card>
-
-</c-layout.app>
-"""
+# ── Runner Functions ──────────────────────────────────────────────────────────
 
 
 def run_new_crud(args):
     """
-    TUJUAN: Generate CRUD views + templates + form + URL entries.
+    TUJUAN: Generate CRUD views (modal HTMX) + templates + form + URL entries.
 
     Penggunaan:
       rdp new crud <nama> -a <app>
@@ -592,19 +902,34 @@ def run_new_crud(args):
     ALUR:
       1. Parse nama, app, dan flags
       2. Tentukan halaman yang akan di-generate
-      3. Generate views, form, templates
+      3. Generate views (modal), form, templates
       4. Inject URL patterns ke urls.py
 
     DIPANGGIL DARI: main()
     """
     name, app = get_app_from_args(args)
     if not name or not app:
-        print("[ERROR] Penggunaan: rdp new crud <nama> -a <nama-app>")
+        available_apps = []
+        if os.path.exists("apps"):
+            available_apps = [
+                d for d in os.listdir("apps")
+                if os.path.isdir(os.path.join("apps", d)) and not d.startswith("__") and not d.startswith(".")
+            ]
+        print("\n[ERROR] Aplikasi target belum ditentukan.")
+        print("  Gunakan format: rdp new crud <nama> -a <nama-app>")
+        if available_apps:
+            print(f"  Aplikasi yang tersedia di apps/: {', '.join(available_apps)}")
+            print(f"  Contoh: rdp new crud {name or 'item'} -a {available_apps[0]}")
+        else:
+            print("  Belum ada aplikasi yang dibuat. Buat aplikasi terlebih dahulu dengan:")
+            print(f"    rdp new app {name or 'billing'}")
         sys.exit(1)
 
     app_dir = os.path.join("apps", app)
     if not os.path.exists(app_dir):
-        print(f"[ERROR] Aplikasi '{app}' tidak ditemukan.")
+        print(f"\n[ERROR] Aplikasi '{app}' tidak ditemukan di folder apps/{app}.")
+        print(f"  Buat aplikasi '{app}' terlebih dahulu dengan perintah:")
+        print(f"    rdp new app {app}")
         sys.exit(1)
 
     flags = _parse_flags(args)
@@ -638,16 +963,16 @@ def run_new_crud(args):
     if written_views and ("create" in pages or "edit" in pages):
         _inject_form(app, name)
 
-    # 3. Templates
+    # 3. Templates — mapping template file ke generator
     tpl_dir = os.path.join("templates", "apps", app)
     os.makedirs(tpl_dir, exist_ok=True)
 
     tpl_map = {
-        "list":   (f"{name_lower}_list.html",           _generate_list_template(app, name, verbose, style)),
-        "create": (f"{name_lower}_form.html",            _generate_form_template(app, name, verbose)),
-        "edit":   (f"{name_lower}_form.html",            _generate_form_template(app, name, verbose)),  # sama dengan create
-        "detail": (f"{name_lower}_detail.html",          _generate_detail_template(app, name, verbose)),
-        "delete": (f"{name_lower}_confirm_delete.html",  _generate_delete_template(app, name, verbose)),
+        "list":   (f"{name_lower}_list.html",          _generate_list_template(app, name, verbose, style)),
+        "create": (f"{name_lower}_create_modal.html",  _generate_create_modal_template(app, name, verbose)),
+        "edit":   (f"{name_lower}_edit_modal.html",    _generate_edit_modal_template(app, name, verbose)),
+        "detail": (f"{name_lower}_detail.html",        _generate_detail_template(app, name, verbose)),
+        "delete": (f"{name_lower}_delete_modal.html",  _generate_delete_template(app, name, verbose)),
     }
 
     written_templates = set()
@@ -656,7 +981,7 @@ def run_new_crud(args):
             continue
         tpl_file, tpl_content = tpl_map[page]
         if tpl_file in written_templates:
-            continue  # create dan edit share form.html — tulis sekali
+            continue
         tpl_path = os.path.join(tpl_dir, tpl_file)
         if os.path.exists(tpl_path):
             print(f"  [WARNING] Template '{tpl_file}' sudah ada, dilewati.")
@@ -686,11 +1011,6 @@ def run_new_page(args):
       rdp new page delete -a <app> --model <Model>
       rdp new page detail -a <app> --model <Model>
       rdp new page custom <nama> -a <app>
-
-    ALUR:
-      1. Parse tipe halaman (list/create/edit/delete/detail/custom)
-      2. Jika CRUD page: generate template + view + form (jika perlu) + URL
-      3. Jika custom: buat template kosong dengan layout app
 
     DIPANGGIL DARI: main()
     """
@@ -723,13 +1043,14 @@ def run_new_page(args):
 {{# templates/apps/{app}/{custom_name.lower()}.html #}}
 <c-layout.app title="{custom_name.capitalize()}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">{custom_name.capitalize()}</h2>
+    <ul class="rdp-breadcrumb"><li>Dashboard</li><li>{custom_name.capitalize()}</li></ul>
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">{custom_name.capitalize()}</h1>
     </div>
 
-    <c-rdp.card>
-        <p>Konten halaman {custom_name}.</p>
-    </c-rdp.card>
+    <div style="background:var(--rdp-surface);border:1px solid var(--rdp-border);border-radius:12px;padding:24px">
+        <p style="color:var(--rdp-text-muted);font-size:14px">Konten halaman {custom_name}.</p>
+    </div>
 
 </c-layout.app>
 """
@@ -744,7 +1065,6 @@ def run_new_page(args):
         print(f"  Pilihan: {', '.join(CRUD_PAGES)}, custom")
         sys.exit(1)
 
-    # Untuk CRUD page, butuh -a dan --model
     _, app = get_app_from_args(args)
     if not app:
         print("[ERROR] Tambahkan -a <nama-app>")
@@ -754,7 +1074,6 @@ def run_new_page(args):
     model_name = flags.get("model")
 
     if not model_name:
-        # Tanya interaktif
         model_name = get_input(f"Nama model untuk halaman {page_type}", default="Item")
 
     style = flags.get("style", "table")
@@ -769,7 +1088,6 @@ def run_new_page(args):
 
     print(f"\nGenerate halaman '{page_type}' untuk model '{name}' di app '{app}'...")
 
-    # Generate hanya halaman yang diminta
     written_views = _inject_views(app, name, [page_type]) or []
     if written_views and page_type in ("create", "edit"):
         _inject_form(app, name)
@@ -780,11 +1098,11 @@ def run_new_page(args):
     os.makedirs(tpl_dir, exist_ok=True)
 
     tpl_map = {
-        "list":   (f"{name_lower}_list.html",           _generate_list_template(app, name, verbose, style)),
-        "create": (f"{name_lower}_form.html",            _generate_form_template(app, name, verbose)),
-        "edit":   (f"{name_lower}_form.html",            _generate_form_template(app, name, verbose)),
-        "detail": (f"{name_lower}_detail.html",          _generate_detail_template(app, name, verbose)),
-        "delete": (f"{name_lower}_confirm_delete.html",  _generate_delete_template(app, name, verbose)),
+        "list":   (f"{name_lower}_list.html",          _generate_list_template(app, name, verbose, style)),
+        "create": (f"{name_lower}_create_modal.html",  _generate_create_modal_template(app, name, verbose)),
+        "edit":   (f"{name_lower}_edit_modal.html",    _generate_edit_modal_template(app, name, verbose)),
+        "detail": (f"{name_lower}_detail.html",        _generate_detail_template(app, name, verbose)),
+        "delete": (f"{name_lower}_delete_modal.html",  _generate_delete_template(app, name, verbose)),
     }
 
     tpl_file, tpl_content = tpl_map[page_type]

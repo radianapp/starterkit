@@ -1,0 +1,40 @@
+{# templates/apps/inventory/produk_delete_modal.html #}
+{# Partial HTMX — dirender oleh produkDeleteModalView, di-inject ke #modal-container #}
+<div class="rdp-modal-backdrop"
+     style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px"
+     onclick="if(event.target===this)document.getElementById('modal-container').innerHTML=''">
+    <div class="rdp-modal rdp-modal--sm"
+         style="position:relative;width:100%;max-width:400px;display:flex;flex-direction:column;background:var(--rdp-surface)"
+         onclick="event.stopPropagation()">
+
+        <div class="rdp-modal__body" style="padding:24px 24px 20px;display:flex;flex-direction:column;gap:12px;overflow-x:hidden">
+            <span style="width:44px;height:44px;border-radius:22px;background:var(--rdp-danger-soft,#FBEDEB);color:var(--rdp-danger);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </span>
+            <h2 style="font-size:17px;font-weight:700;margin:0;letter-spacing:-0.01em;line-height:1.35">Hapus Produk "{{ object.name }}"?</h2>
+            <p style="margin:0;font-size:13px;line-height:1.55;color:var(--rdp-text-muted)">Tindakan ini tidak bisa dibatalkan. Data akan dihapus secara permanen.</p>
+
+            <div style="display:flex;align-items:center;gap:10px;background:var(--rdp-surface-sunken,#F3F1EC);border:1px solid var(--rdp-border);border-radius:10px;padding:10px 12px">
+                <span style="display:flex;flex-direction:column;line-height:1.4;min-width:0;flex:1">
+                    <span style="font-size:13px;font-weight:600">{{ object.name }}</span>
+                    <span style="font-size:11.5px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted)">ID: {{ object.pk }}</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;background:var(--rdp-background,#FAF9F7);border-radius:0 0 var(--rdp-radius-lg,14px) var(--rdp-radius-lg,14px)">
+            <button class="rdp-btn rdp-btn--secondary"
+                    onclick="document.getElementById('modal-container').innerHTML=''">Batal</button>
+            <form hx-delete="{% url 'inventory:produk-delete' object.pk %}"
+                  hx-target="#modal-container"
+                  hx-swap="innerHTML"
+                  style="margin:0">
+                {% csrf_token %}
+                <button type="submit" id="btn-confirm-hapus-produk" class="rdp-btn rdp-btn--danger" style="min-width:96px">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Hapus
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

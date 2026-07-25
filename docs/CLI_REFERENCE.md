@@ -1,4 +1,4 @@
-﻿# Referensi RDP CLI
+# Referensi RDP CLI
 
 RDP CLI (`rdp`) adalah alat baris perintah (*command-line interface*) untuk menyederhanakan pembuatan proyek baru berbasis RDP Starter Kit dari terminal, tanpa perlu meng-*clone* repositori secara manual.
 
@@ -48,6 +48,20 @@ rdp new datahub-internal
 - Memperbarui `pyproject.toml` dengan nama dan deskripsi proyek Anda
 - Menambahkan *route* dan template HTML untuk halaman opsional yang dipilih
 
+**Opsi Perintah:**
+- `--local` / `-l` : Menggunakan folder starterkit lokal (cocok untuk pengujian lokal/offline tanpa `git clone` dari GitHub).
+
+**Contoh Pengujian Lokal dari Source Code:**
+```bash
+# Jalankan langsung dari folder mana saja (PowerShell):
+uv run python C:\Users\rahad\Work\org\rdp\beta\starterkit\scripts\rdp_cli.py new portal-analytic --local
+
+# Atau via env variable:
+$env:RDP_TEMPLATE_PATH="C:\path\to\starterkit"
+uv run python C:\path\to\starterkit\scripts\rdp_cli.py new portal-analytic
+```
+
+
 **Langkah selanjutnya setelah wizard selesai:**
 ```bash
 cd nama-proyek-anda
@@ -59,6 +73,7 @@ uv run python manage.py runserver
 ```
 
 Buka **http://localhost:8000** -- selesai!
+
 
 ---
 

@@ -24,10 +24,34 @@ Modul:
   rdp/generators/crud.py        ← new crud, new page, make, scaffold
 """
 
+# ruff: noqa: E402
+import os
 import sys
+
+
+# Prioritaskan pencarian modul local:
+# 1. RDP_TEMPLATE_PATH jika di-set di environment
+# 2. Current working directory jika ada folder scripts/rdp (misal di proyek lokal)
+# 3. Folder lokasi rdp_cli.py ini berada
+env_template_path = os.environ.get("RDP_TEMPLATE_PATH")
+cwd = os.getcwd()
+
+if env_template_path and os.path.exists(os.path.join(env_template_path, "scripts", "rdp")):
+    if env_template_path not in sys.path:
+        sys.path.insert(0, env_template_path)
+elif os.path.exists(os.path.join(cwd, "scripts", "rdp")):
+    if cwd not in sys.path:
+        sys.path.insert(0, cwd)
+
+_cli_dir = os.path.dirname(os.path.abspath(__file__))
+_root_dir = os.path.dirname(_cli_dir)
+if _root_dir not in sys.path:
+    sys.path.insert(0, _root_dir)
+
 
 # ── Utils & versi ─────────────────────────────────────────────────────────────
 from scripts.rdp.utils import __version__, check_for_updates, print_help, run_django_cmd
+
 
 # ── Operasi project ──────────────────────────────────────────────────────────
 from scripts.rdp.ops.project import run_new, run_update

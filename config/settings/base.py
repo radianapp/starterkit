@@ -192,14 +192,16 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "apps.inventory",
-    "apps.test_app",
     "apps.core.apps.CoreConfig",
     "apps.accounts.apps.AccountsConfig",
     "apps.dashboard.apps.DashboardConfig",
+    "apps.inventory.apps.InventoryConfig",
+    "apps.test_app.apps.TestAppConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+
 
 # ⚙️ KONFIGURASI: Custom User model
 AUTH_USER_MODEL = "accounts.User"

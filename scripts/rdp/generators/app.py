@@ -59,11 +59,14 @@ def run_new_app(args):
     layout = "app" if app_type == "dashboard" else "blank"
     verbose = " ".join(x.capitalize() for x in app_name.split("_"))
 
-    print(f"\nMembuat aplikasi '{app_name}' ({app_type}) di {app_dir}/...")
+    os.makedirs(app_dir)
+    with open(os.path.join(app_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write(f'default_app_config = "apps.{app_name}.apps.{class_name}Config"\n')
 
     # ── models/ ──────────────────────────────────────────────────────────────
     models_dir = os.path.join(app_dir, "models")
     os.makedirs(models_dir)
+
 
     with open(os.path.join(models_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
         f.write(f'''\
@@ -395,6 +398,7 @@ class Test{class_name}Views:
         f.write(f'''\
 # apps/{app_name}/apps.py
 
+import os
 from django.apps import AppConfig
 
 
@@ -402,7 +406,9 @@ class {class_name}Config(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.{app_name}"
     verbose_name = "{verbose}"
+    path = os.path.dirname(os.path.abspath(__file__))
 ''')
+
 
     # ── urls.py ──────────────────────────────────────────────────────────────
     with open(os.path.join(app_dir, "urls.py"), "w", encoding="utf-8") as f:
@@ -423,11 +429,18 @@ app_name = "{app_name}"
 
 urlpatterns = [
     path("", {class_name}ListView.as_view(), name="list"),
+    path("{app_name}/", {class_name}ListView.as_view(), name="{app_name}-list"),
     path("<int:pk>/", {class_name}DetailView.as_view(), name="detail"),
+    path("<int:pk>/", {class_name}DetailView.as_view(), name="{app_name}-detail"),
     path("baru/", {class_name}CreateView.as_view(), name="create"),
+    path("baru/", {class_name}CreateView.as_view(), name="{app_name}-create"),
     path("<int:pk>/edit/", {class_name}UpdateView.as_view(), name="update"),
+    path("<int:pk>/edit/", {class_name}UpdateView.as_view(), name="edit"),
+    path("<int:pk>/edit/", {class_name}UpdateView.as_view(), name="{app_name}-update"),
     path("<int:pk>/hapus/", {class_name}DeleteView.as_view(), name="delete"),
+    path("<int:pk>/hapus/", {class_name}DeleteView.as_view(), name="{app_name}-delete"),
 ]
+
 ''')
 
     # ── migrations/ ──────────────────────────────────────────────────────────
@@ -445,47 +458,69 @@ urlpatterns = [
 {{# {app_name}/templates/apps/{app_name}/{app_name}_list.html #}}
 <c-layout.{layout} title="Daftar {verbose}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">Daftar {verbose}</h2>
+    <nav aria-label="Breadcrumb" style="margin-bottom:12px">
+        <ul class="rdp-breadcrumb">
+            <li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li>
+            <li>Daftar {verbose}</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-page-header" style="margin-bottom:16px">
+        <h1 class="rdp-page-header__title">Daftar {verbose}</h1>
         <div class="rdp-page-header__actions">
             <c-rdp.button variant="primary" href="{{% url '{app_name}:create' %}}">+ Tambah {verbose}</c-rdp.button>
         </div>
     </div>
 
-    <c-rdp.card>
+    <c-rdp.filter_bar>
+        <form method="GET" style="display:flex; align-items:center; gap:10px; width:100%">
+            <div style="position:relative; width:260px">
+                <input class="rdp-input" name="q" placeholder="Cari {verbose}..." value="{{{{ request.GET.q|default:'' }}}}" style="width:100%; height:34px; padding:0 12px 0 32px; font-size:13px; box-sizing:border-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--rdp-text-muted,#6B665E); pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            </div>
+            <c-rdp.button type="submit" variant="ghost" size="sm">Cari</c-rdp.button>
+            <div style="flex:1"></div>
+            <c-rdp.button variant="primary" size="sm" href="{{% url '{app_name}:create' %}}">+ Tambah {verbose}</c-rdp.button>
+        </form>
+    </c-rdp.filter_bar>
+
+    <c-rdp.card style="margin-top:16px; padding:0">
         {{% if items %}}
-        <table class="rdp-table">
+        <c-rdp.table>
             <thead>
                 <tr>
                     <th>Nama</th>
                     <th>Status</th>
                     <th>Dibuat</th>
-                    <th style="width:120px">Aksi</th>
+                    <th style="width:180px; text-align:right">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 {{% for item in items %}}
-                <tr>
-                    <td><a href="{{% url '{app_name}:detail' item.pk %}}">{{{{ item.name }}}}</a></td>
+                <tr class="pos-row">
+                    <td><a href="{{% url '{app_name}:detail' item.pk %}}" style="font-weight:600; text-decoration:none">{{{{ item.name }}}}</a></td>
                     <td>
                         {{% if item.is_active %}}
-                            <span class="rdp-badge rdp-badge--success">Aktif</span>
+                            <c-rdp.badge variant="success">Aktif</c-rdp.badge>
                         {{% else %}}
-                            <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                            <c-rdp.badge variant="neutral">Nonaktif</c-rdp.badge>
                         {{% endif %}}
                     </td>
-                    <td>{{{{ item.created_at|date:"d M Y" }}}}</td>
-                    <td class="rdp-table__actions">
-                        <a href="{{% url '{app_name}:update' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--secondary">Edit</a>
-                        <a href="{{% url '{app_name}:delete' item.pk %}}" class="rdp-btn rdp-btn--sm rdp-btn--danger">Hapus</a>
+                    <td style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--rdp-text-muted)">{{{{ item.created_at|date:"d M Y" }}}}</td>
+                    <td style="text-align:right">
+                        <div class="rdp-table__actions" style="justify-content:flex-end">
+                            <c-rdp.button variant="ghost" size="sm" href="{{% url '{app_name}:detail' item.pk %}}">Detail</c-rdp.button>
+                            <c-rdp.button variant="secondary" size="sm" href="{{% url '{app_name}:update' item.pk %}}">Edit</c-rdp.button>
+                            <c-rdp.button variant="danger" size="sm" href="{{% url '{app_name}:delete' item.pk %}}">Hapus</c-rdp.button>
+                        </div>
                     </td>
                 </tr>
                 {{% endfor %}}
             </tbody>
-        </table>
+        </c-rdp.table>
         {{% else %}}
-        <div class="rdp-empty-state">
-            <p class="rdp-empty-state__text">Belum ada data {verbose}.</p>
+        <div style="padding:48px 24px; text-align:center">
+            <p style="color:var(--rdp-text-muted); font-size:14px; margin-bottom:16px">Belum ada data {verbose}.</p>
             <c-rdp.button variant="primary" href="{{% url '{app_name}:create' %}}">+ Tambah {verbose}</c-rdp.button>
         </div>
         {{% endif %}}
@@ -499,43 +534,51 @@ urlpatterns = [
 {{# {app_name}/templates/apps/{app_name}/{app_name}_detail.html #}}
 <c-layout.{layout} title="{{{{ object.name }}}}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">{{{{ object.name }}}}</h2>
+    <nav aria-label="Breadcrumb" style="margin-bottom:12px">
+        <ul class="rdp-breadcrumb">
+            <li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li>
+            <li><a href="{{% url '{app_name}:list' %}}">Daftar {verbose}</a></li>
+            <li>{{{{ object.name }}}}</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-page-header" style="margin-bottom:16px">
+        <h1 class="rdp-page-header__title">{{{{ object.name }}}}</h1>
         <div class="rdp-page-header__actions">
             <c-rdp.button variant="secondary" href="{{% url '{app_name}:update' object.pk %}}">Edit</c-rdp.button>
             <c-rdp.button variant="danger" href="{{% url '{app_name}:delete' object.pk %}}">Hapus</c-rdp.button>
         </div>
     </div>
 
-    <c-rdp.card>
-        <dl class="rdp-dl">
-            <dt>Nama</dt>
-            <dd>{{{{ object.name }}}}</dd>
+    <c-rdp.card style="max-width:800px">
+        <dl class="rdp-dl" style="display:grid; grid-template-columns:140px 1fr; gap:12px 16px; margin:0">
+            <dt style="font-weight:600; color:var(--rdp-text-muted)">Nama</dt>
+            <dd style="margin:0; font-weight:600">{{{{ object.name }}}}</dd>
 
-            <dt>Deskripsi</dt>
-            <dd>{{{{ object.description|default:"-" }}}}</dd>
+            <dt style="font-weight:600; color:var(--rdp-text-muted)">Deskripsi</dt>
+            <dd style="margin:0">{{{{ object.description|default:"-" }}}}</dd>
 
-            <dt>Status</dt>
-            <dd>
+            <dt style="font-weight:600; color:var(--rdp-text-muted)">Status</dt>
+            <dd style="margin:0">
                 {{% if object.is_active %}}
-                    <span class="rdp-badge rdp-badge--success">Aktif</span>
+                    <c-rdp.badge variant="success">Aktif</c-rdp.badge>
                 {{% else %}}
-                    <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                    <c-rdp.badge variant="neutral">Nonaktif</c-rdp.badge>
                 {{% endif %}}
             </dd>
 
-            <dt>Dibuat pada</dt>
-            <dd>{{{{ object.created_at|date:"d M Y H:i" }}}}</dd>
+            <dt style="font-weight:600; color:var(--rdp-text-muted)">Dibuat pada</dt>
+            <dd style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:13px">{{{{ object.created_at|date:"d M Y H:i" }}}}</dd>
 
             {{% if object.created_by %}}
-            <dt>Dibuat oleh</dt>
-            <dd>{{{{ object.created_by }}}}</dd>
+            <dt style="font-weight:600; color:var(--rdp-text-muted)">Dibuat oleh</dt>
+            <dd style="margin:0">{{{{ object.created_by }}}}</dd>
             {{% endif %}}
         </dl>
     </c-rdp.card>
 
     <div style="margin-top:16px">
-        <a href="{{% url '{app_name}:list' %}}" class="rdp-btn rdp-btn--ghost">← Kembali ke Daftar</a>
+        <c-rdp.button variant="ghost" href="{{% url '{app_name}:list' %}}">← Kembali ke Daftar</c-rdp.button>
     </div>
 
 </c-layout.{layout}>
@@ -546,16 +589,27 @@ urlpatterns = [
 {{# {app_name}/templates/apps/{app_name}/{app_name}_form.html #}}
 <c-layout.{layout} title="{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</h2>
+    <nav aria-label="Breadcrumb" style="margin-bottom:12px">
+        <ul class="rdp-breadcrumb">
+            <li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li>
+            <li><a href="{{% url '{app_name}:list' %}}">Daftar {verbose}</a></li>
+            <li>{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-page-header" style="margin-bottom:16px">
+        <h1 class="rdp-page-header__title">{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}</h1>
+        <div class="rdp-page-header__actions">
+            <c-rdp.button variant="ghost" href="{{% url '{app_name}:list' %}}">← Kembali</c-rdp.button>
+        </div>
     </div>
 
-    <c-rdp.card>
+    <c-rdp.card style="max-width:720px">
         <form method="POST" class="rdp-form">
             {{% csrf_token %}}
             {{{{ form.as_p }}}}
-            <div class="rdp-form__actions">
-                <c-rdp.button type="submit" variant="primary">Simpan</c-rdp.button>
+            <div class="rdp-form__actions" style="margin-top:24px; display:flex; gap:8px">
+                <c-rdp.button type="submit" variant="primary">Simpan {verbose}</c-rdp.button>
                 <c-rdp.button variant="ghost" href="{{% url '{app_name}:list' %}}">Batal</c-rdp.button>
             </div>
         </form>
@@ -569,21 +623,32 @@ urlpatterns = [
 {{# {app_name}/templates/apps/{app_name}/{app_name}_confirm_delete.html #}}
 <c-layout.{layout} title="Hapus {verbose}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">Hapus {verbose}</h2>
+    <nav aria-label="Breadcrumb" style="margin-bottom:12px">
+        <ul class="rdp-breadcrumb">
+            <li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li>
+            <li><a href="{{% url '{app_name}:list' %}}">Daftar {verbose}</a></li>
+            <li>Hapus</li>
+        </ul>
+    </nav>
+
+    <div class="rdp-page-header" style="margin-bottom:16px">
+        <h1 class="rdp-page-header__title">Konfirmasi Hapus</h1>
     </div>
 
-    <c-rdp.card>
-        <p>Yakin ingin menghapus <strong>{{{{ object.name }}}}</strong>? Tindakan ini tidak bisa dibatalkan.</p>
-        <form method="POST" style="margin-top:16px; display:flex; gap:8px">
+    <c-rdp.card style="max-width:540px; border-color:var(--rdp-danger-soft,#FCEBE8)">
+        <h3 style="margin-top:0; color:var(--rdp-danger,#B3382D); font-size:16px">Yakin ingin menghapus {verbose}?</h3>
+        <p style="margin-bottom:16px">Data <strong>"{{{{ object.name }}}}"</strong> akan dihapus secara permanen.</p>
+        <form method="POST" style="display:flex; gap:10px">
             {{% csrf_token %}}
-            <c-rdp.button type="submit" variant="danger">Ya, Hapus</c-rdp.button>
+            <c-rdp.button type="submit" variant="danger">Ya, Hapus Permanen</c-rdp.button>
             <c-rdp.button variant="ghost" href="{{% url '{app_name}:list' %}}">Batal</c-rdp.button>
         </form>
     </c-rdp.card>
 
 </c-layout.{layout}>
 ''')
+
+
 
     print(f"  [OK] Struktur aplikasi '{app_name}' ({app_type}) berhasil dibuat.")
 
@@ -595,10 +660,11 @@ urlpatterns = [
             with open(base_settings_path, "r", encoding="utf-8") as f:
                 content = f.read()
             if "LOCAL_APPS = [" in content:
-                content = content.replace("LOCAL_APPS = [", f'LOCAL_APPS = [\n    "apps.{app_name}",')
+                content = content.replace("LOCAL_APPS = [", f'LOCAL_APPS = [\n    "apps.{app_name}.apps.{class_name}Config",')
                 with open(base_settings_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print("  [OK] Aplikasi didaftarkan di LOCAL_APPS.")
+
             else:
                 print("  [WARNING] Blok LOCAL_APPS tidak ditemukan. Daftarkan manual.")
     else:

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif; color: #1C1B1A; }
+    a { color: var(--rdp-accent, #15654E); text-decoration: none; }
+    a:hover { color: #0F4A39; text-decoration: underline; }
+    .rdp-keep { break-inside: avoid; orphans: 3; widows: 3; }
+  </style>
+</helmet>
+
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="letter" margin="0.75in" hint-size="100%,1400px">
+
+  <!-- ============ MASTHEAD ============ -->
+  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 2px solid #1C1B1A;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rdp-accent, #15654E);">RDP UI · Product Foundation</div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8A857C;">v0.1 · July 2026</div>
+  </div>
+
+  <h1 style="font-size: 40px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; margin: 26px 0 10px;">The UI framework Django never shipped.</h1>
+  <p style="font-size: 15.5px; line-height: 1.6; color: #55514A; margin: 0 0 34px; max-width: 58ch;">A complete, server-first UI ecosystem — design system, CSS framework, Cotton components, HTMX patterns, themes, and templates — built natively for Django. <em>Modern UI Framework for Django.</em></p>
+
+  <!-- ============ 1 · POSITIONING ============ -->
+  <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid #E4E1DB; padding-top: 16px; margin-bottom: 14px;">
+    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--rdp-accent, #15654E);">01</span>
+    <h2 style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin: 0;">Product positioning</h2>
+  </div>
+
+  <p style="font-size: 17px; line-height: 1.55; font-weight: 500; margin: 0 0 8px; max-width: 62ch;">For Django teams who want a polished product without adopting a frontend stack, RDP UI is the UI framework that turns semantic HTML into a finished interface — components, themes, and interaction patterns that speak Django natively.</p>
+  <p style="font-size: 14px; line-height: 1.6; color: #55514A; margin: 0 0 20px; max-width: 66ch;">Unlike CSS toolkits that stop at styling, or component libraries that assume React, RDP UI covers the whole surface of a real product — from a button to a billing page — inside the templates Django developers already write.</p>
+
+  <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; line-height: 1.5; margin-bottom: 16px;">
+    <thead>
+      <tr>
+        <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 12px 8px 0; border-bottom: 1px solid #1C1B1A; width: 16%;">Framework</th>
+        <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 12px 8px 0; border-bottom: 1px solid #1C1B1A; width: 38%;">What it is</th>
+        <th style="text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; padding: 0 0 8px 0; border-bottom: 1px solid #1C1B1A;">Why it falls short for Django teams</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; vertical-align: top;">Tailwind UI</td>
+        <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Paid component gallery on utility-class CSS</td>
+        <td style="padding: 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Utility-class soup in templates; React/Alpine-leaning; no Django integration</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; vertical-align: top;">shadcn/ui</td>
+        <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Copy-paste React components</td>
+        <td style="padding: 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Requires the React + build-tool stack Django teams are avoiding</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; vertical-align: top;">PicoCSS</td>
+        <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Elegant classless CSS for semantic HTML</td>
+        <td style="padding: 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Stops at primitives — no components, patterns, or product templates</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; vertical-align: top;">Bootstrap</td>
+        <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">The long-standing default CSS framework</td>
+        <td style="padding: 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Instantly recognizable, dated look; no server-first interaction story</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; vertical-align: top;">Chakra UI</td>
+        <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Accessible, themeable React system</td>
+        <td style="padding: 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">React-only; unusable from a Django template</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 600; padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; vertical-align: top;">DaisyUI</td>
+        <td style="padding: 9px 12px 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Themed component classes on Tailwind</td>
+        <td style="padding: 9px 0; border-bottom: 1px solid #E4E1DB; color: #55514A; vertical-align: top;">Still utility CSS underneath; themes without a backend or component model</td>
+      </tr>
+      <tr>
+        <td style="font-weight: 700; padding: 10px 12px 10px 0; color: var(--rdp-accent, #15654E); vertical-align: top;">RDP UI</td>
+        <td style="padding: 10px 12px 10px 0; font-weight: 500; vertical-align: top;">Complete UI ecosystem for Django</td>
+        <td style="padding: 10px 0; font-weight: 500; vertical-align: top;">Design system → CSS → Cotton components → HTMX patterns → themes → templates, one coherent stack</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="rdp-keep" style="background: #EEF3F0; border-radius: 12px; padding: 20px 24px; margin-bottom: 36px;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rdp-accent, #15654E); margin-bottom: 6px;">The wedge</div>
+    <p style="font-size: 16.5px; line-height: 1.5; font-weight: 600; margin: 0;">The only complete UI ecosystem natively built for Django + Cotton + HTMX. Every component is one tag away — <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--rdp-accent, #15654E);">&lt;c-rdp.button&gt;</span> — with server-first interactivity and zero build step.</p>
+  </div>
+
+  <!-- ============ 2 · PERSONAS ============ -->
+  <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid #E4E1DB; padding-top: 16px; margin-bottom: 16px;">
+    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--rdp-accent, #15654E);">02</span>
+    <h2 style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin: 0;">User personas</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 36px;">
+
+    <div class="rdp-keep" style="border: 1px solid #E4E1DB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C;">Persona 1 · Indie</div>
+      <div style="font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em;">The solo Django developer</div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rdp-accent, #15654E); margin-bottom: 3px;">Goals</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">Ship side projects and client work fast, alone, without babysitting a frontend toolchain.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #B0543C; margin-bottom: 3px;">Pains</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">The UI takes longer than the backend; every project restarts from a blank stylesheet.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 3px;">RDP UI gives them</div>
+        <p style="font-size: 12.5px; line-height: 1.55; margin: 0;">A full component catalog and ready themes — drop <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px;">&lt;c-rdp.*&gt;</span> tags into templates and the product looks finished on day one.</p>
+      </div>
+    </div>
+
+    <div class="rdp-keep" style="border: 1px solid #E4E1DB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C;">Persona 2 · Backend</div>
+      <div style="font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em;">The backend engineer with no design skills</div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rdp-accent, #15654E); margin-bottom: 3px;">Goals</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">Build internal tools that don't look homemade — without learning design.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #B0543C; margin-bottom: 3px;">Pains</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">Can't judge spacing, type, or color; copy-pasted CSS breaks and accessibility is a mystery.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 3px;">RDP UI gives them</div>
+        <p style="font-size: 12.5px; line-height: 1.55; margin: 0;">Correct-by-default components: design decisions pre-made, WCAG AA, keyboard navigation, and focus states baked in.</p>
+      </div>
+    </div>
+
+    <div class="rdp-keep" style="border: 1px solid #E4E1DB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C;">Persona 3 · Startup</div>
+      <div style="font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em;">The founder shipping a SaaS</div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rdp-accent, #15654E); margin-bottom: 3px;">Goals</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">Look credible to customers and investors now; iterate on product weekly.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #B0543C; margin-bottom: 3px;">Pains</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">No budget for frontend hires; a React SPA doubles the stack and halves the pace.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 3px;">RDP UI gives them</div>
+        <p style="font-size: 12.5px; line-height: 1.55; margin: 0;">SaaS-shaped templates — auth, dashboard, settings, billing — plus theming for their brand and HTMX interactivity without SPA cost.</p>
+      </div>
+    </div>
+
+    <div class="rdp-keep" style="border: 1px solid #E4E1DB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C;">Persona 4 · Enterprise</div>
+      <div style="font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em;">The team lead standardizing internal tools</div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rdp-accent, #15654E); margin-bottom: 3px;">Goals</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">One consistent, compliant UI standard across dozens of Django tools and teams.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #B0543C; margin-bottom: 3px;">Pains</div>
+        <p style="font-size: 12.5px; line-height: 1.55; color: #55514A; margin: 0;">Every tool looks different; accessibility audits fail; onboarding new hires to N ad-hoc UIs is slow.</p>
+      </div>
+      <div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8A857C; margin-bottom: 3px;">RDP UI gives them</div>
+        <p style="font-size: 12.5px; line-height: 1.55; margin: 0;">A single versioned design system: shared tokens, documented components, audit-ready accessibility — governance without a design department.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 3 · DESIGN PRINCIPLES ============ -->
+  <div style="display: flex; align-items: baseline; gap: 12px; border-top: 1px solid #E4E1DB; padding-top: 16px; margin-bottom: 16px;">
+    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--rdp-accent, #15654E);">03</span>
+    <h2 style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin: 0;">Design principles</h2>
+  </div>
+
+  <sc-for list="{{ principles }}" as="p" hint-placeholder-count="7">
+    <div class="rdp-keep" style="display: grid; grid-template-columns: 44px 200px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E4E1DB;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--rdp-accent, #15654E); padding-top: 2px;">{{ p.num }}</div>
+      <div>
+        <div style="font-size: 14px; font-weight: 700; letter-spacing: -0.01em;">{{ p.title }}</div>
+        <div style="font-size: 12px; line-height: 1.5; color: #8A857C; margin-top: 3px;">{{ p.sub }}</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="display: flex; gap: 8px; align-items: baseline;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rdp-accent, #15654E); flex: 0 0 88px;">This means</span>
+          <span style="font-size: 12.5px; line-height: 1.5;">{{ p.means }}</span>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: baseline;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #B0543C; flex: 0 0 88px;">Never means</span>
+          <span style="font-size: 12.5px; line-height: 1.5; color: #55514A;">{{ p.never }}</span>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+
+  <div style="display: flex; justify-content: space-between; gap: 16px; margin-top: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #8A857C;">
+    <span>RDP UI — Modern UI Framework for Django</span>
+    <span>Foundation · Phase 1 of the design program</span>
+  </div>
+
+</x-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#15654E&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#15654E&quot;, &quot;#2A5FA8&quot;, &quot;#6B4FA0&quot;, &quot;#1C1B1A&quot;], &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  componentDidMount() { this.applyAccent(); }
+  componentDidUpdate() { this.applyAccent(); }
+  applyAccent() {
+    document.documentElement.style.setProperty('--rdp-accent', this.props.accent ?? '#15654E');
+  }
+  renderVals() {
+    return {
+      principles: [
+        { num: 'P1', title: 'HTML First', sub: 'Semantic markup is the API.',
+          means: 'A form is a <form>, a nav is a <nav>; RDP UI styles the elements you already write.',
+          never: 'Div soup, or memorizing strings of utility classes to get a button.' },
+        { num: 'P2', title: 'Component First', sub: 'Everything reusable, everything named.',
+          means: 'Every pattern ships as a Cotton tag — <c-rdp.card>, <c-rdp.table> — composable and overridable.',
+          never: 'One-off snippets you paste, fork, and can never update again.' },
+        { num: 'P3', title: 'Server First', sub: 'HTMX is the interactive layer.',
+          means: 'Interactivity is a server round-trip: swap a fragment, keep Django as the source of truth.',
+          never: 'A JS build step, client-side state, or React anywhere in the stack.' },
+        { num: 'P4', title: 'Accessibility First', sub: 'WCAG AA is the floor, not a feature.',
+          means: 'Keyboard navigation, visible focus, contrast, and ARIA ship correct in every component by default.',
+          never: 'Accessibility as an opt-in flag, an add-on package, or a docs footnote.' },
+        { num: 'P5', title: 'Theme First', sub: 'Every color and size is a variable.',
+          means: 'Components read only CSS variables; rebrand or dark-mode an entire product from one tokens file.',
+          never: 'A hardcoded hex value, px size, or magic number inside a component.' },
+        { num: 'P6', title: 'Minimal API', sub: 'Small surface, small docs.',
+          means: 'Learnable in an afternoon: few components, few props, obvious names, sensible defaults.',
+          never: 'Config sprawl, a thousand variants, or docs you need docs for.' },
+        { num: 'P7', title: 'Enterprise Ready', sub: 'Built for real, dense software.',
+          means: 'Tables, forms, filters, and dashboards proven at ERP/CRM/HRM/CMS/POS density and scale.',
+          never: 'Components that only survive a marketing-page demo.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

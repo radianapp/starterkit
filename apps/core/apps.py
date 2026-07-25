@@ -5,6 +5,7 @@ US: US-001 — Clone & jalankan project baru
 TUJUAN: Setup core app yang berisi utils, mixins, base views, context processors.
 """
 
+import os
 from django.apps import AppConfig
 
 
@@ -22,6 +23,8 @@ class CoreConfig(AppConfig):
     name = "apps.core"
     label = "core"
     verbose_name = "Core"
+    path = os.path.dirname(os.path.abspath(__file__))
+
 
     def ready(self):
         """

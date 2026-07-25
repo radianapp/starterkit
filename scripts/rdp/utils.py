@@ -88,12 +88,44 @@ def check_for_updates() -> None:
         print()
 
 
+def get_cli_source_info() -> tuple[str, str]:
+    """
+    Mengembalikan (mode, path) tempat modul CLI dimuat.
+    Modes:
+      - 'LOCAL DEV' (via environment RDP_TEMPLATE_PATH)
+      - 'LOCAL PROJ' (via folder proyek lokal yang berisi scripts/rdp)
+      - 'GLOBAL' (via paket rdp terinstal di uv/pip)
+    """
+    env_path = os.environ.get("RDP_TEMPLATE_PATH")
+    if env_path and os.path.exists(os.path.join(env_path, "scripts", "rdp")):
+        return "LOCAL DEV", env_path
+
+    cwd = os.getcwd()
+    if os.path.exists(os.path.join(cwd, "scripts", "rdp")):
+        return "LOCAL PROJ", cwd
+
+    return "GLOBAL", os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 def print_banner():
-    """Tampilkan banner selamat datang."""
+    """Tampilkan banner selamat datang beserta indikator mode CLI."""
+    mode, path = get_cli_source_info()
     print("=" * 60)
     print("      Radian Data Platform (RDP) — Project Builder CLI")
-    print(f"      v{__version__}")
+    print(f"      v{__version__}  [{mode}]")
     print("=" * 60)
+    if mode == "LOCAL DEV":
+        print(f"  [MODE LOKAL DEV] Memakai modul & generator dari RDP_TEMPLATE_PATH:")
+        print(f"  -> {path}")
+        print("=" * 60)
+    elif mode == "LOCAL PROJ":
+        print(f"  [MODE LOKAL PROYEK] Memakai modul & generator dari proyek ini:")
+        print(f"  -> {path}")
+        print("=" * 60)
+    else:
+        print(f"  [MODE GLOBAL] Memakai paket rdp terinstal global di environment.")
+        print("=" * 60)
+
 
 
 def print_help():
@@ -102,9 +134,8 @@ def print_help():
 
     DIPANGGIL DARI: main() jika argumen --help atau tidak ada sub-perintah
     """
+    print_banner()
     print(f"""
-rdp — CLI untuk Radian Data Platform Starter Kit v{__version__}
-
 PENGGUNAAN:
   rdp remove app <nama_app>   Hapus aplikasi Django + templates + url + sidebar (konfirmasi berlapis)
   rdp new <nama_proyek>       Membuat proyek baru dari template RDP
@@ -214,22 +245,57 @@ def check_git_available() -> bool:
 
 
 def on_rm_error(func, path, exc_info):
-    """Error handler untuk shutil.rmtree untuk file read-only di Windows."""
-    os.chmod(path, stat.S_IWRITE)
-    func(path)
+    """Error handler untuk shutil.rmtree untuk file read-only / locked di Windows."""
+    import time
+    try:
+        os.chmod(path, stat.S_IWRITE)
+        func(path)
+    except Exception:
+        time.sleep(0.1)
+        try:
+            func(path)
+        except Exception:
+            pass
 
 
-def clone_template(target_dir: str) -> bool:
+
+def clone_template(target_dir: str, source_path: str | None = None) -> bool:
     """
-    Clone template repositori dari GitHub ke direktori target.
+    Clone template repositori dari GitHub atau salin dari direktori lokal (untuk pengujian development).
 
     ALUR:
-      1. Jalankan `git clone --depth=1` untuk mendapatkan versi terbaru
-      2. Hapus direktori .git/ agar proyek baru tidak terhubung ke repo template
-      3. Return True jika sukses, False jika gagal
+      1. Jika source_path atau RDP_TEMPLATE_PATH diset, salin langsung dari direktori lokal
+      2. Jika tidak, jalankan `git clone --depth=1` untuk mendapatkan versi terbaru dari GitHub
+      3. Hapus direktori .git/ agar proyek baru tidak terhubung ke repo template
+      4. Return True jika sukses, False jika gagal
 
     DIPANGGIL DARI: run_new()
     """
+    local_source = source_path or os.environ.get("RDP_TEMPLATE_PATH")
+    if local_source and os.path.exists(local_source):
+        print(f"\n  [LOCAL DEV] Menggunakan template dari folder lokal: {local_source}")
+        try:
+            shutil.copytree(
+                local_source,
+                target_dir,
+                dirs_exist_ok=True,
+                ignore=shutil.ignore_patterns(
+                    ".git",
+                    ".venv",
+                    "__pycache__",
+                    "*.pyc",
+                    "db.sqlite3",
+                    ".pytest_cache",
+                    ".ruff_cache",
+                    "htmlcov",
+                    "node_modules",
+                ),
+            )
+            return True
+        except Exception as e:
+            print(f"\n[ERROR] Gagal menyalin template lokal: {e}")
+            return False
+
     print("\n  Mengunduh template dari GitHub...")
     try:
         subprocess.run(
@@ -248,6 +314,7 @@ def clone_template(target_dir: str) -> bool:
         shutil.rmtree(git_dir, onerror=on_rm_error)
 
     return True
+
 
 
 def show_diff(file_current, file_new):
@@ -309,4 +376,19 @@ def get_app_from_args(args):
         idx = args.index("--app")
         if idx + 1 < len(args):
             app = args[idx + 1]
+
+    # Smart fallback jika -a / --app tidak diberikan
+    if not app:
+        if os.path.exists(os.path.join("apps", name)):
+            app = name
+        elif os.path.exists("apps"):
+            available_apps = [
+                d for d in os.listdir("apps")
+                if os.path.isdir(os.path.join("apps", d)) and not d.startswith("__") and not d.startswith(".")
+            ]
+            custom_apps = [a for a in available_apps if a not in ("core", "accounts")]
+            if len(custom_apps) == 1:
+                app = custom_apps[0]
+
     return name, app
+

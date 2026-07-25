@@ -118,6 +118,7 @@ def main():  # noqa: C901
             shutil.copytree(
                 src_item,
                 dst_item,
+                dirs_exist_ok=True,
                 ignore=shutil.ignore_patterns(
                     "*.pyc", "__pycache__", ".venv", ".git", ".pytest_cache", ".ruff_cache"
                 ),

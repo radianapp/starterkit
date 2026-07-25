@@ -223,19 +223,6 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
         if os.path.exists(home_html):
             os.remove(home_html)
 
-        urls_content = re.sub(
-            r'\n\ndef home_view\(request\):.*?(?=\n\nurlpatterns)',
-            '',
-            urls_content,
-            flags=re.DOTALL,
-        )
-        urls_content = re.sub(r'^from django\.shortcuts import redirect\n?', '', urls_content, flags=re.MULTILINE)
-        urls_content = re.sub(r'^[ \t]*path\("",\s+\w+,\s+name="home"\),\n?', '', urls_content, flags=re.MULTILINE)
-        urls_content = re.sub(r'^[ \t]*# Root.*?landing page.*?\n', '', urls_content, flags=re.MULTILINE)
-        urls_content = re.sub(r'^[ \t]*# Halaman Publik.*?\n', '', urls_content, flags=re.MULTILINE)
-        urls_content = re.sub(r'^[ \t]*path\("about/".*?name="about"\),\n?', '', urls_content, flags=re.MULTILINE)
-        urls_content = re.sub(r'^[ \t]*path\("terms/".*?name="terms"\),\n?', '', urls_content, flags=re.MULTILINE)
-        urls_content = re.sub(r'^[ \t]*path\("privacy/".*?name="privacy"\),\n?', '', urls_content, flags=re.MULTILINE)
 
     if not has_auth:
         accounts_templates = os.path.join(target_dir, "templates", "accounts")
@@ -262,9 +249,29 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
         if os.path.exists(dev_comp):
             os.remove(dev_comp)
 
-        htmx_views_file = os.path.join(target_dir, "apps", "core", "views", "htmx_examples.py")
-        if os.path.exists(htmx_views_file):
-            os.remove(htmx_views_file)
+        # Hapus demo apps (inventory, test_app) jika demo pages tidak diaktifkan
+        for demo_app in ["inventory", "test_app"]:
+            app_p = os.path.join(target_dir, "apps", demo_app)
+            if os.path.exists(app_p):
+                shutil.rmtree(app_p, onerror=on_rm_error)
+
+        for demo_view_file in ["htmx_examples.py", "starter.py"]:
+            v_p = os.path.join(target_dir, "apps", "core", "views", demo_view_file)
+            if os.path.exists(v_p):
+                os.remove(v_p)
+
+
+        # Bersihkan referensi apps.inventory dan apps.test_app dari settings dan urls
+        settings_content = re.sub(r'^[ \t]*"apps\.inventory.*?",?\n?', '', settings_content, flags=re.MULTILINE)
+        settings_content = re.sub(r'^[ \t]*"apps\.test_app.*?",?\n?', '', settings_content, flags=re.MULTILINE)
+        urls_content = re.sub(
+            r'\nif is_app_installed\("apps\.inventory"\):\n\s+urlpatterns\.append\(path\("produk/", include\("apps\.inventory\.urls"\)\)\)',
+            '',
+            urls_content,
+        )
+
+
+
 
         urls_content = re.sub(
             r'\n[ \t]*# Docs & Examples.*?(?=\n[ \t]*# Halaman Publik|\n[ \t]*# App URLs)',
@@ -290,6 +297,7 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
             urls_content,
             flags=re.MULTILINE,
         )
+
     else:
         htmx_templates = os.path.join(target_dir, "templates", "htmx_examples")
         if os.path.exists(htmx_templates):
@@ -405,6 +413,9 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
             f.write(settings_content)
 
 
+
+
+
 def run_new(args: list[str]):
     """
     Sub-perintah `rdp new <nama-proyek>` — wizard bootstrap proyek baru.
@@ -426,7 +437,10 @@ def run_new(args: list[str]):
         print("  Instal Git dari https://git-scm.com lalu coba lagi.")
         sys.exit(1)
 
-    default_name = args[0] if args else "myproject"
+    use_local = "--local" in args or "-l" in args
+    clean_args = [a for a in args if a not in ("--local", "-l")]
+
+    default_name = clean_args[0] if clean_args else "myproject"
     print(f"\nBootstrap proyek baru dari template: https://github.com/radianapp/starterkit.git\n")
 
     proj_name = get_input("Nama Proyek (contoh: portal-analytic)", default=default_name)
@@ -476,10 +490,19 @@ def run_new(args: list[str]):
     print(f"\n{'=' * 60}")
     print(f"  Membuat proyek '{proj_name}'...")
 
-    if not clone_template(target_dir):
+    # Lokasi root starterkit lokal untuk testing pengembangan tanpa push ke GitHub
+    local_starterkit_root = (
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        if use_local
+        else None
+    )
+
+
+    if not clone_template(target_dir, source_path=local_starterkit_root):
         if os.path.exists(target_dir):
             shutil.rmtree(target_dir)
         sys.exit(1)
+
 
     print("  Mengatur konfigurasi...")
     setup_env(target_dir, proj_name, color_choice)
@@ -509,17 +532,17 @@ def run_update(args):
     import filecmp
 
     if not os.path.exists("manage.py") or not os.path.exists("pyproject.toml"):
-        print("❌ Error: Perintah 'rdp update' harus dijalankan di root direktori proyek RDP (yang memiliki manage.py dan pyproject.toml).")
+        print("[ERROR] Perintah 'rdp update' harus dijalankan di root direktori proyek RDP (yang memiliki manage.py dan pyproject.toml).")
         sys.exit(1)
 
     print(f"Mengecek pembaruan template dari: https://github.com/radianapp/starterkit.git")
 
     with tempfile.TemporaryDirectory() as temp_dir:
         if not clone_template(temp_dir):
-            print("❌ Gagal mengunduh template.")
+            print("[ERROR] Gagal mengunduh template.")
             sys.exit(1)
 
-        print("✅ Template terbaru berhasil diunduh. Menganalisis perbedaan...")
+        print("[OK] Template terbaru berhasil diunduh. Menganalisis perbedaan...")
 
         ignored_patterns = [
             ".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache",
@@ -545,19 +568,19 @@ def run_update(args):
                 os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
                 if not os.path.exists(dest_path):
-                    print(f"➕ Menambahkan file baru: {rel_path}")
+                    print(f"[NEW] Menambahkan file baru: {rel_path}")
                     shutil.copy2(src_path, dest_path)
                     added_count += 1
                 else:
                     if not filecmp.cmp(src_path, dest_path, shallow=False):
                         if prompt_overwrite(dest_path, src_path, rel_path):
-                            print(f"🔄 Mengupdate: {rel_path}")
+                            print(f"[UPDATE] Mengupdate: {rel_path}")
                             shutil.copy2(src_path, dest_path)
                             updated_count += 1
                         else:
-                            print(f"⏭️ Melewati: {rel_path}")
+                            print(f"[SKIP] Melewati: {rel_path}")
                             skipped_count += 1
 
-    print("\n🎉 Proses update selesai!")
+    print("\n[OK] Proses update selesai!")
     print(f"Statistik: {added_count} ditambahkan, {updated_count} diupdate, {skipped_count} dilewati.")
     print("Pastikan untuk mengecek perubahan, menjalankan `uv sync`, dan `python manage.py migrate` jika diperlukan.")

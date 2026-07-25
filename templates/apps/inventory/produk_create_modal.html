@@ -1,0 +1,38 @@
+{# templates/apps/inventory/produk_create_modal.html #}
+{# Partial HTMX — dirender oleh produkCreateModalView, di-inject ke #modal-container #}
+<div class="rdp-modal-backdrop"
+     style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px"
+     onclick="if(event.target===this)document.getElementById('modal-container').innerHTML=''">
+    <div class="rdp-modal rdp-modal--md"
+         style="position:relative;width:100%;max-width:560px;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:var(--rdp-surface)"
+         onclick="event.stopPropagation()">
+
+        <div class="rdp-modal__header">
+            <h2 class="rdp-modal__title">Tambah Produk Baru</h2>
+            <button title="Tutup" class="rdp-modal__close"
+                    onclick="document.getElementById('modal-container').innerHTML=''">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="rdp-modal__body" style="overflow-y:auto;overflow-x:hidden">
+            <form id="form-create-produk"
+                  hx-post="{% url 'inventory:produk-create' %}"
+                  hx-target="#modal-container"
+                  hx-swap="innerHTML"
+                  style="display:flex;flex-direction:column;gap:16px">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;padding-top:16px;border-top:1px solid var(--rdp-border)">
+                    <button type="button" class="rdp-btn rdp-btn--secondary"
+                            onclick="document.getElementById('modal-container').innerHTML=''">Batal</button>
+                    <button type="submit" id="btn-submit-create-produk" class="rdp-btn rdp-btn--primary" style="min-width:110px">
+                        Simpan Produk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

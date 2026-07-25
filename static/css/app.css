@@ -1,4 +1,45 @@
 /* ==========================================================================
+   Dashboard Shell Design Tokens & Overrides (Dashboard Shell.dc.html)
+   ========================================================================== */
+:root {
+    --rdp-font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+    --rdp-font-mono: 'IBM Plex Mono', monospace;
+
+    --rdp-background: #FAF9F7;
+    --rdp-surface-sunken: #F3F1EC;
+    --rdp-surface: #FFFFFF;
+    --rdp-border: #E5E2DC;
+    --rdp-border-strong: #D2CEC6;
+
+    --rdp-primary: #15654E;
+    --rdp-primary-hover: #10513F;
+    --rdp-primary-soft: #EDF4F0;
+
+    --rdp-text: #1C1B18;
+    --rdp-text-muted: #6B665E;
+
+    --rdp-danger: #B3382D;
+    --rdp-danger-soft: #FBEDEB;
+}
+
+body {
+    background-color: var(--rdp-background, #FAF9F7) !important;
+    color: var(--rdp-text, #1C1B18) !important;
+    font-family: var(--rdp-font-sans) !important;
+}
+
+/* Primary Button Color Override */
+.rdp-btn--primary {
+    background-color: var(--rdp-primary, #15654E) !important;
+    border-color: var(--rdp-primary, #15654E) !important;
+    color: #FFFFFF !important;
+}
+.rdp-btn--primary:hover {
+    background-color: var(--rdp-primary-hover, #10513F) !important;
+    border-color: var(--rdp-primary-hover, #10513F) !important;
+}
+
+/* ==========================================================================
    Sidebar Navigation Component (app.html / dashboard.html)
    ========================================================================== */
 
@@ -360,3 +401,151 @@
         justify-content: center;
     }
 }
+
+/* ==========================================================================
+   Table Row Actions — reveal on hover (Dashboard Shell pattern)
+   ========================================================================== */
+.pos-row .row-actions {
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+.pos-row:hover .row-actions {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Page Header — breadcrumb + title + actions
+   ========================================================================== */
+.rdp-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.rdp-page-header__title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+.rdp-page-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Breadcrumb — <ul class="rdp-breadcrumb">
+   ========================================================================== */
+.rdp-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 12.5px;
+    color: var(--rdp-text-muted, #6B665E);
+}
+.rdp-breadcrumb li + li::before {
+    content: '/';
+    margin-right: 4px;
+    opacity: 0.5;
+}
+.rdp-breadcrumb a {
+    color: var(--rdp-text-muted, #6B665E);
+    text-decoration: none;
+}
+.rdp-breadcrumb a:hover {
+    color: var(--rdp-text, #1C1B18);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Modal — backdrop + dialog (HTMX partial inject ke #modal-container)
+   ========================================================================== */
+.rdp-modal {
+    background: var(--rdp-surface, #FFFFFF);
+    border: 1px solid var(--rdp-border, #E5E2DC);
+    border-radius: var(--rdp-radius-lg, 14px);
+    box-shadow: 0 4px 6px rgba(28,27,24,.06), 0 24px 64px rgba(28,27,24,.18);
+    display: flex;
+    flex-direction: column;
+}
+
+.rdp-modal__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--rdp-border, #E5E2DC);
+    flex-shrink: 0;
+}
+
+.rdp-modal__title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.rdp-modal__close {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--rdp-text-muted, #6B665E);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.1s, color 0.1s;
+    padding: 0;
+}
+.rdp-modal__close:hover {
+    background: var(--rdp-surface-sunken, #F3F1EC);
+    color: var(--rdp-text, #1C1B18);
+}
+
+.rdp-modal__body {
+    padding: 20px;
+    flex: 1;
+    min-height: 0;
+}
+
+.rdp-modal__footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--rdp-border, #E5E2DC);
+    background: var(--rdp-background, #FAF9F7);
+    border-radius: 0 0 var(--rdp-radius-lg, 14px) var(--rdp-radius-lg, 14px);
+    flex-shrink: 0;
+}
+
+/* Modal size variations */
+.rdp-modal--sm { max-width: 420px; }
+.rdp-modal--md { max-width: 560px; }
+.rdp-modal--lg { max-width: 720px; }
+
+/* ==========================================================================
+   HTMX loading indicator
+   ========================================================================== */
+.htmx-request .htmx-indicator { display: inline-flex; }
+.htmx-indicator { display: none; }
+
+/* ==========================================================================
+   Scrollbar styling — mengikuti Dashboard Shell design
+   ========================================================================== */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+    background: rgba(120,116,108,.35);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-track { background: transparent; }

@@ -1,60 +1,132 @@
 {# templates/apps/inventory/produk_list.html #}
+{# US: RDP Dashboard Shell — Tabel Presisi 1:1 Produk List design #}
 <c-layout.app title="Daftar Produk">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">Daftar Produk</h2>
-        <div class="rdp-page-header__actions">
-            <c-rdp.button variant="primary" href="{% url 'inventory:produk-create' %}">+ Tambah Produk</c-rdp.button>
-        </div>
+    {# ── Breadcrumb ─────────────────────────────────────── #}
+    <ul class="rdp-breadcrumb">
+        <li><a href="{% url 'dashboard:index' %}">Katalog</a></li>
+        <li>Daftar Produk</li>
+    </ul>
+
+    {# ── Page Header ────────────────────────────────────── #}
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">Produk</h1>
     </div>
 
-    <c-rdp.card>
-        {% if items %}
-        <table class="rdp-table">
+    {# ── Toast feedback area ────────────────────────────── #}
+    <div id="toast-area" aria-live="polite"></div>
+
+    {# ── Filter & Search Bar ─────────────────────────────── #}
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <form method="GET" style="display:flex;align-items:center;gap:8px;flex:1;min-width:280px;margin:0">
+            <div style="position:relative;width:260px;flex-shrink:0">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--rdp-text-muted);pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                <input class="rdp-input" name="q" placeholder="Cari Produk..." value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}" style="width:100%;height:36px;padding:0 12px 0 32px;margin:0;font-size:13.5px;box-sizing:border-box">
+            </div>
+            <button type="submit" class="rdp-btn rdp-btn--sm" style="height:36px">Filter</button>
+        </form>
+        <div style="flex:1"></div>
+        <button id="btn-tambah-produk" class="rdp-btn rdp-btn--primary rdp-btn--sm" style="height:36px"
+                hx-get="{% url 'inventory:produk-create-modal' %}"
+                hx-target="#modal-container"
+                hx-swap="innerHTML">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            Tambah Produk
+        </button>
+    </div>
+
+    {# ── Tabel Data ──────────────────────────────────────── #}
+    {% if items %}
+    <div class="rdp-table-wrapper" style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border);border-radius:12px;overflow:hidden">
+        <table class="rdp-table" style="width:100%;border-collapse:collapse">
             <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Status</th>
-                    <th>Dibuat</th>
-                    <th style="width:140px">Aksi</th>
+                <tr style="border-bottom:1px solid var(--rdp-border)">
+                    <th style="padding:10px 14px;font-size:12px;font-weight:600;color:var(--rdp-text-muted);text-transform:uppercase;letter-spacing:0.04em">Nama</th>
+                    <th style="padding:10px 14px;font-size:12px;font-weight:600;color:var(--rdp-text-muted);text-transform:uppercase;letter-spacing:0.04em">Status</th>
+                    <th style="padding:10px 14px;font-size:12px;font-weight:600;color:var(--rdp-text-muted);text-transform:uppercase;letter-spacing:0.04em">Dibuat</th>
+                    <th style="padding:10px 14px;text-align:right"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in items %}
-                <tr>
-                    <td><a href="{% url 'inventory:produk-detail' item.pk %}">{{ item.name }}</a></td>
-                    <td>
+                <tr class="pos-row" style="border-bottom:1px solid var(--rdp-border);transition:background 0.1s;cursor:pointer">
+                    <td style="padding:12px 14px;font-weight:500;font-size:13.5px;color:var(--rdp-text)">{{ item.name }}</td>
+                    <td style="padding:12px 14px">
                         {% if item.is_active %}
-                            <span class="rdp-badge rdp-badge--success">Aktif</span>
+                            <span class="rdp-badge rdp-badge--success" style="font-size:11px">Aktif</span>
                         {% else %}
-                            <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                            <span class="rdp-badge rdp-badge--neutral" style="font-size:11px">Nonaktif</span>
                         {% endif %}
                     </td>
-                    <td>{{ item.created_at|date:"d M Y" }}</td>
-                    <td class="rdp-table__actions">
-                        <a href="{% url 'inventory:produk-detail' item.pk %}" class="rdp-btn rdp-btn--sm rdp-btn--ghost">Detail</a>
-                        <a href="{% url 'inventory:produk-update' item.pk %}" class="rdp-btn rdp-btn--sm rdp-btn--secondary">Edit</a>
-                        <a href="{% url 'inventory:produk-delete' item.pk %}" class="rdp-btn rdp-btn--sm rdp-btn--danger">Hapus</a>
+                    <td style="padding:12px 14px;font-family:var(--rdp-font-mono,'IBM Plex Mono',monospace);font-size:12.5px;color:var(--rdp-text-muted)">{{ item.created_at|date:"d M Y" }}</td>
+                    <td style="padding:6px 14px;text-align:right;width:100px">
+                        <span class="row-actions" style="display:inline-flex;gap:4px;justify-content:flex-end">
+                            <button id="btn-edit-produk-{{ item.pk }}" title="Edit"
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs"
+                                    style="width:28px;height:28px"
+                                    hx-get="{% url 'inventory:produk-edit-modal' item.pk %}"
+                                    hx-target="#modal-container"
+                                    hx-swap="innerHTML">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+                            </button>
+                            <button id="btn-hapus-produk-{{ item.pk }}" title="Hapus"
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs"
+                                    style="width:28px;height:28px;color:var(--rdp-danger)"
+                                    hx-get="{% url 'inventory:produk-delete-modal' item.pk %}"
+                                    hx-target="#modal-container"
+                                    hx-swap="innerHTML">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </span>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
 
-        {% if is_paginated %}
-        <div class="rdp-pagination">
-            {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="rdp-btn rdp-btn--ghost">← Sebelumnya</a>{% endif %}
-            <span>Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</span>
-            {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="rdp-btn rdp-btn--ghost">Berikutnya →</a>{% endif %}
+    {# ── Pagination ─────────────────────────────────────── #}
+    {% if is_paginated %}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
+        <span style="font-size:12.5px;color:var(--rdp-text-muted)">Menampilkan {{ page_obj.start_index }}–{{ page_obj.end_index }} dari {{ page_obj.paginator.count }}</span>
+        <div style="display:flex;gap:6px">
+            <button class="rdp-btn rdp-btn--sm" {% if not page_obj.has_previous %}disabled{% endif %}>
+                {% if page_obj.has_previous %}<a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}" style="color:inherit;text-decoration:none">Sebelumnya</a>{% else %}Sebelumnya{% endif %}
+            </button>
+            <button class="rdp-btn rdp-btn--sm" {% if not page_obj.has_next %}disabled{% endif %}>
+                {% if page_obj.has_next %}<a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}" style="color:inherit;text-decoration:none">Berikutnya</a>{% else %}Berikutnya{% endif %}
+            </button>
         </div>
-        {% endif %}
+    </div>
+    {% endif %}
 
-        {% else %}
-        <div class="rdp-empty-state">
-            <p class="rdp-empty-state__text">Belum ada data Produk.</p>
-            <c-rdp.button variant="primary" href="{% url 'inventory:produk-create' %}">+ Tambah Produk</c-rdp.button>
-        </div>
-        {% endif %}
-    </c-rdp.card>
+    {% else %}
+    {# ── Empty State ─────────────────────────────────────── #}
+    {% if request.GET.q %}
+    <div style="border:1.5px dashed var(--rdp-border-strong);border-radius:14px;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <span style="font-size:14px;font-weight:600">Tidak ada produk yang cocok</span>
+        <span style="font-size:13px;color:var(--rdp-text-muted)">Coba kata kunci lain.</span>
+        <a href="{% url 'inventory:produk-list' %}" class="rdp-btn rdp-btn--ghost rdp-btn--sm">Hapus pencarian</a>
+    </div>
+    {% else %}
+    <div style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border);border-radius:14px;padding:72px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+        <span style="width:56px;height:56px;border-radius:28px;background:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E);display:inline-flex;align-items:center;justify-content:center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"></path><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="M12 22V12"></path><path d="m3.3 7 8.7 5 8.7-5"></path></svg>
+        </span>
+        <span style="font-size:17px;font-weight:600;color:var(--rdp-text)">Belum ada Produk</span>
+        <span style="font-size:13.5px;color:var(--rdp-text-muted);max-width:42ch;text-align:center;line-height:1.55">Produk yang kamu tambahkan akan tampil di sini. Mulai dengan menambahkan yang pertama.</span>
+        <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="margin-top:6px"
+                hx-get="{% url 'inventory:produk-create-modal' %}"
+                hx-target="#modal-container"
+                hx-swap="innerHTML">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            Tambah Produk
+        </button>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    {# ── Modal container ─────────────────────────────────── #}
+    <div id="modal-container"></div>
 
 </c-layout.app>

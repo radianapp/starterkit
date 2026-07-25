@@ -182,3 +182,15 @@ class TestBasicViews:
         """
         response = client.get("/dashboard/")
         assert response.status_code in [200, 302]
+
+    def test_is_app_installed_helper(self):
+        """
+        TUJUAN: Verify is_app_installed helper di config.urls bekerja dengan benar.
+        """
+        from config.urls import is_app_installed
+
+        assert is_app_installed("apps.core")
+        assert is_app_installed("apps.accounts")
+        assert is_app_installed("apps.dashboard")
+        assert not is_app_installed("apps.non_existent_app")
+

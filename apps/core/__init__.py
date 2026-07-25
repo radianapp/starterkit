@@ -1,4 +1,1 @@
-"""
-Core module untuk RDP Starter Kit.
-Berisi utilities, mixins, base views, dan context processors.
-"""
+default_app_config = "apps.core.apps.CoreConfig"
