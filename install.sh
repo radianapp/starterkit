@@ -67,7 +67,7 @@ fi
 info "Menginstall CLI '${CLI_NAME}' dari ${REPO}..."
 echo ""
 
-if uv tool install "${REPO}" --force 2>&1; then
+if uv tool install "${REPO}" --force --refresh 2>&1; then
     echo ""
     success "CLI '${CLI_NAME}' berhasil diinstall!"
 else

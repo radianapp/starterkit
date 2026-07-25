@@ -66,7 +66,7 @@ Write-Info "Menginstall CLI '$CLI_NAME' dari $REPO..."
 Write-Host ""
 
 try {
-    uv tool install $REPO --force
+    uv tool install $REPO --force --refresh
     Write-Host ""
     Write-Success "CLI '$CLI_NAME' berhasil diinstall!"
 } catch {
