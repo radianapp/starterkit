@@ -11,7 +11,11 @@ import sys
 import time
 import urllib.request
 
-__version__ = "0.3.6"
+try:
+    from importlib.metadata import version as _pkg_version
+    __version__ = _pkg_version("rdp-starter-kit")
+except Exception:
+    __version__ = "0.4.0"  # fallback saat run dari source tanpa install
 
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
 _PYPROJECT_RAW_URL = "https://raw.githubusercontent.com/radianapp/starterkit/main/pyproject.toml"
