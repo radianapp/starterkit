@@ -1,0 +1,39 @@
+/* US-034: Styling filter bar menggunakan CSS variables RDP-UI */
+.rdp-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rdp-space-sm, 0.5rem);
+  padding: var(--rdp-space-md, 1rem);
+  background-color: var(--rdp-bg, #FFFFFF);
+  border: 1px solid var(--rdp-border, #DEE2E6);
+  border-radius: var(--rdp-radius-md, 8px);
+  margin-bottom: var(--rdp-space-lg, 1.5rem);
+}
+
+.rdp-filter-bar__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rdp-space-sm, 0.5rem);
+  width: 100%;
+}
+
+.rdp-filter-bar__filters > * {
+  margin-bottom: 0 !important; /* Reset margin select/input PicoCSS */
+  max-width: 240px;
+}
+
+.rdp-filter-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--rdp-space-sm, 0.5rem);
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .rdp-filter-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,98 @@
+/* US-034: Styling drawer menggunakan CSS variables RDP-UI */
+.rdp-drawer-wrapper {
+  display: inline-block;
+}
+
+.rdp-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--rdp-z-modal, 1050);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.rdp-drawer {
+  background-color: var(--rdp-surface, #FFFFFF);
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--rdp-shadow-floating);
+  outline: none;
+}
+
+.rdp-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--rdp-space-md, 1rem) var(--rdp-space-lg, 1.5rem);
+  border-bottom: 1px solid var(--rdp-border-light, #E9ECEF);
+  flex-shrink: 0;
+}
+
+.rdp-drawer__title {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-h3, 1.25rem);
+  font-weight: 600;
+  color: var(--rdp-text, #212529);
+  margin: 0;
+}
+
+.rdp-drawer__close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--rdp-text-muted, #868E96);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color var(--rdp-transition);
+}
+
+.rdp-drawer__close:hover {
+  color: var(--rdp-text, #212529);
+}
+
+.rdp-drawer__body {
+  flex-grow: 1;
+  padding: var(--rdp-space-lg, 1.5rem);
+  overflow-y: auto;
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-body, 1rem);
+  color: var(--rdp-text-secondary, #495057);
+}
+
+.rdp-drawer__footer {
+  padding: var(--rdp-space-md, 1rem) var(--rdp-space-lg, 1.5rem);
+  background-color: var(--rdp-bg-secondary, #F8F9FA);
+  border-top: 1px solid var(--rdp-border-light, #E9ECEF);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--rdp-space-sm, 0.5rem);
+  flex-shrink: 0;
+}
+
+/* Animations transitions */
+.rdp-drawer-enter {
+  transition: transform var(--rdp-duration-slow) var(--rdp-easing-out);
+}
+.rdp-drawer-enter-start {
+  transform: translateX(100%);
+}
+.rdp-drawer-enter-end {
+  transform: translateX(0);
+}
+.rdp-drawer-leave {
+  transition: transform var(--rdp-duration-slow) var(--rdp-easing-in);
+}
+.rdp-drawer-leave-start {
+  transform: translateX(0);
+}
+.rdp-drawer-leave-end {
+  transform: translateX(100%);
+}

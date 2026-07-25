@@ -1,0 +1,18 @@
+{# templates/apps/inventory/produk_confirm_delete.html #}
+<c-layout.app title="Hapus Produk">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">Hapus Produk</h2>
+    </div>
+
+    <c-rdp.card>
+        <p>Yakin ingin menghapus <strong>{{ object.name }}</strong>?</p>
+        <p style="color: var(--rdp-color-danger); font-size: 0.9em;">⚠️ Tindakan ini tidak bisa dibatalkan.</p>
+        <form method="POST" style="margin-top:16px; display:flex; gap:8px">
+            {% csrf_token %}
+            <c-rdp.button type="submit" variant="danger">Ya, Hapus</c-rdp.button>
+            <c-rdp.button variant="ghost" href="{% url 'inventory:produk-list' %}">Batal</c-rdp.button>
+        </form>
+    </c-rdp.card>
+
+</c-layout.app>

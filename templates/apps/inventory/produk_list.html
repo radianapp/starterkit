@@ -1,0 +1,60 @@
+{# templates/apps/inventory/produk_list.html #}
+<c-layout.app title="Daftar Produk">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">Daftar Produk</h2>
+        <div class="rdp-page-header__actions">
+            <c-rdp.button variant="primary" href="{% url 'inventory:produk-create' %}">+ Tambah Produk</c-rdp.button>
+        </div>
+    </div>
+
+    <c-rdp.card>
+        {% if items %}
+        <table class="rdp-table">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Status</th>
+                    <th>Dibuat</th>
+                    <th style="width:140px">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td><a href="{% url 'inventory:produk-detail' item.pk %}">{{ item.name }}</a></td>
+                    <td>
+                        {% if item.is_active %}
+                            <span class="rdp-badge rdp-badge--success">Aktif</span>
+                        {% else %}
+                            <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.created_at|date:"d M Y" }}</td>
+                    <td class="rdp-table__actions">
+                        <a href="{% url 'inventory:produk-detail' item.pk %}" class="rdp-btn rdp-btn--sm rdp-btn--ghost">Detail</a>
+                        <a href="{% url 'inventory:produk-update' item.pk %}" class="rdp-btn rdp-btn--sm rdp-btn--secondary">Edit</a>
+                        <a href="{% url 'inventory:produk-delete' item.pk %}" class="rdp-btn rdp-btn--sm rdp-btn--danger">Hapus</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if is_paginated %}
+        <div class="rdp-pagination">
+            {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="rdp-btn rdp-btn--ghost">← Sebelumnya</a>{% endif %}
+            <span>Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="rdp-btn rdp-btn--ghost">Berikutnya →</a>{% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="rdp-empty-state">
+            <p class="rdp-empty-state__text">Belum ada data Produk.</p>
+            <c-rdp.button variant="primary" href="{% url 'inventory:produk-create' %}">+ Tambah Produk</c-rdp.button>
+        </div>
+        {% endif %}
+    </c-rdp.card>
+
+</c-layout.app>

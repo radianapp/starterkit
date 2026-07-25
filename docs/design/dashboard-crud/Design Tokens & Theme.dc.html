@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/rdp.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/badge.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/stat-card.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/styles.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/default.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/dark.css">
+<link rel="stylesheet" href="themes-accent.css">
+<script src="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#F3F1EC;font-family:'Instrument Sans',system-ui,sans-serif}
+a{color:var(--rdp-primary,#15654E)}a:hover{color:var(--rdp-primary-hover,#10513F)}
+</style>
+</helmet>
+<div data-screen-label="Design Tokens & Theme" style="min-height:100vh;background:#F3F1EC;padding:32px 32px 64px;font-family:'Instrument Sans',system-ui,sans-serif;color:#1C1B18">
+  <div style="max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:24px">
+    <div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#6B665E;margin-bottom:6px">ProductOS · Theme System</div>
+      <h1 style="font-size:28px;font-weight:700;letter-spacing:-0.02em;margin:0 0 6px">Design Tokens &amp; Theme</h1>
+      <p style="margin:0;font-size:13.5px;color:#6B665E;max-width:70ch;line-height:1.55">Base: RDP-UI. Dua mode (Light &amp; Dark, toggle di Menu Profile) + 4 varian accent yang hanya mengganti token primary di atas base yang sama.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start">
+      <sc-for list="{{ panels }}" as="pn" hint-placeholder-count="2">
+        <div data-rdp-theme="{{ pn.theme }}" data-screen-label="{{ pn.label }}" style="background:var(--rdp-background);border:1px solid var(--rdp-border-strong,#D2CEC6);border-radius:14px;padding:22px;color:var(--rdp-text);display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:15px;font-weight:700">{{ pn.label }}</span>
+            <span style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted)">{{ pn.attr }}</span>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Palet warna</div>
+            <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+              <sc-for list="{{ tokens }}" as="t" hint-placeholder-count="8">
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <span style="height:40px;border-radius:8px;border:1px solid var(--rdp-border);background:{{ t.varRef }}"></span>
+                  <span style="font-size:11px;font-weight:600;line-height:1.2">{{ t.name }}</span>
+                  <span style="font-size:9.5px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted)">{{ t.varName }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Tombol</div>
+            <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:8px;align-items:center;font-size:11px;color:var(--rdp-text-muted)">
+              <span></span><span style="text-align:center">Normal</span><span style="text-align:center">Hover</span><span style="text-align:center">Disabled</span>
+              <span style="font-size:11.5px;font-weight:600;color:var(--rdp-text)">Primary</span>
+              <button class="rdp-btn rdp-btn--primary rdp-btn--sm">Simpan</button>
+              <button class="rdp-btn rdp-btn--sm" style="background:var(--rdp-primary-hover);border-color:var(--rdp-primary-hover);color:var(--rdp-on-primary,#fff)">Simpan</button>
+              <button class="rdp-btn rdp-btn--primary rdp-btn--sm" disabled="{{ true }}">Simpan</button>
+              <span style="font-size:11.5px;font-weight:600;color:var(--rdp-text)">Secondary</span>
+              <button class="rdp-btn rdp-btn--secondary rdp-btn--sm">Batal</button>
+              <button class="rdp-btn rdp-btn--sm" style="background:var(--rdp-border);border-color:var(--rdp-border);color:var(--rdp-text)">Batal</button>
+              <button class="rdp-btn rdp-btn--secondary rdp-btn--sm" disabled="{{ true }}">Batal</button>
+              <span style="font-size:11.5px;font-weight:600;color:var(--rdp-text)">Danger</span>
+              <button class="rdp-btn rdp-btn--danger rdp-btn--sm">Hapus</button>
+              <button class="rdp-btn rdp-btn--sm" style="background:var(--rdp-red-700,#8F2D24);border-color:var(--rdp-red-700,#8F2D24);color:#fff">Hapus</button>
+              <button class="rdp-btn rdp-btn--danger rdp-btn--sm" disabled="{{ true }}">Hapus</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Badge</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="rdp-badge rdp-badge--success">Aktif</span>
+              <span class="rdp-badge rdp-badge--warning">Stok menipis</span>
+              <span class="rdp-badge rdp-badge--danger">Habis</span>
+              <span class="rdp-badge rdp-badge--neutral">Draf</span>
+              <span class="rdp-badge rdp-badge--info">Info</span>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Alert</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="rdp-alert rdp-alert--success" style="margin:0"><div><div class="rdp-alert__title">Produk disimpan</div>Perubahan berhasil disimpan ke katalog.</div></div>
+              <div class="rdp-alert rdp-alert--danger" style="margin:0"><div><div class="rdp-alert__title">Gagal menghapus</div>Produk masih dipakai di 3 order aktif.</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Form field</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="rdp-form-field">
+                <label class="rdp-form-field__label">Normal</label>
+                <input class="rdp-input" defaultValue="Verge Standing Desk" style="margin:0">
+                <div class="rdp-form-field__help">Helper text di bawah field.</div>
+              </div>
+              <div class="rdp-form-field">
+                <label class="rdp-form-field__label">Focus</label>
+                <input class="rdp-input" defaultValue="Verge Standing Desk" style="margin:0;border-color:var(--rdp-focus);box-shadow:0 0 0 3px var(--rdp-primary-soft)">
+              </div>
+              <div class="rdp-form-field">
+                <label class="rdp-form-field__label">Error</label>
+                <input class="rdp-input" defaultValue="0" aria-invalid="true" style="margin:0">
+                <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--rdp-danger)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                  Harga tidak boleh 0.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Card / Stat card</div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+              <div class="rdp-stat-card"><div class="rdp-stat-card__label">Total produk</div><div class="rdp-stat-card__value">128</div><div class="rdp-stat-card__delta rdp-stat-card__delta--up">+6 bulan ini</div></div>
+              <div style="background:var(--rdp-surface);border:1px solid var(--rdp-border);border-radius:10px;padding:14px 16px">
+                <div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Card standar</div>
+                <div style="font-size:12.5px;color:var(--rdp-text-muted);line-height:1.5">Surface + border 1px + radius 10px, teks sekunder muted.</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted);margin-bottom:10px">Nav item</div>
+            <div style="display:flex;flex-direction:column;gap:2px;max-width:240px;background:var(--rdp-surface-sunken);border:1px solid var(--rdp-border);border-radius:10px;padding:8px">
+              <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;font-size:13.5px;font-weight:500;color:var(--rdp-text-muted);text-decoration:none" style-hover="background:var(--rdp-border);color:var(--rdp-text)">
+                <x-import component-from-global-scope="RDPUIDesignSystem_ee4ae1.Icon" name="dashboard" size="{{ navIconSize }}" hint-size="17px,17px"></x-import>
+                Dashboard
+              </a>
+              <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;font-size:13.5px;font-weight:600;color:var(--rdp-primary);background:var(--rdp-primary-soft);text-decoration:none">
+                <x-import component-from-global-scope="RDPUIDesignSystem_ee4ae1.Icon" name="folder" size="{{ navIconSize }}" hint-size="17px,17px"></x-import>
+                Produk <span style="margin-left:auto;font-size:11px;font-family:'IBM Plex Mono',monospace;opacity:0.7">128</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div>
+      <h2 style="font-size:19px;font-weight:700;letter-spacing:-0.01em;margin:8px 0 4px">Varian Accent</h2>
+      <p style="margin:0 0 14px;font-size:13px;color:#6B665E;max-width:70ch;line-height:1.55">Custom theme = hanya mengganti <span style="font-family:'IBM Plex Mono',monospace;font-size:12px">--rdp-primary / -hover / -soft</span> lewat <span style="font-family:'IBM Plex Mono',monospace;font-size:12px">[data-rdp-accent]</span>. Base light/dark tidak berubah. Tiap kartu: atas = light, bawah = dark.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px">
+        <sc-for list="{{ accents }}" as="a" hint-placeholder-count="4">
+          <div style="border:1px solid #D2CEC6;border-radius:14px;overflow:hidden;display:flex;flex-direction:column">
+            <div data-rdp-theme="default" data-rdp-accent="{{ a.id }}" style="background:var(--rdp-background);color:var(--rdp-text);padding:16px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="width:14px;height:14px;border-radius:7px;background:var(--rdp-primary)"></span>
+                <span style="font-size:13.5px;font-weight:700">{{ a.label }}</span>
+                <span style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted);margin-left:auto">{{ a.hex }}</span>
+              </div>
+              <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="align-self:flex-start">Tambah Produk</button>
+              <a href="#" style="display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;font-size:13px;font-weight:600;color:var(--rdp-primary);background:var(--rdp-primary-soft);text-decoration:none">
+                <x-import component-from-global-scope="RDPUIDesignSystem_ee4ae1.Icon" name="folder" size="{{ navIconSize }}" hint-size="16px,16px"></x-import>
+                Produk
+              </a>
+            </div>
+            <div data-rdp-theme="dark" data-rdp-accent="{{ a.id }}" style="background:var(--rdp-background);color:var(--rdp-text);padding:16px;display:flex;flex-direction:column;gap:10px;border-top:1px solid #D2CEC6">
+              <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="align-self:flex-start">Tambah Produk</button>
+              <a href="#" style="display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;font-size:13px;font-weight:600;color:var(--rdp-primary);background:var(--rdp-primary-soft);text-decoration:none">
+                <x-import component-from-global-scope="RDPUIDesignSystem_ee4ae1.Icon" name="folder" size="{{ navIconSize }}" hint-size="16px,16px"></x-import>
+                Produk
+              </a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      navIconSize: 17,
+      panels: [
+        { theme: 'default', label: 'Light', attr: 'data-rdp-theme="default"' },
+        { theme: 'dark', label: 'Dark', attr: 'data-rdp-theme="dark"' }
+      ],
+      tokens: [
+        { name: 'Background', varName: '--rdp-background', varRef: 'var(--rdp-background)' },
+        { name: 'Surface / Card', varName: '--rdp-surface', varRef: 'var(--rdp-surface)' },
+        { name: 'Text primary', varName: '--rdp-text', varRef: 'var(--rdp-text)' },
+        { name: 'Text secondary', varName: '--rdp-text-muted', varRef: 'var(--rdp-text-muted)' },
+        { name: 'Border', varName: '--rdp-border', varRef: 'var(--rdp-border)' },
+        { name: 'Danger', varName: '--rdp-danger', varRef: 'var(--rdp-danger)' },
+        { name: 'Success', varName: '--rdp-success', varRef: 'var(--rdp-success)' },
+        { name: 'Warning', varName: '--rdp-warning', varRef: 'var(--rdp-warning)' }
+      ],
+      accents: [
+        { id: 'coral', label: 'Accent Coral', hex: '#C2503C' },
+        { id: 'teal', label: 'Accent Teal', hex: '#0F766E' },
+        { id: 'purple', label: 'Accent Purple', hex: '#6D4FA1' },
+        { id: 'amber', label: 'Accent Amber', hex: '#B45309' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -100,6 +100,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("apps.accounts.urls")),
     path("dashboard/", include("apps.dashboard.urls")),
+    path("produk/", include("apps.inventory.urls")),
     path("api-auth/", include("rest_framework.urls")),
 
     # API v1 Global Router

@@ -2,6 +2,29 @@
    Persistent Theme & Accent Helper (US-028, Extras)
    ========================================================================== */
 
+// RDP-UI theme switcher — dipakai oleh navbar theme picker dropdown
+window.setRdpTheme = function(theme) {
+    var darkThemes = ['dark', 'midnight', 'terminal', 'nord', 'dracula'];
+    document.documentElement.setAttribute('data-rdp-theme', theme);
+    document.documentElement.setAttribute('data-theme', darkThemes.indexOf(theme) >= 0 ? 'dark' : 'light');
+    localStorage.setItem('rdp-rdp-theme', theme);
+    // Swap theme CSS
+    var link = document.getElementById('rdp-theme-css');
+    if (link) {
+        var base = link.href.replace(/[^/]+\.css$/, '');
+        link.href = base + theme + '.css';
+    }
+    window.dispatchEvent(new CustomEvent('rdp-theme-changed', { detail: { theme: theme } }));
+};
+
+// Dark mode toggle — dipakai navbar user dropdown
+window.toggleRdpDarkMode = function() {
+    var current = document.documentElement.getAttribute('data-rdp-theme') || 'default';
+    var darkThemes = ['dark', 'midnight', 'terminal', 'nord', 'dracula'];
+    var isDark = darkThemes.indexOf(current) >= 0;
+    window.setRdpTheme(isDark ? 'default' : 'dark');
+};
+
 (function() {
     window.ThemeHelper = {
         getTheme() {

@@ -1,0 +1,43 @@
+/* US-033: Styling badge menggunakan CSS variables RDP-UI */
+.rdp-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.5rem;
+  font-size: var(--rdp-size-caption, 0.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+  border-radius: var(--rdp-radius-pill, 9999px);
+  white-space: nowrap;
+}
+
+.rdp-badge--neutral {
+  background-color: var(--rdp-bg-tertiary, #F1F3F5);
+  color: var(--rdp-text-secondary, #495057);
+}
+
+.rdp-badge--primary {
+  background-color: var(--rdp-primary-50, #E8EDF3);
+  color: var(--rdp-primary-900, #091A30);
+  border: 1px solid var(--rdp-primary-200, #9EB2CC);
+}
+
+.rdp-badge--success {
+  background-color: var(--rdp-success-50, #E8F5E9);
+  color: var(--rdp-success-800, #2E7D32);
+}
+
+.rdp-badge--warning {
+  background-color: var(--rdp-warning-50, #FFF8E1);
+  color: var(--rdp-warning-900, #FF6F00);
+}
+
+.rdp-badge--danger {
+  background-color: var(--rdp-danger-50, #FFEBEE);
+  color: var(--rdp-danger-900, #B71C1C);
+}
+
+.rdp-badge--info {
+  background-color: var(--rdp-info-50, #E3F2FD);
+  color: var(--rdp-info-900, #0D47A1);
+}

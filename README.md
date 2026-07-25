@@ -30,6 +30,12 @@ Pastikan [uv](https://docs.astral.sh/uv/) dan [Git](https://git-scm.com) sudah t
 
 ```bash
 uv tool install git+https://github.com/radianapp/starterkit.git
+
+# Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/radianapp/starterkit/main/install.sh | bash
+
+# Windows PowerShell
+iex (irm https://raw.githubusercontent.com/radianapp/starterkit/main/install.ps1)
 ```
 
 Setelah ini perintah `rdp` tersedia secara global dari folder mana saja di sistem Anda.

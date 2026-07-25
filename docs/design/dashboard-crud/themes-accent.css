@@ -1,0 +1,20 @@
+/* ProductOS accent themes — layered over RDP-UI light/dark base.
+   Only primary/accent tokens change; base surfaces, text, borders stay. */
+
+[data-rdp-accent="coral"]  { --rdp-primary:#C2503C; --rdp-primary-hover:#A63F2E; --rdp-primary-soft:#F9ECE9; --rdp-focus:#C2503C; --rdp-green-100:#F3D9D3; }
+[data-rdp-accent="teal"]   { --rdp-primary:#0F766E; --rdp-primary-hover:#0B5E58; --rdp-primary-soft:#E6F2F1; --rdp-focus:#0F766E; --rdp-green-100:#CFE7E5; }
+[data-rdp-accent="purple"] { --rdp-primary:#6D4FA1; --rdp-primary-hover:#59408A; --rdp-primary-soft:#F0EDF7; --rdp-focus:#6D4FA1; --rdp-green-100:#E0D8EF; }
+[data-rdp-accent="amber"]  { --rdp-primary:#B45309; --rdp-primary-hover:#92400E; --rdp-primary-soft:#FBF0E0; --rdp-focus:#B45309; --rdp-green-100:#F5E3C7; }
+
+/* Dark base: alert text uses primitive green/red-800 scales that dark.css doesn't
+   override — retint to the semantic status colors for readable contrast. */
+[data-rdp-theme="dark"] .rdp-alert--success { color: var(--rdp-success, #7FD1A8); }
+[data-rdp-theme="dark"] .rdp-alert--warning { color: var(--rdp-warning, #E1C25B); }
+[data-rdp-theme="dark"] .rdp-alert--danger  { color: var(--rdp-danger, #E8988C); }
+[data-rdp-theme="dark"] .rdp-alert--info    { color: var(--rdp-info, #8FBEEB); }
+
+/* Dark base: lift primary for contrast, translucent soft, dark on-primary */
+[data-rdp-theme="dark"][data-rdp-accent="coral"],  [data-rdp-theme="dark"] [data-rdp-accent="coral"]  { --rdp-primary:#E07B62; --rdp-primary-hover:#EB9480; --rdp-primary-soft:rgba(224,123,98,0.16); --rdp-focus:#E07B62; --rdp-on-primary:#1C1B18; --rdp-green-100:rgba(224,123,98,0.28); }
+[data-rdp-theme="dark"][data-rdp-accent="teal"],   [data-rdp-theme="dark"] [data-rdp-accent="teal"]   { --rdp-primary:#3FB3AA; --rdp-primary-hover:#5CC4BC; --rdp-primary-soft:rgba(63,179,170,0.16); --rdp-focus:#3FB3AA; --rdp-on-primary:#1C1B18; --rdp-green-100:rgba(63,179,170,0.28); }
+[data-rdp-theme="dark"][data-rdp-accent="purple"], [data-rdp-theme="dark"] [data-rdp-accent="purple"] { --rdp-primary:#A78BD4; --rdp-primary-hover:#B9A2E0; --rdp-primary-soft:rgba(167,139,212,0.16); --rdp-focus:#A78BD4; --rdp-on-primary:#1C1B18; --rdp-green-100:rgba(167,139,212,0.28); }
+[data-rdp-theme="dark"][data-rdp-accent="amber"],  [data-rdp-theme="dark"] [data-rdp-accent="amber"]  { --rdp-primary:#E1A13D; --rdp-primary-hover:#EBB566; --rdp-primary-soft:rgba(225,161,61,0.16); --rdp-focus:#E1A13D; --rdp-on-primary:#1C1B18; --rdp-green-100:rgba(225,161,61,0.28); }

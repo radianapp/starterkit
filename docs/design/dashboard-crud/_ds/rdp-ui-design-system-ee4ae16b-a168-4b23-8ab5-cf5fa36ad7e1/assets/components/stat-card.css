@@ -1,0 +1,65 @@
+/* US-034: Styling stat card menggunakan CSS variables RDP-UI */
+.rdp-stat-card {
+  padding: var(--rdp-space-md, 1rem) var(--rdp-space-lg, 1.5rem);
+  border: 1px solid var(--rdp-border, #DEE2E6);
+  border-radius: var(--rdp-radius-lg, 12px);
+  background-color: var(--rdp-surface, #FFFFFF);
+  box-shadow: var(--rdp-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--rdp-space-2xs, 0.25rem);
+  min-width: 200px;
+  flex-grow: 1;
+}
+
+.rdp-stat-card__label {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-caption, 0.75rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rdp-text-muted, #868E96);
+}
+
+.rdp-stat-card__value-wrapper {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--rdp-space-sm, 0.5rem);
+}
+
+.rdp-stat-card__value {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-h1, 1.75rem);
+  font-weight: 700;
+  color: var(--rdp-text, #212529);
+  line-height: 1;
+}
+
+.rdp-stat-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-caption, 0.75rem);
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--rdp-radius-sm, 4px);
+}
+
+.rdp-stat-card__trend--up {
+  color: var(--rdp-success, #4CAF50);
+  background-color: var(--rdp-success-50, #E8F5E9);
+}
+
+.rdp-stat-card__trend--down {
+  color: var(--rdp-danger, #F44336);
+  background-color: var(--rdp-danger-50, #FFEBEE);
+}
+
+.rdp-stat-card__extra {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-caption, 0.75rem);
+  color: var(--rdp-text-muted, #868E96);
+  margin-top: var(--rdp-space-2xs, 0.25rem);
+}

@@ -1,0 +1,64 @@
+/* US-034: Styling progress bar menggunakan CSS variables RDP-UI */
+.rdp-progress-container {
+  width: 100%;
+  display: block;
+}
+
+.rdp-progress {
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  border: none;
+  background-color: var(--rdp-border-light, #E9ECEF);
+  border-radius: var(--rdp-radius-pill, 9999px);
+  overflow: hidden;
+}
+
+/* Fallback untuk browser lama */
+.rdp-progress::-webkit-progress-bar {
+  background-color: var(--rdp-border-light, #E9ECEF);
+  border-radius: var(--rdp-radius-pill, 9999px);
+}
+
+.rdp-progress::-webkit-progress-value {
+  border-radius: var(--rdp-radius-pill, 9999px);
+  transition: width var(--rdp-duration-normal) var(--rdp-easing-default);
+}
+
+.rdp-progress::-moz-progress-bar {
+  border-radius: var(--rdp-radius-pill, 9999px);
+  transition: width var(--rdp-duration-normal) var(--rdp-easing-default);
+}
+
+/* Variants */
+/* Primary */
+.rdp-progress--primary::-webkit-progress-value {
+  background-color: var(--rdp-primary-500, #3B6797);
+}
+.rdp-progress--primary::-moz-progress-bar {
+  background-color: var(--rdp-primary-500, #3B6797);
+}
+
+/* Success */
+.rdp-progress--success::-webkit-progress-value {
+  background-color: var(--rdp-success, #4CAF50);
+}
+.rdp-progress--success::-moz-progress-bar {
+  background-color: var(--rdp-success, #4CAF50);
+}
+
+/* Warning */
+.rdp-progress--warning::-webkit-progress-value {
+  background-color: var(--rdp-warning, #FFC107);
+}
+.rdp-progress--warning::-moz-progress-bar {
+  background-color: var(--rdp-warning, #FFC107);
+}
+
+/* Danger */
+.rdp-progress--danger::-webkit-progress-value {
+  background-color: var(--rdp-danger, #F44336);
+}
+.rdp-progress--danger::-moz-progress-bar {
+  background-color: var(--rdp-danger, #F44336);
+}

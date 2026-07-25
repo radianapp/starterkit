@@ -1,0 +1,34 @@
+/* Component Rating Style */
+.rdp-rating {
+  display: inline-block;
+  user-select: none;
+}
+
+.rdp-rating__stars {
+  display: flex;
+  gap: 4px;
+}
+
+.rdp-rating__star {
+  font-size: 1.5rem;
+  color: var(--color-border, #ccc);
+  cursor: pointer;
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.rdp-rating:not(.rdp-rating--readonly) .rdp-rating__star:hover {
+  transform: scale(1.2);
+}
+
+.rdp-rating__star--active {
+  color: var(--color-primary, #ca8a04);
+}
+
+.rdp-rating__star--hover {
+  color: var(--color-primary-hover, #ca8a04);
+  opacity: 0.85;
+}
+
+.rdp-rating--readonly .rdp-rating__star {
+  cursor: default;
+}

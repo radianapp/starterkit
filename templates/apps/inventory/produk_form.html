@@ -1,0 +1,22 @@
+{# templates/apps/inventory/produk_form.html #}
+<c-layout.app title="{% if object %}Edit{% else %}Tambah{% endif %} Produk">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">{% if object %}Edit{% else %}Tambah{% endif %} Produk</h2>
+        <div class="rdp-page-header__actions">
+            <c-rdp.button variant="ghost" href="{% url 'inventory:produk-list' %}">← Kembali</c-rdp.button>
+        </div>
+    </div>
+
+    <c-rdp.card>
+        <form method="POST" class="rdp-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="rdp-form__actions">
+                <c-rdp.button type="submit" variant="primary">Simpan</c-rdp.button>
+                <c-rdp.button variant="ghost" href="{% url 'inventory:produk-list' %}">Batal</c-rdp.button>
+            </div>
+        </form>
+    </c-rdp.card>
+
+</c-layout.app>

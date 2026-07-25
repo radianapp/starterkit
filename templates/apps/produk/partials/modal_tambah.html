@@ -1,0 +1,155 @@
+{# Partial: modal tambah produk — diisi ke #modal-container via HTMX #}
+{# Context: form, kategori_list, pemasok_list #}
+
+<dialog id="modal-tambah" class="rdp-modal rdp-modal--md" style="max-width: 560px;"
+        x-data="{ loading: false }"
+        open>
+  <form method="post" action="{% url 'produk:tambah' %}"
+        hx-post="{% url 'produk:tambah' %}"
+        hx-target="#produk-table-area"
+        hx-swap="innerHTML"
+        hx-on::after-request="
+          if(event.detail.successful) {
+            document.getElementById('modal-tambah').close();
+            document.getElementById('modal-container').innerHTML = '';
+          }
+        "
+        @htmx:before-request="loading = true"
+        @htmx:after-request="loading = false">
+    {% csrf_token %}
+
+    <div class="rdp-modal__header">
+      <h2 class="rdp-modal__title">Tambah Produk Baru</h2>
+      <button type="button" title="Tutup" class="rdp-modal__close"
+              onclick="document.getElementById('modal-tambah').close(); document.getElementById('modal-container').innerHTML = ''">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="rdp-modal__body" style="overflow-y: auto; overflow-x: hidden;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        {# Nama produk #}
+        <div class="rdp-form-field">
+          <label class="rdp-form-field__label" for="id_nama">
+            Nama produk <span class="rdp-form-field__required">*</span>
+          </label>
+          <input class="rdp-input{% if form.nama.errors %} rdp-input--error{% endif %}"
+                 id="id_nama" name="nama" type="text"
+                 placeholder="Mis. Meja Kerja Oak"
+                 value="{{ form.nama.value|default:'' }}"
+                 :disabled="loading" style="margin: 0;">
+          {% if form.nama.errors %}
+            <div class="rdp-form-field__error" style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--rdp-danger, #B3382D);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path>
+              </svg>
+              {{ form.nama.errors.0 }}
+            </div>
+          {% else %}
+            <div class="rdp-form-field__help">Nama yang tampil di katalog. Harus unik.</div>
+          {% endif %}
+        </div>
+
+        {# SKU + Kategori #}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="rdp-form-field">
+            <label class="rdp-form-field__label" for="id_sku">SKU</label>
+            <input class="rdp-input" id="id_sku" name="sku" type="text"
+                   placeholder="PL-XXXX"
+                   value="{{ form.sku.value|default:'' }}"
+                   :disabled="loading"
+                   style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+            <div class="rdp-form-field__help">Kosongkan untuk dibuat otomatis.</div>
+          </div>
+          <div class="rdp-form-field">
+            <label class="rdp-form-field__label" for="id_kategori">
+              Kategori <span class="rdp-form-field__required">*</span>
+            </label>
+            <select class="rdp-select{% if form.kategori.errors %} rdp-select--error{% endif %}"
+                    id="id_kategori" name="kategori" :disabled="loading" style="margin: 0;">
+              <option value="">Pilih kategori…</option>
+              {% for kat in kategori_list %}
+                <option value="{{ kat.pk }}" {% if form.kategori.value|stringformat:'s' == kat.pk|stringformat:'s' %}selected{% endif %}>
+                  {{ kat.nama }}
+                </option>
+              {% endfor %}
+            </select>
+            {% if form.kategori.errors %}
+              <div class="rdp-form-field__error" style="font-size: 12px; color: var(--rdp-danger, #B3382D);">{{ form.kategori.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Harga + Stok #}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="rdp-form-field">
+            <label class="rdp-form-field__label" for="id_harga">
+              Harga (Rp) <span class="rdp-form-field__required">*</span>
+            </label>
+            <input class="rdp-input{% if form.harga.errors %} rdp-input--error{% endif %}"
+                   id="id_harga" name="harga" type="number" min="0"
+                   placeholder="0"
+                   value="{{ form.harga.value|default:'' }}"
+                   :disabled="loading"
+                   style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+            {% if form.harga.errors %}
+              <div class="rdp-form-field__error" style="font-size: 12px; color: var(--rdp-danger, #B3382D);">{{ form.harga.errors.0 }}</div>
+            {% else %}
+              <div class="rdp-form-field__help">Angka saja. Contoh: 3200000</div>
+            {% endif %}
+          </div>
+          <div class="rdp-form-field">
+            <label class="rdp-form-field__label" for="id_stok">Stok awal</label>
+            <input class="rdp-input" id="id_stok" name="stok" type="number" min="0"
+                   placeholder="0"
+                   value="{{ form.stok.value|default:0 }}"
+                   :disabled="loading"
+                   style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+            <div class="rdp-form-field__help">Unit tersedia di gudang.</div>
+          </div>
+        </div>
+
+        {# Pemasok #}
+        <div class="rdp-form-field">
+          <label class="rdp-form-field__label" for="id_pemasok">Pemasok</label>
+          <select class="rdp-select" id="id_pemasok" name="pemasok" :disabled="loading" style="margin: 0;">
+            <option value="">Pilih pemasok…</option>
+            {% for pemasok in pemasok_list %}
+              <option value="{{ pemasok.pk }}" {% if form.pemasok.value|stringformat:'s' == pemasok.pk|stringformat:'s' %}selected{% endif %}>
+                {{ pemasok.nama }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        {# Deskripsi #}
+        <div class="rdp-form-field">
+          <label class="rdp-form-field__label" for="id_deskripsi">Deskripsi</label>
+          <textarea class="rdp-textarea" id="id_deskripsi" name="deskripsi"
+                    rows="3" placeholder="Deskripsi singkat produk…"
+                    :disabled="loading"
+                    style="margin: 0; resize: vertical; min-height: 72px;">{{ form.deskripsi.value|default:'' }}</textarea>
+          <div class="rdp-form-field__help">Opsional. Tampil di halaman detail produk.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rdp-modal__footer" style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button type="button" class="rdp-btn rdp-btn--secondary" :disabled="loading"
+              onclick="document.getElementById('modal-tambah').close(); document.getElementById('modal-container').innerHTML = ''">
+        Batal
+      </button>
+      <button type="submit" class="rdp-btn rdp-btn--primary" :disabled="loading" style="min-width: 110px;">
+        <template x-if="loading">
+          <span class="rdp-spinner rdp-spinner--sm" style="border-color: rgba(255,255,255,.45); border-top-color: transparent;"></span>
+        </template>
+        <span x-text="loading ? 'Menyimpan…' : 'Simpan'">Simpan</span>
+      </button>
+    </div>
+
+  </form>
+</dialog>

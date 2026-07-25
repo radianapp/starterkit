@@ -1,0 +1,81 @@
+/* US-034: Styling accordion menggunakan CSS variables RDP-UI */
+.rdp-accordion {
+  border: 1px solid var(--rdp-border, #DEE2E6);
+  border-radius: var(--rdp-radius-md, 8px);
+  background-color: var(--rdp-surface, #FFFFFF);
+  overflow: hidden;
+  margin-bottom: var(--rdp-space-sm, 0.5rem);
+  transition: border-color var(--rdp-transition);
+}
+
+.rdp-accordion--open {
+  border-color: var(--rdp-primary-500, #3B6797);
+}
+
+.rdp-accordion__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--rdp-space-md, 1rem);
+  background: transparent;
+  border: none;
+  color: var(--rdp-text, #212529);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--rdp-transition);
+}
+
+.rdp-accordion__header:hover {
+  background-color: var(--rdp-bg-secondary, #F8F9FA);
+}
+
+.rdp-accordion__title {
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-body, 1rem);
+  font-weight: 600;
+}
+
+.rdp-accordion__caret {
+  font-size: 0.75rem;
+  color: var(--rdp-text-muted, #868E96);
+  transition: transform var(--rdp-transition);
+}
+
+.rdp-accordion__caret--rotated {
+  transform: rotate(180deg);
+}
+
+.rdp-accordion__body {
+  border-top: 1px solid var(--rdp-border-light, #E9ECEF);
+}
+
+.rdp-accordion__content {
+  padding: var(--rdp-space-md, 1rem);
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-small, 0.875rem);
+  color: var(--rdp-text-secondary, #495057);
+  line-height: 1.6;
+}
+
+/* Transitions helper classes */
+.rdp-accordion-enter {
+  transition: max-height var(--rdp-duration-normal) var(--rdp-easing-out);
+  overflow: hidden;
+}
+.rdp-accordion-enter-start {
+  max-height: 0;
+}
+.rdp-accordion-enter-end {
+  max-height: 1000px;
+}
+.rdp-accordion-leave {
+  transition: max-height var(--rdp-duration-normal) var(--rdp-easing-in);
+  overflow: hidden;
+}
+.rdp-accordion-leave-start {
+  max-height: 1000px;
+}
+.rdp-accordion-leave-end {
+  max-height: 0;
+}

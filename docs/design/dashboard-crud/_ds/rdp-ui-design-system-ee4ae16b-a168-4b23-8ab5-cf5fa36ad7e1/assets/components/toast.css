@@ -1,0 +1,123 @@
+/* US-034: Styling toast menggunakan CSS variables RDP-UI */
+#toast-container {
+  position: fixed;
+  bottom: var(--rdp-space-lg, 1.5rem);
+  right: var(--rdp-space-lg, 1.5rem);
+  z-index: var(--rdp-z-toast, 1080);
+  display: flex;
+  flex-direction: column;
+  gap: var(--rdp-space-sm, 0.5rem);
+  max-width: 400px;
+  width: calc(100vw - 3rem);
+  pointer-events: none;
+}
+
+#toast-container.toast-top-right {
+  top: var(--rdp-space-lg, 1.5rem);
+  bottom: auto;
+}
+
+#toast-container.toast-top-left {
+  top: var(--rdp-space-lg, 1.5rem);
+  left: var(--rdp-space-lg, 1.5rem);
+  bottom: auto;
+  right: auto;
+}
+
+#toast-container.toast-top-center {
+  top: var(--rdp-space-lg, 1.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: auto;
+  right: auto;
+}
+
+#toast-container.toast-bottom-left {
+  bottom: var(--rdp-space-lg, 1.5rem);
+  left: var(--rdp-space-lg, 1.5rem);
+  right: auto;
+}
+
+.rdp-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--rdp-space-sm, 0.5rem);
+  padding: var(--rdp-space-sm, 0.5rem) var(--rdp-space-md, 1rem);
+  border-radius: var(--rdp-radius-md, 8px);
+  background-color: var(--rdp-surface, #FFFFFF);
+  color: var(--rdp-text, #212529);
+  box-shadow: var(--rdp-shadow-lg);
+  border: 1px solid var(--rdp-border, #DEE2E6);
+  animation: rdp-toast-slide-in 0.3s var(--rdp-easing-out, ease-out) forwards;
+  transition: opacity var(--rdp-duration-normal) var(--rdp-easing-default), transform var(--rdp-duration-normal) var(--rdp-easing-default);
+}
+
+.rdp-toast__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+}
+
+.rdp-toast__message {
+  flex-grow: 1;
+  font-family: var(--rdp-sans);
+  font-size: var(--rdp-size-small, 0.875rem);
+  line-height: 1.4;
+}
+
+.rdp-toast__close {
+  background: transparent;
+  border: none;
+  color: var(--rdp-text-muted, #868E96);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0 var(--rdp-space-2xs, 0.25rem);
+  cursor: pointer;
+  transition: color var(--rdp-transition);
+}
+
+.rdp-toast__close:hover {
+  color: var(--rdp-text, #212529);
+}
+
+/* Toast Variants */
+.rdp-toast--success {
+  border-left: 4px solid var(--rdp-success, #4CAF50);
+}
+
+.rdp-toast--error, .rdp-toast--danger {
+  border-left: 4px solid var(--rdp-danger, #F44336);
+}
+
+.rdp-toast--warning {
+  border-left: 4px solid var(--rdp-warning, #FFC107);
+}
+
+.rdp-toast--info {
+  border-left: 4px solid var(--rdp-info, #2196F3);
+}
+
+@keyframes rdp-toast-slide-in {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}

@@ -1,0 +1,160 @@
+/* Dashboard CRUD — CSS dari design docs/design/dashboard-crud */
+
+/* ── Row actions (hover reveal) ─────────────────────────── */
+.rdp-crud-row .row-actions { opacity: 0; transition: opacity .12s; }
+.rdp-crud-row:hover .row-actions { opacity: 1; }
+.rdp-crud-row { cursor: pointer; }
+
+/* ── Tabel CRUD ──────────────────────────────────────────── */
+.rdp-crud-table-wrapper {
+  background: var(--rdp-surface, #FFFFFF);
+  border: 1px solid var(--rdp-border, #E5E2DC);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ── Bulk action bar ─────────────────────────────────────── */
+.rdp-bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  background: var(--rdp-primary-soft, #EDF4F0);
+  border: 1px solid var(--rdp-border, #E5E2DC);
+  border-radius: 8px;
+  padding: 6px 12px;
+  min-height: 46px;
+  box-sizing: border-box;
+}
+
+/* ── Filter bar ──────────────────────────────────────────── */
+.rdp-crud-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Detail rightbar ─────────────────────────────────────── */
+.rdp-detail-panel {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--rdp-surface, #FFFFFF);
+  border-left: 1px solid var(--rdp-border, #E5E2DC);
+}
+
+.rdp-detail-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--rdp-border, #E5E2DC);
+  flex-shrink: 0;
+}
+
+.rdp-detail-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+}
+
+.rdp-detail-panel__image-placeholder {
+  height: 132px;
+  border: 1.5px dashed var(--rdp-border-strong, #D2CEC6);
+  border-radius: 10px;
+  background: var(--rdp-surface-sunken, #F3F1EC);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--rdp-text-muted, #6B665E);
+}
+
+.rdp-detail-panel__meta {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  row-gap: 11px;
+  font-size: 13px;
+  border-top: 1px solid var(--rdp-border, #E5E2DC);
+  padding-top: 16px;
+}
+
+.rdp-detail-panel__meta-label {
+  color: var(--rdp-text-muted, #6B665E);
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.rdp-crud-empty {
+  border: 1px solid var(--rdp-border, #E5E2DC);
+  background: var(--rdp-surface, #FFFFFF);
+  border-radius: 14px;
+  padding: 72px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.rdp-crud-empty--dashed {
+  background: transparent;
+  border: 1.5px dashed var(--rdp-border-strong, #D2CEC6);
+}
+
+.rdp-crud-empty__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background: var(--rdp-primary-soft, #EDF4F0);
+  color: var(--rdp-primary, #15654E);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── No-results state ────────────────────────────────────── */
+.rdp-crud-no-results {
+  border: 1.5px dashed var(--rdp-border-strong, #D2CEC6);
+  border-radius: 14px;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Pagination ──────────────────────────────────────────── */
+.rdp-crud-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+/* ── Confirm/delete dialog ───────────────────────────────── */
+.rdp-confirm-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: var(--rdp-danger-soft, #FDE8E6);
+  color: var(--rdp-danger, #B3382D);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Responsive: sembunyikan detail panel di mobile ─────── */
+@media (max-width: 1023px) {
+  .rdp-detail-panel {
+    display: none;
+  }
+}

@@ -1,0 +1,40 @@
+{# templates/apps/inventory/produk_detail.html #}
+<c-layout.app title="{{ object.name }}">
+
+    <div class="rdp-page-header">
+        <h2 class="rdp-page-header__title">{{ object.name }}</h2>
+        <div class="rdp-page-header__actions">
+            <c-rdp.button variant="secondary" href="{% url 'inventory:produk-update' object.pk %}">Edit</c-rdp.button>
+            <c-rdp.button variant="danger" href="{% url 'inventory:produk-delete' object.pk %}">Hapus</c-rdp.button>
+        </div>
+    </div>
+
+    <c-rdp.card>
+        <dl class="rdp-dl">
+            <dt>Nama</dt>
+            <dd>{{ object.name }}</dd>
+
+            <dt>Deskripsi</dt>
+            <dd>{{ object.description|default:"-" }}</dd>
+
+            {% if object.is_active is not None %}
+            <dt>Status</dt>
+            <dd>
+                {% if object.is_active %}
+                    <span class="rdp-badge rdp-badge--success">Aktif</span>
+                {% else %}
+                    <span class="rdp-badge rdp-badge--neutral">Nonaktif</span>
+                {% endif %}
+            </dd>
+            {% endif %}
+
+            <dt>Dibuat pada</dt>
+            <dd>{{ object.created_at|date:"d M Y H:i" }}</dd>
+        </dl>
+    </c-rdp.card>
+
+    <div style="margin-top:16px">
+        <a href="{% url 'inventory:produk-list' %}" class="rdp-btn rdp-btn--ghost">← Kembali ke Daftar</a>
+    </div>
+
+</c-layout.app>

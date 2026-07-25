@@ -1,0 +1,124 @@
+{# Halaman List Produk — CRUD Dashboard Template #}
+{# Referensi design: docs/design/dashboard-crud/ #}
+{% load static %}
+{% load cotton %}
+
+<c-layout.app title="Produk" navbar_brand="{{ APP_BRAND_SHORT|default:'App' }}">
+
+  <c-slot name="head">
+    <link rel="stylesheet" href="{% static 'css/dashboard-crud.css' %}">
+  </c-slot>
+
+  <c-slot name="sidebar">
+    <a href="/" class="rdp-sidebar__brand">
+      <span class="rdp-sidebar__brand-icon">⬡</span>
+      <span class="rdp-sidebar__brand-text">{{ APP_BRAND_SHORT }}</span>
+    </a>
+
+    <nav class="rdp-sidebar__nav" aria-label="Main navigation">
+      <div class="rdp-sidebar__section">
+        <div class="rdp-sidebar__section-title">Menu Utama</div>
+        <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link">
+          <span class="rdp-sidebar__link-icon">📊</span>
+          <span class="rdp-sidebar__link-text">Dashboard</span>
+        </a>
+      </div>
+
+      <div class="rdp-sidebar__section">
+        <div class="rdp-sidebar__section-title">Katalog</div>
+        {# Ganti URL sesuai app yang dipakai #}
+        <a href="#" class="rdp-sidebar__link active" aria-current="page">
+          <span class="rdp-sidebar__link-icon">📦</span>
+          <span class="rdp-sidebar__link-text">Produk</span>
+        </a>
+        <a href="#" class="rdp-sidebar__link">
+          <span class="rdp-sidebar__link-icon">📁</span>
+          <span class="rdp-sidebar__link-text">Kategori</span>
+        </a>
+      </div>
+
+      <div class="rdp-sidebar__section">
+        <div class="rdp-sidebar__section-title">Pengaturan</div>
+        <a href="{% url 'accounts:profile' %}" class="rdp-sidebar__link">
+          <span class="rdp-sidebar__link-icon">👤</span>
+          <span class="rdp-sidebar__link-text">Profil</span>
+        </a>
+      </div>
+    </nav>
+  </c-slot>
+
+  {# ── Main content ─────────────────────────────────────── #}
+
+  <div style="display: flex; min-width: 0; min-height: 0; height: 100%;">
+
+    {# ── Content area ─── #}
+    <div style="flex: 1; min-width: 0; overflow-y: auto; padding: 20px 28px 48px;">
+
+      <ul class="rdp-breadcrumb">
+        <li><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+        <li>Produk</li>
+      </ul>
+
+      <div class="rdp-page-header" style="margin-top: 10px; margin-bottom: 16px;">
+        <h1 class="rdp-page-header__title">Produk</h1>
+      </div>
+
+      {# ── Filter bar (no selection) ─── #}
+      <div id="filter-bar" class="rdp-crud-filter-bar">
+        <div style="position: relative; width: 240px; flex-shrink: 0;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+               style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--rdp-text-muted, #6B665E); pointer-events: none;">
+            <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input class="rdp-input" placeholder="Cari Produk..."
+                 style="width: 100%; height: 34px; padding: 0 12px 0 32px; margin: 0; font-size: 13px; box-sizing: border-box;"
+                 name="q" value="{{ request.GET.q }}"
+                 hx-get="{{ request.path }}"
+                 hx-trigger="keyup changed delay:400ms"
+                 hx-target="#produk-table-area"
+                 hx-include="[name='kategori_filter']">
+        </div>
+
+        <select class="rdp-select" name="kategori_filter" style="height: 34px; width: 170px; margin: 0; font-size: 13px;"
+                hx-get="{{ request.path }}"
+                hx-trigger="change"
+                hx-target="#produk-table-area"
+                hx-include="[name='q']">
+          <option value="">Semua kategori</option>
+          {% for kat in kategori_list %}
+            <option value="{{ kat.pk }}" {% if request.GET.kategori_filter == kat.pk|stringformat:'s' %}selected{% endif %}>{{ kat.nama }}</option>
+          {% endfor %}
+        </select>
+
+        <div style="flex: 1;"></div>
+
+        <button type="button" class="rdp-btn rdp-btn--primary rdp-btn--sm" style="height: 34px;"
+                hx-get="{% url 'produk:tambah_modal' %}"
+                hx-target="#modal-container"
+                hx-swap="innerHTML"
+                @click="$nextTick(() => document.getElementById('modal-container').querySelector('dialog')?.showModal())">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path><path d="M12 5v14"></path>
+          </svg>
+          Tambah Produk
+        </button>
+      </div>
+
+      {# ── Table area (HTMX swap target) ─── #}
+      <div id="produk-table-area">
+        {% include "apps/produk/partials/table_body.html" %}
+      </div>
+
+    </div>
+
+    {# ── Detail panel ─── #}
+    <div id="detail-panel-container">
+      {# Diisi via HTMX saat baris diklik #}
+    </div>
+
+  </div>
+
+  {# ── Modal container ─── #}
+  <div id="modal-container"></div>
+
+</c-layout.app>

@@ -1,0 +1,59 @@
+/* RDP UI — Theme: Midnight (Deep Indigo · RDP Original) */
+[data-rdp-theme="midnight"] {
+  color-scheme: dark;
+
+  --rdp-primary:        #8FA8EC;
+  --rdp-primary-hover:  #A9BCF2;
+  --rdp-primary-soft:   #1B2340;
+  --rdp-on-primary:     #0E1220;
+
+  --rdp-background:     #0E1220;
+  --rdp-surface:        #161B2E;
+  --rdp-surface-raised: #1F2640;
+  --rdp-surface-sunken: #0A0D18;
+
+  --rdp-text:           #E6E9F5;
+  --rdp-text-muted:     #98A1C0;
+
+  --rdp-border:         #262E4A;
+  --rdp-border-strong:  #3A4460;
+  --rdp-focus:          #8FA8EC;
+
+  --rdp-success:        #7ED3A8;
+  --rdp-success-soft:   #0A1E18;
+  --rdp-warning:        #D9A441;
+  --rdp-warning-soft:   #1E1408;
+  --rdp-danger:         #E08273;
+  --rdp-danger-soft:    #200A08;
+  --rdp-info:           #8FA8EC;
+  --rdp-info-soft:      #0E1A30;
+
+  --rdp-font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --rdp-shadow-1: 0 1px 2px rgba(0,0,0,0.40);
+  --rdp-shadow-2: 0 1px 2px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.40);
+  --rdp-shadow-3: 0 2px 6px rgba(0,0,0,0.40), 0 12px 32px rgba(0,0,0,0.45);
+  --rdp-shadow-4: 0 4px 12px rgba(0,0,0,0.45), 0 24px 56px rgba(0,0,0,0.60);
+
+  /* compat */
+  --rdp-bg: var(--rdp-surface);
+  --rdp-bg-secondary: var(--rdp-background);
+  --rdp-bg-tertiary:  var(--rdp-surface-sunken);
+  --rdp-border-light: var(--rdp-border);
+  --rdp-text-secondary: var(--rdp-text-muted);
+  --rdp-text-inverse: var(--rdp-on-primary);
+  --rdp-cream:      var(--rdp-background);
+  --rdp-cream-dark: var(--rdp-surface-sunken);
+  --pico-primary:            var(--rdp-primary);
+  --pico-primary-hover:      var(--rdp-primary-hover);
+  --pico-primary-inverse:    var(--rdp-on-primary);
+  --pico-background-color:   var(--rdp-surface);
+  --pico-color:              var(--rdp-text);
+  --pico-muted-color:        var(--rdp-text-muted);
+  --pico-muted-border-color: var(--rdp-border);
+  --pico-card-background-color: var(--rdp-surface);
+  --pico-card-border-color:     var(--rdp-border);
+  --pico-form-element-background-color: var(--rdp-background);
+  --pico-form-element-border-color:     var(--rdp-border);
+  --pico-form-element-focus-color:      var(--rdp-primary);
+}

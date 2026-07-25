@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/rdp.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/accordion.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/avatar.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/badge.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/empty-state.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/filter-bar.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/search-box.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/skeleton.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/stat-card.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/table.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/tabs.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/timeline.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/components/tooltip.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/styles.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/default.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/light.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/dark.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/midnight.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/nord.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/dracula.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/forest.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/ocean.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/corporate.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/github.css">
+<link rel="stylesheet" href="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/assets/themes/terminal.css">
+<script src="_ds/rdp-ui-design-system-ee4ae16b-a168-4b23-8ab5-cf5fa36ad7e1/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#FAF9F7;font-family:'Instrument Sans',system-ui,sans-serif}
+/* Desktop-only mock: neutralize rdp.css tablet icon-rail breakpoint inside the fixed 240px sidebar */
+@media (min-width:768px) and (max-width:1023.98px){
+  .rdp-sidebar__link-text{display:inline !important}
+  .rdp-sidebar__link{justify-content:flex-start !important}
+  .rdp-sidebar__section-title{display:block !important}
+  .rdp-sidebar__badge{display:inline-flex !important}
+}
+/* Light sidebar: retint rdp-sidebar link classes (authored for the dark rail) to semantic tokens */
+.rdp-sidebar__link{color:var(--rdp-text-muted,#6B665E)}
+.rdp-sidebar__link:hover{background-color:var(--rdp-border,#E5E2DC);color:var(--rdp-text,#1C1B18)}
+.rdp-sidebar__link.active{background-color:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E)}
+/* Row actions reveal on hover — descendant hover can't be inline */
+.pos-row .row-actions{opacity:0;transition:opacity .12s}
+.pos-row:hover .row-actions{opacity:1}
+a{color:var(--rdp-primary,#15654E)}a:hover{color:var(--rdp-primary-hover,#10513F)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(120,116,108,.35);border-radius:5px;border:2px solid transparent;background-clip:content-box}::-webkit-scrollbar-track{background:transparent}
+</style>
+</helmet>
+<div data-screen-label="Dashboard shell" data-rdp-theme="{{ theme }}" style="height:100vh;display:grid;grid-template-columns:240px 1fr;grid-template-rows:64px 1fr;background:var(--rdp-background,#FAF9F7);color:var(--rdp-text,#1C1B18);font-family:'Instrument Sans',var(--rdp-font-sans,system-ui),sans-serif;overflow:hidden">
+
+  <sc-if value="{{ brandNavbar }}" hint-placeholder-val="{{ true }}">
+    <div style="grid-row:1;grid-column:1;background:var(--rdp-surface-sunken,#F3F1EC);border-bottom:1px solid var(--rdp-border,#E5E2DC);display:flex;align-items:center;padding:0 16px">
+      <a href="#" onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--rdp-text,#1C1B18)">
+        <span style="width:28px;height:28px;border-radius:6px;background:var(--rdp-primary,#15654E);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">P</span>
+        <span style="font-weight:700;font-size:16px;letter-spacing:-0.01em">ProductOS</span>
+      </a>
+    </div>
+  </sc-if>
+  <sc-if value="{{ brandSidebar }}" hint-placeholder-val="{{ false }}">
+    <div style="grid-row:1;grid-column:1;background:var(--rdp-surface-sunken,#F3F1EC);display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--rdp-border,#E5E2DC)">
+      <a href="#" onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--rdp-text,#1C1B18)">
+        <span style="width:28px;height:28px;border-radius:6px;background:var(--rdp-primary,#15654E);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">P</span>
+        <span style="font-weight:700;font-size:16px;letter-spacing:-0.01em">ProductOS</span>
+      </a>
+    </div>
+  </sc-if>
+
+  <header data-screen-label="Navbar" style="grid-row:1;grid-column:2;display:flex;align-items:center;gap:12px;background:var(--rdp-surface-sunken,#F3F1EC);color:var(--rdp-text,#1C1B18);border-bottom:1px solid var(--rdp-border,#E5E2DC);padding:0 20px;min-width:0">
+    <div style="position:relative;width:320px;flex-shrink:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--rdp-text-muted,#6B665E);pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+      <input class="rdp-input" placeholder="Search products, orders, docs…" style="width:100%;height:36px;padding:0 40px 0 34px;margin:0;font-size:14px;box-sizing:border-box">
+      <button title="Search filters" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="position:absolute;right:3px;top:50%;transform:translateY(-50%);width:30px;height:30px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"></line><line x1="10" x2="3" y1="4" y2="4"></line><line x1="21" x2="12" y1="12" y2="12"></line><line x1="8" x2="3" y1="12" y2="12"></line><line x1="21" x2="16" y1="20" y2="20"></line><line x1="12" x2="3" y1="20" y2="20"></line><line x1="14" x2="14" y1="2" y2="6"></line><line x1="8" x2="8" y1="10" y2="14"></line><line x1="16" x2="16" y1="18" y2="22"></line></svg>
+      </button>
+    </div>
+    <div style="flex:1"></div>
+
+    <div class="rdp-dropdown" onClick="{{ stopProp }}">
+      <button title="Theme" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" onClick="{{ toggleThemeMenu }}" style="width:34px;height:34px">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+      </button>
+      <sc-if value="{{ themeOpen }}" hint-placeholder-val="{{ false }}">
+        <div class="rdp-dropdown__menu rdp-dropdown__menu--right" style="min-width:210px;max-height:380px;overflow-y:auto">
+          <div class="rdp-dropdown__label">Theme</div>
+          <sc-for list="{{ themeOptions }}" as="t" hint-placeholder-count="4">
+            <button class="rdp-dropdown__item" onClick="{{ t.pick }}" style="display:flex;align-items:center;gap:10px;width:100%">
+              <span data-rdp-theme="{{ t.id }}" style="width:16px;height:16px;border-radius:4px;background:var(--rdp-primary);border:1px solid var(--rdp-border);flex-shrink:0"></span>
+              <span style="flex:1;text-align:left">{{ t.label }}</span>
+              <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+
+    <div class="rdp-dropdown" onClick="{{ stopProp }}">
+      <button title="Notifications" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" onClick="{{ toggleNotifMenu }}" style="width:34px;height:34px;position:relative">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span style="position:absolute;top:1px;right:1px;min-width:15px;height:15px;border-radius:8px;background:var(--rdp-danger,#B3382D);color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;box-sizing:border-box">3</span>
+      </button>
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div class="rdp-dropdown__menu rdp-dropdown__menu--right" style="min-width:330px;padding:0">
+          <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--rdp-border,#E5E2DC)">
+            <span style="font-weight:600;font-size:13.5px;flex:1">Notifications</span>
+            <button class="rdp-btn rdp-btn--link rdp-btn--xs" onClick="{{ closeMenus }}">Mark all read</button>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="3">
+              <div style="display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--rdp-border,#E5E2DC);cursor:pointer" style-hover="background:var(--rdp-surface-sunken,#F3F1EC)">
+                <span style="width:8px;height:8px;border-radius:4px;background:var(--rdp-primary,#15654E);margin-top:5px;flex-shrink:0"></span>
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font-size:13px;font-weight:600">{{ n.title }}</span>
+                  <span style="display:block;font-size:12.5px;color:var(--rdp-text-muted,#6B665E);margin-top:1px">{{ n.desc }}</span>
+                </span>
+                <span style="font-size:11px;color:var(--rdp-text-muted,#6B665E);font-family:'IBM Plex Mono',monospace;flex-shrink:0">{{ n.time }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:8px 14px;text-align:center"><button class="rdp-btn rdp-btn--link rdp-btn--xs" onClick="{{ closeMenus }}">View all notifications</button></div>
+        </div>
+      </sc-if>
+    </div>
+
+    <button title="Toggle detail panel" class="rdp-btn rdp-btn--icon rdp-btn--sm {{ panelBtnClass }}" onClick="{{ toggleRightbar }}" style="width:34px;height:34px">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><line x1="15" x2="15" y1="3" y2="21"></line></svg>
+    </button>
+
+    <span style="width:1px;height:24px;background:var(--rdp-border,#E5E2DC)"></span>
+
+    <div class="rdp-dropdown" onClick="{{ stopProp }}">
+      <button onClick="{{ toggleProfileMenu }}" style="display:flex;align-items:center;gap:9px;background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;font-family:inherit" style-hover="background:var(--rdp-surface-sunken,#F3F1EC)">
+        <span class="rdp-avatar rdp-avatar--sm" style="background:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E);font-weight:600">AR</span>
+        <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.25">
+          <span style="font-size:13px;font-weight:600;color:var(--rdp-text,#1C1B18)">Andi Rahman</span>
+          <span style="font-size:11px;color:var(--rdp-text-muted,#6B665E)">{{ orgName }}</span>
+        </span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-text-muted,#6B665E)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ profileOpen }}" hint-placeholder-val="{{ false }}">
+        <div class="rdp-dropdown__menu rdp-dropdown__menu--right" style="min-width:264px">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px 12px">
+            <span class="rdp-avatar rdp-avatar--sm" style="background:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E);font-weight:600">AR</span>
+            <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0">
+              <span style="font-size:13.5px;font-weight:600">Andi Rahman</span>
+              <span style="font-size:12px;color:var(--rdp-text-muted,#6B665E)">andi@radian.web.id</span>
+            </span>
+          </div>
+          <div class="rdp-dropdown__divider"></div>
+          <div class="rdp-dropdown__label">Organization</div>
+          <sc-for list="{{ orgs }}" as="o" hint-placeholder-count="2">
+            <button class="rdp-dropdown__item" onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:10px;width:100%">
+              <span style="width:22px;height:22px;border-radius:5px;background:var(--rdp-surface-sunken,#F3F1EC);border:1px solid var(--rdp-border,#E5E2DC);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">{{ o.init }}</span>
+              <span style="flex:1;text-align:left">{{ o.name }}</span>
+              <sc-if value="{{ o.active }}" hint-placeholder-val="{{ false }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </sc-if>
+            </button>
+          </sc-for>
+          <div class="rdp-dropdown__divider"></div>
+          <button class="rdp-dropdown__item" onClick="{{ goProfile }}" style="display:flex;align-items:center;gap:10px;width:100%">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span style="flex:1;text-align:left">Profile</span>
+          </button>
+          <button class="rdp-dropdown__item" onClick="{{ goSettings }}" style="display:flex;align-items:center;gap:10px;width:100%">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <span style="flex:1;text-align:left">Settings</span>
+          </button>
+          <div class="rdp-dropdown__divider"></div>
+          <button class="rdp-dropdown__item rdp-dropdown__item--danger" onClick="{{ closeMenus }}" style="display:flex;align-items:center;gap:10px;width:100%">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
+            <span style="flex:1;text-align:left">Sign out</span>
+          </button>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <aside data-screen-label="Sidebar" style="grid-row:2;grid-column:1;background:var(--rdp-surface-sunken,#F3F1EC);color:var(--rdp-text,#1C1B18);border-right:1px solid var(--rdp-border,#E5E2DC);display:flex;flex-direction:column;min-height:0">
+    <nav style="flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 8px;min-height:0">
+      <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="3">
+        <div style="margin-bottom:18px">
+          <sc-if value="{{ sec.title }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted,#6B665E);padding:2px 8px;margin-bottom:4px">{{ sec.title }}</div>
+          </sc-if>
+          <sc-for list="{{ sec.items }}" as="item" hint-placeholder-count="2">
+            <div>
+              <a href="#" class="rdp-sidebar__link {{ item.activeClass }}" onClick="{{ item.onClick }}">
+                <x-import component-from-global-scope="RDPUIDesignSystem_ee4ae1.Icon" name="{{ item.icon }}" size="{{ iconSize }}" hint-size="18px,18px"></x-import>
+                <span class="rdp-sidebar__link-text" style="flex:1">{{ item.label }}</span>
+                <sc-if value="{{ item.badge }}" hint-placeholder-val="{{ false }}">
+                  <span class="rdp-sidebar__badge">{{ item.badge }}</span>
+                </sc-if>
+                <sc-if value="{{ item.expanded }}" hint-placeholder-val="{{ false }}">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;flex-shrink:0"><path d="m6 9 6 6 6-6"></path></svg>
+                </sc-if>
+                <sc-if value="{{ item.collapsed }}" hint-placeholder-val="{{ false }}">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.5;flex-shrink:0"><path d="m9 18 6-6-6-6"></path></svg>
+                </sc-if>
+              </a>
+              <sc-if value="{{ item.showChildren }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;margin:2px 0 6px">
+                  <sc-for list="{{ item.children }}" as="sub" hint-placeholder-count="2">
+                    <a href="#" class="rdp-sidebar__link {{ sub.activeClass }}" onClick="{{ sub.onClick }}" style="padding:6px 8px 6px 38px;font-size:13px">
+                      <span class="rdp-sidebar__link-text" style="flex:1">{{ sub.label }}</span>
+                      <sc-if value="{{ sub.count }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted,#6B665E);opacity:0.75">{{ sub.count }}</span>
+                      </sc-if>
+                    </a>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </nav>
+    <div style="border-top:1px solid var(--rdp-border,#E5E2DC);padding:8px;flex-shrink:0">
+      <a href="#" class="rdp-sidebar__link {{ profileActiveClass }}" onClick="{{ goProfile }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span class="rdp-sidebar__link-text">Profile</span>
+      </a>
+      <a href="#" class="rdp-sidebar__link {{ settingsActiveClass }}" onClick="{{ goSettings }}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span class="rdp-sidebar__link-text">Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <div style="grid-row:2;grid-column:2;display:flex;min-width:0;min-height:0">
+    <main style="flex:1;min-width:0;overflow-y:auto;padding:20px 28px 48px">
+
+      <sc-if value="{{ isProducts }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Produk (list)">
+          <ul class="rdp-breadcrumb"><li><a href="#" onClick="{{ noop }}">Katalog</a></li><li>Produk</li></ul>
+          <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+            <h1 class="rdp-page-header__title">Produk</h1>
+          </div>
+          <sc-if value="{{ noSelection }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="position:relative;width:240px;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--rdp-text-muted,#6B665E);pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              <input class="rdp-input" placeholder="Cari Produk..." value="{{ query }}" onChange="{{ setQuery }}" style="width:100%;height:34px;padding:0 12px 0 32px;margin:0;font-size:13px;box-sizing:border-box">
+            </div>
+            <div class="rdp-dropdown" onClick="{{ stopProp }}">
+              <button class="rdp-btn rdp-btn--sm" onClick="{{ toggleFilterMenu }}" style="height:34px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46"></polygon></svg>
+                {{ filterLabel }}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+              </button>
+              <sc-if value="{{ filterOpen }}" hint-placeholder-val="{{ false }}">
+                <div class="rdp-dropdown__menu" style="min-width:190px;left:0">
+                  <div class="rdp-dropdown__label">Kategori</div>
+                  <sc-for list="{{ filterOptions }}" as="f" hint-placeholder-count="4">
+                    <button class="rdp-dropdown__item" onClick="{{ f.pick }}" style="display:flex;align-items:center;gap:10px;width:100%">
+                      <span style="flex:1;text-align:left">{{ f.label }}</span>
+                      <sc-if value="{{ f.active }}" hint-placeholder-val="{{ false }}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      </sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div class="rdp-dropdown" onClick="{{ stopProp }}">
+              <button class="rdp-btn rdp-btn--sm" onClick="{{ toggleSortMenu }}" style="height:34px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"></path><path d="M17 20V4"></path><path d="m3 8 4-4 4 4"></path><path d="M7 4v16"></path></svg>
+                {{ sortLabel }}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+              </button>
+              <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
+                <div class="rdp-dropdown__menu" style="min-width:200px;left:0">
+                  <div class="rdp-dropdown__label">Urutkan menurut</div>
+                  <sc-for list="{{ sortKeyOptions }}" as="sk" hint-placeholder-count="4">
+                    <button class="rdp-dropdown__item" onClick="{{ sk.pick }}" style="display:flex;align-items:center;gap:10px;width:100%">
+                      <span style="flex:1;text-align:left">{{ sk.label }}</span>
+                      <sc-if value="{{ sk.active }}" hint-placeholder-val="{{ false }}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      </sc-if>
+                    </button>
+                  </sc-for>
+                  <div class="rdp-dropdown__divider"></div>
+                  <div class="rdp-dropdown__label">Arah</div>
+                  <sc-for list="{{ sortDirOptions }}" as="sd" hint-placeholder-count="2">
+                    <button class="rdp-dropdown__item" onClick="{{ sd.pick }}" style="display:flex;align-items:center;gap:10px;width:100%">
+                      <span style="flex:1;text-align:left">{{ sd.label }}</span>
+                      <sc-if value="{{ sd.active }}" hint-placeholder-val="{{ false }}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      </sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div style="flex:1"></div>
+            <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="height:34px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+              Tambah Produk
+            </button>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ selMode }}" hint-placeholder-val="{{ false }}">
+            <div data-screen-label="Bulk action bar" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;background:var(--rdp-primary-soft,#EDF4F0);border:1px solid var(--rdp-border,#E5E2DC);border-radius:8px;padding:6px 12px;min-height:46px;box-sizing:border-box">
+              <span style="font-size:13px;font-weight:600;color:var(--rdp-primary,#15654E)">{{ selCount }} dipilih</span>
+              <span style="width:1px;height:20px;background:var(--rdp-border,#E5E2DC)"></span>
+              <button class="rdp-btn rdp-btn--sm" disabled="{{ editDisabled }}" title="{{ editTitle }}" onClick="{{ bulkEdit }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+                Edit
+              </button>
+              <button class="rdp-btn rdp-btn--sm" onClick="{{ bulkNoop }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                Duplikat
+              </button>
+              <button class="rdp-btn rdp-btn--sm" onClick="{{ bulkClear }}">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="5" x="2" y="3" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path></svg>
+                Arsipkan
+              </button>
+              <button class="rdp-btn rdp-btn--sm" onClick="{{ openConfirm }}" style="color:var(--rdp-danger,#B3382D)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Hapus
+              </button>
+              <div style="flex:1"></div>
+              <button class="rdp-btn rdp-btn--ghost rdp-btn--sm" onClick="{{ clearSel }}">Batalkan pilihan</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ listLoading }}" hint-placeholder-val="{{ false }}">
+            <div class="rdp-table-wrapper" data-screen-label="Produk (loading)" style="background:var(--rdp-surface,#FFFFFF)">
+              <table class="rdp-table">
+                <thead><tr><th style="padding:7px 6px 7px 12px;width:52px"><span class="rdp-skeleton" style="height:14px;width:14px;display:inline-block"></span></th><th style="padding:7px 12px;font-size:12px">Produk</th><th style="padding:7px 12px;font-size:12px">SKU</th><th style="padding:7px 12px;font-size:12px">Kategori</th><th style="padding:7px 12px;font-size:12px">Harga</th><th style="padding:7px 12px;font-size:12px">Stok</th><th style="padding:7px 12px;font-size:12px">Status</th><th style="padding:7px 12px;font-size:12px">Diperbarui</th><th style="padding:7px 12px"></th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ skels }}" as="k" hint-placeholder-count="8">
+                    <tr>
+                      <td style="padding:9px 6px 9px 12px"><span class="rdp-skeleton" style="height:14px;width:14px"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:12px;width:72%"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:12px;width:56px"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:12px;width:64px"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:12px;width:78px"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:12px;width:32px"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:18px;width:64px;border-radius:9px"></span></td>
+                      <td style="padding:9px 12px"><span class="rdp-skeleton" style="height:12px;width:52px"></span></td>
+                      <td style="padding:9px 12px"></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showTable }}" hint-placeholder-val="{{ true }}">
+            <div class="rdp-table-wrapper" style="background:var(--rdp-surface,#FFFFFF)">
+              <table class="rdp-table">
+                <thead><tr>
+                  <th style="padding:4px 6px 4px 12px;width:52px">
+                    <div class="rdp-dropdown" onClick="{{ stopProp }}" style="display:flex;align-items:center">
+                      <input type="checkbox" ref="{{ headCbRef }}" checked="{{ allSelected }}" onChange="{{ toggleSelectAll }}" style="width:15px;height:15px;accent-color:var(--rdp-primary,#15654E);cursor:pointer;margin:0">
+                      <button title="Pilih…" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs" onClick="{{ toggleSelMenu }}" style="width:18px;height:22px;min-height:22px;padding:0">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                      </button>
+                      <sc-if value="{{ selMenuOpen }}" hint-placeholder-val="{{ false }}">
+                        <div class="rdp-dropdown__menu" style="min-width:150px;left:0;top:24px">
+                          <sc-for list="{{ selMenuOptions }}" as="m" hint-placeholder-count="4">
+                            <button class="rdp-dropdown__item" onClick="{{ m.pick }}" style="display:flex;width:100%"><span style="flex:1;text-align:left">{{ m.label }}</span></button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </th>
+                  <th style="padding:7px 12px;font-size:12px">Produk</th><th style="padding:7px 12px;font-size:12px">SKU</th><th style="padding:7px 12px;font-size:12px">Kategori</th><th style="padding:7px 12px;font-size:12px">Harga</th><th style="padding:7px 12px;font-size:12px">Stok</th><th style="padding:7px 12px;font-size:12px">Status</th><th style="padding:7px 12px;font-size:12px">Diperbarui</th><th style="padding:7px 12px"></th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ rows }}" as="p" hint-placeholder-count="8">
+                    <tr class="pos-row" style="{{ p.rowStyle }}" style-hover="background:var(--rdp-surface-sunken,#F3F1EC)" onClick="{{ p.open }}">
+                      <td style="padding:4px 6px 4px 12px;width:52px" onClick="{{ p.stopRow }}">
+                        <input type="checkbox" checked="{{ p.checked }}" onChange="{{ p.toggleSel }}" style="width:15px;height:15px;accent-color:var(--rdp-primary,#15654E);cursor:pointer;margin:0;display:block">
+                      </td>
+                      <td style="padding:6px 12px;font-weight:500;font-size:13px">{{ p.name }}</td>
+                      <td style="padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--rdp-text-muted,#6B665E)">{{ p.sku }}</td>
+                      <td style="padding:6px 12px;font-size:12.5px">{{ p.cat }}</td>
+                      <td style="padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px">{{ p.price }}</td>
+                      <td style="padding:6px 12px;font-family:'IBM Plex Mono',monospace;font-size:12px">{{ p.stock }}</td>
+                      <td style="padding:6px 12px"><span class="rdp-badge {{ p.badgeClass }}" style="font-size:11px">{{ p.status }}</span></td>
+                      <td style="padding:6px 12px;font-size:12px;color:var(--rdp-text-muted,#6B665E)">{{ p.updated }}</td>
+                      <td style="padding:2px 10px;text-align:right;width:70px">
+                        <span class="row-actions" style="display:inline-flex;gap:2px;justify-content:flex-end">
+                          <button title="Edit" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs" onClick="{{ p.edit }}" style="width:26px;height:26px;min-height:26px">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+                          </button>
+                          <button title="Hapus" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--xs" onClick="{{ p.del }}" style="width:26px;height:26px;min-height:26px;color:var(--rdp-danger,#B3382D)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          </button>
+                        </span>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1.5px dashed var(--rdp-border-strong,#D2CEC6);border-radius:14px;padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <span style="font-size:14px;font-weight:600">Tidak ada produk yang cocok</span>
+              <span style="font-size:13px;color:var(--rdp-text-muted,#6B665E)">Coba kata kunci lain atau hapus filter kategori.</span>
+              <button class="rdp-btn rdp-btn--ghost rdp-btn--sm" onClick="{{ clearFilters }}">Hapus filter</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}">
+            <div data-screen-label="Produk (empty)" style="{{ emptyBoxStyle }}">
+              <span style="width:56px;height:56px;border-radius:28px;background:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E);display:inline-flex;align-items:center;justify-content:center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"></path><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="M12 22V12"></path><path d="m3.3 7 8.7 5 8.7-5"></path></svg>
+              </span>
+              <span style="font-size:17px;font-weight:600;color:var(--rdp-text,#1C1B18)">Belum ada Produk</span>
+              <span style="font-size:13.5px;color:var(--rdp-text-muted,#6B665E);max-width:42ch;text-align:center;line-height:1.55">Produk yang kamu tambahkan akan tampil di sini. Mulai dengan menambahkan produk pertamamu.</span>
+              <button class="rdp-btn rdp-btn--primary rdp-btn--sm" style="margin-top:6px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                Tambah Produk
+              </button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showTable }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+              <span style="font-size:12.5px;color:var(--rdp-text-muted,#6B665E)">Menampilkan {{ pageFrom }}–{{ pageTo }} dari 145</span>
+              <div style="display:flex;gap:6px">
+                <button class="rdp-btn rdp-btn--sm" disabled="{{ prevDisabled }}" onClick="{{ prevPage }}">Sebelumnya</button>
+                <button class="rdp-btn rdp-btn--sm" disabled="{{ nextDisabled }}" onClick="{{ nextPage }}">Berikutnya</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isArchived }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Archived (empty state)">
+          <ul class="rdp-breadcrumb"><li><a href="#" onClick="{{ noop }}">Catalog</a></li><li><a href="#" onClick="{{ noop }}">Products</a></li><li>Archived</li></ul>
+          <div class="rdp-page-header" style="margin-top:10px">
+            <h1 class="rdp-page-header__title">Archived</h1>
+          </div>
+          <div style="{{ emptyBoxStyle }}">
+            <span style="width:56px;height:56px;border-radius:28px;background:var(--rdp-primary-soft,#EDF4F0);color:var(--rdp-primary,#15654E);display:inline-flex;align-items:center;justify-content:center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="5" x="2" y="3" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path></svg>
+            </span>
+            <span style="font-size:17px;font-weight:600;color:var(--rdp-text,#1C1B18)">No archived products</span>
+            <span style="font-size:13.5px;color:var(--rdp-text-muted,#6B665E);max-width:42ch;text-align:center;line-height:1.55">Products you archive are hidden from your storefront and end up here. You can restore them at any time.</span>
+            <button class="rdp-btn rdp-btn--outline rdp-btn--sm" onClick="{{ goAllProducts }}" style="margin-top:6px">View all products</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStub }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Placeholder screen">
+          <div class="rdp-page-header" style="margin-top:10px">
+            <h1 class="rdp-page-header__title">{{ stubTitle }}</h1>
+          </div>
+          <div style="border:1.5px dashed var(--rdp-border-strong,#D2CEC6);border-radius:14px;padding:64px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:15px;font-weight:600">Out of scope for Phase 1</span>
+            <span style="font-size:13px;color:var(--rdp-text-muted,#6B665E);max-width:44ch;text-align:center;line-height:1.55">This screen is a navigation placeholder. Phase 1 validates the shell: navbar, sidebar, content states and the detail rightbar.</span>
+            <button class="rdp-btn rdp-btn--ghost rdp-btn--sm" onClick="{{ goAllProducts }}">Back to Products</button>
+          </div>
+        </div>
+      </sc-if>
+    </main>
+
+    <sc-if value="{{ rightbarOpen }}" hint-placeholder-val="{{ false }}">
+      <aside data-screen-label="Detail rightbar" style="{{ rbStyle }}">
+        <div style="display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid var(--rdp-border,#E5E2DC);flex-shrink:0">
+          <span style="font-size:13.5px;font-weight:600;flex:1">Detail produk</span>
+          <span style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted,#6B665E)">{{ rb.sku }}</span>
+          <button title="Close" class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" onClick="{{ closeRightbar }}" style="width:28px;height:28px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;min-height:0">
+          <div style="height:132px;border:1.5px dashed var(--rdp-border-strong,#D2CEC6);border-radius:10px;background:var(--rdp-surface-sunken,#F3F1EC);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--rdp-text-muted,#6B665E)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+            <span style="font-size:11.5px">Gambar produk</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:16px;font-weight:700;letter-spacing:-0.01em">{{ rb.name }}</span>
+            <span><span class="rdp-badge {{ rb.badgeClass }}">{{ rb.status }}</span></span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="rdp-btn rdp-btn--sm" style="flex:1">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+              Edit
+            </button>
+            <button class="rdp-btn rdp-btn--sm" style="flex:1">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+              Duplikat
+            </button>
+            <button class="rdp-btn rdp-btn--sm" style="flex:1">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="5" x="2" y="3" rx="1"></rect><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"></path><path d="M10 12h4"></path></svg>
+              Arsipkan
+            </button>
+          </div>
+          <div style="display:grid;grid-template-columns:104px 1fr;row-gap:11px;font-size:13px;border-top:1px solid var(--rdp-border,#E5E2DC);padding-top:16px">
+            <span style="color:var(--rdp-text-muted,#6B665E)">Kategori</span><span>{{ rb.cat }}</span>
+            <span style="color:var(--rdp-text-muted,#6B665E)">Harga</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">{{ rb.price }}</span>
+            <span style="color:var(--rdp-text-muted,#6B665E)">Stok</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px">{{ rb.stock }}</span>
+            <span style="color:var(--rdp-text-muted,#6B665E)">Pemasok</span><span>{{ rb.supplier }}</span>
+            <span style="color:var(--rdp-text-muted,#6B665E)">Diperbarui</span><span>{{ rb.updated }}</span>
+          </div>
+          <div style="border-top:1px solid var(--rdp-border,#E5E2DC);padding-top:14px">
+            <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--rdp-text-muted,#6B665E);margin-bottom:12px">Aktivitas terbaru</div>
+            <x-import component-from-global-scope="RDPUIDesignSystem_ee4ae1.Timeline" items="{{ rbTimeline }}" hint-size="100%,160px"></x-import>
+          </div>
+        </div>
+      </aside>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ true }}">
+    <div class="rdp-modal-backdrop" data-screen-label="Dialog Hapus Produk" onClick="{{ closeConfirm }}" style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div class="rdp-modal rdp-modal--sm" onClick="{{ stopProp }}" style="position:relative;inset:auto;align-items:stretch;justify-content:flex-start;width:100%;max-width:400px;height:auto;min-height:0;max-height:calc(100vh - 96px);align-self:center;display:flex;flex-direction:column;background:var(--rdp-surface,#FFFFFF)">
+        <div class="rdp-modal__body" style="padding:24px 24px 20px;display:flex;flex-direction:column;gap:12px;overflow-x:hidden">
+          <span style="width:44px;height:44px;border-radius:22px;background:var(--rdp-danger-soft,#FBEDEB);color:var(--rdp-danger,#B3382D);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </span>
+          <h2 style="font-size:17px;font-weight:700;margin:0;letter-spacing:-0.01em;line-height:1.35">Hapus Produk “Verge Standing Desk”?</h2>
+          <p style="margin:0;font-size:13px;line-height:1.55;color:var(--rdp-text-muted,#6B665E)">Tindakan ini tidak bisa dibatalkan. Produk akan dihapus permanen dari katalog dan storefront.</p>
+          <div style="display:flex;align-items:center;gap:10px;background:var(--rdp-surface-sunken,#F3F1EC);border:1px solid var(--rdp-border,#E5E2DC);border-radius:10px;padding:10px 12px">
+            <span style="width:40px;height:40px;border:1.5px dashed var(--rdp-border-strong,#D2CEC6);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--rdp-text-muted,#6B665E);flex-shrink:0;background:var(--rdp-surface,#FFFFFF)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+            </span>
+            <span style="display:flex;flex-direction:column;line-height:1.4;min-width:0;flex:1">
+              <span style="font-size:13px;font-weight:600">Verge Standing Desk</span>
+              <span style="font-size:11.5px;font-family:'IBM Plex Mono',monospace;color:var(--rdp-text-muted,#6B665E)">PL-0871 · Furnitur · Rp 4.800.000</span>
+            </span>
+            <span class="rdp-badge rdp-badge--warning" style="font-size:11px;flex-shrink:0">Stok menipis</span>
+          </div>
+        </div>
+        <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;background:var(--rdp-background,#FAF9F7);border-radius:0 0 var(--rdp-radius-lg,14px) var(--rdp-radius-lg,14px)">
+          <button class="rdp-btn rdp-btn--secondary" onClick="{{ closeConfirm }}">Batal</button>
+          <button class="rdp-btn rdp-btn--danger" onClick="{{ confirmDelete }}" style="min-width:96px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div class="rdp-toast-container rdp-toast-container--bottom-right" data-screen-label="Toast sukses" style="position:fixed;bottom:16px;right:16px;z-index:300;display:flex;flex-direction:column-reverse;gap:8px;pointer-events:none">
+      <div class="rdp-toast rdp-toast--success" style="width:340px;pointer-events:auto">
+        <span class="rdp-toast__icon" style="color:var(--rdp-success,#2E7D32)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="m9 11 3 3L22 4"></path></svg>
+        </span>
+        <div class="rdp-toast__content">
+          <div class="rdp-toast__title">Produk dihapus</div>
+          <div class="rdp-toast__message" style="font-size:12.5px">“Verge Standing Desk” (PL-0871) dihapus dari katalog.</div>
+        </div>
+        <button title="Tutup" class="rdp-toast__close" onClick="{{ hideToast }}">×</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ confirmClosed }}" hint-placeholder-val="{{ false }}">
+    <button class="rdp-btn rdp-btn--danger" onClick="{{ openConfirm }}" style="position:fixed;bottom:24px;right:24px;z-index:100;box-shadow:0 2px 4px rgba(28,27,24,0.12), 0 8px 24px rgba(28,27,24,0.16)">Buka dialog Hapus Produk</button>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 900},
+  &quot;confirmState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;auto&quot;, &quot;dialog&quot;, &quot;toast&quot;], &quot;default&quot;: &quot;auto&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Dialog Hapus&quot;, &quot;description&quot;: &quot;auto = interaktif (Hapus \u2192 toast sukses). dialog/toast memaksa state untuk review.&quot;},
+  &quot;listState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;empty&quot;], &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Content&quot;},
+  &quot;brandInSidebar&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout variations&quot;},
+  &quot;rightbarTreatment&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;full-height&quot;, &quot;inset-card&quot;], &quot;default&quot;: &quot;full-height&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Rightbar&quot;},
+  &quot;rightbarWidth&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 360, &quot;min&quot;: 280, &quot;max&quot;: 480, &quot;step&quot;: 20, &quot;unit&quot;: &quot;px&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Rightbar&quot;},
+  &quot;emptyStyle&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;card&quot;, &quot;dashed&quot;], &quot;default&quot;: &quot;card&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Content&quot;}
+}">
+class Component extends DCLogic {
+  state = { theme: 'default', view: 'all-products', open: { products: true }, rb: null, profileOpen: false, themeOpen: false, notifOpen: false, org: 'Radian Group', query: '', cat: 'Semua kategori', sortKey: 'name', sortDir: 'asc', page: 1, filterOpen: false, sortOpen: false, sel: {}, selMenuOpen: false, confirmOpen: true, toastShown: false };
+
+  componentDidMount() {
+    this._doc = () => { if (this.state.profileOpen || this.state.themeOpen || this.state.notifOpen || this.state.filterOpen || this.state.sortOpen || this.state.selMenuOpen) this.setState({ profileOpen: false, themeOpen: false, notifOpen: false, filterOpen: false, sortOpen: false, selMenuOpen: false }); };
+    document.addEventListener('click', this._doc);
+  }
+  componentWillUnmount() { document.removeEventListener('click', this._doc); }
+
+  renderVals() {
+    const s = this.state;
+    const W = this.props.rightbarWidth ?? 360;
+    const treatment = this.props.rightbarTreatment ?? 'full-height';
+    const emptyStyle = this.props.emptyStyle ?? 'card';
+    const brandSidebar = this.props.brandInSidebar ?? false;
+
+    const B = { 'Aktif': 'rdp-badge--success', 'Stok menipis': 'rdp-badge--warning', 'Habis': 'rdp-badge--danger', 'Draf': 'rdp-badge--neutral' };
+    const PRODUCTS = [
+      ['Aurora Desk Lamp', 'PL-1042', 'Pencahayaan', 480000, 126, 'Aktif', '2 jam lalu', 'PT Nusantara Tech'],
+      ['Tundra Office Chair', 'PL-0988', 'Furnitur', 2150000, 34, 'Aktif', '5 jam lalu', 'CV Karya Mandiri'],
+      ['Verge Standing Desk', 'PL-0871', 'Furnitur', 4800000, 8, 'Stok menipis', 'Kemarin', 'CV Karya Mandiri'],
+      ['Halo Monitor Arm', 'PL-0812', 'Aksesori', 640000, 61, 'Aktif', 'Kemarin', 'PT Cahaya Abadi'],
+      ['Slate Desk Pad', 'PL-0755', 'Aksesori', 180000, 212, 'Aktif', '18 Jul', 'PT Sinar Terang'],
+      ['Nimbus Cable Tray', 'PL-0701', 'Aksesori', 95000, 0, 'Habis', '17 Jul', 'PT Sinar Terang'],
+      ['Ridge Bookshelf', 'PL-0640', 'Penyimpanan', 1750000, 19, 'Aktif', '15 Jul', 'CV Mitra Jaya'],
+      ['Fjord Task Light', 'PL-0587', 'Pencahayaan', 0, 0, 'Draf', '12 Jul', '—'],
+      ['Atlas File Cabinet', 'PL-0562', 'Penyimpanan', 2900000, 11, 'Aktif', '12 Jul', 'CV Mitra Jaya'],
+      ['Orbit Desk Organizer', 'PL-0533', 'Aksesori', 145000, 88, 'Aktif', '11 Jul', 'PT Sinar Terang'],
+      ['Vertex Ergonomic Stool', 'PL-0518', 'Furnitur', 1280000, 5, 'Stok menipis', '10 Jul', 'CV Karya Mandiri'],
+      ['Lumen Floor Lamp', 'PL-0486', 'Pencahayaan', 890000, 27, 'Aktif', '9 Jul', 'PT Nusantara Tech'],
+      ['Strata Shelf Unit', 'PL-0450', 'Penyimpanan', 2350000, 14, 'Aktif', '8 Jul', 'CV Mitra Jaya'],
+      ['Pivot Laptop Stand', 'PL-0421', 'Aksesori', 320000, 143, 'Aktif', '7 Jul', 'PT Cahaya Abadi'],
+      ['Dune Acoustic Panel', 'PL-0398', 'Aksesori', 210000, 0, 'Habis', '5 Jul', 'PT Sinar Terang'],
+      ['Crest Meeting Table', 'PL-0342', 'Furnitur', 6400000, 3, 'Stok menipis', '3 Jul', 'CV Karya Mandiri'],
+      ['Ember Desk Heater', 'PL-0311', 'Aksesori', 0, 0, 'Draf', '1 Jul', '—'],
+      ['Polar Whiteboard', 'PL-0288', 'Aksesori', 750000, 42, 'Aktif', '28 Jun', 'PT Cahaya Abadi'],
+      ['Arc Wall Sconce', 'PL-0254', 'Pencahayaan', 410000, 66, 'Aktif', '26 Jun', 'PT Nusantara Tech'],
+      ['Basalt Drawer Unit', 'PL-0207', 'Penyimpanan', 1150000, 22, 'Aktif', '24 Jun', 'CV Mitra Jaya']
+    ].map(([name, sku, cat, priceN, stockN, status, updated, supplier], idx) => ({
+      name, sku, cat, priceN, stockN, status, updated, supplier, idx,
+      price: priceN ? 'Rp ' + priceN.toLocaleString('id-ID') : '—',
+      stock: status === 'Draf' ? '—' : String(stockN),
+      badgeClass: B[status]
+    }));
+    const products = PRODUCTS.map(p => ({
+      ...p,
+      open: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ rb: p }); },
+      edit: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ rb: p }); },
+      del: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ confirmOpen: true, toastShown: false }); }
+    }));
+
+    const SORT_KEYS = [['name', 'Nama'], ['priceN', 'Harga'], ['stockN', 'Stok'], ['idx', 'Diperbarui']];
+    const q = s.query.trim().toLowerCase();
+    let rows = products.filter(p => (s.cat === 'Semua kategori' || p.cat === s.cat) && (!q || (p.name + ' ' + p.sku).toLowerCase().includes(q)));
+    const dir = s.sortDir === 'asc' ? 1 : -1;
+    rows = rows.slice().sort((a, b) => { const k = s.sortKey; const av = a[k], bv = b[k]; return (typeof av === 'string' ? av.localeCompare(bv) : av - bv) * dir; });
+    const listState = this.props.listState ?? 'normal';
+
+    const sel = s.sel;
+    const selCount = Object.keys(sel).filter(k => sel[k]).length;
+    const allSelected = rows.length > 0 && rows.every(r => sel[r.sku]);
+    const someSelected = selCount > 0 && !allSelected;
+    const selectRows = (list) => { const next = {}; list.forEach(r => { next[r.sku] = true; }); this.setState({ sel: next, selMenuOpen: false }); };
+    rows = rows.map(p => ({
+      ...p,
+      checked: !!sel[p.sku],
+      rowStyle: { cursor: 'pointer', background: sel[p.sku] ? 'var(--rdp-primary-soft,#EDF4F0)' : undefined },
+      stopRow: (e) => e.stopPropagation(),
+      toggleSel: () => this.setState(st => ({ sel: { ...st.sel, [p.sku]: !st.sel[p.sku] } }))
+    }));
+
+    const NAV = [
+      { title: '', items: [
+        { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+        { id: 'inbox', label: 'Inbox', icon: 'inbox', badge: '3' } ] },
+      { title: 'Catalog', items: [
+        { id: 'products', label: 'Products', icon: 'folder', children: [
+          { id: 'all-products', label: 'All products', count: '128' },
+          { id: 'collections', label: 'Collections', count: '12' },
+          { id: 'archived', label: 'Archived' } ] },
+        { id: 'inventory', label: 'Inventory', icon: 'briefcase', children: [
+          { id: 'stock', label: 'Stock levels' },
+          { id: 'suppliers', label: 'Suppliers' } ] },
+        { id: 'orders', label: 'Orders', icon: 'file-text', children: [
+          { id: 'all-orders', label: 'All orders' },
+          { id: 'returns', label: 'Returns' } ] } ] },
+      { title: 'Insights', items: [
+        { id: 'reports', label: 'Reports', icon: 'trending-up' },
+        { id: 'activity', label: 'Activity log', icon: 'calendar' } ] }
+    ];
+    const STUBS = { dashboard: 'Dashboard', inbox: 'Inbox', collections: 'Collections', stock: 'Stock levels', suppliers: 'Suppliers', 'all-orders': 'All orders', returns: 'Returns', reports: 'Reports', activity: 'Activity log', profile: 'Profile', settings: 'Settings' };
+
+    const sections = NAV.map(sec => ({
+      title: sec.title,
+      items: sec.items.map(it => {
+        const isParent = !!it.children;
+        const exp = !!s.open[it.id];
+        const childActive = isParent && it.children.some(c => c.id === s.view);
+        return {
+          icon: it.icon, label: it.label, badge: it.badge || false,
+          activeClass: (!isParent && s.view === it.id) || (isParent && childActive && !exp) ? 'active' : '',
+          expanded: isParent && exp, collapsed: isParent && !exp, showChildren: isParent && exp,
+          onClick: (e) => { e.preventDefault(); isParent ? this.setState(st => ({ open: { ...st.open, [it.id]: !st.open[it.id] } })) : this.setState({ view: it.id }); },
+          children: isParent ? it.children.map(c => ({ label: c.label, count: c.count || false, activeClass: s.view === c.id ? 'active' : '', onClick: (e) => { e.preventDefault(); this.setState({ view: c.id }); } })) : []
+        };
+      })
+    }));
+
+    const THEMES = ['default', 'light', 'dark', 'midnight', 'nord', 'dracula', 'forest', 'ocean', 'corporate', 'github', 'terminal'];
+    const themeOptions = THEMES.map(id => ({ id, label: id === 'github' ? 'GitHub' : id.charAt(0).toUpperCase() + id.slice(1), active: s.theme === id, pick: () => this.setState({ theme: id, themeOpen: false }) }));
+
+    const orgs = ['Radian Group', 'PT Cahaya Abadi'].map(name => ({ name, init: name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(), active: s.org === name, pick: () => this.setState({ org: name, profileOpen: false }) }));
+
+    const rb = s.rb || PRODUCTS[0];
+    const rbBase = { width: W, flexShrink: 0, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'var(--rdp-surface,#FFFFFF)', minWidth: 0 };
+    const rbStyle = treatment === 'inset-card'
+      ? { ...rbBase, margin: '16px 16px 16px 0', border: '1px solid var(--rdp-border,#E5E2DC)', borderRadius: 14, boxShadow: '0 1px 2px rgba(28,27,24,0.05), 0 4px 14px rgba(28,27,24,0.07)', overflow: 'hidden' }
+      : { ...rbBase, borderLeft: '1px solid var(--rdp-border,#E5E2DC)' };
+
+    const emptyBase = { borderRadius: 14, padding: '72px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 };
+    const emptyBoxStyle = emptyStyle === 'dashed'
+      ? { ...emptyBase, border: '1.5px dashed var(--rdp-border-strong,#D2CEC6)' }
+      : { ...emptyBase, background: 'var(--rdp-surface,#FFFFFF)', border: '1px solid var(--rdp-border,#E5E2DC)' };
+
+    return {
+      theme: s.theme, iconSize: 18, noop: (e) => e.preventDefault(),
+      brandSidebar, brandNavbar: !brandSidebar,
+      stopProp: (e) => e.stopPropagation(),
+      themeOpen: s.themeOpen, notifOpen: s.notifOpen, profileOpen: s.profileOpen,
+      toggleThemeMenu: () => this.setState(st => ({ themeOpen: !st.themeOpen, notifOpen: false, profileOpen: false })),
+      toggleNotifMenu: () => this.setState(st => ({ notifOpen: !st.notifOpen, themeOpen: false, profileOpen: false })),
+      toggleProfileMenu: () => this.setState(st => ({ profileOpen: !st.profileOpen, themeOpen: false, notifOpen: false })),
+      closeMenus: () => this.setState({ profileOpen: false, themeOpen: false, notifOpen: false }),
+      themeOptions, orgs, orgName: s.org,
+      notifs: [
+        { title: 'Stock alert', desc: 'Verge Standing Desk is below reorder point (8 left).', time: '12m' },
+        { title: 'New order #SO-2214', desc: 'PT Cahaya Abadi · 12 items · Rp 8.400.000', time: '1h' },
+        { title: 'Import finished', desc: '24 products updated from suppliers.csv', time: '3h' }
+      ],
+      sections,
+      profileActiveClass: s.view === 'profile' ? 'active' : '', settingsActiveClass: s.view === 'settings' ? 'active' : '',
+      goProfile: (e) => { e.preventDefault(); this.setState({ view: 'profile', profileOpen: false }); },
+      goSettings: (e) => { e.preventDefault(); this.setState({ view: 'settings', profileOpen: false }); },
+      goHome: (e) => { e.preventDefault(); this.setState({ view: 'dashboard' }); },
+      goAllProducts: () => this.setState({ view: 'all-products' }),
+      isProducts: s.view === 'all-products', isArchived: s.view === 'archived',
+      isStub: !!STUBS[s.view], stubTitle: STUBS[s.view] || '',
+      emptyBoxStyle,
+      rows, skels: Array.from({ length: 8 }, () => ({})),
+      listLoading: listState === 'loading',
+      listEmpty: listState === 'empty',
+      showTable: listState === 'normal' && rows.length > 0,
+      noResults: listState === 'normal' && rows.length === 0,
+      query: s.query, setQuery: (e) => this.setState({ query: e.target.value, page: 1 }),
+      filterOpen: s.filterOpen, sortOpen: s.sortOpen,
+      toggleFilterMenu: () => this.setState(st => ({ filterOpen: !st.filterOpen, sortOpen: false, profileOpen: false, themeOpen: false, notifOpen: false })),
+      toggleSortMenu: () => this.setState(st => ({ sortOpen: !st.sortOpen, filterOpen: false, profileOpen: false, themeOpen: false, notifOpen: false })),
+      filterLabel: s.cat === 'Semua kategori' ? 'Filter' : s.cat,
+      filterOptions: ['Semua kategori', 'Furnitur', 'Pencahayaan', 'Aksesori', 'Penyimpanan'].map(c => ({ label: c, active: s.cat === c, pick: () => this.setState({ cat: c, filterOpen: false, page: 1 }) })),
+      sortLabel: SORT_KEYS.find(k => k[0] === s.sortKey)[1] + (s.sortDir === 'asc' ? ' ↑' : ' ↓'),
+      sortKeyOptions: SORT_KEYS.map(([k, label]) => ({ label, active: s.sortKey === k, pick: () => this.setState({ sortKey: k, sortOpen: false }) })),
+      sortDirOptions: [['asc', 'Naik (A–Z, kecil→besar)'], ['desc', 'Turun (Z–A, besar→kecil)']].map(([d, label]) => ({ label, active: s.sortDir === d, pick: () => this.setState({ sortDir: d, sortOpen: false }) })),
+      clearFilters: () => this.setState({ query: '', cat: 'Semua kategori', page: 1 }),
+      noSelection: selCount === 0, selMode: selCount > 0, selCount,
+      allSelected, headCbRef: (el) => { if (el) el.indeterminate = someSelected; },
+      toggleSelectAll: () => allSelected ? this.setState({ sel: {} }) : selectRows(rows),
+      selMenuOpen: s.selMenuOpen,
+      toggleSelMenu: () => this.setState(st => ({ selMenuOpen: !st.selMenuOpen })),
+      selMenuOptions: [
+        { label: 'Semua', pick: () => selectRows(rows) },
+        { label: 'Tak satu pun', pick: () => this.setState({ sel: {}, selMenuOpen: false }) },
+        { label: 'Aktif', pick: () => selectRows(rows.filter(r => r.status === 'Aktif')) },
+        { label: 'Stok menipis', pick: () => selectRows(rows.filter(r => r.status === 'Stok menipis')) },
+        { label: 'Habis', pick: () => selectRows(rows.filter(r => r.status === 'Habis')) },
+        { label: 'Draf', pick: () => selectRows(rows.filter(r => r.status === 'Draf')) }
+      ],
+      editDisabled: selCount > 1,
+      editTitle: selCount > 1 ? 'Edit hanya untuk satu item' : 'Edit item terpilih',
+      bulkEdit: () => { const p = products.find(x => sel[x.sku]); if (p) this.setState({ rb: p }); },
+      bulkNoop: () => {},
+      bulkClear: () => this.setState({ sel: {} }),
+      clearSel: () => this.setState({ sel: {} }),
+      ...(() => {
+        const forced = this.props.confirmState ?? 'auto';
+        const open = forced === 'dialog' ? true : forced === 'toast' ? false : s.confirmOpen;
+        const toast = forced === 'toast' ? true : forced === 'dialog' ? false : s.toastShown;
+        return {
+          confirmOpen: open, confirmClosed: !open && !toast,
+          toastVisible: toast,
+          openConfirm: () => this.setState({ confirmOpen: true, toastShown: false }),
+          closeConfirm: () => this.setState({ confirmOpen: false }),
+          confirmDelete: () => {
+            this.setState({ confirmOpen: false, toastShown: true, sel: {} });
+            clearTimeout(this._t);
+            this._t = setTimeout(() => this.setState({ toastShown: false }), 5000);
+          },
+          hideToast: () => this.setState({ toastShown: false })
+        };
+      })(),
+      pageFrom: (s.page - 1) * 20 + 1, pageTo: Math.min(s.page * 20, 145),
+      prevDisabled: s.page <= 1, nextDisabled: s.page >= 8,
+      prevPage: () => this.setState(st => ({ page: Math.max(1, st.page - 1) })),
+      nextPage: () => this.setState(st => ({ page: Math.min(8, st.page + 1) })),
+      rightbarOpen: !!s.rb, rb, rbStyle,
+      panelBtnClass: s.rb ? 'rdp-btn--accent' : 'rdp-btn--ghost',
+      toggleRightbar: () => this.setState(st => ({ rb: st.rb ? null : PRODUCTS[0] })),
+      closeRightbar: () => this.setState({ rb: null }),
+      rbTimeline: [
+        { title: 'Harga diperbarui', desc: 'Rp 4.500.000 → ' + rb.price, time: rb.updated, active: true },
+        { title: 'Stok disesuaikan', desc: '+12 unit · PO-0288 diterima', time: '16 Jul' },
+        { title: 'Produk dibuat', desc: 'Diimpor dari suppliers.csv', time: 'Mar 2026' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

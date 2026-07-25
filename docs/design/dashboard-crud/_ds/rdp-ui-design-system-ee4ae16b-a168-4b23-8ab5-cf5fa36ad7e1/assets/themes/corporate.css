@@ -1,0 +1,52 @@
+/* RDP UI — Theme: Corporate (Slate + Navy · RDP Original) */
+[data-rdp-theme="corporate"] {
+  --rdp-primary:        #24427C;
+  --rdp-primary-hover:  #1B3462;
+  --rdp-primary-soft:   #E9EEF7;
+  --rdp-on-primary:     #FFFFFF;
+
+  --rdp-background:     #F5F7FA;
+  --rdp-surface:        #FFFFFF;
+  --rdp-surface-raised: #FFFFFF;
+  --rdp-surface-sunken: #EDF0F5;
+
+  --rdp-text:           #17233A;
+  --rdp-text-muted:     #5B6779;
+
+  --rdp-border:         #DCE2EB;
+  --rdp-border-strong:  #BFC8D6;
+  --rdp-focus:          #24427C;
+
+  --rdp-success:        #1E7A46;
+  --rdp-success-soft:   #E8F5EE;
+  --rdp-warning:        #9A6A0B;
+  --rdp-warning-soft:   #FDF6E3;
+  --rdp-danger:         #B3382D;
+  --rdp-danger-soft:    #FCECEA;
+  --rdp-info:           #2A5FA8;
+  --rdp-info-soft:      #EBF1F9;
+
+  --rdp-font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* compat */
+  --rdp-bg: var(--rdp-surface);
+  --rdp-bg-secondary: var(--rdp-background);
+  --rdp-bg-tertiary:  var(--rdp-surface-sunken);
+  --rdp-border-light: var(--rdp-border);
+  --rdp-text-secondary: var(--rdp-text-muted);
+  --rdp-text-inverse: var(--rdp-on-primary);
+  --rdp-cream:      var(--rdp-background);
+  --rdp-cream-dark: var(--rdp-surface-sunken);
+  --pico-primary:            var(--rdp-primary);
+  --pico-primary-hover:      var(--rdp-primary-hover);
+  --pico-primary-inverse:    var(--rdp-on-primary);
+  --pico-background-color:   var(--rdp-surface);
+  --pico-color:              var(--rdp-text);
+  --pico-muted-color:        var(--rdp-text-muted);
+  --pico-muted-border-color: var(--rdp-border);
+  --pico-card-background-color: var(--rdp-surface);
+  --pico-card-border-color:     var(--rdp-border);
+  --pico-form-element-background-color: var(--rdp-background);
+  --pico-form-element-border-color:     var(--rdp-border);
+  --pico-form-element-focus-color:      var(--rdp-primary);
+}

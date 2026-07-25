@@ -76,7 +76,7 @@ DIPANGGIL DARI: Halaman aplikasi internal seperti Dashboard.
                 {% if navbar %}
                     {{ navbar }}
                 {% else %}
-                    {# Hamburger — shown at mobile & tablet, hidden on desktop #}
+                    {# Hamburger — mobile only #}
                     <button
                         @click="sidebarOpen = !sidebarOpen"
                         class="rdp-topnav__toggle"
@@ -88,34 +88,106 @@ DIPANGGIL DARI: Halaman aplikasi internal seperti Dashboard.
                             <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </button>
-                    
-                    {# Search box — hidden on mobile (lives in sidebar), visible tablet+ #}
-                    <div class="app-search-box" style="margin-left: 12px;">
-                        ⌕ <input type="text" placeholder="Search…" />
+
+                    {# Global search — desktop #}
+                    <div class="app-search-box" style="margin-left: 12px; position: relative;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--rdp-text-muted)"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                        <input type="text" placeholder="Cari…" />
                         <span class="app-search-badge">⌘K</span>
                     </div>
-                    
-                    {# Desktop right menu (hidden on mobile) #}
-                    <div class="app-desktop-only" style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+
+                    <div style="flex: 1;"></div>
+
+                    {# Desktop right actions #}
+                    <div class="app-desktop-only" style="display: flex; align-items: center; gap: 4px;">
                         {{ navbar_actions }}
-                        <button @click="toggleDarkMode()"
-                                style="width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--rdp-border); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: var(--rdp-text-muted); background: transparent; cursor: pointer;"
-                                :title="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
-                                :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-                            <span x-show="!darkMode" aria-hidden="true">🌙</span>
-                            <span x-show="darkMode" aria-hidden="true" style="display:none;">☀️</span>
-                        </button>
-                        <span style="width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--rdp-border); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: var(--rdp-text-muted); cursor: pointer;">🔔</span>
-                        <span style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--rdp-border); cursor: pointer;">
-                            <span style="width: 22px; height: 22px; border-radius: 99px; background: #D6E7DF; color: #10513F; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">{{ user.username|default:"G"|slice:":2"|upper }}</span>
-                            <span style="font-size: 13px; font-weight: 600; color: var(--rdp-text);">{{ user.username|default:"Guest" }}</span>
-                            <span style="color: #8A857C; font-size: 10px;">▾</span>
-                        </span>
+
+                        {# Theme picker dropdown #}
+                        <div x-data="{ open: false }" @click.away="open = false" style="position: relative;">
+                            <button title="Tema" @click="open = !open"
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+                            </button>
+                            <div x-show="open" x-cloak
+                                 class="app-navbar-dropdown" style="min-width: 210px; max-height: 380px; overflow-y: auto; right: 0; left: auto;">
+                                <div class="app-navbar-dropdown__label">Tema</div>
+                                {% for t in RDP_THEME_LIST %}
+                                <button class="app-navbar-dropdown__item" onclick="window.setRdpTheme('{{ t }}'); this.closest('[x-data]').__x.$data.open = false">
+                                    <span data-rdp-theme="{{ t }}" style="width:16px;height:16px;border-radius:4px;background:var(--rdp-primary);border:1px solid var(--rdp-border);flex-shrink:0;display:inline-block;"></span>
+                                    <span style="flex:1;text-align:left;text-transform:capitalize;">{{ t }}</span>
+                                </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {# Notifikasi dropdown #}
+                        <div x-data="{ open: false }" @click.away="open = false" style="position: relative;">
+                            <button title="Notifikasi" @click="open = !open"
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px; position: relative;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+                            </button>
+                            <div x-show="open" x-cloak class="app-navbar-dropdown" style="min-width: 300px; padding: 0; right: 0; left: auto;">
+                                <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--rdp-border);">
+                                    <span style="font-weight:600;font-size:13.5px;flex:1;">Notifikasi</span>
+                                </div>
+                                <div style="padding:32px 16px;text-align:center;color:var(--rdp-text-muted);font-size:13px;">
+                                    Tidak ada notifikasi baru.
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Divider #}
+                        <span style="width:1px;height:24px;background:var(--rdp-border);margin:0 4px;flex-shrink:0;"></span>
+
+                        {# User profile dropdown #}
+                        <div x-data="{ open: false }" @click.away="open = false" style="position: relative;">
+                            <button @click="open = !open"
+                                    style="display:flex;align-items:center;gap:9px;background:transparent;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;font-family:inherit;">
+                                <span class="rdp-avatar rdp-avatar--sm" style="background:var(--rdp-primary-soft);color:var(--rdp-primary);font-weight:600;font-size:11px;">
+                                    {{ user.get_full_name|default:user.username|default:"G"|slice:":2"|upper }}
+                                </span>
+                                <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.25;">
+                                    <span style="font-size:13px;font-weight:600;color:var(--rdp-text);">{{ user.get_full_name|default:user.username|default:"Guest" }}</span>
+                                    <span style="font-size:11px;color:var(--rdp-text-muted);">{{ user.email|default:"" }}</span>
+                                </span>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                            </button>
+                            <div x-show="open" x-cloak class="app-navbar-dropdown" style="min-width: 240px; right: 0; left: auto;">
+                                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px 12px;">
+                                    <span class="rdp-avatar rdp-avatar--sm" style="background:var(--rdp-primary-soft);color:var(--rdp-primary);font-weight:600;font-size:11px;">
+                                        {{ user.get_full_name|default:user.username|default:"G"|slice:":2"|upper }}
+                                    </span>
+                                    <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;">
+                                        <span style="font-size:13.5px;font-weight:600;">{{ user.get_full_name|default:user.username }}</span>
+                                        <span style="font-size:12px;color:var(--rdp-text-muted);">{{ user.email }}</span>
+                                    </span>
+                                </div>
+                                <div class="rdp-dropdown__divider"></div>
+                                <div class="app-navbar-dropdown__label">Tampilan</div>
+                                <button class="app-navbar-dropdown__item" onclick="window.toggleRdpDarkMode()">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                                    <span style="flex:1;text-align:left;">Dark mode</span>
+                                </button>
+                                <div class="rdp-dropdown__divider"></div>
+                                <a href="{% url 'accounts:profile' %}" class="app-navbar-dropdown__item">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <span style="flex:1;">Profil</span>
+                                </a>
+                                <div class="rdp-dropdown__divider"></div>
+                                <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="app-navbar-dropdown__item app-navbar-dropdown__item--danger" style="width:100%;background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
+                                        <span style="flex:1;text-align:left;">Keluar</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    
-                    {# Mobile profile avatar — only shown on mobile #}
+
+                    {# Mobile profile avatar #}
                     <span class="app-mobile-avatar" style="margin-left: auto;">
-                        {{ user.username|default:"G"|slice:":2"|upper }}
+                        {{ user.get_full_name|default:user.username|default:"G"|slice:":2"|upper }}
                     </span>
                 {% endif %}
             </c-slot>
