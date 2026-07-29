@@ -536,8 +536,9 @@ def _generate_list_template(app: str, name: str, verbose: str, style: str) -> st
 <c-layout.app title="Daftar {verbose}">
 
     {{# ── Breadcrumb ─────────────────────────────────────── #}}
+    {{% url 'dashboard:index' as dash_url %}}{{% url 'home' as home_url %}}
     <ul class="rdp-breadcrumb">
-        <li><a href="{{% url 'dashboard:index' %}}">Katalog</a></li>
+        <li><a href="{{{{ dash_url|default:home_url|default:'/' }}}}">Katalog</a></li>
         <li>Daftar {verbose}</li>
     </ul>
 
@@ -835,8 +836,9 @@ def _generate_detail_template(app: str, name: str, verbose: str) -> str:
 {{# templates/apps/{app}/{name_lower}_detail.html #}}
 <c-layout.app title="{{{{ object.name }}}}">
 
+    {{% url 'dashboard:index' as dash_url %}}{{% url 'home' as home_url %}}
     <ul class="rdp-breadcrumb">
-        <li><a href="{{% url 'dashboard:index' %}}">Dashboard</a></li>
+        <li><a href="{{{{ dash_url|default:home_url|default:'/' }}}}">Katalog</a></li>
         <li><a href="{{% url '{app}:{name_lower}-list' %}}">Daftar {verbose}</a></li>
         <li>{{{{ object.name }}}}</li>
     </ul>

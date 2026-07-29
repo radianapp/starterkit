@@ -45,9 +45,12 @@ def user_login(request):
 
     DIPANGGIL DARI: accounts:login URL
     """
-    # Sudah login — buang ke dashboard
+    # Sudah login — redirect ke target aman (bukan login page lagi)
     if request.user.is_authenticated:
-        return redirect(_LOGIN_REDIRECT)
+        next_url = request.GET.get("next") or _LOGIN_REDIRECT
+        if next_url and not next_url.startswith("/accounts/login"):
+            return redirect(next_url)
+        return redirect("admin:index")
 
     is_htmx = request.headers.get("HX-Request") == "true"
 

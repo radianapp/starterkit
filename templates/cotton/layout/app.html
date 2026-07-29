@@ -20,8 +20,9 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                     {{ sidebar }}
                 {% else %}
                     {# Brand / Logo Header — 1:1 dengan ProductOS Dashboard Shell #}
+                    {% url 'dashboard:index' as dash_url %}{% url 'home' as home_url %}
                     <div class="rdp-sidebar__brand-wrapper" style="padding: 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--rdp-border);">
-                        <a href="{% url 'dashboard:index' %}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--rdp-text);">
+                        <a href="{{ dash_url|default:home_url|default:'/' }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--rdp-text);">
                             <span style="width: 28px; height: 28px; border-radius: 6px; background: var(--rdp-primary, #15654E); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px;">P</span>
                             <span style="font-weight: 700; font-size: 16px; letter-spacing: -0.01em; color: var(--rdp-text);">{{ navbar_brand|default:APP_BRAND_SHORT|default:'ProductOS' }}</span>
                         </a>
@@ -31,8 +32,8 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                     <nav style="display: flex; flex-direction: column; gap: 2px; padding: 12px 10px; flex: 1; overflow-y: auto;" aria-label="Navigasi sidebar">
                         <div class="rdp-sidebar__section-title" style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rdp-text-muted); padding: 6px 8px 4px;">Menu Utama</div>
                         
-                        <a href="{% url 'dashboard:index' %}" class="sidebar-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+                        <a href="{{ dash_url|default:home_url|default:'/' }}" class="sidebar-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rx></svg>
                             <span>Dashboard</span>
                         </a>
                         

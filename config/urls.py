@@ -24,13 +24,31 @@ def is_app_installed(app_module_name: str) -> bool:
 
 def home_view(request):
     """
-    Root URL redirect:
-    - Jika user sudah login dan apps.dashboard terpasang -> redirect ke dashboard
-    - Jika template home.html ada -> tampilkan landing page publik
-    - Jika home.html tidak ada (landing page dinonaktifkan) -> redirect ke login page
+    Root URL redirect pintar:
+    - Jika user sudah login:
+        - Jika apps.dashboard terpasang -> redirect ke dashboard:index
+        - Jika ada app kustom lain (misal: billing, inventory) -> redirect ke app tersebut
+        - Else -> redirect ke admin:index
+    - Jika belum login:
+        - Jika template home.html ada -> tampilkan landing page
+        - Jika tidak ada -> redirect ke accounts:login atau admin:index
     """
-    if request.user.is_authenticated and is_app_installed("apps.dashboard"):
-        return redirect("dashboard:index")
+    if request.user.is_authenticated:
+        if is_app_installed("apps.dashboard"):
+            return redirect("dashboard:index")
+
+        # Cari app pengguna pertama di apps/ selain core & accounts
+        for app_path in settings.INSTALLED_APPS:
+            if app_path.startswith("apps.") and app_path not in ("apps.core", "apps.accounts", "apps.dashboard"):
+                app_name = app_path.split(".")[1]
+                try:
+                    return redirect(f"{app_name}:list")
+                except Exception:
+                    try:
+                        return redirect(f"{app_name}:{app_name}-list")
+                    except Exception:
+                        pass
+        return redirect("admin:index")
 
     from django.template.loader import TemplateDoesNotExist, get_template
 
