@@ -273,6 +273,7 @@ JAZZMIN_SETTINGS = {
     "show_ui_builder": False,
     "changeform_format": "horizontal_tabs",
     "language_chooser": False,
+    "default_theme_mode": "auto",
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -294,7 +295,6 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_flat_style": False,
     # 🧪 TEST MANUAL: Theme bisa diubah ke "flatly" untuk light mode
     "theme": "darkly",
-    "dark_mode_theme": None,
     "button_classes": {
         "primary": "btn-primary",
         "secondary": "btn-secondary",

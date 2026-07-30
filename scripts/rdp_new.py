@@ -81,7 +81,6 @@ def main():  # noqa: C901
     has_contact = ask_yes_no("\nApakah Anda membutuhkan halaman Publik 'Contact Us'?", default="y")
     has_faq = ask_yes_no("Apakah Anda membutuhkan halaman Publik 'FAQ'?", default="y")
     has_dashboard = ask_yes_no("Apakah Anda ingin menyertakan aplikasi 'dashboard'?", default="y")
-    has_inventory = ask_yes_no("Apakah Anda ingin menyertakan aplikasi contoh 'inventory'?", default="y")
 
     # Target path
     src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -104,9 +103,32 @@ def main():  # noqa: C901
         "htmlcov",
         "rdp_starter_kit.egg-info",
         "new_project",
+        ".agents",
+        ".claude",
+        "logs",
+        "media",
+        "scratch_test_dir",
+        "build",
+        "dist",
+        "bin",
+        "docs",
+        "scripts",
+        "tests",
         proj_name,
     }
-    exclude_files = {".coverage", "db.sqlite3"}
+    exclude_files = {
+        ".coverage",
+        "db.sqlite3",
+        "CHANGELOG.md",
+        "README.md",
+        "backup.bundle",
+        "tags-backup.txt",
+        "layout_dump.html",
+        "fix_bools.py",
+        "scratch_gens.py",
+        "install.ps1",
+        "install.sh",
+    }
 
     # Copy files
     os.makedirs(target_dir)
@@ -118,11 +140,9 @@ def main():  # noqa: C901
             if item in exclude_dirs:
                 continue
             if item == "apps":
-                ignore_apps = ["test_app"]
+                ignore_apps = ["test_app", "inventory"]  # inventory tidak lagi disertakan
                 if not has_dashboard:
                     ignore_apps.append("dashboard")
-                if not has_inventory:
-                    ignore_apps.append("inventory")
                 
                 def ignore_apps_func(d, contents):
                     ignored = set()
@@ -136,6 +156,23 @@ def main():  # noqa: C901
                     return ignored
 
                 ignore_func = ignore_apps_func
+            elif item == "templates":
+                ignore_templates = ["starter", "htmx_examples", "apps", "docs", "inventory", "test_components_render.html", "test_layouts_render.html", "dev_components.html"]
+                if not has_dashboard:
+                    ignore_templates.append("dashboard")
+                
+                def ignore_templates_func(d, contents):
+                    ignored = set()
+                    if os.path.basename(d) == "templates" and os.path.dirname(d) == src_dir:
+                        for template in ignore_templates:
+                            if template in contents:
+                                ignored.add(template)
+                    import fnmatch
+                    for pat in ["*.pyc", "__pycache__", ".venv", ".git", ".pytest_cache", ".ruff_cache"]:
+                        ignored.update(fnmatch.filter(contents, pat))
+                    return ignored
+
+                ignore_func = ignore_templates_func
             else:
                 ignore_func = shutil.ignore_patterns("*.pyc", "__pycache__", ".venv", ".git", ".pytest_cache", ".ruff_cache")
 
@@ -196,7 +233,7 @@ def main():  # noqa: C901
         for line in base_lines:
             if '"apps.dashboard.apps.DashboardConfig"' in line and not has_dashboard:
                 continue
-            if '"apps.inventory.apps.InventoryConfig"' in line and not has_inventory:
+            if '"apps.inventory.apps.InventoryConfig"' in line:
                 continue
             if '"apps.test_app.apps.TestAppConfig"' in line:
                 continue
@@ -215,6 +252,9 @@ def main():  # noqa: C901
             'description = "Production-ready Django starter template for Radian Data Platform (RDP)"',
             f'description = "{proj_desc}"',
         )
+        # Remove the [project.scripts] section since the new project isn't a CLI tool
+        content = re.sub(r'\[project\.scripts\]\n.*?(\n\[)', r'\1', content, flags=re.DOTALL)
+        
         with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(content)
 
@@ -252,6 +292,26 @@ def main():  # noqa: C901
     # Write HTML files if selected
     public_templates_dir = os.path.join(target_dir, "templates", "public")
     os.makedirs(public_templates_dir, exist_ok=True)
+    
+    # 9. Create a clean CHANGELOG.md
+    changelog_path = os.path.join(target_dir, "CHANGELOG.md")
+    with open(changelog_path, "w", encoding="utf-8") as f:
+        f.write(f"# Changelog\\n\\nAll notable changes to {proj_name} will be documented in this file.\\n\\n## [Unreleased]\\n")
+
+    # 10. Create empty docs directory
+    docs_dir = os.path.join(target_dir, "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+    
+    # 11. Create a clean README.md
+    readme_path = os.path.join(target_dir, "README.md")
+    with open(readme_path, "w", encoding="utf-8") as f:
+        f.write(f"# {proj_name}\\n\\n{proj_desc}\\n")
+        
+    # 12. Create an empty tests directory
+    tests_dir = os.path.join(target_dir, "tests")
+    os.makedirs(tests_dir, exist_ok=True)
+    with open(os.path.join(tests_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
 
     if has_contact:
         contact_html = """<c-layout.public title="Hubungi Kami">

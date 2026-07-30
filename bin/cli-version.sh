@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# bin/upgrade-version.sh
+# bin/cli-version.sh
 # Bump versi CLI, commit, tag, dan push ke GitHub.
 #
 # Penggunaan:
-#   bash bin/upgrade-version.sh          # interaktif — suggest versi berikutnya
-#   bash bin/upgrade-version.sh 0.4.0   # langsung set versi
+#   bash bin/cli-version.sh          # interaktif — suggest versi berikutnya
+#   bash bin/cli-version.sh 0.4.0   # langsung set versi
 #
 # Alur:
 #   1. Ambil versi lokal dari pyproject.toml

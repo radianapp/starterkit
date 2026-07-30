@@ -1,9 +1,9 @@
-# bin/upgrade-version.ps1
+# bin/cli-version.ps1
 # Bump versi CLI, commit, tag, dan push ke GitHub.
 #
 # Penggunaan:
-#   .\bin\upgrade-version.ps1           # interaktif — suggest versi berikutnya
-#   .\bin\upgrade-version.ps1 0.4.0    # langsung set versi
+#   .\bin\cli-version.ps1           # interaktif — suggest versi berikutnya
+#   .\bin\cli-version.ps1 0.4.0    # langsung set versi
 #
 # Alur:
 #   1. Ambil versi lokal dari pyproject.toml
