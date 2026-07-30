@@ -66,7 +66,23 @@ RDP_APP_ACCENT = env_var("RDP_APP_ACCENT", "navy")
 
 # ⚙️ KONFIGURASI: Framework & App Versions
 FRAMEWORK_VERSION = env_var("FRAMEWORK_VERSION", "0.3.0")
-LOCAL_APP_VERSION = env_var("LOCAL_APP_VERSION", "1.0.0")
+
+_version_file = BASE_DIR / "config" / "version.json"
+LOCAL_APP_VERSION = "1.0.0"
+LOCAL_APP_VERSION_DATE = ""
+LOCAL_APP_VERSION_BY = "System"
+LOCAL_APP_VERSION_DESC = ""
+
+if _version_file.exists():
+    try:
+        with open(_version_file, "r") as f:
+            _v_data = json.load(f)
+            LOCAL_APP_VERSION = _v_data.get("version", LOCAL_APP_VERSION)
+            LOCAL_APP_VERSION_DATE = _v_data.get("updated_at", "")
+            LOCAL_APP_VERSION_BY = _v_data.get("updated_by", "System")
+            LOCAL_APP_VERSION_DESC = _v_data.get("description", "")
+    except Exception:
+        pass
 
 
 # ⚙️ KONFIGURASI: White label — brand bisa dikustom via .env

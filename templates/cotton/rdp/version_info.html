@@ -1,0 +1,21 @@
+<c-vars 
+    show_date="False"
+    show_author="False"
+    class="" 
+/>
+
+<div class="{{ class }}" 
+     {% if APP_VERSION_DESC %}title="{{ APP_VERSION_DESC }}"{% endif %}
+     style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875em; color: var(--pico-muted-color);">
+    <span>v{{ LOCAL_APP_VERSION|default:"1.0.0" }}</span>
+    
+    {% if show_date == "True" and APP_VERSION_DATE %}
+        <span style="opacity: 0.5;">&bull;</span>
+        <span>{{ APP_VERSION_DATE|date:"d M Y" }}</span>
+    {% endif %}
+
+    {% if show_author == "True" and APP_VERSION_BY %}
+        <span style="opacity: 0.5;">&bull;</span>
+        <span>By {{ APP_VERSION_BY }}</span>
+    {% endif %}
+</div>

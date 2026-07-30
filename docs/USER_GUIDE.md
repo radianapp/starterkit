@@ -87,7 +87,7 @@ Untuk menyajikan data terstruktur:
 - **Empty State**: `<c-rdp.empty_state title="Belum ada data" description="Mulai dengan menambah data pertama Anda." />`
 
 ### 5. Layout & Responsive Behavior (Phase 4.5)
-RDP UI menyediakan Holy Grail layout melalui `<c-layout.app>` dan `<c-layout.dashboard>` yang otomatis beradaptasi dengan berbagai ukuran layar (Responsive Strategy):
+RDP UI menyediakan Holy Grail layout melalui `<c-layout.app>` yang otomatis beradaptasi dengan berbagai ukuran layar (Responsive Strategy):
 
 - **Mobile (< 768px)**: 
   - Sidebar tersembunyi (Drawer) yang dapat dibuka via ikon Hamburger.

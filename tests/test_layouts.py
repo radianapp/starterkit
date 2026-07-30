@@ -49,7 +49,7 @@ class TestLayouts(SimpleTestCase):
 
     def test_all_seven_layouts_render(self):
         """Memastikan ketujuh layout Cotton dapat dirender tanpa error."""
-        layouts = ["base", "auth", "public", "dashboard", "error", "email", "print"]
+        layouts = ["base", "auth", "public", "app", "error", "email", "print"]
         for layout in layouts:
             html = self.render_layout(layout)
             assert "Hello World" in html or "SITE_NAME" in html

@@ -98,7 +98,7 @@ class BookCreateView(View):
 ## Langkah 6: Integrasi Template HTML
 Desain halaman utama di `templates/books/book_list.html` dengan pemanggilan data dinamis:
 ```html
-<c-layout.dashboard title="Daftar Buku">
+<c-layout.app title="Daftar Buku">
     <button hx-get="{% url 'books:create' %}" hx-target="#form-container">Tambah Buku</button>
     <div id="form-container"></div>
 
@@ -115,7 +115,7 @@ Desain halaman utama di `templates/books/book_list.html` dengan pemanggilan data
             {% endfor %}
         </tbody>
     </table>
-</c-layout.dashboard>
+</c-layout.app>
 ```
 Dan template baris data di `templates/books/partials/book_row.html`:
 ```html

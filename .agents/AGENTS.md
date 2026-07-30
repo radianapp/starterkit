@@ -157,8 +157,9 @@ Format: `US: US-{nomor} — {judul story}` — singkat, di baris pertama docstri
 - Override komponen: buat file di `templates/cotton/rdp/{nama}.html` di project ini
 - Jangan pakai utility CSS bebas di template — styling lewat komponen atau CSS var RDP-UI
 
-**Test**
+**Test (Wajib TDD untuk AI)**
 - Setiap view/model baru wajib ada test-nya di `tests/`
+- **Aturan TDD AI**: AI WAJIB menulis *unit test* BERSAMAAN dengan implementasi fitur (atau bahkan sebelum implementasinya sempurna). Jangan pernah menunda penulisan *test* hingga akhir *Sprint* atau akhir fase rilis. Jika ada User Story baru, sertakan file `tests/` di daftar *file* yang diubah.
 - Jalankan `uv run pytest` sebelum commit — wajib hijau
 - Coverage target: > 80% untuk kode di `apps/`
 

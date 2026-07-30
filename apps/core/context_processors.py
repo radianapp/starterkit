@@ -17,6 +17,9 @@ def debug_settings(request):
         "RDP_APP_ACCENT": getattr(settings, "RDP_APP_ACCENT", "navy"),
         "FRAMEWORK_VERSION": getattr(settings, "FRAMEWORK_VERSION", "0.3.0"),
         "LOCAL_APP_VERSION": getattr(settings, "LOCAL_APP_VERSION", "1.0.0"),
+        "APP_VERSION_DATE": getattr(settings, "LOCAL_APP_VERSION_DATE", ""),
+        "APP_VERSION_BY": getattr(settings, "LOCAL_APP_VERSION_BY", "System"),
+        "APP_VERSION_DESC": getattr(settings, "LOCAL_APP_VERSION_DESC", ""),
         "RDP_APP_THEME": getattr(settings, "RDP_APP_THEME", "default"),
         "RDP_THEME_LIST": getattr(settings, "RDP_THEME_LIST", [
             "default", "light", "dark", "midnight",

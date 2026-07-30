@@ -673,7 +673,7 @@ Sebagai developer, saya ingin tujuh layout Cotton (`<c-layout.base|auth|public|d
 - Given `<c-layout.base>`, When dirender, Then load order: PicoCSS → `rdp.css` (berversi) → HTMX → `rdp.js` → Alpine.js; ada skip-nav link; `data-theme` ada di `<html>`; CSRF meta tag ada; `debug.css` hanya diload jika `RDP_DEBUG_OVERLAY` aktif.
 - Given `<c-layout.auth>`, When dipakai di halaman login/register, Then tampil layout terpusat (centered content) tanpa navbar/sidebar.
 - Given `<c-layout.public>`, When dipakai di halaman landing/about, Then tampil navbar publik + footer; mendukung slot `nav_links`.
-- Given `<c-layout.dashboard>`, When dipakai di halaman app, Then tampil topbar + sidebar + main content + footer.
+- Given `<c-layout.app>`, When dipakai di halaman app, Then tampil topbar + sidebar + main content + footer.
 - Given `<c-layout.error>`, When dipakai di 403/404/500, Then tampil layout sederhana terpusat tanpa sidebar.
 - Given `<c-layout.email>`, When dipakai di template email HTML, Then output HTML dengan CSS inline-safe (tanpa link CDN eksternal) dan layout yang konsisten di email client.
 - Given `<c-layout.print>`, When dipakai dan halaman di-print, Then sidebar/navbar tersembunyi, konten utama penuh lebar.
@@ -692,7 +692,7 @@ Sebagai developer, saya ingin tujuh layout Cotton (`<c-layout.base|auth|public|d
 ## US-028: App shell lengkap — persistent theme, toast global, modal global
 
 **Story**:
-Sebagai developer, saya ingin `<c-layout.dashboard>` sudah menyediakan tema persisten, container toast global, dan container modal global, sehingga semua halaman app langsung mendapat fitur ini tanpa setup per-halaman.
+Sebagai developer, saya ingin `<c-layout.app>` sudah menyediakan tema persisten, container toast global, dan container modal global, sehingga semua halaman app langsung mendapat fitur ini tanpa setup per-halaman.
 
 **Prioritas**: Must
 **Estimasi**: 3

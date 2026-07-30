@@ -77,9 +77,11 @@ def main():  # noqa: C901
         except ValueError:
             print("Ketik angka yang tertera.")
 
-    # 4. Optional pages
+    # 4. Optional pages and apps
     has_contact = ask_yes_no("\nApakah Anda membutuhkan halaman Publik 'Contact Us'?", default="y")
     has_faq = ask_yes_no("Apakah Anda membutuhkan halaman Publik 'FAQ'?", default="y")
+    has_dashboard = ask_yes_no("Apakah Anda ingin menyertakan aplikasi 'dashboard'?", default="y")
+    has_inventory = ask_yes_no("Apakah Anda ingin menyertakan aplikasi contoh 'inventory'?", default="y")
 
     # Target path
     src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -115,13 +117,33 @@ def main():  # noqa: C901
         if os.path.isdir(src_item):
             if item in exclude_dirs:
                 continue
+            if item == "apps":
+                ignore_apps = ["test_app"]
+                if not has_dashboard:
+                    ignore_apps.append("dashboard")
+                if not has_inventory:
+                    ignore_apps.append("inventory")
+                
+                def ignore_apps_func(d, contents):
+                    ignored = set()
+                    if os.path.basename(d) == "apps" and os.path.dirname(d) == src_dir:
+                        for app in ignore_apps:
+                            if app in contents:
+                                ignored.add(app)
+                    import fnmatch
+                    for pat in ["*.pyc", "__pycache__", ".venv", ".git", ".pytest_cache", ".ruff_cache"]:
+                        ignored.update(fnmatch.filter(contents, pat))
+                    return ignored
+
+                ignore_func = ignore_apps_func
+            else:
+                ignore_func = shutil.ignore_patterns("*.pyc", "__pycache__", ".venv", ".git", ".pytest_cache", ".ruff_cache")
+
             shutil.copytree(
                 src_item,
                 dst_item,
                 dirs_exist_ok=True,
-                ignore=shutil.ignore_patterns(
-                    "*.pyc", "__pycache__", ".venv", ".git", ".pytest_cache", ".ruff_cache"
-                ),
+                ignore=ignore_func,
             )
         else:
             if item in exclude_files:
@@ -163,6 +185,25 @@ def main():  # noqa: C901
 
     with open(env_path, "w", encoding="utf-8") as f:
         f.writelines(new_env_lines)
+
+    # 6b. Menyesuaikan LOCAL_APPS di config/settings/base.py
+    base_py_path = os.path.join(target_dir, "config", "settings", "base.py")
+    if os.path.exists(base_py_path):
+        with open(base_py_path, encoding="utf-8") as f:
+            base_lines = f.readlines()
+        
+        new_base_lines = []
+        for line in base_lines:
+            if '"apps.dashboard.apps.DashboardConfig"' in line and not has_dashboard:
+                continue
+            if '"apps.inventory.apps.InventoryConfig"' in line and not has_inventory:
+                continue
+            if '"apps.test_app.apps.TestAppConfig"' in line:
+                continue
+            new_base_lines.append(line)
+        
+        with open(base_py_path, "w", encoding="utf-8") as f:
+            f.writelines(new_base_lines)
 
     # 7. Rename references to rdp-starter-kit or rdp_starter_kit in files
     pyproject_path = os.path.join(target_dir, "pyproject.toml")

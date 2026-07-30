@@ -13,7 +13,7 @@ Setiap langkah (*step*) dalam wizard adalah fragmen HTML parsial. HTMX menukar k
 Halaman ini bertindak sebagai penampung langkah pertama:
 ```html
 {# templates/wizard/wizard_index.html #}
-<c-layout.dashboard title="Wizard Pendaftaran">
+<c-layout.app title="Wizard Pendaftaran">
     <div class="wizard-steps-indicator">
         <!-- Indikator visual progres -->
     </div>
@@ -21,7 +21,7 @@ Halaman ini bertindak sebagai penampung langkah pertama:
     <div id="wizard-container" hx-target="this" hx-swap="innerHTML">
         {% include "wizard/partials/step_1.html" %}
     </div>
-</c-layout.dashboard>
+</c-layout.app>
 ```
 
 ---
