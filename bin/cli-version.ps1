@@ -101,7 +101,7 @@ Write-Host "[OK] Committed"
 git tag "v$NewVersion"
 Write-Host "[OK] Tagged v$NewVersion"
 
-git push origin main --tags
+git push origin main "v$NewVersion"
 Write-Host ""
 Write-Host "[OK] v$NewVersion tersedia di GitHub."
 Write-Host "     User upgrade: uv tool upgrade rdp-starter-kit"

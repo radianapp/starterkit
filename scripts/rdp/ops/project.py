@@ -100,6 +100,62 @@ def setup_pyproject(target_dir: str, proj_name: str, proj_desc: str):
             f.write(lock_content)
 
 
+def reset_project_scaffolding(target_dir: str, proj_name: str, proj_desc: str):
+    """
+    Mereset folder/file bawaan starterkit agar siap digunakan untuk project baru.
+    (Misalnya menghapus docs bawaan, tests bawaan, dan reset CHANGELOG/README).
+    """
+    # 1. Reset docs/
+    docs_dir = os.path.join(target_dir, "docs")
+    if os.path.exists(docs_dir):
+        shutil.rmtree(docs_dir, onerror=on_rm_error)
+    os.makedirs(docs_dir, exist_ok=True)
+
+    # 2. Reset tests/
+    tests_dir = os.path.join(target_dir, "tests")
+    if os.path.exists(tests_dir):
+        shutil.rmtree(tests_dir, onerror=on_rm_error)
+    os.makedirs(tests_dir, exist_ok=True)
+    with open(os.path.join(tests_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
+
+    # 3. Reset CHANGELOG.md
+    changelog_path = os.path.join(target_dir, "CHANGELOG.md")
+    with open(changelog_path, "w", encoding="utf-8") as f:
+        f.write(f"# Changelog\\n\\nAll notable changes to {proj_name} will be documented in this file.\\n\\n## [Unreleased]\\n")
+
+    # 4. Reset README.md
+    readme_path = os.path.join(target_dir, "README.md")
+    with open(readme_path, "w", encoding="utf-8") as f:
+        f.write(f"# {proj_name}\\n\\n{proj_desc}\\n")
+
+    # 5. Hapus blok [project.scripts] dari pyproject.toml
+    pyproject_path = os.path.join(target_dir, "pyproject.toml")
+    if os.path.exists(pyproject_path):
+        with open(pyproject_path, encoding="utf-8") as f:
+            content = f.read()
+        content = re.sub(r'\[project\.scripts\]\\n.*?(\\n\[)', r'\\1', content, flags=re.DOTALL)
+        with open(pyproject_path, "w", encoding="utf-8") as f:
+            f.write(content)
+
+    # 6. Hapus folder/file yang tidak perlu di-copy (misalnya bin, instalation scripts, dll)
+    unnecessary = [
+        ".agents", ".claude", "logs", "media", "scratch_test_dir", 
+        "build", "dist", "bin", "scripts", "install.ps1", "install.sh", 
+        "backup.bundle", "tags-backup.txt", "layout_dump.html", 
+        "fix_bools.py", "scratch_gens.py"
+    ]
+    for item in unnecessary:
+        p = os.path.join(target_dir, item)
+        if os.path.isdir(p):
+            shutil.rmtree(p, onerror=on_rm_error)
+        elif os.path.isfile(p):
+            try:
+                os.remove(p)
+            except OSError:
+                pass
+
+
 def setup_optional_pages(target_dir: str, proj_name: str, has_contact: bool, has_faq: bool):
     """
     Tambahkan URL dan template untuk halaman publik opsional (Contact Us, FAQ).
@@ -507,6 +563,7 @@ def run_new(args: list[str]):
     print("  Mengatur konfigurasi...")
     setup_env(target_dir, proj_name, color_choice)
     setup_pyproject(target_dir, proj_name, proj_desc)
+    reset_project_scaffolding(target_dir, proj_name, proj_desc)
     cleanup_optional_features(target_dir, has_landing, has_auth, has_dashboard, has_demo_pages)
 
     if has_landing:

@@ -91,7 +91,7 @@ echo "[OK] Committed"
 git tag "v$NEW_VERSION"
 echo "[OK] Tagged v$NEW_VERSION"
 
-git push origin main --tags
+git push origin main "v$NEW_VERSION"
 echo ""
 echo "[OK] v$NEW_VERSION tersedia di GitHub."
 echo "     User upgrade: uv tool upgrade rdp-starter-kit"
