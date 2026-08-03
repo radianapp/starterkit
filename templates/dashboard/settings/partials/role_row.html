@@ -1,0 +1,36 @@
+<tr id="user-row-{{ u.id }}">
+    <td>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="rdp-avatar rdp-avatar--sm" style="background:var(--rdp-primary-soft, #EDF4F0);color:var(--rdp-primary, #15654E);font-weight:600;font-size:11px;">
+                {{ u.get_full_name|default:u.username|slice:":2"|upper }}
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <span style="font-weight: 600; color: var(--rdp-text);">{{ u.get_full_name|default:u.username }}</span>
+                {% if u.is_superuser %}
+                    <span style="font-size: 11px; color: var(--rdp-danger); font-weight: 600;">System Admin</span>
+                {% endif %}
+            </div>
+        </div>
+    </td>
+    <td style="color: var(--rdp-text-muted);">{{ u.email }}</td>
+    <td style="color: var(--rdp-text-muted);">{{ u.date_joined|date:"d M Y" }}</td>
+    <td>
+        <form hx-post="{% url 'dashboard:rbac_update_role' u.id %}" 
+              hx-target="#user-row-{{ u.id }}" 
+              hx-swap="outerHTML"
+              style="margin: 0;">
+            {% csrf_token %}
+            <select name="role" class="rdp-input" 
+                    onchange="this.form.dispatchEvent(new Event('submit'))"
+                    style="width: 100%; height: 36px; cursor: pointer;"
+                    {% if u == request.user %}disabled title="Tidak bisa mengubah peran sendiri"{% endif %}>
+                <option value="">-- Tidak ada --</option>
+                {% for role in available_roles %}
+                    <option value="{{ role }}" {% if u.groups.all.0.name == role %}selected{% endif %}>
+                        {{ role }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </td>
+</tr>

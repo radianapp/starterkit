@@ -38,3 +38,10 @@ uv run manage.py makemigrations dashboard
 uv run manage.py migrate
 ```
 
+## Bulk Upload User Tertunda atau Gagal
+
+**Masalah**: Proses import user dari file CSV yang besar (>1000 baris) tidak masuk ke database atau stuck.
+**Solusi**:
+1. Pemrosesan >1000 baris dikerjakan di background oleh **Celery**. Pastikan *worker* Celery dan instance Redis sudah aktif.
+2. Jalankan perintah `uv run celery -A config worker -l info` di terminal terpisah untuk menghidupkan Celery.
+3. Cek log pada layar Celery tersebut untuk menemukan error spesifik pada format file CSV atau email server yang mungkin gagal terkirim.

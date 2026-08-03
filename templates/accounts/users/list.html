@@ -1,0 +1,33 @@
+<c-layout.app title="{{ title }}">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <div>
+            <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: var(--rdp-text);">{{ title }}</h1>
+            <p class="rdp-text-muted" style="margin-top: 4px; font-size: 14px;">
+                Kelola hak akses dan peran seluruh pengguna di dalam sistem.
+            </p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <c-rdp.button color="secondary" outline="true"
+                          hx-get="{% url 'accounts:user_bulk_upload' %}" 
+                          hx-target="#modal-container"
+                          hx-swap="innerHTML">
+                Upload CSV
+            </c-rdp.button>
+            <c-rdp.button color="primary" 
+                          hx-get="{% url 'accounts:user_add' %}" 
+                          hx-target="#modal-container"
+                          hx-swap="innerHTML">
+                + Tambah Pengguna
+            </c-rdp.button>
+        </div>
+    </div>
+
+    <c-rdp.card>
+        <div id="user-table-container" 
+             hx-get="{% url 'accounts:user_list_partial' %}" 
+             hx-trigger="load, refreshUserList from:body">
+            <!-- Akan dimuat oleh HTMX -->
+            <div style="padding: 20px; text-align: center;">Memuat daftar pengguna...</div>
+        </div>
+    </c-rdp.card>
+</c-layout.app>

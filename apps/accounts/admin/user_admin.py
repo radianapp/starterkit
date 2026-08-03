@@ -15,6 +15,7 @@ ALUR:
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+from simple_history.admin import SimpleHistoryAdmin
 
 from apps.accounts.models import User, UserProfile
 
@@ -36,7 +37,7 @@ class UserProfileInline(admin.StackedInline):
 
 
 @admin.register(User)
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(SimpleHistoryAdmin, BaseUserAdmin):
     """
     TUJUAN: Custom admin interface untuk User model.
 

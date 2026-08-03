@@ -1,214 +1,163 @@
 # apps/inventory/views/produk.py
-# US-CRUD-01: Views CRUD Produk — demo dashboard CRUD
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.views import View
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.template.loader import render_to_string
 
-from apps.inventory.forms import ProdukForm
-from apps.inventory.models import Kategori, Pemasok, Produk
-
-
-def _shared_ctx():
-    """Konteks dropdown yang dipakai modal tambah dan edit."""
-    return {
-        "kategori_list": Kategori.objects.all(),
-        "pemasok_list": Pemasok.objects.all(),
-    }
+from ..models import Produk
+from ..forms import ProdukForm
 
 
-def _produk_list_qs(request):
+class ProdukListView(LoginRequiredMixin, ListView):
     """
-    TUJUAN: Bangun queryset produk dengan filter q dan kategori_filter.
+    TUJUAN: Tampilkan daftar semua Produk.
 
-    ALUR:
-      1. Ambil semua produk dengan select_related
-      2. Filter berdasarkan q (nama/SKU) dan kategori_filter
-      3. Return queryset + page_obj
-
-    DIPANGGIL DARI: ProdukListView, TabelProdukView
-    """
-    qs = Produk.objects.select_related("kategori", "pemasok").order_by("-updated_at")
-
-    q = request.GET.get("q", "").strip()
-    if q:
-        qs = qs.filter(Q(nama__icontains=q) | Q(sku__icontains=q))
-
-    kategori_filter = request.GET.get("kategori_filter", "").strip()
-    if kategori_filter:
-        qs = qs.filter(kategori_id=kategori_filter)
-
-    paginator = Paginator(qs, 20)
-    page_obj = paginator.get_page(request.GET.get("page", 1))
-    return qs, page_obj
-
-
-class ProdukListView(LoginRequiredMixin, View):
-    """
-    TUJUAN: Halaman list produk (full page).
-    US: US-CRUD-01 — CRUD Produk Dashboard
+    DIPANGGIL DARI: urls.py → name="produk-list"
+    DEPENDENSI: Produk model, templates/apps/inventory/produk_list.html
     """
 
-    def get(self, request):
-        from django.shortcuts import render
+    model = Produk
+    template_name = "apps/inventory/produk_list.html"
+    context_object_name = "items"
+    paginate_by = 20
 
-        _, page_obj = _produk_list_qs(request)
-        return render(request, "apps/produk/list.html", {
-            **_shared_ctx(),
-            "produk_list": page_obj.object_list,
-            "page_obj": page_obj,
-        })
+    def get_paginate_by(self, queryset):
+        """Ambil jumlah baris per halaman dari URL parameter atau pengaturan akun."""
+        # 1. Cek parameter URL (misal sedang diubah via dropdown HTMX)
+        paginate_by = self.request.GET.get("paginate_by")
+        if paginate_by and paginate_by.isdigit():
+            return int(paginate_by)
+            
+        # 2. Cek preferensi pengguna yang tersimpan di UserProfile
+        if self.request.user.is_authenticated:
+            from apps.accounts.services.settings_service import get_user_preference
+            user_pref = get_user_preference(self.request.user, "rows_per_page")
+            if user_pref:
+                try:
+                    return int(user_pref)
+                except ValueError:
+                    pass
+                    
+        # 3. Fallback default
+        return self.paginate_by
+
+    def get_queryset(self):
+        """Filter queryset berdasarkan parameter q (pencarian)."""
+        qs = super().get_queryset()
+        q = self.request.GET.get("q", "").strip()
+        if q:
+            qs = qs.filter(nama__icontains=q)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        """Tambahkan current_paginate_by ke context agar dropdown sinkron."""
+        context = super().get_context_data(**kwargs)
+        context["current_paginate_by"] = self.get_paginate_by(self.get_queryset())
+        return context
 
 
-class TabelProdukView(LoginRequiredMixin, View):
+class ProdukCreateModalView(LoginRequiredMixin, CreateView):
     """
-    TUJUAN: HTMX partial — swap #produk-table-area saat filter/search berubah.
-    US: US-CRUD-01
-    """
+    TUJUAN: Tampilkan modal form tambah Produk (HTMX partial).
 
-    def get(self, request):
-        from django.shortcuts import render
-
-        _, page_obj = _produk_list_qs(request)
-        return render(request, "apps/produk/partials/table_body.html", {
-            "produk_list": page_obj.object_list,
-            "page_obj": page_obj,
-        })
-
-
-class DetailPanelView(LoginRequiredMixin, View):
-    """
-    TUJUAN: HTMX partial — isi #detail-panel-container saat baris diklik.
-    US: US-CRUD-01
-    """
-
-    def get(self, request, pk):
-        from django.shortcuts import render
-
-        produk = get_object_or_404(Produk.objects.select_related("kategori", "pemasok"), pk=pk)
-        return render(request, "apps/produk/partials/detail_panel.html", {"produk": produk})
-
-
-class TambahModalView(LoginRequiredMixin, View):
-    """
-    TUJUAN: HTMX partial — render modal tambah produk.
-    US: US-CRUD-01
-    """
-
-    def get(self, request):
-        from django.shortcuts import render
-
-        return render(request, "apps/produk/partials/modal_tambah.html", {
-            "form": ProdukForm(),
-            **_shared_ctx(),
-        })
-
-
-class TambahProdukView(LoginRequiredMixin, View):
-    """
-    TUJUAN: Handle POST tambah produk, return table partial atau modal dengan error.
-    US: US-CRUD-01
+    DIPANGGIL DARI: urls.py → name="produk-create-modal" (GET)
+                    urls.py → name="produk-create" (POST)
     """
 
-    def post(self, request):
-        from django.shortcuts import render
+    model = Produk
+    form_class = ProdukForm
+    template_name = "apps/inventory/produk_create_modal.html"
 
-        form = ProdukForm(request.POST)
-        if form.is_valid():
-            form.save()
-            _, page_obj = _produk_list_qs(request)
-            response = render(request, "apps/produk/partials/table_body.html", {
-                "produk_list": page_obj.object_list,
-                "page_obj": page_obj,
-            })
-            # KEPUTUSAN TEKNIS: HX-Trigger untuk toast sukses via JS global
-            response["HX-Trigger"] = '{"showToast": {"message": "Produk ditambahkan", "type": "success"}}'
-            return response
+    def get(self, request, *args, **kwargs):
+        """Tampilkan modal create — response partial HTML."""
+        form = self.form_class()
+        html = render_to_string(self.template_name, {"form": form}, request=request)
+        return HttpResponse(html)
 
-        return render(request, "apps/produk/partials/modal_tambah.html", {
-            "form": form,
-            **_shared_ctx(),
-        }, status=422)
-
-
-class EditModalView(LoginRequiredMixin, View):
-    """
-    TUJUAN: HTMX partial — render modal edit produk dengan data pre-fill.
-    US: US-CRUD-01
-    """
-
-    def get(self, request, pk):
-        from django.shortcuts import render
-
-        produk = get_object_or_404(Produk, pk=pk)
-        return render(request, "apps/produk/partials/modal_edit.html", {
-            "form": ProdukForm(instance=produk),
-            "produk": produk,
-            **_shared_ctx(),
-        })
-
-
-class EditProdukView(LoginRequiredMixin, View):
-    """
-    TUJUAN: Handle POST edit produk, return table partial atau modal dengan error.
-    US: US-CRUD-01
-    """
-
-    def post(self, request, pk):
-        from django.shortcuts import render
-
-        produk = get_object_or_404(Produk, pk=pk)
-        form = ProdukForm(request.POST, instance=produk)
-        if form.is_valid():
-            form.save()
-            _, page_obj = _produk_list_qs(request)
-            response = render(request, "apps/produk/partials/table_body.html", {
-                "produk_list": page_obj.object_list,
-                "page_obj": page_obj,
-            })
-            response["HX-Trigger"] = '{"showToast": {"message": "Produk diperbarui", "type": "success"}}'
-            return response
-
-        return render(request, "apps/produk/partials/modal_edit.html", {
-            "form": form,
-            "produk": produk,
-            **_shared_ctx(),
-        }, status=422)
-
-
-class HapusKonfirmasiView(LoginRequiredMixin, View):
-    """
-    TUJUAN: HTMX partial — render dialog konfirmasi hapus.
-    US: US-CRUD-01
-    """
-
-    def get(self, request, pk):
-        from django.shortcuts import render
-
-        produk = get_object_or_404(Produk.objects.select_related("kategori"), pk=pk)
-        return render(request, "apps/produk/partials/confirm_hapus.html", {"produk": produk})
-
-
-class HapusProdukView(LoginRequiredMixin, View):
-    """
-    TUJUAN: Handle POST hapus produk, return table partial yang diperbarui.
-    US: US-CRUD-01
-    """
-
-    def post(self, request, pk):
-        from django.shortcuts import render
-
-        produk = get_object_or_404(Produk, pk=pk)
-        nama = produk.nama
-        produk.delete()
-        _, page_obj = _produk_list_qs(request)
-        response = render(request, "apps/produk/partials/table_body.html", {
-            "produk_list": page_obj.object_list,
-            "page_obj": page_obj,
-        })
-        response["HX-Trigger"] = f'{{"showToast": {{"message": "\\"{nama}\\" dihapus", "type": "success"}}}}'
+    def form_valid(self, form):
+        """Simpan data, trigger reload halaman via HX-Refresh."""
+        self.object = form.save()
+        response = HttpResponse("")
+        response["HX-Refresh"] = "true"
         return response
+
+    def form_invalid(self, form):
+        """Kembalikan modal dengan error — HTTP 422 agar HTMX tahu ini error."""
+        html = render_to_string(self.template_name, {"form": form}, request=self.request)
+        return HttpResponse(html, status=422)
+
+
+class ProdukEditModalView(LoginRequiredMixin, UpdateView):
+    """
+    TUJUAN: Tampilkan modal form edit Produk (HTMX partial).
+
+    DIPANGGIL DARI: urls.py → name="produk-edit-modal" (GET)
+                    urls.py → name="produk-edit" (POST)
+    """
+
+    model = Produk
+    form_class = ProdukForm
+    template_name = "apps/inventory/produk_edit_modal.html"
+
+    def get(self, request, *args, **kwargs):
+        """Tampilkan modal edit dengan data yang ada — response partial HTML."""
+        self.object = self.get_object()
+        form = self.form_class(instance=self.object)
+        html = render_to_string(self.template_name, {"form": form, "object": self.object}, request=request)
+        return HttpResponse(html)
+
+    def form_valid(self, form):
+        """Simpan perubahan, trigger reload halaman."""
+        self.object = form.save()
+        response = HttpResponse("")
+        response["HX-Refresh"] = "true"
+        return response
+
+    def form_invalid(self, form):
+        """Kembalikan modal dengan error — HTTP 422."""
+        html = render_to_string(self.template_name, {"form": form, "object": self.object}, request=self.request)
+        return HttpResponse(html, status=422)
+
+
+class ProdukDeleteModalView(LoginRequiredMixin, DeleteView):
+    """
+    TUJUAN: Tampilkan modal konfirmasi hapus (GET) dan proses hapus (DELETE/POST).
+
+    DIPANGGIL DARI: urls.py → name="produk-delete-modal" (GET)
+                    urls.py → name="produk-delete" (DELETE/POST)
+    """
+
+    model = Produk
+    template_name = "apps/inventory/produk_delete_modal.html"
+    success_url = reverse_lazy("inventory:produk-list")
+
+    def get(self, request, *args, **kwargs):
+        """Tampilkan modal konfirmasi hapus — response partial HTML."""
+        self.object = self.get_object()
+        html = render_to_string(self.template_name, {"object": self.object}, request=request)
+        return HttpResponse(html)
+
+    def delete(self, request, *args, **kwargs):
+        """Hapus object, tutup modal + refresh halaman."""
+        self.object = self.get_object()
+        self.object.delete()
+        response = HttpResponse("")
+        response["HX-Refresh"] = "true"
+        return response
+
+    # Alias untuk POST (karena HTMX form pakai hx-delete → method override)
+    post = delete
+
+
+class ProdukDetailView(LoginRequiredMixin, DetailView):
+    """
+    TUJUAN: Tampilkan detail satu Produk.
+
+    DIPANGGIL DARI: urls.py → name="produk-detail"
+    """
+
+    model = Produk
+    template_name = "apps/inventory/produk_detail.html"
+

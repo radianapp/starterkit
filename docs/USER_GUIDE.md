@@ -207,3 +207,18 @@ Gunakan format **Semantic Versioning** (`MAJOR.MINOR.PATCH`):
 - `MINOR` — fitur baru yang backward-compatible.
 - `PATCH` — perbaikan bug kecil.
 
+## Fitur Manajemen Pengguna
+
+### 1. Bulk Upload via CSV (Hanya Superadmin)
+Fitur Bulk Upload memungkinkan Superadmin untuk menambahkan banyak pengguna sekaligus melalui file CSV.
+- **Langkah-langkah**:
+  1. Buka halaman **Manajemen User** di interface dashboard.
+  2. Klik tombol **Upload CSV**.
+  3. Pilih file CSV (wajib memiliki kolom `email`, opsional `password`, `first_name`, `last_name`, serta kolom tambahan lain yang akan disimpan sebagai *custom fields* di `extra_data`).
+- **Pemrosesan Skala Besar**: Jika jumlah baris lebih dari 1000, proses akan otomatis dialihkan ke *background task* (Celery) agar sistem tidak terblokir.
+- **Notifikasi Email**: Pengguna akan mendapatkan email invitasi berisi tautan untuk mengaktifkan akun mereka (tautan valid selama 24 jam).
+- **Keamanan Akun**: Pengguna hasil Bulk Upload akan dipaksa (*forced*) mengganti password default atau password acak mereka pada saat pertama kali berhasil login.
+
+### 2. Mengirim Ulang Email Undangan (Resend Invite)
+Jika pengguna belum login atau mengaktifkan akunnya dari email invitasi, admin dapat mengirim ulang email tersebut:
+- Di tabel Manajemen User, klik tombol **Resend Invite** pada baris pengguna yang statusnya *Pending* atau belum login sama sekali.

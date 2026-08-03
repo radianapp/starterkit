@@ -1,0 +1,46 @@
+<c-rdp.drawer id="drawer-bulk-upload">
+    <div class="rdp-drawer__header">
+        <h2 class="rdp-drawer__title">Bulk Upload Pengguna (CSV)</h2>
+        <button class="rdp-drawer__close" aria-label="Tutup" data-action="close-drawer">×</button>
+    </div>
+    
+    <div class="rdp-drawer__body" style="padding: 20px;">
+        <form hx-post="{% url 'accounts:user_bulk_upload' %}" 
+              hx-target="#drawer-bulk-upload" 
+              hx-swap="outerHTML" 
+              enctype="multipart/form-data">
+            
+            {% csrf_token %}
+
+            {% if error %}
+            <div style="background: var(--rdp-danger-100); color: var(--rdp-danger-700); padding: 12px; border-radius: 6px; margin-bottom: 16px;">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <div style="margin-bottom: 20px;">
+                <label for="{{ form.csv_file.id_for_label }}" style="display: block; font-weight: 600; margin-bottom: 8px;">
+                    {{ form.csv_file.label }}
+                </label>
+                {{ form.csv_file }}
+                {% if form.csv_file.errors %}
+                    <div style="color: var(--rdp-danger); font-size: 13px; margin-top: 4px;">{{ form.csv_file.errors.0 }}</div>
+                {% endif %}
+                <p style="font-size: 13px; color: var(--rdp-text-muted); margin-top: 8px;">
+                    {{ form.csv_file.help_text }}
+                </p>
+                <div style="margin-top: 16px; background-color: var(--rdp-gray-50); padding: 12px; border-radius: 6px; font-size: 13px; border: 1px solid var(--rdp-gray-200);">
+                    <strong>Contoh format:</strong>
+                    <pre style="margin: 8px 0 0 0; background: transparent; padding: 0; font-size: 12px; color: var(--rdp-gray-700);">email,first_name,last_name,department
+user1@test.com,User,Satu,IT
+user2@test.com,User,Dua,HR</pre>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 32px;">
+                <c-rdp.button type="button" outline="true" data-action="close-drawer">Batal</c-rdp.button>
+                <c-rdp.button type="submit" color="primary">Upload CSV</c-rdp.button>
+            </div>
+        </form>
+    </div>
+</c-rdp.drawer>

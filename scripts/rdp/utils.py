@@ -175,6 +175,8 @@ PENGGUNAAN:
   rdp migrate (atau m)        Menjalankan migrasi database (uv run manage.py migrate)
   rdp makemigrations (atau mm) Membuat file migrasi baru (uv run manage.py makemigrations)
   rdp shell (atau s)          Membuka shell interaktif Django (uv run manage.py shell)
+  rdp createsuperuser (csu)   Membuat superuser (uv run manage.py createsuperuser)
+  rdp <perintah_django>       Perintah manage.py lainnya otomatis diteruskan
   rdp --help                  Menampilkan bantuan ini
   rdp --version               Menampilkan versi CLI
 

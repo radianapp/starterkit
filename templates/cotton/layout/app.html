@@ -4,6 +4,7 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
 {% endcomment %}
 {% load static %}
 {% load cotton %}
+{% load auth_tags %}
 
 <c-layout.base title="{{ title }}" navbar_brand="{{ navbar_brand }}" layout_name="app">
     <c-slot name="head">
@@ -29,40 +30,46 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                     </div>
                     
                     {# Navigasi Sidebar Utama #}
-                    <nav style="display: flex; flex-direction: column; gap: 2px; padding: 12px 10px; flex: 1; overflow-y: auto;" aria-label="Navigasi sidebar">
+                    <nav style="display: flex; flex-direction: column; justify-content: flex-start; gap: 2px; padding: 12px 10px; flex: 1; overflow-y: auto;" aria-label="Navigasi sidebar">
                         <div class="rdp-sidebar__section-title" style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rdp-text-muted); padding: 6px 8px 4px;">Menu Utama</div>
                         
                         <a href="{{ dash_url|default:home_url|default:'/' }}" class="sidebar-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rx></svg>
                             <span>Dashboard</span>
                         </a>
+                        <a href="{% url 'inventory:produk-list' %}" class="sidebar-link {% if 'inventory' in request.resolver_match.app_name %}active{% endif %}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                            <span>Inventory</span>
+                        </a>
                         
                         {# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}
                         
-                        <div class="rdp-sidebar__section-title" style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rdp-text-muted); padding: 14px 8px 4px;">Akun & Pengaturan</div>
-                        
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'accounts:profile' %}" class="sidebar-link {% if 'profile' in request.resolver_match.url_name %}active{% endif %}">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                <span>Profil</span>
-                            </a>
-                            <a href="{% url 'admin:index' %}" class="sidebar-link">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                <span>Admin Panel</span>
-                            </a>
-                            <form method="post" action="{% url 'accounts:logout' %}" style="margin:0">
-                                {% csrf_token %}
-                                <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" x2="9" y1="12" y2="12"></line></svg>
-                                    <span>Keluar</span>
-                                </button>
-                            </form>
-                        {% else %}
-                            <a href="{% url 'accounts:login' %}" class="sidebar-link">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg>
-                                <span>Masuk</span>
-                            </a>
-                        {% endif %}
+                        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 2px;">
+                            <div class="rdp-sidebar__section-title" style="font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rdp-text-muted); padding: 14px 8px 4px;">Akun & Pengaturan</div>
+                            
+                            {% if user.is_authenticated %}
+                                {% if request.user|has_group:"SuperAdmin" %}
+                                    <a href="{% url 'accounts:user_list' %}" class="sidebar-link {% if 'user_list' in request.resolver_match.url_name %}active{% endif %}">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                        <span>Manajemen Pengguna</span>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'accounts:profile' %}" class="sidebar-link {% if 'profile' in request.resolver_match.url_name %}active{% endif %}">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <span>Profil</span>
+                                </a>
+                                <a href="{% url 'accounts:settings' %}" class="sidebar-link {% if 'settings' in request.resolver_match.url_name %}active{% endif %}">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                    <span>Pengaturan</span>
+                                </a>
+
+                            {% else %}
+                                <a href="{% url 'accounts:login' %}" class="sidebar-link">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg>
+                                    <span>Masuk</span>
+                                </a>
+                            {% endif %}
+                        </div>
                     </nav>
 
                     <div style="margin-top: auto; padding: 12px 10px; border-top: 1px solid var(--rdp-border);">
@@ -111,14 +118,14 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                         {# Theme picker dropdown #}
                         <div x-data="{ open: false }" @click.away="open = false" style="position: relative;">
                             <button title="Tema" @click="open = !open"
-                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px;">
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px; color: var(--rdp-text);">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
                             </button>
                             <div x-show="open" x-cloak
                                  class="app-navbar-dropdown" style="min-width: 210px; max-height: 380px; overflow-y: auto; right: 0; left: auto;">
                                 <div class="app-navbar-dropdown__label">Tema</div>
                                 {% for t in RDP_THEME_LIST %}
-                                <button class="app-navbar-dropdown__item" onclick="window.setRdpTheme('{{ t }}'); this.closest('[x-data]').__x.$data.open = false">
+                                <button class="app-navbar-dropdown__item" @click="window.setRdpTheme('{{ t }}'); open = false">
                                     <span data-rdp-theme="{{ t }}" style="width:16px;height:16px;border-radius:4px;background:var(--rdp-primary);border:1px solid var(--rdp-border);flex-shrink:0;display:inline-block;"></span>
                                     <span style="flex:1;text-align:left;text-transform:capitalize;">{{ t }}</span>
                                 </button>
@@ -129,7 +136,7 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                         {# Notifikasi dropdown #}
                         <div x-data="{ open: false }" @click.away="open = false" style="position: relative;">
                             <button title="Notifikasi" @click="open = !open"
-                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px; position: relative;">
+                                    class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px; position: relative; color: var(--rdp-text);">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
                                 <span style="position: absolute; top: 1px; right: 1px; min-width: 15px; height: 15px; border-radius: 8px; background: var(--rdp-danger, #B3382D); color: #fff; font-size: 9.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px; box-sizing: border-box;">3</span>
                             </button>
@@ -171,9 +178,14 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                                 </div>
                                 <div class="rdp-dropdown__divider"></div>
                                 <div class="app-navbar-dropdown__label">Tampilan</div>
-                                <button class="app-navbar-dropdown__item" onclick="window.toggleRdpDarkMode()">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
-                                    <span style="flex:1;text-align:left;">Dark mode</span>
+                                <button class="app-navbar-dropdown__item" @click="window.toggleRdpDarkMode(); open = false">
+                                    <template x-if="darkMode">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                    </template>
+                                    <template x-if="!darkMode">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                                    </template>
+                                    <span x-text="darkMode ? 'Light mode' : 'Dark mode'" style="flex:1;text-align:left;"></span>
                                 </button>
                                 <div class="rdp-dropdown__divider"></div>
                                 <a href="{% url 'accounts:profile' %}" class="app-navbar-dropdown__item">
@@ -193,9 +205,47 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                     </div>
 
                     {# Mobile profile avatar #}
-                    <span class="app-mobile-avatar" style="margin-left: auto;">
-                        {{ user.get_full_name|default:user.username|default:"AR"|slice:":2"|upper }}
-                    </span>
+                    <div x-data="{ open: false }" @click.away="open = false" style="position: relative; margin-left: auto;" class="app-mobile-avatar">
+                        <span @click="open = !open" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;cursor:pointer;">
+                            {{ user.get_full_name|default:user.username|default:"AR"|slice:":2"|upper }}
+                        </span>
+                        <div x-show="open" x-cloak class="app-navbar-dropdown" style="min-width: 240px; right: 0; left: auto; font-weight: normal; font-size: 13px; line-height: normal; color: var(--rdp-text);">
+                            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px 12px;">
+                                <span class="rdp-avatar rdp-avatar--sm" style="background:var(--rdp-primary-soft, #EDF4F0);color:var(--rdp-primary, #15654E);font-weight:600;font-size:11px;">
+                                    {{ user.get_full_name|default:user.username|default:"AR"|slice:":2"|upper }}
+                                </span>
+                                <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;text-align:left;">
+                                    <span style="font-size:13.5px;font-weight:600;">{{ user.get_full_name|default:user.username }}</span>
+                                    <span style="font-size:12px;color:var(--rdp-text-muted);">{{ user.email }}</span>
+                                </span>
+                            </div>
+                            <div class="rdp-dropdown__divider"></div>
+                            <div class="app-navbar-dropdown__label">Tampilan</div>
+                            <button class="app-navbar-dropdown__item" @click="window.toggleRdpDarkMode(); open = false">
+                                <template x-if="darkMode">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                </template>
+                                <template x-if="!darkMode">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                                </template>
+                                <span x-text="darkMode ? 'Light mode' : 'Dark mode'" style="flex:1;text-align:left;"></span>
+                            </button>
+                            <div class="rdp-dropdown__divider"></div>
+                            <a href="{% url 'accounts:profile' %}" class="app-navbar-dropdown__item">
+                                <span style="flex:1;text-align:left;">Profile</span>
+                            </a>
+                            <a href="{% url 'accounts:profile' %}" class="app-navbar-dropdown__item">
+                                <span style="flex:1;text-align:left;">Settings</span>
+                            </a>
+                            <div class="rdp-dropdown__divider"></div>
+                            <form action="{% url 'accounts:logout' %}" method="post" style="margin:0;">
+                                {% csrf_token %}
+                                <button type="submit" class="app-navbar-dropdown__item app-navbar-dropdown__item--danger" style="width:100%;">
+                                    <span style="flex:1;text-align:left;">Keluar</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 {% endif %}
             </c-slot>
 

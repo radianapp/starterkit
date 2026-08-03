@@ -1,8 +1,8 @@
 {# templates/apps/inventory/produk_detail.html #}
-<c-layout.app title="{{ object.name }}">
+<c-layout.app title="{{ object.nama }}">
 
-    <div class="rdp-page-header">
-        <h2 class="rdp-page-header__title">{{ object.name }}</h2>
+    <div class="rdp-page-header" style="margin-top:10px;margin-bottom:16px">
+        <h1 class="rdp-page-header__title">{{ object.nama }}</h1>
         <div class="rdp-page-header__actions">
             <c-rdp.button variant="secondary" href="{% url 'inventory:produk-update' object.pk %}">Edit</c-rdp.button>
             <c-rdp.button variant="danger" href="{% url 'inventory:produk-delete' object.pk %}">Hapus</c-rdp.button>

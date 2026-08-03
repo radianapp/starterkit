@@ -80,6 +80,8 @@ def profile_view(request):
             }
         )
 
+    passkeys = user.passkeys.all()
+
     return render(
         request,
         "accounts/profile.html",
@@ -87,6 +89,7 @@ def profile_view(request):
             "form": form,
             "avatar_form": avatar_form,
             "profile": profile,
+            "passkeys": passkeys,
             "page_title": "Edit Profil",
         },
     )

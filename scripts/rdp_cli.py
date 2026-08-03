@@ -191,10 +191,11 @@ def main():
         run_django_cmd("makemigrations", args[1:])
     elif args[0] in ("shell", "s"):
         run_django_cmd("shell", args[1:])
+    elif args[0] in ("createsuperuser", "csu"):
+        run_django_cmd("createsuperuser", args[1:])
     else:
-        print(f"[ERROR] Sub-perintah tidak dikenal: '{args[0]}'")
-        print("  Jalankan `rdp --help` untuk melihat daftar perintah yang tersedia.")
-        sys.exit(1)
+        # Fallback: Jika bukan perintah RDP CLI khusus, coba jalankan sebagai perintah manage.py
+        run_django_cmd(args[0], args[1:])
 
 
 if __name__ == "__main__":

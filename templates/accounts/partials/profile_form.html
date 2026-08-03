@@ -3,57 +3,57 @@
     hx-post="{% url 'accounts:profile' %}"
     hx-target="#profile-form-section"
     hx-swap="innerHTML"
-    class="profile-form"
+    class="auth-form"
 >
     {% csrf_token %}
 
     {% if success %}
-        <c-rdp.alert type="success">Profil berhasil diperbarui.</c-rdp.alert>
+        <c-rdp.alert variant="success" class="mb-3">Profil berhasil diperbarui.</c-rdp.alert>
     {% endif %}
 
-    <div class="profile-form__row">
-        <c-rdp.form.input
-            name="first_name"
-            label="Nama Depan"
-            value="{{ form.first_name.value|default:'' }}"
-            placeholder="Nama depan"
-        >
+    <div class="settings-form-row">
+        <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label>First name</label>
+            <input 
+                name="first_name" 
+                type="text" 
+                value="{{ form.first_name.value|default:'' }}"
+                {% if form.first_name.errors %}aria-invalid="true"{% endif %}>
             {% if form.first_name.errors %}
-                <c-slot name="error">{{ form.first_name.errors.0 }}</c-slot>
+                <div style="font-size: 12px; color: var(--rdp-danger); font-weight: 500;">{{ form.first_name.errors.0 }}</div>
             {% endif %}
-        </c-rdp.form.input>
-
-        <c-rdp.form.input
-            name="last_name"
-            label="Nama Belakang"
-            value="{{ form.last_name.value|default:'' }}"
-            placeholder="Nama belakang"
-        >
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 7px;">
+            <label>Last name</label>
+            <input 
+                name="last_name" 
+                type="text" 
+                value="{{ form.last_name.value|default:'' }}"
+                {% if form.last_name.errors %}aria-invalid="true"{% endif %}>
             {% if form.last_name.errors %}
-                <c-slot name="error">{{ form.last_name.errors.0 }}</c-slot>
+                <div style="font-size: 12px; color: var(--rdp-danger); font-weight: 500;">{{ form.last_name.errors.0 }}</div>
             {% endif %}
-        </c-rdp.form.input>
+        </div>
     </div>
 
-    <div>
-        <label class="rdp-form-field__label" for="id_bio">Bio</label>
+    <div style="display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px;">
+        <label>Bio</label>
         <textarea
-            id="id_bio"
             name="bio"
             rows="3"
             placeholder="Cerita singkat tentang kamu..."
-            class="rdp-form-field__input{% if form.bio.errors %} rdp-form-field__input--error{% endif %}"
             maxlength="500"
+            {% if form.bio.errors %}aria-invalid="true"{% endif %}
+            style="padding: 10px 13px; font-size: 14px; font-family: inherit; background: var(--rdp-surface); color: inherit; border: 1px solid var(--rdp-border-strong); border-radius: 9px; outline: none; width: 100%; box-sizing: border-box;"
         >{{ form.bio.value|default:'' }}</textarea>
         {% if form.bio.errors %}
-            <span class="rdp-form-field__error">{{ form.bio.errors.0 }}</span>
+            <div style="font-size: 12px; color: var(--rdp-danger); font-weight: 500;">{{ form.bio.errors.0 }}</div>
+        {% else %}
+            <div style="font-size: 12px; color: var(--rdp-text-muted);">Maksimal 500 karakter.</div>
         {% endif %}
-        <span class="rdp-form-field__hint">Maksimal 500 karakter.</span>
     </div>
 
-    <div>
-        <c-rdp.button type="submit" variant="primary">
-            Simpan Perubahan
-        </c-rdp.button>
+    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+        <button type="submit" class="settings-btn settings-btn--primary">Save changes</button>
     </div>
 </form>

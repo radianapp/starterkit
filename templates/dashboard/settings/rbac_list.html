@@ -1,0 +1,34 @@
+<c-layout.app title="{{ title }}">
+    <div style="margin-bottom: 24px;">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: var(--rdp-text);">{{ title }}</h1>
+        <p class="rdp-text-muted" style="margin-top: 4px; font-size: 14px;">
+            Kelola hak akses dan peran seluruh pengguna di dalam sistem.
+        </p>
+    </div>
+
+    <c-rdp.card>
+        <div style="overflow-x: auto;">
+            <table class="rdp-table">
+                <thead>
+                    <tr>
+                        <th style="width: 250px;">PENGGUNA</th>
+                        <th>EMAIL</th>
+                        <th>TANGGAL BERGABUNG</th>
+                        <th style="width: 200px;">PERAN (ROLE)</th>
+                    </tr>
+                </thead>
+                <tbody id="user-role-list">
+                    {% for u in users %}
+                        {% include 'dashboard/settings/partials/role_row.html' with u=u %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 32px; color: var(--rdp-text-muted);">
+                                Tidak ada pengguna ditemukan.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </c-rdp.card>
+</c-layout.app>

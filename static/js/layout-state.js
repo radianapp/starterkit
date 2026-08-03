@@ -13,22 +13,36 @@ DEPENDENSI: Alpine.js 3.x
 */
 
 function layoutState() {
+  /* Restore state dari localStorage secara sinkron untuk menghindari flicker/glitch UI */
+  const savedSidebar = localStorage.getItem('sidebarOpen');
+  const initialSidebarOpen = savedSidebar !== null ? JSON.parse(savedSidebar) : window.innerWidth >= 768;
+
+  const savedCollapsed = localStorage.getItem('sidebarCollapsed');
+  const initialSidebarCollapsed = savedCollapsed !== null ? JSON.parse(savedCollapsed) : false;
+
   return {
-    sidebarOpen: window.innerWidth >= 768,
-    sidebarCollapsed: false,
+    sidebarOpen: initialSidebarOpen,
+    sidebarCollapsed: initialSidebarCollapsed,
     darkMode: false,
 
     init() {
-      /* Restore sidebar state dari localStorage */
-      const savedSidebar = localStorage.getItem('sidebarOpen');
-      if (savedSidebar !== null) {
-        this.sidebarOpen = JSON.parse(savedSidebar);
-      }
 
-      /* Restore dark mode dari localStorage — default light */
-      const savedTheme = localStorage.getItem('rdp-theme');
-      this.darkMode = savedTheme === 'dark';
-      this.applyTheme();
+      /* Watch state changes untuk disimpan ke localStorage */
+      this.$watch('sidebarOpen', (value) => {
+        localStorage.setItem('sidebarOpen', JSON.stringify(value));
+      });
+      this.$watch('sidebarCollapsed', (value) => {
+        localStorage.setItem('sidebarCollapsed', JSON.stringify(value));
+      });
+
+      /* Sync darkMode dari DOM attribute (yang sudah diset oleh script inline base.html/theme.js) */
+      this.darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+      
+      /* Listen event rdp-theme-changed dari theme.js untuk meng-update state secara reaktif */
+      window.addEventListener('rdp-theme-changed', (e) => {
+          const darkThemes = ['dark','midnight','terminal','nord','dracula'];
+          this.darkMode = darkThemes.includes(e.detail.theme);
+      });
 
       /* Listen untuk resize events — auto open sidebar saat desktop, jangan force close di mobile */
       window.addEventListener('resize', () => {
@@ -38,11 +52,6 @@ function layoutState() {
       });
     },
 
-    watch_sidebarOpen(value) {
-      /* Persist state ke localStorage */
-      localStorage.setItem('sidebarOpen', JSON.stringify(value));
-    },
-
     closeSidebar() {
       /* Close sidebar hanya di mobile (window < 768px) */
       if (window.innerWidth < 768) {
@@ -50,36 +59,7 @@ function layoutState() {
       }
     },
 
-    toggleDarkMode() {
-      this.darkMode = !this.darkMode;
-      localStorage.setItem('rdp-theme', this.darkMode ? 'dark' : 'light');
-      this.applyTheme();
-    },
 
-    applyTheme() {
-      /* Update pico theme attribute */
-      document.documentElement.setAttribute('data-theme', this.darkMode ? 'dark' : 'light');
-      
-      /* Update RDP specific theme attribute and CSS */
-      let currentRdpTheme = document.documentElement.getAttribute('data-rdp-theme') || 'default';
-      const darkThemes = ['dark','midnight','terminal','nord','dracula'];
-      
-      if (this.darkMode && !darkThemes.includes(currentRdpTheme)) {
-        currentRdpTheme = 'dark';
-      } else if (!this.darkMode && darkThemes.includes(currentRdpTheme)) {
-        currentRdpTheme = 'default';
-      }
-      
-      document.documentElement.setAttribute('data-rdp-theme', currentRdpTheme);
-      localStorage.setItem('rdp-rdp-theme', currentRdpTheme);
-      
-      const themeLink = document.getElementById('rdp-theme-css');
-      if (themeLink) {
-        const currentHref = themeLink.getAttribute('href');
-        const newHref = currentHref.replace(/\/[^\/]+\.css$/, '/' + currentRdpTheme + '.css');
-        themeLink.setAttribute('href', newHref);
-      }
-    }
   };
 }
 

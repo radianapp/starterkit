@@ -9,6 +9,13 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.4.7] — 2026-08-03
+
+- **Fitur Baru (Manajemen Pengguna)**: Menambahkan fitur Bulk Upload User via CSV.
+- **Keamanan (WebAuthn)**: Menambahkan dukungan login tanpa kata sandi (Passkey) melalui WebAuthn.
+- **Pembaruan (Sistem)**: Menambahkan `ForceChangePasswordMiddleware` untuk memaksa pengguna dari bulk upload mengubah kata sandi default mereka.
+- **Infrastruktur (Task Queue)**: Mengintegrasikan Celery untuk pemrosesan asinkron bulk upload dalam jumlah besar (>1000).
+
 ## [0.3.0] — 2026-07-15
 
 - **Fitur Baru (CLI)**: Menambahkan perintah `rdp update` untuk memperbarui proyek RDP yang sudah ada dengan kode terbaru dari template GitHub. Dilengkapi dengan deteksi file pintar (melewati yang tidak berubah), *ignored directories* otomatis (`.env`, `db.sqlite3`, dll.), dan fitur *interactive prompt* (Y/n/d) untuk mengecek dan memverifikasi diff baris kode sebelum melakukan penimpaan file yang berbeda.

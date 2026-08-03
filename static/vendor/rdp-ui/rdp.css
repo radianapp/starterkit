@@ -131,6 +131,31 @@
 }
 
 /* ==========================================================================
+   PICO RESET — Netralisir gaya bare-element PicoCSS pada <button>
+   ALASAN: PicoCSS memberikan background, padding, dan width penuh pada semua
+   <button> tanpa kelas. Ini mengganggu komponen UI custom (tabs, icon buttons,
+   ghost buttons, toolbar actions) yang butuh tampilan polos/transparan.
+   Setelah reset ini, <button> tanpa kelas rdp-btn akan tampil "netral" —
+   developer harus menambahkan kelas rdp-btn--* untuk memberi gaya.
+   ========================================================================== */
+
+button:not(.rdp-btn):not([class*="pico-"]):not([role="button"]) {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-shadow: none;
+}
+
+/* ==========================================================================
    LAYER 3 · TYPOGRAPHY TOKENS
    ========================================================================== */
 

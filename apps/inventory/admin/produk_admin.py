@@ -2,6 +2,7 @@
 # US-CRUD-01: Admin untuk Produk, Kategori, Pemasok
 
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 
 from apps.inventory.models import Kategori, Pemasok, Produk
 
@@ -19,7 +20,7 @@ class PemasokAdmin(admin.ModelAdmin):
 
 
 @admin.register(Produk)
-class ProdukAdmin(admin.ModelAdmin):
+class ProdukAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     list_display = ["nama", "sku", "kategori", "harga", "stok", "status", "updated_at"]
     list_filter = ["status", "kategori"]
     search_fields = ["nama", "sku"]

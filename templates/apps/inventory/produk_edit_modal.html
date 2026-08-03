@@ -1,38 +1,87 @@
 {# templates/apps/inventory/produk_edit_modal.html #}
 {# Partial HTMX — dirender oleh produkEditModalView, di-inject ke #modal-container #}
 <div class="rdp-modal-backdrop"
-     style="position:fixed;inset:0;z-index:200;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px"
+     style="position:fixed;inset:0;z-index:9999;background:rgba(28,27,24,0.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box"
      onclick="if(event.target===this)document.getElementById('modal-container').innerHTML=''">
-    <div class="rdp-modal rdp-modal--md"
-         style="position:relative;width:100%;max-width:560px;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:var(--rdp-surface)"
-         onclick="event.stopPropagation()">
+    
+    <div class="rdp-modal rdp-modal--md" onclick="event.stopPropagation()" 
+         style="position:relative;width:100%;max-width:560px;max-height:calc(100vh - 120px);height:fit-content;display:flex;flex-direction:column;background:var(--rdp-surface,#FFFFFF);border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.1);overflow:hidden;margin:auto;">
+        
+        <form id="form-edit-produk"
+              hx-post="{% url 'inventory:produk-edit' object.pk %}"
+              hx-target="#modal-container"
+              hx-swap="innerHTML"
+              style="display:flex;flex-direction:column;flex:1;min-height:0;margin:0;width:100%">
+            {% csrf_token %}
 
-        <div class="rdp-modal__header">
-            <h2 class="rdp-modal__title">Edit Produk: {{ object.name }}</h2>
-            <button title="Tutup" class="rdp-modal__close"
-                    onclick="document.getElementById('modal-container').innerHTML=''">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-            </button>
-        </div>
+            <div class="rdp-modal__header" style="border-bottom:1px solid var(--rdp-border,#E5E2DC);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;background:var(--rdp-surface,#FFFFFF);flex-shrink:0">
+                <h2 class="rdp-modal__title" style="margin:0;font-size:18px;font-weight:700;color:var(--rdp-text,#1C1B18);text-align:left">Edit Produk</h2>
+                <button title="Tutup" class="rdp-modal__close" type="button"
+                        onclick="document.getElementById('modal-container').innerHTML=''"
+                        style="background:transparent;border:none;color:var(--rdp-text-muted,#6B665E);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:4px">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                </button>
+            </div>
 
-        <div class="rdp-modal__body" style="overflow-y:auto;overflow-x:hidden">
-            <form id="form-edit-produk-{{ object.pk }}"
-                  hx-post="{% url 'inventory:produk-edit' object.pk %}"
-                  hx-target="#modal-container"
-                  hx-swap="innerHTML"
-                  style="display:flex;flex-direction:column;gap:16px">
-                {% csrf_token %}
+            <div class="rdp-modal__body" style="overflow-y:auto;overflow-x:hidden;padding:24px;display:flex;flex-direction:column;gap:18px;flex:1">
+                
+                <c-rdp.form.input name="nama" label="Nama produk" required="True" 
+                                  placeholder="Mis. Meja Kerja Oak" 
+                                  help_text="Nama yang tampil di katalog. Harus unik." 
+                                  value="{{ form.nama.value|default:'' }}" 
+                                  error="{{ form.nama.errors.0 }}" />
 
-                {{ form.as_p }}
-
-                <div class="rdp-modal__footer" style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;padding-top:16px;border-top:1px solid var(--rdp-border)">
-                    <button type="button" class="rdp-btn rdp-btn--secondary"
-                            onclick="document.getElementById('modal-container').innerHTML=''">Batal</button>
-                    <button type="submit" id="btn-submit-edit-produk" class="rdp-btn rdp-btn--primary" style="min-width:110px">
-                        Simpan Perubahan
-                    </button>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <c-rdp.form.input name="sku" label="SKU" 
+                                      placeholder="PL-XXXX" 
+                                      help_text="Kosongkan untuk dibuat otomatis." 
+                                      value="{{ form.sku.value|default:'' }}" 
+                                      error="{{ form.sku.errors.0 }}" />
+                    
+                    <c-rdp.form.select name="kategori" label="Kategori" required="True" error="{{ form.kategori.errors.0 }}">
+                        <option value="">Pilih kategori...</option>
+                        {% for choice in form.kategori.field.queryset %}
+                            <option value="{{ choice.pk }}" {% if form.kategori.value|stringformat:"s" == choice.pk|stringformat:"s" %}selected{% endif %}>{{ choice.nama }}</option>
+                        {% endfor %}
+                    </c-rdp.form.select>
                 </div>
-            </form>
-        </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <c-rdp.form.input name="harga" label="Harga (Rp)" required="True" type="number"
+                                      placeholder="0" 
+                                      help_text="Angka saja. Contoh: 3200000" 
+                                      value="{{ form.harga.value|default:'' }}" 
+                                      error="{{ form.harga.errors.0 }}" />
+                    
+                    <c-rdp.form.input name="stok" label="Stok awal" required="True" type="number"
+                                      placeholder="0" 
+                                      help_text="Unit tersedia di gudang." 
+                                      value="{{ form.stok.value|default:'' }}" 
+                                      error="{{ form.stok.errors.0 }}" />
+                </div>
+
+                <c-rdp.form.select name="pemasok" label="Pemasok" error="{{ form.pemasok.errors.0 }}">
+                    <option value="">Pilih pemasok...</option>
+                    {% for choice in form.pemasok.field.queryset %}
+                        <option value="{{ choice.pk }}" {% if form.pemasok.value|stringformat:"s" == choice.pk|stringformat:"s" %}selected{% endif %}>{{ choice.nama }}</option>
+                    {% endfor %}
+                </c-rdp.form.select>
+
+                <c-rdp.form.textarea name="deskripsi" label="Deskripsi" 
+                                     placeholder="Deskripsi singkat produk..." 
+                                     help_text="Opsional. Tampil di halaman detail produk." 
+                                     value="{{ form.deskripsi.value|default:'' }}" 
+                                     error="{{ form.deskripsi.errors.0 }}" />
+
+            </div>
+
+            <div class="rdp-modal__footer" style="padding:16px 24px;border-top:1px solid var(--rdp-border,#E5E2DC);display:flex;justify-content:flex-end;gap:12px;background:var(--rdp-surface-sunken,#F9F9F8);flex-shrink:0">
+                <button type="button" class="rdp-btn rdp-btn--secondary"
+                        onclick="document.getElementById('modal-container').innerHTML=''" style="background:#FFFFFF;border:1px solid var(--rdp-border,#E5E2DC);color:var(--rdp-text,#1C1B18);padding:8px 20px;border-radius:6px;font-weight:500;cursor:pointer;width:auto">Batal</button>
+                <button type="submit" id="btn-submit-edit-produk" class="rdp-btn rdp-btn--primary" style="background:var(--rdp-primary,#15654E);color:#FFFFFF;border:none;padding:8px 20px;border-radius:6px;font-weight:500;cursor:pointer;min-width:110px;width:auto">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
     </div>
 </div>

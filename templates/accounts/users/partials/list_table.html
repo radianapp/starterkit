@@ -1,0 +1,70 @@
+<div class="rdp-table-wrapper" style="overflow-x: auto;">
+    <table class="rdp-table">
+        <thead>
+            <tr>
+                <th>USERNAME</th>
+                <th>NAMA</th>
+                <th>EMAIL</th>
+                <th>STATUS</th>
+                <th>PERAN (ROLE)</th>
+                <th>TANGGAL BERGABUNG</th>
+                <th style="width: 80px;">AKSI</th>
+            </tr>
+        </thead>
+        <tbody id="user-table-body">
+            {% for u in users %}
+                <tr id="user-row-{{ u.id }}">
+                    <td><strong>{{ u.username }}</strong></td>
+                    <td>{{ u.get_full_name|default:"-" }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>
+                        {% if u.is_active %}
+                            <c-rdp.badge variant="success">Aktif</c-rdp.badge>
+                        {% else %}
+                            <c-rdp.badge variant="danger">Nonaktif</c-rdp.badge>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if u.is_superuser %}
+                            <c-rdp.badge variant="primary">SuperAdmin</c-rdp.badge>
+                        {% else %}
+                            {% with group=u.groups.first %}
+                                {% if group %}
+                                    <c-rdp.badge variant="info">{{ group.name }}</c-rdp.badge>
+                                {% else %}
+                                    <span class="rdp-text-muted">--</span>
+                                {% endif %}
+                            {% endwith %}
+                        {% endif %}
+                    </td>
+                    <td>{{ u.date_joined|date:"d M Y" }}</td>
+                    <td style="display: flex; gap: 4px;">
+                        <c-rdp.button color="secondary"
+                                      variant="outline"
+                                      size="sm"
+                                      hx-get="{% url 'accounts:user_edit' u.id %}"
+                                      hx-target="#modal-container"
+                                      hx-swap="innerHTML">
+                            Edit
+                        </c-rdp.button>
+                        {% if not u.email_verified %}
+                        <c-rdp.button color="primary"
+                                      variant="outline"
+                                      size="sm"
+                                      hx-post="{% url 'accounts:resend_invite_email' u.id %}"
+                                      hx-swap="none">
+                            Kirim Invite
+                        </c-rdp.button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 32px;">
+                        <c-rdp.empty-state title="Belum ada pengguna lain" message="Anda dapat menambahkan pengguna baru ke dalam sistem." icon="users" />
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

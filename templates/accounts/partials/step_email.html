@@ -4,36 +4,42 @@
     hx-target="#wizard-content"
     hx-swap="innerHTML"
     hx-indicator="#wizard-spinner"
-    class="reg-wizard__form"
+    class="auth-form"
     novalidate
 >
     {% csrf_token %}
 
-    <div class="reg-wizard__step-header">
-        <h2>Masukkan Email Anda</h2>
-        <p>Email ini akan digunakan untuk login.</p>
+    <div style="display: flex; flex-direction: column; gap: 7px;">
+        <label>Work email</label>
+        <input 
+            name="email" 
+            type="email" 
+            placeholder="nama@domain.com"
+            value="{{ form.email.value|default:'' }}"
+            {% if form.email.errors %}aria-invalid="true"{% endif %}
+            required autofocus>
+        
+        {% if form.email.errors %}
+            <div style="display: flex; gap: 6px; align-items: baseline; font-size: 12px; line-height: 1.5; color: #B3382D; font-weight: 500;">
+                <span>⚠</span>{{ form.email.errors.0 }}
+            </div>
+        {% endif %}
     </div>
-
-    <c-rdp.form.input
-        name="email"
-        type="email"
-        label="Alamat Email"
-        value="{{ form.email.value|default:'' }}"
-        error="{{ form.email.errors.0|default:'' }}"
-        required="true"
-        autofocus="true"
-        placeholder="nama@contoh.com"
-    />
 
     {% if form.non_field_errors %}
-        <c-rdp.alert type="error">{{ form.non_field_errors.0 }}</c-rdp.alert>
+        <div style="display: flex; gap: 6px; align-items: baseline; font-size: 12px; line-height: 1.5; color: #B3382D; font-weight: 500; margin-top: 4px;">
+            <span>⚠</span>{{ form.non_field_errors.0 }}
+        </div>
     {% endif %}
 
-    <div class="reg-wizard__actions">
-        <c-rdp.button type="submit" variant="primary" size="md">
-            Lanjut →
-        </c-rdp.button>
-    </div>
+    {% if TURNSTILE_ENABLED %}
+    <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}" data-size="flexible" style="margin-top: 10px;"></div>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% endif %}
 
-    <span id="wizard-spinner" class="reg-wizard__spinner htmx-indicator">Memproses...</span>
+    <button type="submit" style="margin-top: 12px;">Create account</button>
+
+    <div id="wizard-spinner" class="htmx-indicator" style="text-align: center; margin-top: 10px; font-size: 13px; color: #6B665E;">
+        Memproses...
+    </div>
 </form>

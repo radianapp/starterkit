@@ -1,29 +1,47 @@
 {# US-009: Fragment preview avatar + tombol upload — HTMX target: #avatar-section #}
 {% load static %}
 
-<img
-    src="{{ profile.get_avatar_url }}"
-    alt="Foto profil {{ user.get_full_name|default:user.email }}"
-    class="profile-avatar__img"
->
-
-{# Tombol trigger upload — klik buka form #}
-<button
-    type="button"
-    class="profile-avatar__upload-btn"
-    onclick="document.getElementById('avatar-upload-form').classList.toggle('is-visible')"
-    title="Ganti foto profil"
-    aria-label="Ganti foto profil"
->
-    ✎
-</button>
-
-<p class="profile-avatar__hint">JPG, PNG, WebP · Maks 2MB</p>
+<div class="profile-avatar-row">
+    {% if profile.avatar %}
+        <img 
+            src="{{ profile.get_avatar_url }}" 
+            alt="Foto profil {{ user.get_full_name|default:user.email }}" 
+            class="profile-avatar-row__img"
+            style="object-fit: cover;"
+        >
+    {% else %}
+        <span class="profile-avatar-row__img">
+            {{ user.get_short_name|default:"U"|slice:":2"|upper }}
+        </span>
+    {% endif %}
+    
+    <div class="profile-avatar-row__text">
+        <div class="profile-avatar-row__name">Profile photo</div>
+        <div class="profile-avatar-row__hint">JPG, PNG, WebP · Maks 2MB</div>
+    </div>
+    
+    <div style="display: flex; gap: 8px;">
+        <button 
+            type="button" 
+            class="settings-btn"
+            onclick="document.getElementById('avatar-upload-form').classList.toggle('is-visible')"
+        >Upload</button>
+        {% if profile.avatar %}
+            <button type="button" class="settings-btn settings-btn--danger">Remove</button>
+        {% endif %}
+    </div>
+</div>
 
 {# Form upload — tersembunyi, muncul saat tombol diklik #}
-<div id="avatar-upload-form" class="profile-avatar-upload">
+<div id="avatar-upload-form" style="display: none; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #EFEDE8;" class="is-visible-toggle">
     {% include "accounts/partials/avatar_upload_form.html" %}
 </div>
+
+<style>
+    .is-visible-toggle.is-visible {
+        display: block !important;
+    }
+</style>
 
 {% if success %}
     <script>document.getElementById('avatar-upload-form').classList.remove('is-visible');</script>

@@ -83,6 +83,7 @@ def user_login(request):
             return response
         return redirect(next_url)
 
+    from django.conf import settings
     form = LoginForm(request)
     return render(
         request,
@@ -90,6 +91,8 @@ def user_login(request):
         {
             "form": form,
             "next": request.GET.get("next", ""),
+            "enable_registration": getattr(settings, "ENABLE_USER_REGISTRATION", True),
+            "enable_google_auth": getattr(settings, "ENABLE_GOOGLE_AUTH", False),
         },
     )
 

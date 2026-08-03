@@ -13,9 +13,11 @@ ALUR:
 
 from .profile import UserProfile
 from .user import User, UserManager
+from .passkey import PasskeyCredential
 
 __all__ = [
     "User",
     "UserManager",
     "UserProfile",
+    "PasskeyCredential",
 ]

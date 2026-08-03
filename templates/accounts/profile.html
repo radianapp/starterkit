@@ -3,52 +3,104 @@
 <c-layout.app title="Edit Profil">
     <c-slot name="head">
         <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+        <script src="{% static 'js/webauthn.js' %}"></script>
     </c-slot>
 
-    <div class="profile-page">
-
-        {# Header: avatar + info user #}
-        <div class="profile-header">
-            <div id="avatar-section" class="profile-avatar">
-                {% include "accounts/partials/avatar_preview.html" %}
-            </div>
-
-            <div class="profile-info">
-                <p class="profile-info__name">
-                    {% if user.get_full_name %}
-                        {{ user.get_full_name }}
-                    {% else %}
-                        {{ user.email }}
-                    {% endif %}
-                </p>
-                <p class="profile-info__email">{{ user.email }}</p>
-
-                {% if user.email_verified %}
-                    <span class="profile-info__badge profile-info__badge--verified">✓ Email terverifikasi</span>
-                {% else %}
-                    <span class="profile-info__badge profile-info__badge--unverified">
-                        ⚠ Belum terverifikasi —
-                        <a href="{% url 'accounts:resend_verification' %}">kirim ulang</a>
-                    </span>
-                {% endif %}
-            </div>
-        </div>
+    <main class="settings-content" style="margin: 0 auto; width: 100%;">
+        <h1 class="auth-box__title" style="font-size: 22px; margin-bottom: 4px;">Profile</h1>
+        <p class="auth-box__subtitle" style="margin-bottom: 28px;">How you appear across the workspace. Each section saves independently.</p>
 
         {# Pesan sukses/error dari messages framework #}
         {% if messages %}
+            <div style="margin-bottom: 18px;">
             {% for message in messages %}
-                <c-rdp.alert type="{{ message.tags }}" class="mb-1">{{ message }}</c-rdp.alert>
+                <c-rdp.alert variant="{{ message.tags }}">{{ message }}</c-rdp.alert>
             {% endfor %}
+            </div>
         {% endif %}
 
-        {# Form edit profil #}
-        <div class="profile-section">
-            <p class="profile-section__title">Informasi Profil</p>
+        <!-- avatar + identity card -->
+        <div class="settings-card">
+            <div id="avatar-section">
+                {% include "accounts/partials/avatar_preview.html" %}
+            </div>
 
             <div id="profile-form-section">
                 {% include "accounts/partials/profile_form.html" %}
             </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 18px;">
+                <label style="font-size: 13px; font-weight: 600;">Email</label>
+                <div style="display: flex; align-items: stretch; background: var(--rdp-surface-sunken); border: 1px solid var(--rdp-border); border-radius: 8px; overflow: hidden;">
+                    <input value="{{ user.email }}" disabled style="height: 40px; padding: 0 12px; font-size: 14px; font-family: inherit; color: var(--rdp-text-muted); background: transparent; border: none; outline: none; flex: 1; min-width: 0;">
+                    <span style="display: flex; align-items: center; padding: 0 12px; font-size: 11.5px; font-weight: 600; color: var(--rdp-primary);">
+                        {% if user.email_verified %}Terverifikasi{% else %}Belum Verifikasi{% endif %}
+                    </span>
+                </div>
+            </div>
         </div>
 
-    </div>
+        <!-- webauthn / passkeys -->
+        <div class="settings-card" style="margin-top: 18px;" id="passkeys-section" hx-get="{% url 'accounts:profile' %}" hx-select="#passkeys-section" hx-trigger="passkeyRegistered from:body, passkeyDeleted from:body">
+            <div class="settings-card__title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Security (Biometrics / Passkeys)</span>
+                <button type="button" class="settings-btn settings-btn--primary" style="padding: 4px 12px; font-size: 12px;" onclick="registerNewPasskey()">
+                    Daftarkan Perangkat Baru
+                </button>
+            </div>
+            
+            <div style="margin-top: 14px;">
+                {% if passkeys %}
+                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                        {% for pk in passkeys %}
+                            <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid var(--rdp-border); border-radius: 6px; background: var(--rdp-surface-sunken);">
+                                <div>
+                                    <div style="font-size: 13.5px; font-weight: 600;">{{ pk.name }}</div>
+                                    <div style="font-size: 11.5px; color: var(--rdp-text-muted);">
+                                        Didaftarkan: {{ pk.created_at|date:"d M Y H:i" }} 
+                                        {% if pk.last_used_at %}| Terakhir digunakan: {{ pk.last_used_at|date:"d M Y H:i" }}{% endif %}
+                                    </div>
+                                </div>
+                                <button type="button" class="settings-btn settings-btn--danger" style="padding: 4px 10px; font-size: 11.5px;"
+                                        hx-delete="{% url 'accounts:webauthn_delete_passkey' pk.id %}"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                        hx-confirm="Hapus perangkat ini? Anda tidak bisa login menggunakannya lagi.">
+                                    Hapus
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div style="font-size: 13px; color: var(--rdp-text-muted); text-align: center; padding: 20px 0; border: 1px dashed var(--rdp-border); border-radius: 6px;">
+                        Belum ada perangkat biometrik/sidik jari yang didaftarkan.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <script>
+            function registerNewPasskey() {
+                const deviceName = prompt("Masukkan nama perangkat (misal: iPhone Saya, Laptop Kantor):", "Perangkat Baru");
+                if (!deviceName) return;
+                
+                const challengeUrl = "{% url 'accounts:webauthn_register_challenge' %}";
+                const verifyUrl = "{% url 'accounts:webauthn_register_verify' %}";
+                const csrfToken = "{{ csrf_token }}";
+                
+                registerPasskey(challengeUrl, verifyUrl, csrfToken, deviceName);
+            }
+        </script>
+
+        <!-- danger zone -->
+        <div class="settings-card settings-card--danger" style="margin-top: 18px;">
+            <div class="settings-card__title">Danger zone</div>
+            <div style="display: flex; align-items: center; gap: 14px; margin-top: 14px;">
+                <div style="flex: 1;">
+                    <div style="font-size: 13.5px; font-weight: 600;">Delete account</div>
+                    <div style="font-size: 12px; line-height: 1.55; color: var(--rdp-text-muted); margin-top: 1px;">Removes your profile and access. Workspace data belongs to the org and is kept.</div>
+                </div>
+                <button class="settings-btn settings-btn--danger">Delete account…</button>
+            </div>
+        </div>
+    </main>
 </c-layout.app>

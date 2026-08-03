@@ -530,7 +530,7 @@ def run_new(args: list[str]):
 
     print("\n  Pilih fitur yang ingin disertakan:")
     has_landing = ask_yes_no("  Sertakan halaman Landing Page Publik (home, about, privacy)?", default="y")
-    has_auth = ask_yes_no("  Sertakan fitur Autentikasi UI (login, register, forgot password)?", default="y")
+    has_auth = True  # Autentikasi sekarang menjadi requirement wajib
     has_dashboard = ask_yes_no("  Sertakan fitur Dashboard UI (dashboard, profil, aktivitas)?", default="y")
     has_demo_pages = ask_yes_no("  Sertakan halaman demo/dokumentasi (docs/, examples/, HTMX showcase)?", default="n")
 

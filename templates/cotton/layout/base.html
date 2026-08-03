@@ -11,6 +11,7 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if title != SITE_NAME %}{{ title }} — {% endif %} {% if navbar_brand == "" %}{{ APP_BRAND_SHORT }} {% else %} {{ navbar_brand }} {% endif %}</title>
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
 
     {# Restore saved theme & accent sebelum CSS render — cegah flash #}
     <script>(function(){
@@ -93,11 +94,11 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
     {% if RDP_UI_SELF_HOST %}
         <script src="{% static 'vendor/htmx/htmx.min.js' %}"></script>
         <script defer src="{% static 'vendor/alpinejs/alpine.min.js' %}"></script>
-        <script type="module" src="{% static 'vendor/rdp-ui/rdp.js' %}" defer></script>
+        <script src="{% static 'vendor/rdp-ui/rdp.js' %}" defer></script>
     {% else %}
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script type="module" src="https://ui.radian.web.id/{{ RDP_UI_VERSION|default:'v1.0' }}/assets/rdp.js" defer></script>
+        <script src="https://ui.radian.web.id/{{ RDP_UI_VERSION|default:'v1.0' }}/assets/rdp.js" defer></script>
     {% endif %}
     
     <!-- Pustaka UI/UX Tambahan -->
@@ -111,6 +112,7 @@ TUJUAN: Shell utama <html>, <head>, dan import scripts universal.
     <script src="{% static 'js/debug-overlay.js' %}"></script>
     {{ extra_js }}
 
-
+    {# ── Modal Container Global ── #}
+    <div id="modal-container"></div>
 </body>
 </html>

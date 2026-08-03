@@ -37,14 +37,41 @@ class EmailStepForm(forms.Form):
 
     def clean_email(self):
         """
-        TUJUAN: Validasi email belum dipakai user lain.
+        TUJUAN: Validasi email belum dipakai user lain dan domain diizinkan.
         """
+        from django.conf import settings
+
         email = self.cleaned_data["email"].lower().strip()
+
+        # Validasi domain email
+        domain = email.split("@")[1]
+        allowed_domains = getattr(settings, "ALLOWED_EMAIL_DOMAINS", [])
+        if allowed_domains and domain not in allowed_domains:
+            raise ValidationError(
+                _(
+                    f"Pendaftaran ditolak: Domain email @{domain} tidak memiliki akses. "
+                    f"Harap gunakan email perusahaan yang sah."
+                )
+            )
+
+        # Validasi keunikan email
         if User.objects.filter(email=email).exists():
             raise ValidationError(
                 _("Email ini sudah terdaftar. Silakan login atau gunakan email lain.")
             )
         return email
+
+    def clean(self):
+        """Validasi Cloudflare Turnstile CAPTCHA"""
+        cleaned = super().clean()
+        from apps.core.utils.turnstile import verify_turnstile
+        
+        turnstile_response = self.data.get("cf-turnstile-response")
+        
+        if not verify_turnstile(turnstile_response):
+            raise ValidationError(_("Validasi keamanan (CAPTCHA) gagal. Silakan coba lagi."))
+            
+        return cleaned
 
 
 class DynamicStepForm(forms.Form):

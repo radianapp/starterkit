@@ -2,7 +2,7 @@
 {% load static %}
 {% load cotton %}
 
-<c-layout.app title="Dashboard" navbar_brand="Dashboard">
+<c-layout.app title="Dashboard" navbar_brand="RDP">
 
     {# Extra CSS untuk halaman dashboard #}
     <c-slot name="head">
@@ -11,112 +11,7 @@
 
     {# Navbar actions dikosongkan karena layout.app sudah memiliki toggle dark mode & avatar bawaan #}
 
-    {# Sidebar: brand + navigasi + footer user #}
-    <c-slot name="sidebar">
-        <a href="/" class="rdp-sidebar__brand">
-            <span class="rdp-sidebar__brand-icon">⬡</span>
-            <span class="rdp-sidebar__brand-text">{{ APP_BRAND_SHORT }}</span>
-        </a>
 
-        <nav class="rdp-sidebar__nav" aria-label="Main navigation">
-            <div class="rdp-sidebar__section">
-                <div class="rdp-sidebar__section-title">Menu Utama</div>
-                <a href="{% url 'dashboard:index' %}" class="rdp-sidebar__link active" aria-current="page">
-                    <span class="rdp-sidebar__link-icon">📊</span>
-                    <span class="rdp-sidebar__link-text">Dashboard</span>
-                </a>
-                {# rdp:sidebar-links — marker untuk rdp new app, jangan hapus #}
-                <a href="#" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">📁</span>
-                    <span class="rdp-sidebar__link-text">Proyek</span>
-                    <span class="rdp-sidebar__badge">2</span>
-                </a>
-                <a href="#" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">📈</span>
-                    <span class="rdp-sidebar__link-text">Analisis</span>
-                </a>
-            </div>
-
-            <div class="rdp-sidebar__section">
-                <div class="rdp-sidebar__section-title">Development</div>
-                <a href="#" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">💻</span>
-                    <span class="rdp-sidebar__link-text">API</span>
-                </a>
-                <a href="#" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">🧪</span>
-                    <span class="rdp-sidebar__link-text">Testing</span>
-                </a>
-                <a href="{% url 'dashboard:changelog' %}" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">📋</span>
-                    <span class="rdp-sidebar__link-text">Changelog</span>
-                </a>
-            </div>
-
-            <div class="rdp-sidebar__section">
-                <div class="rdp-sidebar__section-title">Pengaturan</div>
-                <a href="#" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">👥</span>
-                    <span class="rdp-sidebar__link-text">Tim</span>
-                </a>
-                <a href="#" class="rdp-sidebar__link">
-                    <span class="rdp-sidebar__link-icon">⚙️</span>
-                    <span class="rdp-sidebar__link-text">Pengaturan</span>
-                </a>
-            </div>
-        </nav>
-
-        <div class="rdp-sidebar__footer" x-data="{ open: false }" @click.away="open = false">
-            {# Tombol trigger popup user menu #}
-            <button
-                type="button"
-                class="rdp-sidebar__link rdp-sidebar__user-btn"
-                @click="open = !open"
-                :aria-expanded="open"
-                aria-haspopup="true"
-            >
-                <div class="rdp-avatar rdp-avatar--sm rdp-sidebar__footer-avatar">
-                    <span class="rdp-avatar__initials">{{ user.get_full_name|default:user.email|slice:":2"|upper }}</span>
-                </div>
-                <span class="rdp-sidebar__link-text">{{ user.get_full_name|default:user.email }}</span>
-                <span class="rdp-sidebar__user-chevron" :class="{ 'is-open': open }">▲</span>
-            </button>
-
-            {# Popup menu — muncul di atas tombol #}
-            <div
-                x-show="open"
-                x-transition:enter="rdp-user-menu--enter"
-                x-transition:enter-start="rdp-user-menu--enter-start"
-                x-transition:enter-end="rdp-user-menu--enter-end"
-                class="rdp-user-menu"
-                role="menu"
-            >
-                <a href="{% url 'accounts:profile' %}" class="rdp-user-menu__item" role="menuitem">
-                    <span class="rdp-user-menu__icon">👤</span> Profil
-                </a>
-                <a href="#" class="rdp-user-menu__item" role="menuitem">
-                    <span class="rdp-user-menu__icon">⚙️</span> Pengaturan
-                </a>
-                <div class="rdp-user-menu__divider" role="separator"></div>
-                <form method="post" action="{% url 'accounts:logout' %}" class="rdp-user-menu__form">
-                    {% csrf_token %}
-                    <button type="submit" class="rdp-user-menu__item rdp-user-menu__item--danger" role="menuitem">
-                        <span class="rdp-user-menu__icon">🚪</span> Keluar
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        {# Versi Info di bawah sidebar #}
-        {% if DEBUG %}
-        <div class="rdp-sidebar__version-info">
-            <a href="{% url 'dashboard:changelog' %}" class="rdp-sidebar__version-link">
-                <span>🔧 Framework: <strong class="rdp-sidebar__version-value">v{{ FRAMEWORK_VERSION }}</strong></span>
-                <span>🏠 Lokal: <strong class="rdp-sidebar__version-value">v{{ LOCAL_APP_VERSION }}</strong></span>
-            </a>
-        </div>
-        {% endif %}
-    </c-slot>
 
     {# ========== Main content (default slot) ========== #}
 

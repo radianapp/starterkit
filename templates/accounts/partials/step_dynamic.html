@@ -50,7 +50,7 @@
     {% endfor %}
 
     {% if form.non_field_errors %}
-        <c-rdp.alert type="error">{{ form.non_field_errors.0 }}</c-rdp.alert>
+        <c-rdp.alert variant="danger">{{ form.non_field_errors.0 }}</c-rdp.alert>
     {% endif %}
 
     <div class="reg-wizard__actions">

@@ -18,12 +18,64 @@
 
     {# ── Filter & Search Bar ─────────────────────────────── #}
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <form method="GET" style="display:flex;align-items:center;gap:8px;flex:1;min-width:280px;margin:0">
-            <div style="position:relative;width:260px;flex-shrink:0">
+        <form method="GET" style="display:flex;align-items:center;gap:8px;flex:1;min-width:280px;margin:0;flex-wrap:wrap">
+            <div style="position:relative;flex:1;min-width:180px">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--rdp-text-muted);pointer-events:none"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
                 <input class="rdp-input" name="q" placeholder="Cari Produk..." value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}" style="width:100%;height:36px;padding:0 12px 0 32px;margin:0;font-size:13.5px;box-sizing:border-box">
             </div>
-            <button type="submit" class="rdp-btn rdp-btn--sm" style="height:36px">Filter</button>
+            
+            {# Filter Dropdown #}
+            <div x-data="{ open: false }" @click.away="open = false" style="position: relative; flex-shrink: 0;">
+                <button type="button" @click="open = !open" 
+                        style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border,#E5E2DC);color:var(--rdp-text,#1C1B18);height:36px;padding:0 12px;border-radius:8px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                    Filter
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+                <div x-show="open" x-cloak class="app-navbar-dropdown" style="min-width: 200px; left: 0; right: auto; top: calc(100% + 4px); position: absolute; z-index: var(--rdp-z-dropdown, 200); background: var(--rdp-surface, #FFFFFF); border: 1px solid var(--rdp-border, #E5E2DC); border-radius: 12px; box-shadow: 0 4px 6px rgba(28,27,24,.06), 0 12px 32px rgba(28,27,24,.12); padding: 6px; display: flex; flex-direction: column;">
+                    <div class="app-navbar-dropdown__label">CATEGORY</div>
+                    <button type="button" class="app-navbar-dropdown__item" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">
+                        All categories
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Furniture</button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Lighting</button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Accessories</button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Storage</button>
+                </div>
+            </div>
+
+            {# Sort Dropdown #}
+            <div x-data="{ open: false }" @click.away="open = false" style="position: relative; flex-shrink: 0;">
+                <button type="button" @click="open = !open" 
+                        style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border,#E5E2DC);color:var(--rdp-text,#1C1B18);height:36px;padding:0 12px;border-radius:8px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer;font-family:inherit">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l4 4 4-4"></path><path d="M7 20V4"></path><path d="M21 8l-4-4-4 4"></path><path d="M17 4v16"></path></svg>
+                    Name
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:-2px"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:-2px"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+                <div x-show="open" x-cloak class="app-navbar-dropdown" style="min-width: 230px; left: 0; right: auto; top: calc(100% + 4px); position: absolute; z-index: var(--rdp-z-dropdown, 200); background: var(--rdp-surface, #FFFFFF); border: 1px solid var(--rdp-border, #E5E2DC); border-radius: 12px; box-shadow: 0 4px 6px rgba(28,27,24,.06), 0 12px 32px rgba(28,27,24,.12); padding: 6px; display: flex; flex-direction: column;">
+                    <div class="app-navbar-dropdown__label">SORT BY</div>
+                    <button type="button" class="app-navbar-dropdown__item" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">
+                        Name
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Price</button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Stock</button>
+                    <button type="button" class="app-navbar-dropdown__item" style="width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">Updated</button>
+                    
+                    <div class="rdp-dropdown__divider" style="height:1px;background:var(--rdp-border,#E5E2DC);margin:6px 0"></div>
+                    
+                    <div class="app-navbar-dropdown__label">DIRECTION</div>
+                    <button type="button" class="app-navbar-dropdown__item" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">
+                        <span style="line-height:1.4">Ascending (A–Z, low→high)</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--rdp-primary,#15654E)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-left:8px"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button type="button" class="app-navbar-dropdown__item" style="display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:6px 10px;text-align:left;cursor:pointer;border-radius:6px;font-family:inherit;font-size:13px">
+                        <span style="line-height:1.4">Descending (Z–A, high→low)</span>
+                    </button>
+                </div>
+            </div>
         </form>
         <div style="flex:1"></div>
         <button id="btn-tambah-produk" class="rdp-btn rdp-btn--primary rdp-btn--sm" style="height:36px"
@@ -36,6 +88,7 @@
     </div>
 
     {# ── Tabel Data ──────────────────────────────────────── #}
+    <div id="produk-container">
     {% if items %}
     <div class="rdp-table-wrapper" style="background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border);border-radius:12px;overflow:hidden">
         <table class="rdp-table" style="width:100%;border-collapse:collapse">
@@ -50,7 +103,7 @@
             <tbody>
                 {% for item in items %}
                 <tr class="pos-row" style="border-bottom:1px solid var(--rdp-border);transition:background 0.1s;cursor:pointer">
-                    <td style="padding:12px 14px;font-weight:500;font-size:13.5px;color:var(--rdp-text)">{{ item.name }}</td>
+                    <td style="padding:12px 14px;font-weight:500;font-size:13.5px;color:var(--rdp-text)">{{ item.nama }}</td>
                     <td style="padding:12px 14px">
                         {% if item.is_active %}
                             <span class="rdp-badge rdp-badge--success" style="font-size:11px">Aktif</span>
@@ -86,19 +139,54 @@
     </div>
 
     {# ── Pagination ─────────────────────────────────────── #}
-    {% if is_paginated %}
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
-        <span style="font-size:12.5px;color:var(--rdp-text-muted)">Menampilkan {{ page_obj.start_index }}–{{ page_obj.end_index }} dari {{ page_obj.paginator.count }}</span>
+        <div style="display:flex;align-items:center;gap:16px">
+            <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:12.5px;color:var(--rdp-text-muted)">Baris per halaman:</span>
+                <select class="rdp-input" name="paginate_by" style="height:32px;padding:0 28px 0 10px;font-size:13px;width:auto;min-width:60px;margin:0;box-sizing:border-box;border-radius:6px;cursor:pointer"
+                        hx-get="{% url 'inventory:produk-list' %}"
+                        hx-include="[name='q']"
+                        hx-target="#produk-container"
+                        hx-select="#produk-container"
+                        hx-swap="outerHTML">
+                    <option value="10" {% if current_paginate_by == 10 %}selected{% endif %}>10</option>
+                    <option value="20" {% if current_paginate_by == 20 or not current_paginate_by %}selected{% endif %}>20</option>
+                    <option value="50" {% if current_paginate_by == 50 %}selected{% endif %}>50</option>
+                    <option value="100" {% if current_paginate_by == 100 %}selected{% endif %}>100</option>
+                </select>
+            </div>
+            {% if is_paginated %}
+            <span style="font-size:12.5px;color:var(--rdp-text-muted)">Menampilkan {{ page_obj.start_index }}–{{ page_obj.end_index }} dari {{ page_obj.paginator.count }}</span>
+            {% else %}
+            <span style="font-size:12.5px;color:var(--rdp-text-muted)">Menampilkan {{ items|length }} dari {{ items|length }}</span>
+            {% endif %}
+        </div>
         <div style="display:flex;gap:6px">
-            <button class="rdp-btn rdp-btn--sm" {% if not page_obj.has_previous %}disabled{% endif %}>
-                {% if page_obj.has_previous %}<a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}" style="color:inherit;text-decoration:none">Sebelumnya</a>{% else %}Sebelumnya{% endif %}
-            </button>
-            <button class="rdp-btn rdp-btn--sm" {% if not page_obj.has_next %}disabled{% endif %}>
-                {% if page_obj.has_next %}<a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}" style="color:inherit;text-decoration:none">Berikutnya</a>{% else %}Berikutnya{% endif %}
-            </button>
+            {% if is_paginated %}
+            <a {% if page_obj.has_previous %}href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               hx-get="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               hx-target="#produk-container"
+               hx-select="#produk-container"
+               hx-swap="outerHTML"{% endif %} 
+               class="rdp-btn rdp-btn--sm {% if not page_obj.has_previous %}rdp-btn--ghost{% else %}rdp-btn--secondary{% endif %}" 
+               style="height:32px;font-size:13px;padding:0 12px;font-weight:500;{% if not page_obj.has_previous %}pointer-events:none;color:var(--rdp-text-muted);border:none{% else %}background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border,#E5E2DC);color:var(--rdp-text,#1C1B18){% endif %}">
+                Sebelumnya
+            </a>
+            <a {% if page_obj.has_next %}href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}"
+               hx-get="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}"
+               hx-target="#produk-container"
+               hx-select="#produk-container"
+               hx-swap="outerHTML"{% endif %} 
+               class="rdp-btn rdp-btn--sm {% if not page_obj.has_next %}rdp-btn--ghost{% else %}rdp-btn--secondary{% endif %}" 
+               style="height:32px;font-size:13px;padding:0 12px;font-weight:500;{% if not page_obj.has_next %}pointer-events:none;color:var(--rdp-text-muted);border:none{% else %}background:var(--rdp-surface,#FFFFFF);border:1px solid var(--rdp-border,#E5E2DC);color:var(--rdp-text,#1C1B18){% endif %}">
+                Berikutnya
+            </a>
+            {% else %}
+            <a class="rdp-btn rdp-btn--sm rdp-btn--ghost" style="height:32px;font-size:13px;padding:0 12px;font-weight:500;pointer-events:none;color:var(--rdp-text-muted);border:none">Sebelumnya</a>
+            <a class="rdp-btn rdp-btn--sm rdp-btn--ghost" style="height:32px;font-size:13px;padding:0 12px;font-weight:500;pointer-events:none;color:var(--rdp-text-muted);border:none">Berikutnya</a>
+            {% endif %}
         </div>
     </div>
-    {% endif %}
 
     {% else %}
     {# ── Empty State ─────────────────────────────────────── #}
@@ -125,8 +213,5 @@
     </div>
     {% endif %}
     {% endif %}
-
-    {# ── Modal container ─────────────────────────────────── #}
-    <div id="modal-container"></div>
-
+    </div>
 </c-layout.app>

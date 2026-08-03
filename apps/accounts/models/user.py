@@ -15,6 +15,7 @@ from typing import ClassVar
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 
 class UserManager(BaseUserManager):
@@ -114,6 +115,9 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS: ClassVar[list] = ["username"]
     objects = UserManager()
+
+    # Log Aktivitas via django-simple-history
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = _("user")

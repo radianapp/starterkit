@@ -71,6 +71,16 @@ class LoginForm(forms.Form):
                  ke backend karena itulah konvensi Django.
         """
         cleaned = super().clean()
+        
+        # Validasi Cloudflare Turnstile CAPTCHA
+        from apps.core.utils.turnstile import verify_turnstile
+        turnstile_response = self.data.get("cf-turnstile-response")
+        if not verify_turnstile(turnstile_response):
+            raise forms.ValidationError(
+                _("Validasi keamanan (CAPTCHA) gagal. Silakan coba lagi."),
+                code="invalid_captcha",
+            )
+            
         identifier = cleaned.get("identifier", "").strip()
         password = cleaned.get("password", "")
 

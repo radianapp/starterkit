@@ -10,7 +10,7 @@ US-010: Layout Blank — Untuk halaman minimalis (login, register, forgot passwo
     </c-slot>
 
     <div class="rdp-layout rdp-layout--blank" x-data="layoutState()">
-        <button @click="toggleDarkMode()"
+        <button @click="window.toggleRdpDarkMode()"
                 class="rdp-btn rdp-btn--ghost rdp-theme-toggle rdp-theme-toggle--floating"
                 :title="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
                 :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">

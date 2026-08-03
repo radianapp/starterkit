@@ -21,3 +21,11 @@ A: Halaman Changelog mengambil data dari database (model `SystemUpdate`). Tambah
 **Q: Apakah nilai versi akan otomatis berubah saat framework diupdate dari GitHub?**
 A: Tidak secara otomatis. Anda perlu memperbarui nilai `FRAMEWORK_VERSION` di file `.env` secara manual setelah melakukan `git pull` dari repository sumber. Ini adalah keputusan desain untuk menjaga transparansi dan kontrol penuh di tangan developer.
 
+**Q: Apa yang terjadi jika file CSV untuk bulk upload memiliki lebih dari 1000 baris?**
+A: Sistem secara otomatis akan mendelegasikan proses import ke Celery (background task). Admin akan mendapatkan pesan notifikasi hijau bahwa import akan diproses di background.
+
+**Q: Mengapa user hasil bulk upload langsung di-redirect ke halaman "Ganti Password"?**
+A: Ini adalah fitur keamanan dari `ForceChangePasswordMiddleware`. Pengguna baru wajib mengganti password default (yang dibuat acak oleh sistem) agar akun mereka lebih aman.
+
+**Q: Apakah semua kolom tambahan (misalnya departemen atau jabatan) dari CSV akan disimpan?**
+A: Ya. Semua kolom yang tidak standar pada `User` akan disimpan secara otomatis ke dalam kolom JSON `extra_data` di profil pengguna.

@@ -80,3 +80,11 @@ def authenticated_client(client, regular_user):
     """
     client.force_login(regular_user)
     return client
+
+
+@pytest.fixture(autouse=True)
+def override_email_domains(settings):
+    """
+    TUJUAN: Disable ALLOWED_EMAIL_DOMAINS restriction globally for tests.
+    """
+    settings.ALLOWED_EMAIL_DOMAINS = []

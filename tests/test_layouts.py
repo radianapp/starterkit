@@ -28,7 +28,7 @@ class TestLayouts(SimpleTestCase):
         if context_dict:
             context_data.update(context_dict)
 
-        return render_to_string("test_layouts_render.html", context_data)
+        return render_to_string("test_layouts_render.html", context_data, request=self.request)
 
     @override_settings(RDP_UI_SELF_HOST=False, RDP_UI_VERSION="v1.0")
     def test_cdn_assets_loaded_when_self_host_false(self):

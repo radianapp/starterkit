@@ -1,23 +1,15 @@
 from .produk import (
     ProdukListView,
-    TabelProdukView,
-    DetailPanelView,
-    TambahModalView,
-    TambahProdukView,
-    EditModalView,
-    EditProdukView,
-    HapusKonfirmasiView,
-    HapusProdukView,
+    ProdukCreateModalView,
+    ProdukEditModalView,
+    ProdukDeleteModalView,
+    ProdukDetailView,
 )
 
 __all__ = [
     "ProdukListView",
-    "TabelProdukView",
-    "DetailPanelView",
-    "TambahModalView",
-    "TambahProdukView",
-    "EditModalView",
-    "EditProdukView",
-    "HapusKonfirmasiView",
-    "HapusProdukView",
+    "ProdukCreateModalView",
+    "ProdukEditModalView",
+    "ProdukDeleteModalView",
+    "ProdukDetailView",
 ]

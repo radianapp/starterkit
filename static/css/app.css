@@ -1,7 +1,7 @@
 /* ==========================================================================
    Dashboard Shell Design Tokens & Overrides (Dashboard Shell.dc.html)
    ========================================================================== */
-:root {
+[data-rdp-theme="default"], :root:not([data-rdp-theme]) {
     --rdp-font-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
     --rdp-font-mono: 'IBM Plex Mono', monospace;
 

@@ -28,7 +28,7 @@
 
         {% if messages %}
             {% for message in messages %}
-                <c-rdp.alert type="{{ message.tags|default:'info' }}" style="margin-top: 1rem;">
+                <c-rdp.alert variant="{{ message.tags|default:'info' }}" style="margin-top: 1rem;">
                     {{ message }}
                 </c-rdp.alert>
             {% endfor %}

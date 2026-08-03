@@ -205,6 +205,7 @@ THIRD_PARTY_APPS = [
     "django_cotton",  # django-cotton component framework
     "drf_spectacular",
     "storages",
+    "simple_history",
 ]
 
 LOCAL_APPS = [
@@ -216,7 +217,6 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
 
 
 # ⚙️ KONFIGURASI: Custom User model
@@ -319,6 +319,28 @@ REGISTRATION_STEPS = json.loads(env_var("REGISTRATION_STEPS", "[]"))
 # True  = user diarahkan ke halaman "cek email" jika belum verify
 REQUIRE_EMAIL_VERIFICATION = env_var("REQUIRE_EMAIL_VERIFICATION", "False").lower() == "true"
 
+# ⚙️ KONFIGURASI: Auth & Registration Features
+ENABLE_USER_REGISTRATION = env_var("ENABLE_USER_REGISTRATION", "True").lower() in (
+    "true",
+    "1",
+    "yes",
+)
+ENABLE_GOOGLE_AUTH = env_var("ENABLE_GOOGLE_AUTH", "False").lower() in ("true", "1", "yes")
+
+# ⚙️ KONFIGURASI: Domain Whitelist untuk Registrasi
+# Kosongkan list untuk mengizinkan semua domain
+_allowed_domains_env = env_var("ALLOWED_EMAIL_DOMAINS", "")
+ALLOWED_EMAIL_DOMAINS = [
+    domain.strip().lower() for domain in _allowed_domains_env.split(",") if domain.strip()
+]
+
+# ⚙️ KONFIGURASI: Custom Account Adapter untuk django-allauth
+# Digunakan untuk menerapkan batasan domain (dan lain-lain) saat login via Google SSO
+ACCOUNT_ADAPTER = "apps.accounts.adapters.DomainRestrictAdapter"
+
+# ⚙️ KONFIGURASI: Audit Trail
+ENABLE_AUDIT_TRAIL = env_var("ENABLE_AUDIT_TRAIL", "True").lower() in ("true", "1", "yes")
+
 # ⚙️ KONFIGURASI: Auth URL — @login_required redirect ke sini
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
@@ -335,8 +357,18 @@ MIDDLEWARE = [
     # US-008: Enforce email verification jika REQUIRE_EMAIL_VERIFICATION=True
     "apps.core.middleware.EmailVerificationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    # Force password change for bulk uploaded users
+    "apps.accounts.middleware.ForceChangePasswordMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
+
+# KEPUTUSAN TEKNIS: Map Django message tags 'error' ke 'danger' agar sesuai dengan standar CSS alert
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
 
 ROOT_URLCONF = "config.urls"
 
@@ -507,9 +539,18 @@ if USE_S3:
     AWS_ACCESS_KEY_ID = env_var("AWS_ACCESS_KEY_ID", "")
     AWS_SECRET_ACCESS_KEY = env_var("AWS_SECRET_ACCESS_KEY", "")
     AWS_STORAGE_BUCKET_NAME = env_var("AWS_STORAGE_BUCKET_NAME", "")
-    AWS_S3_ENDPOINT_URL = env_var("AWS_S3_ENDPOINT_URL", None) # Untuk MinIO/R2
+    AWS_S3_ENDPOINT_URL = env_var("AWS_S3_ENDPOINT_URL", None)  # Untuk MinIO/R2
     AWS_S3_REGION_NAME = env_var("AWS_S3_REGION_NAME", None)
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    AWS_S3_VERIFY = env_var("AWS_S3_VERIFY", "True").lower() in ("true", "1", "yes") # Set False jika pakai MinIO localhost tanpa SSL
+    AWS_S3_VERIFY = env_var("AWS_S3_VERIFY", "True").lower() in (
+        "true",
+        "1",
+        "yes",
+    )  # Set False jika pakai MinIO localhost tanpa SSL
 
+# ⚙️ KONFIGURASI: Cloudflare Turnstile (CAPTCHA)
+TURNSTILE_ENABLED = env_var("TURNSTILE_ENABLED", "False").lower() in ("true", "1", "yes")
+# Default keys provided are dummy keys for testing that always pass
+TURNSTILE_SITE_KEY = env_var("TURNSTILE_SITE_KEY", "1x00000000000000000000AA")
+TURNSTILE_SECRET_KEY = env_var("TURNSTILE_SECRET_KEY", "1x0000000000000000000000000000000AA")

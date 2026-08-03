@@ -70,7 +70,7 @@ def verify_email_token(token: str):
         return None, "invalid"
 
 
-def send_verification_email(user, request) -> bool:
+def send_verification_email(user, request=None) -> bool:
     """
     TUJUAN: Kirim email verifikasi ke user baru.
 
@@ -90,9 +90,15 @@ def send_verification_email(user, request) -> bool:
     # Prod: SMTP via EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, dll.
     """
     token = generate_verification_token(user)
-    verify_url = request.build_absolute_uri(
-        reverse("accounts:verify_email", kwargs={"token": token})
-    )
+    path = reverse("accounts:verify_email", kwargs={"token": token})
+    
+    if request:
+        verify_url = request.build_absolute_uri(path)
+    else:
+        from django.conf import settings
+        # Pastikan pengaturan base url tersedia di settings atau fallback
+        base_url = getattr(settings, "SITE_URL", "http://localhost:8000")
+        verify_url = f"{base_url.rstrip('/')}{path}"
 
     subject = render_to_string(
         "accounts/email/verify_email_subject.txt",

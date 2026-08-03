@@ -26,4 +26,6 @@ def debug_settings(request):
             "forest", "ocean", "nord", "dracula",
             "terminal", "corporate", "github",
         ]),
+        "TURNSTILE_ENABLED": getattr(settings, "TURNSTILE_ENABLED", False),
+        "TURNSTILE_SITE_KEY": getattr(settings, "TURNSTILE_SITE_KEY", ""),
     }

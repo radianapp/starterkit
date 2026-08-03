@@ -85,19 +85,13 @@ def _get_step_template(step_index: int, steps: list) -> str:
 def register_wizard(request):
     """
     TUJUAN: Handle semua step registration wizard dalam satu URL.
-
-    ALUR (GET):
-      1. Inisialisasi / ambil state wizard dari session
-      2. Render register.html (shell) + partial step saat ini
-
-    ALUR (POST):
-      1. Validasi form step saat ini
-      2. Jika invalid → return partial dengan error (HTMX swap)
-      3. Jika valid dan bukan step terakhir → advance step → return partial step berikutnya
-      4. Jika valid dan step terakhir → create user → auto-login → redirect dashboard
-
-    DIPANGGIL DARI: urls.py path("register/", ...)
     """
+    # KEPUTUSAN TEKNIS: Jika registrasi dinonaktifkan di .env, redirect ke login
+    if not getattr(settings, "ENABLE_USER_REGISTRATION", True):
+        from django.contrib import messages
+        messages.error(request, "Pendaftaran akun baru saat ini ditutup.")
+        return redirect("accounts:login")
+
     steps = getattr(settings, "REGISTRATION_STEPS", [])
     total_steps = 2 + len(steps)  # email + N dynamic + password
     final_step = total_steps - 1
@@ -156,6 +150,7 @@ def register_wizard(request):
         **ctx,
         "total_steps": total_steps,
         "step_labels": _get_step_labels(steps),
+        "enable_google_auth": getattr(settings, "ENABLE_GOOGLE_AUTH", False),
     }
     return render(request, "accounts/register.html", shell_ctx)
 
