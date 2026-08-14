@@ -39,7 +39,11 @@ def home_view(request):
 
         # Cari app pengguna pertama di apps/ selain core & accounts
         for app_path in settings.INSTALLED_APPS:
-            if app_path.startswith("apps.") and app_path not in ("apps.core", "apps.accounts", "apps.dashboard"):
+            if app_path.startswith("apps.") and app_path not in (
+                "apps.core",
+                "apps.accounts",
+                "apps.dashboard",
+            ):
                 app_name = app_path.split(".")[1]
                 try:
                     return redirect(f"{app_name}:list")
@@ -63,7 +67,6 @@ def home_view(request):
         return redirect("admin:index")
 
 
-
 urlpatterns = [
     # Root → landing page publik (redirect dashboard jika sudah login)
     path("", home_view, name="home"),
@@ -76,9 +79,14 @@ if is_app_installed("apps.core"):
 
 if is_app_installed("apps.accounts"):
     urlpatterns.append(path("accounts/", include("apps.accounts.urls")))
+    # Daftarkan allauth SESUDAH accounts kustom agar view login/logout kita tidak ter-shadow
+    urlpatterns.append(path("accounts/", include("allauth.urls")))
 
 if is_app_installed("apps.dashboard"):
     urlpatterns.append(path("dashboard/", include("apps.dashboard.urls")))
+
+if is_app_installed("apps.tenants"):
+    urlpatterns.append(path("tenants/", include("apps.tenants.urls")))
 
 if is_app_installed("apps.inventory"):
     urlpatterns.append(path("produk/", include("apps.inventory.urls")))

@@ -1,5 +1,6 @@
 from django.db import transaction
 
+
 class StockManagerService:
     """Layanan bisnis untuk stock_manager."""
 

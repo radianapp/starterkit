@@ -6,6 +6,7 @@ TUJUAN: Setup accounts app yang berisi user model, authentication, profile manag
 """
 
 import os
+
 from django.apps import AppConfig
 
 
@@ -24,7 +25,6 @@ class AccountsConfig(AppConfig):
     label = "accounts"
     verbose_name = "Accounts & Authentication"
     path = os.path.dirname(os.path.abspath(__file__))
-
 
     def ready(self):
         """

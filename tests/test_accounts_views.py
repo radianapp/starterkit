@@ -16,6 +16,7 @@ from apps.accounts.services.email_service import generate_verification_token
 
 # â”€â”€â”€ Fixtures â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+
 @pytest.fixture
 def client():
     """Provide Django test client."""
@@ -64,6 +65,8 @@ def unverified_client(client, unverified_user):
 
 # â”€â”€â”€ Login View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+
+@pytest.mark.django_db
 class TestUserLoginView:
     """Test untuk view user_login. US: US-005"""
 
@@ -84,19 +87,25 @@ class TestUserLoginView:
     def test_login_post_valid_credentials(self, client, verified_user):
         """POST dengan kredensial valid harus login dan redirect."""
         url = reverse("accounts:login")
-        response = client.post(url, {
-            "identifier": "verified@test.local",
-            "password": "StrongPass123!",
-        })
+        response = client.post(
+            url,
+            {
+                "identifier": "verified@test.local",
+                "password": "StrongPass123!",
+            },
+        )
         assert response.status_code == 302
 
     def test_login_post_invalid_credentials(self, client, db):
         """POST dengan kredensial salah harus return 422."""
         url = reverse("accounts:login")
-        response = client.post(url, {
-            "identifier": "nobody@test.local",
-            "password": "wrongpassword",
-        })
+        response = client.post(
+            url,
+            {
+                "identifier": "nobody@test.local",
+                "password": "wrongpassword",
+            },
+        )
         assert response.status_code == 422
 
     def test_login_post_htmx_invalid_returns_fragment(self, client, db):
@@ -123,26 +132,34 @@ class TestUserLoginView:
     def test_login_post_with_next_param(self, client, verified_user):
         """POST login dengan ?next harus redirect ke next URL lokal."""
         url = reverse("accounts:login") + "?next=/dashboard/"
-        response = client.post(url, {
-            "identifier": "verified@test.local",
-            "password": "StrongPass123!",
-        })
+        response = client.post(
+            url,
+            {
+                "identifier": "verified@test.local",
+                "password": "StrongPass123!",
+            },
+        )
         assert response.status_code == 302
         assert response["Location"] == "/dashboard/"
 
     def test_login_post_external_next_is_sanitized(self, client, verified_user):
         """next URL external harus diabaikan (open redirect prevention)."""
         url = reverse("accounts:login") + "?next=http://evil.com"
-        response = client.post(url, {
-            "identifier": "verified@test.local",
-            "password": "StrongPass123!",
-        })
+        response = client.post(
+            url,
+            {
+                "identifier": "verified@test.local",
+                "password": "StrongPass123!",
+            },
+        )
         assert response.status_code == 302
         assert response["Location"] == "/"
 
 
 # â”€â”€â”€ Logout View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+
+@pytest.mark.django_db
 class TestUserLogoutView:
     """Test untuk view user_logout. US: US-006"""
 
@@ -161,6 +178,8 @@ class TestUserLogoutView:
 
 # â”€â”€â”€ Register Wizard View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+
+@pytest.mark.django_db
 class TestRegisterWizardView:
     """Test untuk view register_wizard. US: US-004"""
 
@@ -194,10 +213,14 @@ class TestRegisterWizardView:
         settings.REGISTRATION_STEPS = []
         url = reverse("accounts:register")
         client.post(url, {"email": "brand_new@test.local"}, HTTP_HX_REQUEST="true")
-        response = client.post(url, {
-            "password1": "VeryStrongPass999!",
-            "password2": "VeryStrongPass999!",
-        }, HTTP_HX_REQUEST="true")
+        response = client.post(
+            url,
+            {
+                "password1": "VeryStrongPass999!",
+                "password2": "VeryStrongPass999!",
+            },
+            HTTP_HX_REQUEST="true",
+        )
         assert response.status_code == 200
         assert "HX-Redirect" in response
 
@@ -206,10 +229,13 @@ class TestRegisterWizardView:
         settings.REGISTRATION_STEPS = []
         url = reverse("accounts:register")
         client.post(url, {"email": "another_new@test.local"})
-        response = client.post(url, {
-            "password1": "VeryStrongPass999!",
-            "password2": "VeryStrongPass999!",
-        })
+        response = client.post(
+            url,
+            {
+                "password1": "VeryStrongPass999!",
+                "password2": "VeryStrongPass999!",
+            },
+        )
         assert response.status_code == 302
 
     def test_register_password_mismatch_returns_422(self, client, db, settings):
@@ -217,14 +243,19 @@ class TestRegisterWizardView:
         settings.REGISTRATION_STEPS = []
         url = reverse("accounts:register")
         client.post(url, {"email": "mismatch@test.local"}, HTTP_HX_REQUEST="true")
-        response = client.post(url, {
-            "password1": "VeryStrongPass999!",
-            "password2": "DifferentPass999!",
-        }, HTTP_HX_REQUEST="true")
+        response = client.post(
+            url,
+            {
+                "password1": "VeryStrongPass999!",
+                "password2": "DifferentPass999!",
+            },
+            HTTP_HX_REQUEST="true",
+        )
         assert response.status_code == 422
 
 
 # â”€â”€â”€ Profile View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 
 class TestProfileView:
     """Test untuk view profile_view. US: US-009"""
@@ -246,11 +277,14 @@ class TestProfileView:
     def test_profile_post_valid_updates_name(self, auth_client, verified_user):
         """POST form profil valid harus update nama."""
         url = reverse("accounts:profile")
-        response = auth_client.post(url, {
-            "first_name": "Budi",
-            "last_name": "Santoso",
-            "bio": "Saya developer.",
-        })
+        response = auth_client.post(
+            url,
+            {
+                "first_name": "Budi",
+                "last_name": "Santoso",
+                "bio": "Saya developer.",
+            },
+        )
         assert response.status_code == 302
         verified_user.refresh_from_db()
         assert verified_user.first_name == "Budi"
@@ -279,6 +313,7 @@ class TestProfileView:
 
 # â”€â”€â”€ Avatar Upload View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+
 class TestAvatarUploadView:
     """Test untuk view avatar_upload_view. US: US-009"""
 
@@ -304,6 +339,7 @@ class TestAvatarUploadView:
 
 
 # â”€â”€â”€ Verify Email Views â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 
 class TestVerifyEmailViews:
     """Test untuk verify email views. US: US-008"""

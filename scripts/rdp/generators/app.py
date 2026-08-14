@@ -5,7 +5,7 @@ import os
 import re
 import sys
 
-from ..utils import _to_class_name, get_input, on_rm_error
+from ..utils import _to_class_name, get_input
 
 
 def run_new_app(args):
@@ -26,7 +26,7 @@ def run_new_app(args):
         sys.exit(1)
 
     app_name = args[0]
-    if not re.match(r'^[a-zA-Z0-9_]+$', app_name):
+    if not re.match(r"^[a-zA-Z0-9_]+$", app_name):
         print("[ERROR] Nama aplikasi hanya boleh mengandung huruf, angka, dan underscore.")
         sys.exit(1)
 
@@ -66,7 +66,6 @@ def run_new_app(args):
     # ── models/ ──────────────────────────────────────────────────────────────
     models_dir = os.path.join(app_dir, "models")
     os.makedirs(models_dir)
-
 
     with open(os.path.join(models_dir, f"{app_name}.py"), "w", encoding="utf-8") as f:
         f.write(f'''\
@@ -409,7 +408,6 @@ class {class_name}Config(AppConfig):
     path = os.path.dirname(os.path.abspath(__file__))
 ''')
 
-
     # ── urls.py ──────────────────────────────────────────────────────────────
     with open(os.path.join(app_dir, "urls.py"), "w", encoding="utf-8") as f:
         f.write(f'''\
@@ -454,7 +452,7 @@ urlpatterns = [
     os.makedirs(tpl_dir, exist_ok=True)
 
     with open(os.path.join(tpl_dir, f"{app_name}_list.html"), "w", encoding="utf-8") as f:
-        f.write(f'''\
+        f.write(f"""\
 {{# {app_name}/templates/apps/{app_name}/{app_name}_list.html #}}
 <c-layout.{layout} title="Daftar {verbose}">
 
@@ -527,10 +525,10 @@ urlpatterns = [
     </c-rdp.card>
 
 </c-layout.{layout}>
-''')
+""")
 
     with open(os.path.join(tpl_dir, f"{app_name}_detail.html"), "w", encoding="utf-8") as f:
-        f.write(f'''\
+        f.write(f"""\
 {{# {app_name}/templates/apps/{app_name}/{app_name}_detail.html #}}
 <c-layout.{layout} title="{{{{ object.name }}}}">
 
@@ -582,10 +580,10 @@ urlpatterns = [
     </div>
 
 </c-layout.{layout}>
-''')
+""")
 
     with open(os.path.join(tpl_dir, f"{app_name}_form.html"), "w", encoding="utf-8") as f:
-        f.write(f'''\
+        f.write(f"""\
 {{# {app_name}/templates/apps/{app_name}/{app_name}_form.html #}}
 <c-layout.{layout} title="{{% if object %}}Edit{{% else %}}Tambah{{% endif %}} {verbose}">
 
@@ -616,10 +614,10 @@ urlpatterns = [
     </c-rdp.card>
 
 </c-layout.{layout}>
-''')
+""")
 
     with open(os.path.join(tpl_dir, f"{app_name}_confirm_delete.html"), "w", encoding="utf-8") as f:
-        f.write(f'''\
+        f.write(f"""\
 {{# {app_name}/templates/apps/{app_name}/{app_name}_confirm_delete.html #}}
 <c-layout.{layout} title="Hapus {verbose}">
 
@@ -646,21 +644,25 @@ urlpatterns = [
     </c-rdp.card>
 
 </c-layout.{layout}>
-''')
-
-
+""")
 
     print(f"  [OK] Struktur aplikasi '{app_name}' ({app_type}) berhasil dibuat.")
 
     # ── Daftarkan ke LOCAL_APPS ───────────────────────────────────────────────
     base_settings_path = os.path.join("config", "settings", "base.py")
     if os.path.exists(base_settings_path):
-        ans = get_input(f"Daftarkan 'apps.{app_name}' ke LOCAL_APPS di config/settings/base.py? (Y/n)", default="Y")
+        ans = get_input(
+            f"Daftarkan 'apps.{app_name}' ke LOCAL_APPS di config/settings/base.py? (Y/n)",
+            default="Y",
+        )
         if ans.lower() in ("y", "yes"):
-            with open(base_settings_path, "r", encoding="utf-8") as f:
+            with open(base_settings_path, encoding="utf-8") as f:
                 content = f.read()
             if "LOCAL_APPS = [" in content:
-                content = content.replace("LOCAL_APPS = [", f'LOCAL_APPS = [\n    "apps.{app_name}.apps.{class_name}Config",')
+                content = content.replace(
+                    "LOCAL_APPS = [",
+                    f'LOCAL_APPS = [\n    "apps.{app_name}.apps.{class_name}Config",',
+                )
                 with open(base_settings_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print("  [OK] Aplikasi didaftarkan di LOCAL_APPS.")
@@ -675,13 +677,17 @@ urlpatterns = [
     if os.path.exists(root_urls_path):
         ans = get_input(f"Tambahkan path('{app_name}/', ...) ke config/urls.py? (Y/n)", default="Y")
         if ans.lower() in ("y", "yes"):
-            with open(root_urls_path, "r", encoding="utf-8") as f:
+            with open(root_urls_path, encoding="utf-8") as f:
                 urls_content = f.read()
             new_path = f'    path("{app_name}/", include("apps.{app_name}.urls")),\n'
             if "# App URLs" in urls_content:
-                urls_content = urls_content.replace("    # App URLs", f"    # App URLs\n{new_path}", 1)
+                urls_content = urls_content.replace(
+                    "    # App URLs", f"    # App URLs\n{new_path}", 1
+                )
             elif "urlpatterns = [" in urls_content:
-                urls_content = urls_content.replace("urlpatterns = [", f"urlpatterns = [\n{new_path}", 1)
+                urls_content = urls_content.replace(
+                    "urlpatterns = [", f"urlpatterns = [\n{new_path}", 1
+                )
             with open(root_urls_path, "w", encoding="utf-8") as f:
                 f.write(urls_content)
             print(f"  [OK] URL '{app_name}/' didaftarkan di config/urls.py.")
@@ -693,7 +699,8 @@ urlpatterns = [
         os.path.join("templates", "cotton", "layout", "app.html"),
     ]
     _sidebar_files_with_marker = [
-        p for p in _sidebar_candidates
+        p
+        for p in _sidebar_candidates
         if os.path.exists(p) and marker in open(p, encoding="utf-8").read()
     ]
 
@@ -701,35 +708,46 @@ urlpatterns = [
         ans = get_input(f"Tambahkan link '{verbose}' ke sidebar? (Y/n)", default="Y")
         if ans.lower() in ("y", "yes"):
             for sidebar_path in _sidebar_files_with_marker:
-                with open(sidebar_path, "r", encoding="utf-8") as f:
+                with open(sidebar_path, encoding="utf-8") as f:
                     sidebar_content = f.read()
-                link_class = "rdp-sidebar__link" if "rdp-sidebar__link" in sidebar_content else "sidebar-link"
-                icon_class = "rdp-sidebar__link-icon" if "rdp-sidebar__link-icon" in sidebar_content else "icon-circle"
-                text_class = "rdp-sidebar__link-text" if "rdp-sidebar__link-text" in sidebar_content else ""
+                link_class = (
+                    "rdp-sidebar__link"
+                    if "rdp-sidebar__link" in sidebar_content
+                    else "sidebar-link"
+                )
+                icon_class = (
+                    "rdp-sidebar__link-icon"
+                    if "rdp-sidebar__link-icon" in sidebar_content
+                    else "icon-circle"
+                )
+                text_class = (
+                    "rdp-sidebar__link-text" if "rdp-sidebar__link-text" in sidebar_content else ""
+                )
                 icon_html = f'<span class="{icon_class}">🔗</span>'
                 text_html = (
-                    f'<span class="{text_class}">{verbose}</span>' if text_class
-                    else f'<span>{verbose}</span>'
+                    f'<span class="{text_class}">{verbose}</span>'
+                    if text_class
+                    else f"<span>{verbose}</span>"
                 )
                 indent = "                "
                 sidebar_link = (
                     f'<a href="/{app_name}/" class="{link_class}">\n'
-                    f'{indent}    {icon_html}\n'
-                    f'{indent}    {text_html}\n'
-                    f'{indent}</a>\n'
-                    f'{indent}{marker}'
+                    f"{indent}    {icon_html}\n"
+                    f"{indent}    {text_html}\n"
+                    f"{indent}</a>\n"
+                    f"{indent}{marker}"
                 )
                 sidebar_content = sidebar_content.replace(marker, sidebar_link, 1)
                 with open(sidebar_path, "w", encoding="utf-8") as f:
                     f.write(sidebar_content)
                 print(f"  [OK] Link '{verbose}' ditambahkan ke sidebar ({sidebar_path}).")
     elif app_type == "dashboard":
-        print(f"  [WARNING] Marker sidebar tidak ditemukan. Tambahkan manual: " + marker)
+        print("  [WARNING] Marker sidebar tidak ditemukan. Tambahkan manual: " + marker)
 
     print()
-    print(f"  Langkah selanjutnya:")
+    print("  Langkah selanjutnya:")
     print(f"    rdp makemigrations  ← buat migrasi untuk model {class_name}")
-    print(f"    rdp migrate         ← terapkan migrasi")
+    print("    rdp migrate         ← terapkan migrasi")
 
 
 def run_new_api(args):
@@ -753,25 +771,27 @@ def run_new_api(args):
 
     api_dir = os.path.join(app_dir, "api")
     if os.path.exists(api_dir):
-        ans = get_input(f"Folder 'api/' sudah ada di dalam '{app_name}'. Timpa isi folder? (y/N)", default="N")
+        ans = get_input(
+            f"Folder 'api/' sudah ada di dalam '{app_name}'. Timpa isi folder? (y/N)", default="N"
+        )
         if ans.lower() not in ("y", "yes"):
             print("Operasi dibatalkan.")
             sys.exit(0)
     else:
         os.makedirs(api_dir)
 
-    with open(os.path.join(api_dir, '__init__.py'), 'w', encoding='utf-8') as f:
-        f.write('')
+    with open(os.path.join(api_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
 
     serializers_dir = os.path.join(api_dir, "serializers")
     os.makedirs(serializers_dir, exist_ok=True)
-    with open(os.path.join(serializers_dir, '__init__.py'), 'w', encoding='utf-8') as f:
-        f.write('')
+    with open(os.path.join(serializers_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
 
     views_dir = os.path.join(api_dir, "views")
     os.makedirs(views_dir, exist_ok=True)
-    with open(os.path.join(views_dir, '__init__.py'), 'w', encoding='utf-8') as f:
-        f.write('')
+    with open(os.path.join(views_dir, "__init__.py"), "w", encoding="utf-8") as f:
+        f.write("")
 
     urls_content = f"""from django.urls import path, include
 from rest_framework.routers import DefaultRouter
@@ -785,8 +805,10 @@ urlpatterns = [
     path('', include(router.urls)),
 ]
 """
-    with open(os.path.join(api_dir, 'urls.py'), 'w', encoding='utf-8') as f:
+    with open(os.path.join(api_dir, "urls.py"), "w", encoding="utf-8") as f:
         f.write(urls_content)
 
     print(f"  [OK] Skeleton REST API untuk '{app_name}' berhasil dibuat di {api_dir}/")
-    print(f"  [INFO] Jangan lupa untuk mendaftarkan 'apps.{app_name}.api.urls' di config/api_urls.py (jika menggunakan router global) atau config/urls.py.")
+    print(
+        f"  [INFO] Jangan lupa untuk mendaftarkan 'apps.{app_name}.api.urls' di config/api_urls.py (jika menggunakan router global) atau config/urls.py."
+    )

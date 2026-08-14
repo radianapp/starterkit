@@ -10,10 +10,10 @@ def example_long_running_task(iterations: int = 100):
     TUJUAN: Memberikan referensi bagi developer baru tentang cara membuat Celery task.
     """
     import time
-    
+
     total = 0
     for i in range(iterations):
         time.sleep(0.01)
         total += i
-        
+
     return f"Task selesai. Total: {total}"

@@ -9,6 +9,17 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-08-14
+
+### Added
+- **US-027 (Multi-Tenancy B2B SaaS)**: Menambahkan modul `apps/tenants` (`Organization`, `OrganizationMember`), `TenantMiddleware` dengan toggle `.env` (`RDP_MULTI_TENANCY_ENABLED=False/True`), `TenantModelMixin`, dan komponen Cotton UI `<c-rdp.tenant_switcher>`.
+- **US-014 (Telemetry & Health Check)**: Menambahkan Observability Dashboard `/dev/telemetry/` (khusus Superuser/Staff) dan endpoint probe `/healthz/` (liveness & readiness status JSON).
+- **US-034 (Advanced HTMX Data Table)**: Menambahkan komponen Cotton UI `<c-rdp.datatable>` dengan pencarian instan HTMX, pagination, dan slot terstruktur.
+- **US-016 (Security Auditor)**: Menambahkan Django management command `python manage.py audit_security` untuk audit otomatis security headers, cookie flags, dan proteksi views.
+- **US-043 (ERD Analyzer & Generator)**: Menambahkan Django management command `python manage.py generate_erd` (dan alias CLI `rdp generate-erd` / `rdp erd`) untuk introspeksi skema Django models secara otomatis dan menghasilkan dokumen ERD format Markdown terstruktur yang dilengkapi diagram Mermaid (`erDiagram`), rincian kolom, serta relasi antar-tabel (`docs/architecture/database.md`).
+- **Production Deployment & Docker**: Menambahkan Dockerfile multi-stage, `docker-compose.prod.yml`, Nginx reverse proxy configuration, dan skrip deployment otomatis (`scripts/docker_deploy_prod.sh`, `scripts/setup_docker_prod.sh`).
+- **Code Map & Tracing**: Utilitas request tracing dan logging context `TraceLog` (`apps/core/utils/tracing.py`) serta generator codemap arsitektur (`python manage.py make_crud_codemap`).
+
 ## [0.4.7] — 2026-08-03
 
 - **Fitur Baru (Manajemen Pengguna)**: Menambahkan fitur Bulk Upload User via CSV.

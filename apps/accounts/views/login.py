@@ -84,6 +84,7 @@ def user_login(request):
         return redirect(next_url)
 
     from django.conf import settings
+
     form = LoginForm(request)
     return render(
         request,

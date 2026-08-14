@@ -35,7 +35,9 @@ class EmailOrUsernameBackend(ModelBackend):
     DIPANGGIL DARI: django.contrib.auth.authenticate()
     """
 
-    def authenticate(self, request, username: str | None = None, password: str | None = None, **kwargs):
+    def authenticate(
+        self, request, username: str | None = None, password: str | None = None, **kwargs
+    ):
         """
         TUJUAN: Autentikasi user berdasarkan email atau username.
 

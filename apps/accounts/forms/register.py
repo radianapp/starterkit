@@ -65,12 +65,12 @@ class EmailStepForm(forms.Form):
         """Validasi Cloudflare Turnstile CAPTCHA"""
         cleaned = super().clean()
         from apps.core.utils.turnstile import verify_turnstile
-        
+
         turnstile_response = self.data.get("cf-turnstile-response")
-        
+
         if not verify_turnstile(turnstile_response):
             raise ValidationError(_("Validasi keamanan (CAPTCHA) gagal. Silakan coba lagi."))
-            
+
         return cleaned
 
 

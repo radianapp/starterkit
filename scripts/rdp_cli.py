@@ -24,10 +24,8 @@ Modul:
   rdp/generators/crud.py        ← new crud, new page, make, scaffold
 """
 
-# ruff: noqa: E402
 import os
 import sys
-
 
 # Prioritaskan pencarian modul local:
 # 1. RDP_TEMPLATE_PATH jika di-set di environment
@@ -50,28 +48,6 @@ if _root_dir not in sys.path:
 
 
 # ── Utils & versi ─────────────────────────────────────────────────────────────
-from scripts.rdp.utils import __version__, check_for_updates, print_help, run_django_cmd
-
-
-# ── Operasi project ──────────────────────────────────────────────────────────
-from scripts.rdp.ops.project import run_new, run_update
-
-# ── Operasi build ────────────────────────────────────────────────────────────
-from scripts.rdp.ops.build import (
-    run_assets,
-    run_db,
-    run_doctor,
-    run_lint,
-    run_new_deploy,
-    run_new_docker,
-    run_new_docs,
-    run_new_env,
-    run_release,
-)
-
-# ── Operasi upgrade ───────────────────────────────────────────────────────────
-from scripts.rdp.ops.upgrade import run_ai, run_monitor, run_plugin, run_upgrade, run_upgrade_cli
-
 # ── Generator: App & API ──────────────────────────────────────────────────────
 from scripts.rdp.generators.app import run_new_api, run_new_app
 
@@ -91,6 +67,26 @@ from scripts.rdp.generators.code import (
 
 # ── Generator: CRUD & Page ────────────────────────────────────────────────────
 from scripts.rdp.generators.crud import run_make, run_new_crud, run_new_page, run_scaffold
+
+# ── Operasi build ────────────────────────────────────────────────────────────
+from scripts.rdp.ops.build import (
+    run_assets,
+    run_db,
+    run_doctor,
+    run_lint,
+    run_new_deploy,
+    run_new_docker,
+    run_new_docs,
+    run_new_env,
+    run_release,
+)
+
+# ── Operasi project ──────────────────────────────────────────────────────────
+from scripts.rdp.ops.project import run_new, run_update
+
+# ── Operasi upgrade ───────────────────────────────────────────────────────────
+from scripts.rdp.ops.upgrade import run_ai, run_monitor, run_plugin, run_upgrade, run_upgrade_cli
+from scripts.rdp.utils import __version__, check_for_updates, print_help, run_django_cmd
 
 
 def main():
@@ -133,23 +129,23 @@ def main():
         rest = args[2:]
 
         dispatch_new = {
-            "app":        run_new_app,
-            "api":        run_new_api,
-            "component":  run_new_component,
-            "htmx":       run_new_htmx,
-            "task":       run_new_task,
-            "service":    run_new_service,
-            "command":    run_new_command,
-            "test":       run_new_test,
-            "model":      run_new_model,
-            "crud":       run_new_crud,
-            "page":       run_new_page,
+            "app": run_new_app,
+            "api": run_new_api,
+            "component": run_new_component,
+            "htmx": run_new_htmx,
+            "task": run_new_task,
+            "service": run_new_service,
+            "command": run_new_command,
+            "test": run_new_test,
+            "model": run_new_model,
+            "crud": run_new_crud,
+            "page": run_new_page,
             "permission": run_new_permission,
-            "seeder":     run_new_seeder,
-            "env":        run_new_env,
-            "docker":     run_new_docker,
-            "docs":       run_new_docs,
-            "deploy":     run_new_deploy,
+            "seeder": run_new_seeder,
+            "env": run_new_env,
+            "docker": run_new_docker,
+            "docs": run_new_docs,
+            "deploy": run_new_deploy,
         }
 
         if sub in dispatch_new:
@@ -181,6 +177,18 @@ def main():
         run_assets(args[1:])
     elif args[0] == "release":
         run_release(args[1:])
+    elif args[0] == "codemap":
+        import subprocess
+
+        index_script = os.path.join(_root_dir, "scripts", "generate_docs_index.py")
+        if os.path.exists(index_script):
+            subprocess.run([sys.executable, index_script])
+        else:
+            print("[ERROR] Script generate_docs_index.py tidak ditemukan.")
+    elif args[0] in ("make-crud-codemap", "crud-codemap"):
+        run_django_cmd("make_crud_codemap", args[1:])
+    elif args[0] in ("generate-erd", "generate_erd", "erd"):
+        run_django_cmd("generate_erd", args[1:])
     elif args[0] == "update":
         run_update(args[1:])
     elif args[0] in ("runserver", "r"):

@@ -45,3 +45,43 @@ uv run manage.py migrate
 1. Pemrosesan >1000 baris dikerjakan di background oleh **Celery**. Pastikan *worker* Celery dan instance Redis sudah aktif.
 2. Jalankan perintah `uv run celery -A config worker -l info` di terminal terpisah untuk menghidupkan Celery.
 3. Cek log pada layar Celery tersebut untuk menemukan error spesifik pada format file CSV atau email server yang mungkin gagal terkirim.
+
+## Form HTMX Mengembalikan Status 422 (Unprocessable Entity)
+
+**Masalah**: Tool monitoring atau log menampilkan error HTTP 422 saat submit form gagal.
+**Solusi**: Ini **bukan bug server**, melainkan perilaku yang diharapkan pada arsitektur HTMX. Status 422 menandakan validasi form gagal dan Django mengembalikan potongan HTML fragment error agar HTMX dapat me-render pesan error di form tanpa reload halaman.
+
+## Peringatan WhiteNoise "No directory at .../staticfiles/"
+
+**Masalah**: Terminal menampilkan `UserWarning: No directory at: .../staticfiles/` saat menjalankan test atau server.
+**Solusi**: Peringatan ini muncul jika perintah `collectstatic` belum dijalankan di environment lokal. Anda dapat mengabaikannya di mode development, atau jalankan perintah berikut untuk mengumpulkan aset static:
+```bash
+uv run python manage.py collectstatic --no-input
+```
+
+## Nginx Mengembalikan "502 Bad Gateway" di Production
+
+**Masalah**: Browser menampilkan error 502 Bad Gateway setelah deploy ke server Linux.
+**Solusi**:
+1. Periksa apakah service Gunicorn sedang berjalan:
+   ```bash
+   sudo systemctl status <app_name>-gunicorn
+   ```
+2. Jika service gagal *start*, periksa log error:
+   ```bash
+   sudo journalctl -u <app_name>-gunicorn -n 50 --no-pager
+   ```
+3. Periksa hak akses socket unix `/run/<app_name>/gunicorn.sock`. Pastikan user `www-data` (Nginx) memiliki hak akses baca/tulis ke direktori `/run/<app_name>/`.
+
+## Error "CSRF verification failed. Request aborted" di HTTPS
+
+**Masalah**: Submit form atau login gagal dengan error 403 Forbidden CSRF saat diakses melalui domain HTTPS.
+**Solusi**:
+1. Pastikan domain Anda telah ditambahkan ke `CSRF_TRUSTED_ORIGINS` di file `.env`:
+   ```ini
+   CSRF_TRUSTED_ORIGINS=https://app.example.com,https://www.example.com
+   ```
+2. Pastikan Nginx meneruskan header `proxy_set_header X-Forwarded-Proto $scheme;` dan di Django `SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")` aktif.
+3. Restart service Gunicorn: `sudo systemctl restart <app_name>-gunicorn`.
+
+

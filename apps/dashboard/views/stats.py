@@ -11,8 +11,9 @@ User = get_user_model()
 @login_required
 def dashboard_stats_htmx(request):
     import time
-    time.sleep(0.5) # Simulate heavy query for demonstration of lazy loading
-    
+
+    time.sleep(0.5)  # Simulate heavy query for demonstration of lazy loading
+
     total_users = User.objects.count()
     total_activities = Activity.objects.count()
     total_revenue_dict = Activity.objects.filter(status="completed").aggregate(total=Sum("amount"))

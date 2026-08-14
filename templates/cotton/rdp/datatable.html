@@ -1,0 +1,45 @@
+{# Cotton Component: <c-rdp.datatable> #}
+{# US: US-034 — Advanced Data Table Component #}
+<c-vars url="" target="" search_placeholder="Cari data..." title="" />
+
+<div class="rdp-datatable-wrapper">
+    {% if title or search_placeholder %}
+        <div class="rdp-datatable-header">
+            {% if title %}
+                <h3 class="rdp-datatable-title">{{ title }}</h3>
+            {% endif %}
+
+            {% if url %}
+                <div class="rdp-datatable-search">
+                    <input type="text"
+                           name="q"
+                           class="rdp-form-control"
+                           placeholder="{{ search_placeholder }}"
+                           hx-get="{{ url }}"
+                           hx-target="{{ target|default:'#datatable-rows' }}"
+                           hx-trigger="keyup changed delay:300ms, search"
+                           hx-swap="outerHTML" />
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="rdp-datatable-table-container">
+        <table class="rdp-datatable">
+            <thead>
+                <tr>
+                    {{ header }}
+                </tr>
+            </thead>
+            <tbody id="{{ target|default:'datatable-rows'|replace:'#'':'' }}">
+                {{ slot }}
+            </tbody>
+        </table>
+    </div>
+
+    {% if pagination %}
+        <div class="rdp-datatable-footer">
+            {{ pagination }}
+        </div>
+    {% endif %}
+</div>

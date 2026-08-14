@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 app_name = "test_app_api"
@@ -7,5 +7,5 @@ router = DefaultRouter()
 # router.register(r'items', views.ItemViewSet, basename='item')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

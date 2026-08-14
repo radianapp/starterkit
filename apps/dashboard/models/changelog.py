@@ -13,20 +13,20 @@ class SystemUpdate(models.Model):
     """
 
     UPDATE_TYPES = [
-        ('core', 'Core Update'),
-        ('page', 'Page Update'),
-        ('bugfix', 'Bugfix'),
-        ('feature', 'New Feature'),
+        ("core", "Core Update"),
+        ("page", "Page Update"),
+        ("bugfix", "Bugfix"),
+        ("feature", "New Feature"),
     ]
 
     version = models.CharField(max_length=50, help_text="Contoh: v1.1.0")
     title = models.CharField(max_length=255)
     description = models.TextField()
-    update_type = models.CharField(max_length=20, choices=UPDATE_TYPES, default='feature')
+    update_type = models.CharField(max_length=20, choices=UPDATE_TYPES, default="feature")
     release_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-release_date']
+        ordering = ["-release_date"]
         verbose_name = "System Update"
         verbose_name_plural = "System Updates"
 

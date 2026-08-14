@@ -1,7 +1,9 @@
 import json
-import urllib.request
 import urllib.parse
+import urllib.request
+
 from django.conf import settings
+
 
 def verify_turnstile(token: str, remoteip: str = None) -> bool:
     """
@@ -20,11 +22,8 @@ def verify_turnstile(token: str, remoteip: str = None) -> bool:
         return False
 
     url = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
-    data = {
-        "secret": secret_key,
-        "response": token
-    }
-    
+    data = {"secret": secret_key, "response": token}
+
     if remoteip:
         data["remoteip"] = remoteip
 

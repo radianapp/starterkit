@@ -12,7 +12,7 @@ RDP_DEBUG_OVERLAY = env_var("RDP_DEBUG_OVERLAY", "True").lower() in ("true", "1"
 # KEPUTUSAN TEKNIS: RDP_UI_SELF_HOST dibaca dari .env, tidak di-hardcode
 # ALASAN: dev perlu bisa test CDN (False) maupun local (True) sesuai kebutuhan
 # ALTERNATIF: hardcode True hanya saat develop rdp-ui framework itu sendiri
-RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")  # noqa: F405
+RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")
 
 DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
@@ -29,13 +29,13 @@ CACHES = {
 
 # Django Debug Toolbar untuk development
 if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
-    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405
+    INSTALLED_APPS += ["debug_toolbar"]
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1"]
 
 # Log level lebih verbose di development
-LOGGING["loggers"]["django"]["level"] = "DEBUG"  # noqa: F405
-LOGGING["loggers"]["apps"]["level"] = "DEBUG"  # noqa: F405
+LOGGING["loggers"]["django"]["level"] = "DEBUG"
+LOGGING["loggers"]["apps"]["level"] = "DEBUG"
 
 # KEPUTUSAN TEKNIS: CSRF tidak perlu secure di development
 # ALASAN: localhost tidak pakai HTTPS

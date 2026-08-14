@@ -1,13 +1,13 @@
 # scripts/rdp/ops/project.py
 # US-024: CLI rdp — operasi project-level (new, update, setup)
 
+import filecmp
 import os
 import re
 import secrets
 import shutil
 import sys
 import tempfile
-import filecmp
 
 from ..utils import (
     ask_yes_no,
@@ -122,7 +122,9 @@ def reset_project_scaffolding(target_dir: str, proj_name: str, proj_desc: str):
     # 3. Reset CHANGELOG.md
     changelog_path = os.path.join(target_dir, "CHANGELOG.md")
     with open(changelog_path, "w", encoding="utf-8") as f:
-        f.write(f"# Changelog\\n\\nAll notable changes to {proj_name} will be documented in this file.\\n\\n## [Unreleased]\\n")
+        f.write(
+            f"# Changelog\\n\\nAll notable changes to {proj_name} will be documented in this file.\\n\\n## [Unreleased]\\n"
+        )
 
     # 4. Reset README.md
     readme_path = os.path.join(target_dir, "README.md")
@@ -134,16 +136,28 @@ def reset_project_scaffolding(target_dir: str, proj_name: str, proj_desc: str):
     if os.path.exists(pyproject_path):
         with open(pyproject_path, encoding="utf-8") as f:
             content = f.read()
-        content = re.sub(r'\[project\.scripts\]\\n.*?(\\n\[)', r'\\1', content, flags=re.DOTALL)
+        content = re.sub(r"\[project\.scripts\]\\n.*?(\\n\[)", r"\\1", content, flags=re.DOTALL)
         with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(content)
 
     # 6. Hapus folder/file yang tidak perlu di-copy (misalnya bin, instalation scripts, dll)
     unnecessary = [
-        ".agents", ".claude", "logs", "media", "scratch_test_dir", 
-        "build", "dist", "bin", "scripts", "install.ps1", "install.sh", 
-        "backup.bundle", "tags-backup.txt", "layout_dump.html", 
-        "fix_bools.py", "scratch_gens.py"
+        ".agents",
+        ".claude",
+        "logs",
+        "media",
+        "scratch_test_dir",
+        "build",
+        "dist",
+        "bin",
+        "scripts",
+        "install.ps1",
+        "install.sh",
+        "backup.bundle",
+        "tags-backup.txt",
+        "layout_dump.html",
+        "fix_bools.py",
+        "scratch_gens.py",
     ]
     for item in unnecessary:
         p = os.path.join(target_dir, item)
@@ -250,7 +264,13 @@ def setup_optional_pages(target_dir: str, proj_name: str, has_contact: bool, has
             f.write(faq_html)
 
 
-def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool, has_dashboard: bool, has_demo_pages: bool = True):
+def cleanup_optional_features(
+    target_dir: str,
+    has_landing: bool,
+    has_auth: bool,
+    has_dashboard: bool,
+    has_demo_pages: bool = True,
+):
     """
     Menghapus file dan routing yang tidak diinginkan pengguna saat setup "a-la-carte".
 
@@ -260,13 +280,13 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
     settings_path = os.path.join(target_dir, "config", "settings", "base.py")
 
     if os.path.exists(urls_path):
-        with open(urls_path, "r", encoding="utf-8") as f:
+        with open(urls_path, encoding="utf-8") as f:
             urls_content = f.read()
     else:
         urls_content = ""
 
     if os.path.exists(settings_path):
-        with open(settings_path, "r", encoding="utf-8") as f:
+        with open(settings_path, encoding="utf-8") as f:
             settings_content = f.read()
     else:
         settings_content = ""
@@ -279,12 +299,16 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
         if os.path.exists(home_html):
             os.remove(home_html)
 
-
     if not has_auth:
         accounts_templates = os.path.join(target_dir, "templates", "accounts")
         if os.path.exists(accounts_templates):
             shutil.rmtree(accounts_templates, onerror=on_rm_error)
-        urls_content = re.sub(r'^[ \t]*path\("accounts/", include\("apps\.accounts\.urls"\)\),\n?', '', urls_content, flags=re.MULTILINE)
+        urls_content = re.sub(
+            r'^[ \t]*path\("accounts/", include\("apps\.accounts\.urls"\)\),\n?',
+            "",
+            urls_content,
+            flags=re.MULTILINE,
+        )
 
     if not has_dashboard:
         dashboard_app = os.path.join(target_dir, "apps", "dashboard")
@@ -293,8 +317,18 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
             shutil.rmtree(dashboard_app, onerror=on_rm_error)
         if os.path.exists(dashboard_templates):
             shutil.rmtree(dashboard_templates, onerror=on_rm_error)
-        urls_content = re.sub(r'^[ \t]*path\("dashboard/", include\("apps\.dashboard\.urls"\)\),\n?', '', urls_content, flags=re.MULTILINE)
-        settings_content = re.sub(r'^[ \t]*"apps\.dashboard\.apps\.DashboardConfig",\n?', '', settings_content, flags=re.MULTILINE)
+        urls_content = re.sub(
+            r'^[ \t]*path\("dashboard/", include\("apps\.dashboard\.urls"\)\),\n?',
+            "",
+            urls_content,
+            flags=re.MULTILINE,
+        )
+        settings_content = re.sub(
+            r'^[ \t]*"apps\.dashboard\.apps\.DashboardConfig",\n?',
+            "",
+            settings_content,
+            flags=re.MULTILINE,
+        )
 
     if not has_demo_pages:
         for demo_dir in ["htmx_examples", "starter", "docs"]:
@@ -316,40 +350,40 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
             if os.path.exists(v_p):
                 os.remove(v_p)
 
-
         # Bersihkan referensi apps.inventory dan apps.test_app dari settings dan urls
-        settings_content = re.sub(r'^[ \t]*"apps\.inventory.*?",?\n?', '', settings_content, flags=re.MULTILINE)
-        settings_content = re.sub(r'^[ \t]*"apps\.test_app.*?",?\n?', '', settings_content, flags=re.MULTILINE)
+        settings_content = re.sub(
+            r'^[ \t]*"apps\.inventory.*?",?\n?', "", settings_content, flags=re.MULTILINE
+        )
+        settings_content = re.sub(
+            r'^[ \t]*"apps\.test_app.*?",?\n?', "", settings_content, flags=re.MULTILINE
+        )
         urls_content = re.sub(
             r'\nif is_app_installed\("apps\.inventory"\):\n\s+urlpatterns\.append\(path\("produk/", include\("apps\.inventory\.urls"\)\)\)',
-            '',
+            "",
             urls_content,
         )
 
-
-
-
         urls_content = re.sub(
-            r'\n[ \t]*# Docs & Examples.*?(?=\n[ \t]*# Halaman Publik|\n[ \t]*# App URLs)',
-            '',
+            r"\n[ \t]*# Docs & Examples.*?(?=\n[ \t]*# Halaman Publik|\n[ \t]*# App URLs)",
+            "",
             urls_content,
             flags=re.MULTILINE | re.DOTALL,
         )
         urls_content = re.sub(
-            r'\n[ \t]*# HTMX Examples.*?(?=\n[ \t]*# App URLs)',
-            '',
+            r"\n[ \t]*# HTMX Examples.*?(?=\n[ \t]*# App URLs)",
+            "",
             urls_content,
             flags=re.MULTILINE | re.DOTALL,
         )
         urls_content = re.sub(
-            r'^from apps\.core\.views import StarterDocsView.*?\n',
-            '',
+            r"^from apps\.core\.views import StarterDocsView.*?\n",
+            "",
             urls_content,
             flags=re.MULTILINE,
         )
         urls_content = re.sub(
-            r'^from apps\.core\.views import htmx_examples as htmx_views\n?',
-            '',
+            r"^from apps\.core\.views import htmx_examples as htmx_views\n?",
+            "",
             urls_content,
             flags=re.MULTILINE,
         )
@@ -362,14 +396,14 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
         if os.path.exists(htmx_views_file):
             os.remove(htmx_views_file)
         urls_content = re.sub(
-            r'^[ \t]*# Showcase 10 Pola HTMX.*?# App URLs',
-            '    # App URLs',
+            r"^[ \t]*# Showcase 10 Pola HTMX.*?# App URLs",
+            "    # App URLs",
             urls_content,
             flags=re.MULTILINE | re.DOTALL,
         )
         urls_content = re.sub(
-            r'^[ \t]*from apps\.core\.views import htmx_examples as htmx_views\n?',
-            '',
+            r"^[ \t]*from apps\.core\.views import htmx_examples as htmx_views\n?",
+            "",
             urls_content,
             flags=re.MULTILINE,
         )
@@ -469,9 +503,6 @@ def cleanup_optional_features(target_dir: str, has_landing: bool, has_auth: bool
             f.write(settings_content)
 
 
-
-
-
 def run_new(args: list[str]):
     """
     Sub-perintah `rdp new <nama-proyek>` — wizard bootstrap proyek baru.
@@ -497,7 +528,7 @@ def run_new(args: list[str]):
     clean_args = [a for a in args if a not in ("--local", "-l")]
 
     default_name = clean_args[0] if clean_args else "myproject"
-    print(f"\nBootstrap proyek baru dari template: https://github.com/radianapp/starterkit.git\n")
+    print("\nBootstrap proyek baru dari template: https://github.com/radianapp/starterkit.git\n")
 
     proj_name = get_input("Nama Proyek (contoh: portal-analytic)", default=default_name)
     proj_name = re.sub(r"[^a-zA-Z0-9_-]", "", proj_name)
@@ -529,10 +560,16 @@ def run_new(args: list[str]):
             print("  Ketik angka yang tertera.")
 
     print("\n  Pilih fitur yang ingin disertakan:")
-    has_landing = ask_yes_no("  Sertakan halaman Landing Page Publik (home, about, privacy)?", default="y")
+    has_landing = ask_yes_no(
+        "  Sertakan halaman Landing Page Publik (home, about, privacy)?", default="y"
+    )
     has_auth = True  # Autentikasi sekarang menjadi requirement wajib
-    has_dashboard = ask_yes_no("  Sertakan fitur Dashboard UI (dashboard, profil, aktivitas)?", default="y")
-    has_demo_pages = ask_yes_no("  Sertakan halaman demo/dokumentasi (docs/, examples/, HTMX showcase)?", default="n")
+    has_dashboard = ask_yes_no(
+        "  Sertakan fitur Dashboard UI (dashboard, profil, aktivitas)?", default="y"
+    )
+    has_demo_pages = ask_yes_no(
+        "  Sertakan halaman demo/dokumentasi (docs/, examples/, HTMX showcase)?", default="n"
+    )
 
     target_dir = os.path.join(os.getcwd(), proj_name)
 
@@ -548,17 +585,17 @@ def run_new(args: list[str]):
 
     # Lokasi root starterkit lokal untuk testing pengembangan tanpa push ke GitHub
     local_starterkit_root = (
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        )
         if use_local
         else None
     )
-
 
     if not clone_template(target_dir, source_path=local_starterkit_root):
         if os.path.exists(target_dir):
             shutil.rmtree(target_dir)
         sys.exit(1)
-
 
     print("  Mengatur konfigurasi...")
     setup_env(target_dir, proj_name, color_choice)
@@ -586,13 +623,14 @@ def run_new(args: list[str]):
 
 def run_update(args):
     """Jalankan proses update untuk proyek yang sudah ada."""
-    import filecmp
 
     if not os.path.exists("manage.py") or not os.path.exists("pyproject.toml"):
-        print("[ERROR] Perintah 'rdp update' harus dijalankan di root direktori proyek RDP (yang memiliki manage.py dan pyproject.toml).")
+        print(
+            "[ERROR] Perintah 'rdp update' harus dijalankan di root direktori proyek RDP (yang memiliki manage.py dan pyproject.toml)."
+        )
         sys.exit(1)
 
-    print(f"Mengecek pembaruan template dari: https://github.com/radianapp/starterkit.git")
+    print("Mengecek pembaruan template dari: https://github.com/radianapp/starterkit.git")
 
     with tempfile.TemporaryDirectory() as temp_dir:
         if not clone_template(temp_dir):
@@ -602,9 +640,20 @@ def run_update(args):
         print("[OK] Template terbaru berhasil diunduh. Menganalisis perbedaan...")
 
         ignored_patterns = [
-            ".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache",
-            "db.sqlite3", ".env", "media", "static", "staticfiles",
-            "htmlcov", ".coverage", "README.md", "CHANGELOG.md"
+            ".git",
+            ".venv",
+            "__pycache__",
+            ".pytest_cache",
+            ".ruff_cache",
+            "db.sqlite3",
+            ".env",
+            "media",
+            "static",
+            "staticfiles",
+            "htmlcov",
+            ".coverage",
+            "README.md",
+            "CHANGELOG.md",
         ]
 
         updated_count = 0
@@ -639,5 +688,9 @@ def run_update(args):
                             skipped_count += 1
 
     print("\n[OK] Proses update selesai!")
-    print(f"Statistik: {added_count} ditambahkan, {updated_count} diupdate, {skipped_count} dilewati.")
-    print("Pastikan untuk mengecek perubahan, menjalankan `uv sync`, dan `python manage.py migrate` jika diperlukan.")
+    print(
+        f"Statistik: {added_count} ditambahkan, {updated_count} diupdate, {skipped_count} dilewati."
+    )
+    print(
+        "Pastikan untuk mengecek perubahan, menjalankan `uv sync`, dan `python manage.py migrate` jika diperlukan."
+    )

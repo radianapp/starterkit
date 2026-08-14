@@ -35,7 +35,7 @@ def manager_group(db):
 
 class _PermView(MultiplePermissionsRequiredMixin, TemplateView):
     template_name = "errors/403.html"
-    permissions_required = ["accounts.view_user"]  # noqa: RUF012
+    permissions_required = ["accounts.view_user"]
 
 
 @pytest.mark.django_db

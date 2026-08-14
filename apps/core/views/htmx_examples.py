@@ -245,6 +245,7 @@ class InfiniteScrollRowsView(View):
 
     def get(self, request, *args, **kwargs):
         import time
+
         page = int(request.GET.get("page", 1))
 
         if page > 1:
@@ -270,7 +271,6 @@ class InfiniteScrollRowsView(View):
             "htmx_examples/partials/log_rows.html",
             {"rows": rows, "next_page": next_page},
         )
-
 
 
 # Pattern 9: Polling Status
@@ -310,7 +310,7 @@ class ToastDemoView(View):
         # Ambil tipe toast dari request (default success)
         toast_type = request.POST.get("type", "success")
         message = request.POST.get("message", "Aksi berhasil dieksekusi!")
-        position = request.POST.get("position", "bottom-right") # default di layout css
+        position = request.POST.get("position", "bottom-right")  # default di layout css
 
         response["HX-Trigger"] = json.dumps(
             {"showToast": {"message": message, "type": toast_type, "position": position}}

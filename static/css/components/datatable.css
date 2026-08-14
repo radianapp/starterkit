@@ -1,0 +1,70 @@
+/* Component: datatable.css */
+
+.rdp-datatable-wrapper {
+    background: var(--rdp-surface, #ffffff);
+    border: 1px solid var(--rdp-border, #e5e2dc);
+    border-radius: var(--rdp-radius-md, 8px);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.rdp-datatable-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: var(--rdp-surface-sunken, #f3f1ec);
+    border-bottom: 1px solid var(--rdp-border, #e5e2dc);
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.rdp-datatable-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--rdp-text, #1c1b18);
+}
+
+.rdp-datatable-search {
+    min-width: 240px;
+}
+
+.rdp-datatable-table-container {
+    overflow-x: auto;
+}
+
+.rdp-datatable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.rdp-datatable th {
+    background: var(--rdp-surface-sunken, #f3f1ec);
+    color: var(--rdp-text-muted, #6b665e);
+    font-weight: 700;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--rdp-border, #e5e2dc);
+}
+
+.rdp-datatable td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--rdp-border, #e5e2dc);
+    color: var(--rdp-text, #1c1b18);
+    vertical-align: middle;
+}
+
+.rdp-datatable tbody tr:hover {
+    background: var(--rdp-primary-soft, #edf4f0);
+}
+
+.rdp-datatable-footer {
+    padding: 0.75rem 1.25rem;
+    background: var(--rdp-surface-sunken, #f3f1ec);
+    border-top: 1px solid var(--rdp-border, #e5e2dc);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

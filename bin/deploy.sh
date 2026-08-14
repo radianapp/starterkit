@@ -86,9 +86,13 @@ while true; do
     echo "3) CI/CD & Build Paket"
     echo "4) Info Git & Deploy"
     echo "5) Perintah RDP CLI"
+    echo "6) Setup Linux Service (Gunicorn + Nginx + SSL)"
+    echo "7) Deploy Pembaruan ke Production (Pull, Migrate, Restart)"
+    echo "8) Setup Docker Compose Production & SSL (Let's Encrypt)"
+    echo "9) Deploy Pembaruan Docker Production (Pull, Rebuild, Restart)"
     echo "0) Keluar"
     echo "============================================="
-    read -p "Pilih menu [0-5]: " choice
+    read -p "Pilih menu [0-9]: " choice
 
     case $choice in
         1)
@@ -122,6 +126,22 @@ while true; do
         5)
             rdp_cli_menu
             ;;
+        6)
+            echo "--- Setup Linux Production Service ---"
+            bash scripts/install_service.sh
+            ;;
+        7)
+            echo "--- Deploy Pembaruan ke Production ---"
+            bash scripts/deploy_prod.sh
+            ;;
+        8)
+            echo "--- Setup Docker Compose Production & SSL ---"
+            bash scripts/setup_docker_prod.sh
+            ;;
+        9)
+            echo "--- Deploy Pembaruan Docker Production ---"
+            bash scripts/docker_deploy_prod.sh
+            ;;
         0)
             echo "Keluar..."
             exit 0
@@ -131,3 +151,5 @@ while true; do
             ;;
     esac
 done
+
+

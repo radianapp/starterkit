@@ -1,11 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import get_user_model
-from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
 import json
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
 
 from apps.accounts.decorators import role_required
 from apps.accounts.forms.user_management import UserManagementForm
@@ -198,6 +196,7 @@ def user_bulk_upload(request):
     """
     import csv
     import io
+
     from apps.accounts.forms.bulk_upload import BulkUploadForm
     from apps.accounts.services.user_service import process_bulk_users
     from apps.accounts.tasks import process_bulk_users_task
@@ -206,13 +205,13 @@ def user_bulk_upload(request):
         form = BulkUploadForm(request.POST, request.FILES)
         if form.is_valid():
             csv_file = form.cleaned_data["csv_file"]
-            
+
             try:
                 # Membaca isi file CSV
                 file_data = csv_file.read().decode("utf-8-sig")
                 reader = csv.DictReader(io.StringIO(file_data))
                 rows = list(reader)
-                
+
                 if len(rows) > 1000:
                     # Lempar ke Celery
                     process_bulk_users_task.delay(rows)
@@ -229,18 +228,20 @@ def user_bulk_upload(request):
                         tags = "warning"
 
                 response = HttpResponse("")
-                response["HX-Trigger"] = json.dumps({
-                    "showToast": {"message": message, "tags": tags},
-                    "refreshUserList": True,
-                    "closeModal": True
-                })
+                response["HX-Trigger"] = json.dumps(
+                    {
+                        "showToast": {"message": message, "tags": tags},
+                        "refreshUserList": True,
+                        "closeModal": True,
+                    }
+                )
                 return response
-                
+
             except Exception as e:
                 return render(
                     request,
                     "accounts/users/partials/bulk_upload_modal.html",
-                    {"form": form, "error": f"Gagal membaca file: {str(e)}"},
+                    {"form": form, "error": f"Gagal membaca file: {e!s}"},
                     status=422,
                 )
         else:
@@ -250,7 +251,7 @@ def user_bulk_upload(request):
                 {"form": form},
                 status=422,
             )
-            
+
     # GET request
     form = BulkUploadForm()
     return render(
@@ -268,11 +269,12 @@ def resend_invite_email(request, user_id):
     """
     if request.method == "POST":
         from apps.accounts.services.email_service import send_verification_email
+
         target_user = get_object_or_404(User, id=user_id)
-        
+
         # Kirim email
         success = send_verification_email(target_user, request)
-        
+
         response = HttpResponse("")
         if success:
             message = f"Email invite berhasil dikirim ulang ke {target_user.email}."
@@ -280,10 +282,8 @@ def resend_invite_email(request, user_id):
         else:
             message = f"Gagal mengirim ulang email invite ke {target_user.email}."
             tags = "error"
-            
-        response["HX-Trigger"] = json.dumps({
-            "showToast": {"message": message, "tags": tags}
-        })
+
+        response["HX-Trigger"] = json.dumps({"showToast": {"message": message, "tags": tags}})
         return response
-    
+
     return HttpResponse("Method not allowed", status=405)

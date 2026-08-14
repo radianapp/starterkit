@@ -1,0 +1,20 @@
+{# US: US-014 — Telemetry & Observability Dashboard #}
+<c-layout.app title="Observability & Telemetry Dashboard">
+    <div class="rdp-container">
+        <header class="rdp-page-header">
+            <div>
+                <h1 class="rdp-page-title">📈 Observability & Telemetry Dashboard</h1>
+                <p class="rdp-page-desc">Monitoring performa runtime, kecepatan eksekusi, N+1 query alert, dan trace logs aplikasi.</p>
+            </div>
+            <div>
+                <button type="button" class="rdp-btn rdp-btn--secondary" hx-get="{% url 'telemetry' %}" hx-target="#telemetry-container" hx-swap="outerHTML">
+                    🔄 Refresh Statistics
+                </button>
+            </div>
+        </header>
+
+        <div id="telemetry-container">
+            {% include "core/partials/telemetry_content.html" %}
+        </div>
+    </div>
+</c-layout.app>

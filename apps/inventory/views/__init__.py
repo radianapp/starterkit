@@ -1,15 +1,15 @@
 from .produk import (
-    ProdukListView,
     ProdukCreateModalView,
-    ProdukEditModalView,
     ProdukDeleteModalView,
     ProdukDetailView,
+    ProdukEditModalView,
+    ProdukListView,
 )
 
 __all__ = [
-    "ProdukListView",
     "ProdukCreateModalView",
-    "ProdukEditModalView",
     "ProdukDeleteModalView",
     "ProdukDetailView",
+    "ProdukEditModalView",
+    "ProdukListView",
 ]

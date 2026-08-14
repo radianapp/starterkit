@@ -6,6 +6,7 @@ TUJUAN: Setup dashboard app sebagai halaman utama setelah login.
 """
 
 import os
+
 from django.apps import AppConfig
 
 
@@ -19,4 +20,3 @@ class DashboardConfig(AppConfig):
     label = "dashboard"
     verbose_name = "Dashboard"
     path = os.path.dirname(os.path.abspath(__file__))
-

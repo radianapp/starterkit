@@ -19,6 +19,7 @@ Instal sekali sebagai global CLI, gunakan dari folder mana saja.
 - ✅ **Cache Backend** — support LocalMemory (dev) & Redis (prod)
 - ✅ **Email Backend** — support console/Mailpit (dev) & SMTP (prod)
 - ✅ **Django-Cotton Components** — ready untuk UI components
+- ✅ **Code Map & Debug Tracing Engine** — penelusuran alur user dari level bisnis hingga kode/query DB, lengkap dengan pembuat dokumen CRUD & index otomatis (`rdp codemap`, `rdp make-crud-codemap`)
 
 ---
 
@@ -235,8 +236,32 @@ apps/accounts/
 
 ---
 
+## 🗺️ Code Map & Debug Tracing Engine
+
+Proyek ini dilengkapi dengan **Code Map & Tracing Engine** untuk reverse engineering dan penelusuran alur eksekusi dari level **User Journey** ➔ **Entrypoint (View/HTMX)** ➔ **Service Layer** ➔ **Model & Query DB** ➔ **Service Units Metering**.
+
+### 1. Perintah Code Map & Auto Generator
+```bash
+# Generate dokumen Code Map, User Guide, FAQ, & Help untuk modul CRUD
+rdp make-crud-codemap <app_label> <ModelName>
+# atau: uv run python manage.py make_crud_codemap inventory Produk
+
+# Update Master Table of Contents (INDEX.md) otomatis
+rdp codemap
+# atau: uv run python scripts/generate_docs_index.py
+```
+
+### 2. Telemetry & Middleware
+* **Correlation ID (`X-Trace-ID`)**: Otomatis di-inject ke setiap HTTP request/response via `TraceMiddleware`.
+* **Tracing Decorator (`@code_map_trace`)**: Melacak lama eksekusi (ms), jumlah query DB, dan unit service yang terpakai.
+* **Model Telemetry (`ExecutionTraceLog`)**: Menyimpan histori eksekusi user untuk inspector UI & reverse engineering.
+
+---
+
 ## 📚 Documentation
 
+- **[docs/codemap/INDEX.md](docs/codemap/INDEX.md)** — **Master Index Code Map, User Guide, FAQ, & Help per Aplikasi**
+- **[docs/architecture/code-map-tracing.md](docs/architecture/code-map-tracing.md)** — Spesifikasi Arsitektur 5-Layer Code Map
 - **[docs/getting-started.md](docs/getting-started.md)** — Panduan lengkap mulai dari instalasi hingga struktur proyek
 - **[docs/USER_GUIDE.md](docs/USER_GUIDE.md)** — Panduan pengguna (fitur, alur, cara pakai)
 - **[docs/CLI_REFERENCE.md](docs/CLI_REFERENCE.md)** — Referensi lengkap perintah `rdp` CLI

@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import sys
 
-from ..utils import ask_yes_no, get_input, run_django_cmd
+from ..utils import ask_yes_no, run_django_cmd
 
 
 def run_lint(args):
@@ -47,12 +47,15 @@ def run_doctor(args):
     try:
         result = subprocess.run(
             ["uv", "run", "python", "manage.py", "makemigrations", "--dry-run", "--check"],
-            capture_output=True, text=True
+            capture_output=True,
+            text=True,
         )
         if result.returncode == 0:
             print("  [OK] Tidak ada perubahan model yang belum dibuat migrasinya.")
         else:
-            print("  [WARNING] Terdapat perubahan model yang belum dimigrasi. Jalankan 'rdp makemigrations'.")
+            print(
+                "  [WARNING] Terdapat perubahan model yang belum dimigrasi. Jalankan 'rdp makemigrations'."
+            )
     except Exception:
         print("  [ERROR] Gagal menjalankan pengecekan migrasi.")
 
@@ -73,7 +76,7 @@ def run_db(args):
     elif subcmd == "backup":
         output_file = args[1] if len(args) > 1 else "db_backup.json"
         print(f"Mengekspor data database ke {output_file}...")
-        with open(output_file, "w", encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             subprocess.run(["uv", "run", "python", "manage.py", "dumpdata"], stdout=f)
         print("  [OK] Backup selesai.")
 
@@ -96,7 +99,9 @@ def run_db(args):
             run_django_cmd("loaddata", [fixture])
 
     elif subcmd == "reset":
-        print("[WARNING] Anda akan MENGHAPUS seluruh database sqlite3 dan menjalankan migrasi ulang.")
+        print(
+            "[WARNING] Anda akan MENGHAPUS seluruh database sqlite3 dan menjalankan migrasi ulang."
+        )
         confirm = ask_yes_no("Apakah Anda yakin ingin melakukan reset database?", default="n")
         if not confirm:
             print("Reset database dibatalkan.")
@@ -112,7 +117,9 @@ def run_db(args):
         print("Menjalankan migrasi ulang...")
         run_django_cmd("migrate", [])
 
-        if ask_yes_no("Apakah Anda ingin memasukkan data awal (loaddemodata) otomatis?", default="y"):
+        if ask_yes_no(
+            "Apakah Anda ingin memasukkan data awal (loaddemodata) otomatis?", default="y"
+        ):
             run_django_cmd("loaddemodata", [])
 
         print("  [OK] Reset database selesai.")
@@ -166,15 +173,15 @@ def run_release(args):
 
 def run_new_env(args):
     """Membuat file .env untuk tiap environment."""
-    envs = ['development', 'production', 'staging', 'testing']
-    if not os.path.exists('.env.example'):
+    envs = ["development", "production", "staging", "testing"]
+    if not os.path.exists(".env.example"):
         print("[ERROR] File .env.example tidak ditemukan di direktori saat ini.")
         sys.exit(1)
 
     for env in envs:
         dest = f".env.{env}"
         if not os.path.exists(dest):
-            shutil.copy2('.env.example', dest)
+            shutil.copy2(".env.example", dest)
             print(f"  [OK] {dest} berhasil dibuat.")
         else:
             print(f"  [WARNING] {dest} sudah ada, dilewati.")
@@ -202,7 +209,7 @@ COPY . .
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
 """
-        with open("Dockerfile", "w", encoding='utf-8') as f:
+        with open("Dockerfile", "w", encoding="utf-8") as f:
             f.write(dockerfile_content)
         print("  [OK] Dockerfile berhasil dibuat.")
     else:
@@ -238,7 +245,7 @@ services:
 volumes:
   postgres_data:
 """
-        with open("docker-compose.yml", "w", encoding='utf-8') as f:
+        with open("docker-compose.yml", "w", encoding="utf-8") as f:
             f.write(compose_content)
         print("  [OK] docker-compose.yml berhasil dibuat.")
     else:
@@ -252,19 +259,19 @@ def run_new_docs(args):
     docs = {
         "API.md": "# API Documentation\n\nDokumentasi endpoint API ada di sini.",
         "CHANGELOG.md": "# Changelog\n\nSemua perubahan akan dicatat di file ini.",
-        "CONTRIBUTING.md": "# Panduan Berkontribusi\n\nPanduan untuk developer dalam berkontribusi pada proyek ini."
+        "CONTRIBUTING.md": "# Panduan Berkontribusi\n\nPanduan untuk developer dalam berkontribusi pada proyek ini.",
     }
 
     for filename, content in docs.items():
         if not os.path.exists(filename):
-            with open(filename, "w", encoding='utf-8') as f:
+            with open(filename, "w", encoding="utf-8") as f:
                 f.write(content)
             print(f"  [OK] {filename} berhasil dibuat.")
         else:
             print(f"  [WARNING] {filename} sudah ada.")
 
     if not os.path.exists("README.md"):
-        with open("README.md", "w", encoding='utf-8') as f:
+        with open("README.md", "w", encoding="utf-8") as f:
             f.write("# Proyek RDP\n\nProyek yang dibangun dari RDP Starter Kit.")
         print("  [OK] README.md berhasil dibuat.")
 

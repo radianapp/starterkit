@@ -3,8 +3,6 @@
 
 from django.db import models
 from django.utils import timezone
-
-
 from simple_history.models import HistoricalRecords
 
 
@@ -78,7 +76,7 @@ class Produk(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="aktif")
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     # Log Aktivitas via django-simple-history
     history = HistoricalRecords()
 

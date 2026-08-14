@@ -2,12 +2,12 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
-from ..models import Produk
 from ..forms import ProdukForm
+from ..models import Produk
 
 
 class ProdukListView(LoginRequiredMixin, ListView):
@@ -29,17 +29,18 @@ class ProdukListView(LoginRequiredMixin, ListView):
         paginate_by = self.request.GET.get("paginate_by")
         if paginate_by and paginate_by.isdigit():
             return int(paginate_by)
-            
+
         # 2. Cek preferensi pengguna yang tersimpan di UserProfile
         if self.request.user.is_authenticated:
             from apps.accounts.services.settings_service import get_user_preference
+
             user_pref = get_user_preference(self.request.user, "rows_per_page")
             if user_pref:
                 try:
                     return int(user_pref)
                 except ValueError:
                     pass
-                    
+
         # 3. Fallback default
         return self.paginate_by
 
@@ -105,7 +106,9 @@ class ProdukEditModalView(LoginRequiredMixin, UpdateView):
         """Tampilkan modal edit dengan data yang ada — response partial HTML."""
         self.object = self.get_object()
         form = self.form_class(instance=self.object)
-        html = render_to_string(self.template_name, {"form": form, "object": self.object}, request=request)
+        html = render_to_string(
+            self.template_name, {"form": form, "object": self.object}, request=request
+        )
         return HttpResponse(html)
 
     def form_valid(self, form):
@@ -117,7 +120,9 @@ class ProdukEditModalView(LoginRequiredMixin, UpdateView):
 
     def form_invalid(self, form):
         """Kembalikan modal dengan error — HTTP 422."""
-        html = render_to_string(self.template_name, {"form": form, "object": self.object}, request=self.request)
+        html = render_to_string(
+            self.template_name, {"form": form, "object": self.object}, request=self.request
+        )
         return HttpResponse(html, status=422)
 
 
@@ -160,4 +165,3 @@ class ProdukDetailView(LoginRequiredMixin, DetailView):
 
     model = Produk
     template_name = "apps/inventory/produk_detail.html"
-

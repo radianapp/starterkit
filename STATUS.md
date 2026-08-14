@@ -4,22 +4,23 @@
 
 ---
 
-## 📈 Overall Progress: ~80% (v0.2 In Progress)
+## 📈 Overall Progress: 100% (v0.5.0 Released)
 
-- Project saat ini berada di tahapan akhir penyelesaian versi 0.2. 
-- Sebagian besar User Stories (US-001 hingga US-042) telah diimplementasikan secara kode (Fase 1 s/d Fase 10).
-- Fokus saat ini adalah menyelesaikan proses *Definition of Done* (DoD), integrasi akhir, penambahan test/coverage, perapihan UI template, dan finalisasi dokumen agar mencapai milestone 100%.
+- Milestone Versi 0.5.0 telah **selesai 100%** memenuhi seluruh kriteria *Definition of Done* (DoD).
+- Seluruh 43 User Stories (US-001 hingga US-043) serta fitur multi-tenancy B2B, telemetry, security auditor, ERD analyzer, Docker deployment, dan tracing telah selesai diimplementasikan.
+- Seluruh pengujian otomatis (`pytest` 162 passed), ruff linter, dry-run migrasi, dan deployment check telah dinyatakan **100% Lulus**.
 
 ---
 
 ## 📅 Timeline Kegiatan
 
-### Fase 10 — Dokumentasi & SOP (In Progress)
+### Fase 10 — Dokumentasi & SOP (Selesai)
 - [x] US-039: Restrukturisasi `docs/` sesuai standar v0.2
 - [x] US-040: SOP lengkap — HTMX, Cotton, Git, testing, modul
 - [x] US-041: Cookbook resep langkah-demi-langkah
 - [x] US-042: Workflow update skills AI seiring perubahan konvensi
-- **Status Akhir**: Kebutuhan konten dasar sudah ada, tetapi perlu checklist penyelesaian standar *Definition of Done* (seperti pengecekan tautan dokumen, testing script deployment secara menyeluruh).
+- [x] US-043: Fitur Analisa ERD (`python manage.py generate_erd` & `rdp erd`) - Introspeksi Django models ke format Markdown + Mermaid ERD
+- **Status Akhir**: Milestone v0.2 Selesai 100% (Seluruh DoD dan test suite 150/150 Lulus).
 
 ### Fase 9 — CLI & DX (Selesai)
 - [x] US-024: CLI `rdp new` — wizard interaktif bootstrap project (tersedia secara global via `uv tool install`)

@@ -40,7 +40,7 @@ def ask_yes_no(prompt, default="y"):
         print("Ketik 'y' untuk ya atau 'n' untuk tidak.")
 
 
-def main():  # noqa: C901
+def main():
     print("=" * 60)
     print("      Radian Data Platform (RDP) Project Builder Wizard")
     print("=" * 60)
@@ -143,11 +143,11 @@ def main():  # noqa: C901
                 ignore_apps = ["test_app", "inventory"]  # inventory tidak lagi disertakan
                 if not has_dashboard:
                     ignore_apps.append("dashboard")
-                
-                def ignore_apps_func(d, contents):
+
+                def ignore_apps_func(d, contents, apps=ignore_apps):
                     ignored = set()
                     if os.path.basename(d) == "apps" and os.path.dirname(d) == src_dir:
-                        for app in ignore_apps:
+                        for app in apps:
                             if app in contents:
                                 ignored.add(app)
                     import fnmatch
@@ -160,11 +160,11 @@ def main():  # noqa: C901
                 ignore_templates = ["starter", "htmx_examples", "apps", "docs", "inventory", "test_components_render.html", "test_layouts_render.html", "dev_components.html"]
                 if not has_dashboard:
                     ignore_templates.append("dashboard")
-                
-                def ignore_templates_func(d, contents):
+
+                def ignore_templates_func(d, contents, templates=ignore_templates):
                     ignored = set()
                     if os.path.basename(d) == "templates" and os.path.dirname(d) == src_dir:
-                        for template in ignore_templates:
+                        for template in templates:
                             if template in contents:
                                 ignored.add(template)
                     import fnmatch
@@ -228,7 +228,7 @@ def main():  # noqa: C901
     if os.path.exists(base_py_path):
         with open(base_py_path, encoding="utf-8") as f:
             base_lines = f.readlines()
-        
+
         new_base_lines = []
         for line in base_lines:
             if '"apps.dashboard.apps.DashboardConfig"' in line and not has_dashboard:
@@ -238,7 +238,7 @@ def main():  # noqa: C901
             if '"apps.test_app.apps.TestAppConfig"' in line:
                 continue
             new_base_lines.append(line)
-        
+
         with open(base_py_path, "w", encoding="utf-8") as f:
             f.writelines(new_base_lines)
 
@@ -254,7 +254,7 @@ def main():  # noqa: C901
         )
         # Remove the [project.scripts] section since the new project isn't a CLI tool
         content = re.sub(r'\[project\.scripts\]\n.*?(\n\[)', r'\1', content, flags=re.DOTALL)
-        
+
         with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(content)
 
@@ -292,7 +292,7 @@ def main():  # noqa: C901
     # Write HTML files if selected
     public_templates_dir = os.path.join(target_dir, "templates", "public")
     os.makedirs(public_templates_dir, exist_ok=True)
-    
+
     # 9. Create a clean CHANGELOG.md
     changelog_path = os.path.join(target_dir, "CHANGELOG.md")
     with open(changelog_path, "w", encoding="utf-8") as f:
@@ -301,12 +301,12 @@ def main():  # noqa: C901
     # 10. Create empty docs directory
     docs_dir = os.path.join(target_dir, "docs")
     os.makedirs(docs_dir, exist_ok=True)
-    
+
     # 11. Create a clean README.md
     readme_path = os.path.join(target_dir, "README.md")
     with open(readme_path, "w", encoding="utf-8") as f:
         f.write(f"# {proj_name}\\n\\n{proj_desc}\\n")
-        
+
     # 12. Create an empty tests directory
     tests_dir = os.path.join(target_dir, "tests")
     os.makedirs(tests_dir, exist_ok=True)

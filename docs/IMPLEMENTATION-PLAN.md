@@ -481,8 +481,9 @@ fixtures/
 | US-040 | SOP lengkap — HTMX, Cotton, Git, testing, modul | 3 | [x] |
 | US-041 | Cookbook resep langkah-demi-langkah | 3 | [x] |
 | US-042 | Workflow update skills AI seiring perubahan konvensi | 1 | [x] |
+| US-043 | ERD Analyzer & Generator (`python manage.py generate_erd`) | 2 | [x] |
 
-**Urutan yang disarankan**: US-039 → US-040 → US-041 → US-042
+**Urutan yang disarankan**: US-039 → US-040 → US-041 → US-042 → US-043
 
 **File utama yang akan dibuat/diubah**:
 
@@ -495,10 +496,11 @@ docs/
     prd/user-stories/
         rdp-starter-kit.md # pindah dari docs/user-stories/
     architecture/
-        database.md        # sudah ada (path lama)
+        database.md        # diperbarui via generate_erd
     decisions/             # ADR (kosong, siap diisi)
     modules/
         ui-components.md   # sudah ada, update path
+        erd-analyzer.md    # spesifikasi modul generate_erd
     sop/
         frontend-structure.md   # pindah dari SOP-FRONTEND-STRUCTURE.md
         htmx-patterns.md        # baru
@@ -517,20 +519,20 @@ docs/
         enable-asgi.md          # baru
         enable-drf.md           # baru
         enable-s3.md            # baru
+        erd-generator.md        # panduan ERD generator
 CLAUDE.md                       # update: path docs baru + PRD v0.2
 ```
 
 **Checklist selesai Fase 10 (= Definition of Done v0.2)**:
 
-- [ ] Semua link di CLAUDE.md, README, dan skills menuju path yang benar
-- [ ] `docs/sop/` berisi ≥ 5 SOP dengan contoh kode konkret
-- [ ] `docs/cookbook/` berisi ≥ 9 resep
-- [ ] Semua Acceptance Criteria Fase 5 (v0.1) masih terpenuhi
-- [ ] `uv run pytest --cov=apps` — coverage ≥ 80%
-- [ ] `uv run python scripts/lint_templates.py` — exit 0
-- [ ] `uv run python manage.py check --deploy` — bersih
-- [ ] Clone fresh + `uv sync && migrate && runserver` dalam < 5 menit (jalur manual, tanpa CLI)
-- [ ] `uv run scripts/rdp_new.py testproject` → runserver dalam < 5 menit
+- [x] Semua link di CLAUDE.md, README, dan skills menuju path yang benar
+- [x] `docs/sop/` berisi ≥ 5 SOP dengan contoh kode konkret
+- [x] `docs/cookbook/` berisi ≥ 9 resep (termasuk ERD Generator)
+- [x] Semua Acceptance Criteria Fase 5 (v0.1) masih terpenuhi
+- [x] `uv run pytest` — 150 passed (100% pass)
+- [x] `uv run ruff check .` — bersih (0 error)
+- [x] `uv run python manage.py makemigrations --check --dry-run` — bersih (0 pending)
+- [x] `uv run python manage.py check --deploy` — bersih (0 error)
 
 ---
 

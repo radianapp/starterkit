@@ -29,7 +29,7 @@ def run_new_component(args):
     <c-slot />
 </div>
 """
-    with open(file_path, 'w', encoding='utf-8') as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write(content)
 
     print(f"  [OK] Komponen Cotton '{name}' berhasil dibuat di {file_path}")
@@ -64,7 +64,7 @@ class {class_name}(TemplateView):
         return context
 """
     if not os.path.exists(view_path):
-        with open(view_path, 'w', encoding='utf-8') as f:
+        with open(view_path, "w", encoding="utf-8") as f:
             f.write(view_content)
         print(f"  [OK] View '{class_name}' berhasil dibuat di {view_path}")
     else:
@@ -75,8 +75,10 @@ class {class_name}(TemplateView):
     partial_path = os.path.join(partials_dir, f"{name}.html")
 
     if not os.path.exists(partial_path):
-        with open(partial_path, 'w', encoding='utf-8') as f:
-            f.write(f"<!-- Partial View: {name} -->\n<div>\n    Isi partial HTMX untuk {name}\n</div>\n")
+        with open(partial_path, "w", encoding="utf-8") as f:
+            f.write(
+                f"<!-- Partial View: {name} -->\n<div>\n    Isi partial HTMX untuk {name}\n</div>\n"
+            )
         print(f"  [OK] Partial HTML berhasil dibuat di {partial_path}")
     else:
         print(f"  [WARNING] Partial HTML '{name}.html' sudah ada.")
@@ -114,10 +116,10 @@ def {name}():
         raise
 """
     if not os.path.exists(tasks_path):
-        with open(tasks_path, 'w', encoding='utf-8') as f:
+        with open(tasks_path, "w", encoding="utf-8") as f:
             f.write(task_content.lstrip())
     else:
-        with open(tasks_path, 'a', encoding='utf-8') as f:
+        with open(tasks_path, "a", encoding="utf-8") as f:
             f.write(task_content)
 
     print(f"  [OK] Task Celery '{name}' berhasil ditambahkan di {tasks_path}")
@@ -156,7 +158,7 @@ class {class_name}:
         \"\"\"Eksekusi logika bisnis.\"\"\"
         pass
 """
-    with open(service_path, 'w', encoding='utf-8') as f:
+    with open(service_path, "w", encoding="utf-8") as f:
         f.write(service_content)
 
     print(f"  [OK] Service '{class_name}' berhasil dibuat di {service_path}")
@@ -177,8 +179,8 @@ def run_new_command(args):
     commands_dir = os.path.join(app_dir, "management", "commands")
     os.makedirs(commands_dir, exist_ok=True)
 
-    open(os.path.join(app_dir, "management", "__init__.py"), 'a').close()
-    open(os.path.join(commands_dir, "__init__.py"), 'a').close()
+    open(os.path.join(app_dir, "management", "__init__.py"), "a").close()
+    open(os.path.join(commands_dir, "__init__.py"), "a").close()
 
     command_path = os.path.join(commands_dir, f"{name}.py")
     if os.path.exists(command_path):
@@ -197,7 +199,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Command {name} berhasil dijalankan.'))
 """
-    with open(command_path, 'w', encoding='utf-8') as f:
+    with open(command_path, "w", encoding="utf-8") as f:
         f.write(command_content)
 
     print(f"  [OK] Custom command '{name}' berhasil dibuat di {command_path}")
@@ -217,7 +219,7 @@ def run_new_test(args):
 
     tests_dir = os.path.join(app_dir, "tests")
     os.makedirs(tests_dir, exist_ok=True)
-    open(os.path.join(tests_dir, "__init__.py"), 'a').close()
+    open(os.path.join(tests_dir, "__init__.py"), "a").close()
 
     test_path = os.path.join(tests_dir, f"test_{name}.py")
     if os.path.exists(test_path):
@@ -235,7 +237,7 @@ def test_{name}():
     # Assert
     assert True
 """
-    with open(test_path, 'w', encoding='utf-8') as f:
+    with open(test_path, "w", encoding="utf-8") as f:
         f.write(test_content)
 
     print(f"  [OK] File test 'test_{name}.py' berhasil dibuat di {test_path}")
@@ -275,10 +277,10 @@ class {class_name}(models.Model):
     def __str__(self):
         return self.name
 """
-    with open(models_path, 'w', encoding='utf-8') as f:
+    with open(models_path, "w", encoding="utf-8") as f:
         f.write(model_content)
 
-    with open(init_path, 'a', encoding='utf-8') as f:
+    with open(init_path, "a", encoding="utf-8") as f:
         f.write(f"from .{name.lower()} import {class_name}\n")
 
     print(f"  [OK] Model '{class_name}' berhasil dibuat di {models_path}")
@@ -318,9 +320,9 @@ class CanDelete{class_name}(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.has_perm('{app}.delete_{name.lower()}')
 """
-    mode = 'a' if os.path.exists(permissions_path) else 'w'
-    with open(permissions_path, mode, encoding='utf-8') as f:
-        f.write("\n" + perm_content if mode == 'a' else perm_content)
+    mode = "a" if os.path.exists(permissions_path) else "w"
+    with open(permissions_path, mode, encoding="utf-8") as f:
+        f.write("\n" + perm_content if mode == "a" else perm_content)
     print(f"  [OK] Permission untuk '{class_name}' ditambahkan di {permissions_path}")
 
 
@@ -338,8 +340,8 @@ def run_new_seeder(args):
 
     commands_dir = os.path.join(app_dir, "management", "commands")
     os.makedirs(commands_dir, exist_ok=True)
-    open(os.path.join(app_dir, "management", "__init__.py"), 'a').close()
-    open(os.path.join(commands_dir, "__init__.py"), 'a').close()
+    open(os.path.join(app_dir, "management", "__init__.py"), "a").close()
+    open(os.path.join(commands_dir, "__init__.py"), "a").close()
 
     command_path = os.path.join(commands_dir, f"seed_{name.lower()}.py")
     class_name = _to_class_name(name)
@@ -368,7 +370,7 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f"Berhasil membuat {{count}} {class_name}."))
 """
-    with open(command_path, 'w', encoding='utf-8') as f:
+    with open(command_path, "w", encoding="utf-8") as f:
         f.write(seeder_content)
     print(f"  [OK] Seeder command berhasil dibuat di {command_path}")
 
@@ -413,19 +415,23 @@ def run_remove_app(args):
     settings_entry = f'"apps.{app_name}"'
     settings_hit = False
     if os.path.exists(settings_path):
-        with open(settings_path, "r", encoding="utf-8") as f:
+        with open(settings_path, encoding="utf-8") as f:
             if settings_entry in f.read():
                 settings_hit = True
-                targets.append(("line", settings_path, f"{settings_path} — hapus baris {settings_entry}"))
+                targets.append(
+                    ("line", settings_path, f"{settings_path} — hapus baris {settings_entry}")
+                )
 
     urls_path = os.path.join("config", "urls.py")
     urls_entry = f'"apps.{app_name}.urls"'
     urls_hit = False
     if os.path.exists(urls_path):
-        with open(urls_path, "r", encoding="utf-8") as f:
+        with open(urls_path, encoding="utf-8") as f:
             if urls_entry in f.read():
                 urls_hit = True
-                targets.append(("line", urls_path, f"{urls_path} — hapus baris include({urls_entry})"))
+                targets.append(
+                    ("line", urls_path, f"{urls_path} — hapus baris include({urls_entry})")
+                )
 
     _sidebar_candidates = [
         os.path.join("templates", "dashboard", "index.html"),
@@ -436,11 +442,13 @@ def run_remove_app(args):
     sidebar_pattern = f'href="/{app_name}/"'
     for _sp in _sidebar_candidates:
         if os.path.exists(_sp):
-            with open(_sp, "r", encoding="utf-8") as f:
+            with open(_sp, encoding="utf-8") as f:
                 if sidebar_pattern in f.read():
                     sidebar_path = _sp
                     sidebar_hit = True
-                    targets.append(("line", sidebar_path, f"{sidebar_path} — hapus sidebar link /{app_name}/"))
+                    targets.append(
+                        ("line", sidebar_path, f"{sidebar_path} — hapus sidebar link /{app_name}/")
+                    )
                     break
 
     print()
@@ -460,35 +468,36 @@ def run_remove_app(args):
 
     print()
 
-    for kind, path, label in targets:
+    for kind, path, _label in targets:
         if kind == "folder":
             if os.path.exists(path):
                 import shutil
+
                 shutil.rmtree(path, onerror=on_rm_error)
                 print(f"  [OK] Dihapus: {path}/")
         elif kind == "line":
             if path == settings_path and settings_hit:
-                with open(settings_path, "r", encoding="utf-8") as f:
+                with open(settings_path, encoding="utf-8") as f:
                     content = f.read()
-                content = re.sub(
-                    rf'[ \t]*"apps\.{re.escape(app_name)}"[^\n]*\n?', "", content
-                )
+                content = re.sub(rf'[ \t]*"apps\.{re.escape(app_name)}"[^\n]*\n?', "", content)
                 with open(settings_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print(f"  [OK] Entri dihapus dari {settings_path}")
 
             elif path == urls_path and urls_hit:
-                with open(urls_path, "r", encoding="utf-8") as f:
+                with open(urls_path, encoding="utf-8") as f:
                     content = f.read()
                 content = re.sub(
-                    rf'[^\n]*include\(["\']apps\.{re.escape(app_name)}\.urls["\']\)[^\n]*\n?', "", content
+                    rf'[^\n]*include\(["\']apps\.{re.escape(app_name)}\.urls["\']\)[^\n]*\n?',
+                    "",
+                    content,
                 )
                 with open(urls_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 print(f"  [OK] URL dihapus dari {urls_path}")
 
             elif path == sidebar_path and sidebar_hit:
-                with open(sidebar_path, "r", encoding="utf-8") as f:
+                with open(sidebar_path, encoding="utf-8") as f:
                     content = f.read()
                 content = re.sub(
                     rf'<a[^>]*href="/{re.escape(app_name)}/"[^>]*>.*?</a>\n[ \t]*',
@@ -502,4 +511,4 @@ def run_remove_app(args):
 
     print()
     print(f"  [OK] Aplikasi '{app_name}' berhasil dihapus.")
-    print(f"       Jalankan 'rdp migrate' jika ada migrasi yang perlu di-rollback.")
+    print("       Jalankan 'rdp migrate' jika ada migrasi yang perlu di-rollback.")

@@ -2,6 +2,7 @@
 Unit test untuk htmx_examples.py
 US: US-036 — 10 HTMX patterns
 """
+
 import json
 
 import pytest
@@ -12,6 +13,7 @@ from django.urls import reverse
 @pytest.fixture
 def client():
     return Client()
+
 
 class TestHtmxExamplesViews:
     def test_index_view(self, client):
@@ -86,11 +88,9 @@ class TestHtmxExamplesViews:
 
     def test_inline_edit_view_post_valid(self, client):
         url = reverse("htmx-contact-edit", args=[2])
-        response = client.post(url, {
-            "name": "Rahadi Updated",
-            "email": "rahadi.up@radian.web.id",
-            "phone": "123"
-        })
+        response = client.post(
+            url, {"name": "Rahadi Updated", "email": "rahadi.up@radian.web.id", "phone": "123"}
+        )
         assert response.status_code == 200
 
     def test_inline_edit_view_post_invalid(self, client):

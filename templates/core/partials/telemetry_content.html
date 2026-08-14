@@ -1,0 +1,71 @@
+{# Partial Content Telemetry #}
+<div id="telemetry-container">
+    <!-- Stat Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <c-rdp.card>
+            <div style="font-size: 0.8rem; color: var(--rdp-text-muted);">Total Request Traces</div>
+            <div style="font-size: 1.75rem; font-weight: 700; color: var(--rdp-primary);">{{ total_traces }}</div>
+        </c-rdp.card>
+        <c-rdp.card>
+            <div style="font-size: 0.8rem; color: var(--rdp-text-muted);">Avg Exec Time</div>
+            <div style="font-size: 1.75rem; font-weight: 700;">{{ avg_exec_time }} ms</div>
+        </c-rdp.card>
+        <c-rdp.card>
+            <div style="font-size: 0.8rem; color: var(--rdp-text-muted);">Avg DB Queries / Request</div>
+            <div style="font-size: 1.75rem; font-weight: 700;">{{ avg_db_queries }}</div>
+        </c-rdp.card>
+        <c-rdp.card>
+            <div style="font-size: 0.8rem; color: var(--rdp-text-muted);">Total Service Units</div>
+            <div style="font-size: 1.75rem; font-weight: 700;">{{ total_units }}</div>
+        </c-rdp.card>
+    </div>
+
+    <!-- Alert List (N+1 Query Suspects & Slow Endpoints) -->
+    {% if high_db_queries %}
+        <c-rdp.alert type="warning" title="⚠️ Deteksi Potensial N+1 Query">
+            Terdapat {{ high_db_queries|length }} request yang melakukan > 10 DB Queries dalam 1 kali request HTTP.
+        </c-rdp.alert>
+    {% endif %}
+
+    <!-- Table of Trace Logs -->
+    <c-rdp.card title="📋 Historis Request Trace Logs Terbaru">
+        <div style="overflow-x: auto;">
+            <table class="rdp-table" style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--rdp-border); text-align: left;">
+                        <th style="padding: 0.6rem;">Trace ID</th>
+                        <th style="padding: 0.6rem;">Feature / View</th>
+                        <th style="padding: 0.6rem;">User</th>
+                        <th style="padding: 0.6rem;">Exec Time (ms)</th>
+                        <th style="padding: 0.6rem;">DB Queries</th>
+                        <th style="padding: 0.6rem;">Status</th>
+                        <th style="padding: 0.6rem;">Waktu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in trace_logs %}
+                        <tr style="border-bottom: 1px solid var(--rdp-border);">
+                            <td style="padding: 0.6rem; font-family: monospace;"><code>{{ log.trace_id|slice:":8" }}</code></td>
+                            <td style="padding: 0.6rem;"><strong>{{ log.feature_name }}</strong><br><small style="color: var(--rdp-text-muted);">{{ log.endpoint }}</small></td>
+                            <td style="padding: 0.6rem;">{{ log.user.username|default:"- (Anon)" }}</td>
+                            <td style="padding: 0.6rem; {% if log.execution_time_ms > 200 %}color: var(--rdp-danger); font-weight: 700;{% endif %}">{{ log.execution_time_ms|floatformat:2 }} ms</td>
+                            <td style="padding: 0.6rem; {% if log.db_query_count > 10 %}color: var(--rdp-danger); font-weight: 700;{% endif %}">{{ log.db_query_count }}</td>
+                            <td style="padding: 0.6rem;">
+                                {% if log.status_code < 400 %}
+                                    <span style="color: var(--rdp-primary); font-weight: 700;">{{ log.status_code }}</span>
+                                {% else %}
+                                    <span style="color: var(--rdp-danger); font-weight: 700;">{{ log.status_code }}</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 0.6rem; color: var(--rdp-text-muted);">{{ log.created_at|date:"Y-m-d H:i:s" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" style="padding: 1rem; text-align: center; color: var(--rdp-text-muted);">Belum ada log telemetri yang tercatat.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </c-rdp.card>
+</div>

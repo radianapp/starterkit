@@ -17,7 +17,6 @@ import sys
 
 from ..utils import _to_class_name, get_app_from_args, get_input
 
-
 # ── Halaman yang didukung CRUD ────────────────────────────────────────────────
 CRUD_PAGES = ["list", "create", "edit", "delete", "detail"]
 
@@ -36,7 +35,7 @@ def _parse_flags(args: list) -> dict:
     DIPANGGIL DARI: run_new_crud(), run_new_page()
     """
     flags = {
-        "only": None,    # list halaman yang diminta, None = semua
+        "only": None,  # list halaman yang diminta, None = semua
         "style": "table",
         "model": None,
     }
@@ -80,7 +79,7 @@ def _inject_form(app: str, name: str):
 
     init_path = os.path.join(forms_dir, "__init__.py")
     if not os.path.exists(init_path):
-        with open(init_path, 'w', encoding='utf-8') as f:
+        with open(init_path, "w", encoding="utf-8") as f:
             f.write("")
 
     form_content = f"""\
@@ -103,10 +102,10 @@ class {class_name}Form(forms.ModelForm):
         model = {class_name}
         fields = "__all__"
 """
-    with open(form_path, 'w', encoding='utf-8') as f:
+    with open(form_path, "w", encoding="utf-8") as f:
         f.write(form_content)
 
-    with open(init_path, 'a', encoding='utf-8') as f:
+    with open(init_path, "a", encoding="utf-8") as f:
         f.write(f"from .{name_lower}_forms import {class_name}Form\n")
 
     print(f"  [OK] Form dibuat di {form_path}")
@@ -132,7 +131,7 @@ def _inject_views(app: str, name: str, pages: list):
     # Buat views/__init__.py jika belum ada
     init_path = os.path.join(views_dir, "__init__.py")
     if not os.path.exists(init_path):
-        with open(init_path, 'w', encoding='utf-8') as f:
+        with open(init_path, "w", encoding="utf-8") as f:
             f.write("")
 
     # Build view class content berdasarkan halaman yang diminta
@@ -295,12 +294,12 @@ class {class_name}DetailView(LoginRequiredMixin, DetailView):
 """)
         exported.append(f"{class_name}DetailView")
 
-    with open(view_path, 'w', encoding='utf-8') as f:
+    with open(view_path, "w", encoding="utf-8") as f:
         f.write("\n".join(view_lines))
 
     # Inject ke __init__.py
     import_line = f"from .{name_lower} import {', '.join(exported)}\n"
-    with open(init_path, 'a', encoding='utf-8') as f:
+    with open(init_path, "a", encoding="utf-8") as f:
         f.write(import_line)
 
     print(f"  [OK] Views dibuat di {view_path}")
@@ -322,8 +321,10 @@ def _inject_url(app: str, name: str, pages: list):
     page_map = {
         "list": (
             f"{class_name}ListView",
-            (f'path("{name_lower}/", {class_name}ListView.as_view(), name="{name_lower}-list"),\n    '
-             f'path("", {class_name}ListView.as_view(), name="list"),'),
+            (
+                f'path("{name_lower}/", {class_name}ListView.as_view(), name="{name_lower}-list"),\n    '
+                f'path("", {class_name}ListView.as_view(), name="list"),'
+            ),
         ),
         "detail": (
             f"{class_name}DetailView",
@@ -331,18 +332,24 @@ def _inject_url(app: str, name: str, pages: list):
         ),
         "create": (
             f"{class_name}CreateModalView",
-            (f'path("{name_lower}/baru/", {class_name}CreateModalView.as_view(), name="{name_lower}-create"),\n    '
-             f'path("{name_lower}/baru/modal/", {class_name}CreateModalView.as_view(), name="{name_lower}-create-modal"),'),
+            (
+                f'path("{name_lower}/baru/", {class_name}CreateModalView.as_view(), name="{name_lower}-create"),\n    '
+                f'path("{name_lower}/baru/modal/", {class_name}CreateModalView.as_view(), name="{name_lower}-create-modal"),'
+            ),
         ),
         "edit": (
             f"{class_name}EditModalView",
-            (f'path("{name_lower}/<int:pk>/edit/", {class_name}EditModalView.as_view(), name="{name_lower}-edit"),\n    '
-             f'path("{name_lower}/<int:pk>/edit/modal/", {class_name}EditModalView.as_view(), name="{name_lower}-edit-modal"),'),
+            (
+                f'path("{name_lower}/<int:pk>/edit/", {class_name}EditModalView.as_view(), name="{name_lower}-edit"),\n    '
+                f'path("{name_lower}/<int:pk>/edit/modal/", {class_name}EditModalView.as_view(), name="{name_lower}-edit-modal"),'
+            ),
         ),
         "delete": (
             f"{class_name}DeleteModalView",
-            (f'path("{name_lower}/<int:pk>/hapus/", {class_name}DeleteModalView.as_view(), name="{name_lower}-delete"),\n    '
-             f'path("{name_lower}/<int:pk>/hapus/modal/", {class_name}DeleteModalView.as_view(), name="{name_lower}-delete-modal"),'),
+            (
+                f'path("{name_lower}/<int:pk>/hapus/", {class_name}DeleteModalView.as_view(), name="{name_lower}-delete"),\n    '
+                f'path("{name_lower}/<int:pk>/hapus/modal/", {class_name}DeleteModalView.as_view(), name="{name_lower}-delete-modal"),'
+            ),
         ),
     }
 
@@ -368,13 +375,13 @@ urlpatterns = [
     {patterns_str}
 ]
 """
-        with open(urls_path, 'w', encoding='utf-8') as f:
+        with open(urls_path, "w", encoding="utf-8") as f:
             f.write(content)
         print(f"  [OK] urls.py baru dibuat: {urls_path}")
         return
 
     # Inject ke urls.py yang sudah ada
-    with open(urls_path, 'r', encoding='utf-8') as f:
+    with open(urls_path, encoding="utf-8") as f:
         existing = f.read()
 
     # Tambah import view yang belum ada
@@ -412,7 +419,7 @@ urlpatterns = [
             1,
         )
 
-    with open(urls_path, 'w', encoding='utf-8') as f:
+    with open(urls_path, "w", encoding="utf-8") as f:
         f.write(existing)
     print(f"  [OK] URL patterns ditambahkan ke {urls_path}")
 
@@ -914,8 +921,11 @@ def run_new_crud(args):
         available_apps = []
         if os.path.exists("apps"):
             available_apps = [
-                d for d in os.listdir("apps")
-                if os.path.isdir(os.path.join("apps", d)) and not d.startswith("__") and not d.startswith(".")
+                d
+                for d in os.listdir("apps")
+                if os.path.isdir(os.path.join("apps", d))
+                and not d.startswith("__")
+                and not d.startswith(".")
             ]
         print("\n[ERROR] Aplikasi target belum ditentukan.")
         print("  Gunakan format: rdp new crud <nama> -a <nama-app>")
@@ -941,7 +951,9 @@ def run_new_crud(args):
         pages = [p for p in flags["only"] if p in CRUD_PAGES]
         invalid = [p for p in flags["only"] if p not in CRUD_PAGES]
         if invalid:
-            print(f"  [WARNING] Halaman tidak dikenal: {', '.join(invalid)}. Pilihan valid: {', '.join(CRUD_PAGES)}")
+            print(
+                f"  [WARNING] Halaman tidak dikenal: {', '.join(invalid)}. Pilihan valid: {', '.join(CRUD_PAGES)}"
+            )
         if not pages:
             print("[ERROR] Tidak ada halaman valid yang dipilih.")
             sys.exit(1)
@@ -970,11 +982,20 @@ def run_new_crud(args):
     os.makedirs(tpl_dir, exist_ok=True)
 
     tpl_map = {
-        "list":   (f"{name_lower}_list.html",          _generate_list_template(app, name, verbose, style)),
-        "create": (f"{name_lower}_create_modal.html",  _generate_create_modal_template(app, name, verbose)),
-        "edit":   (f"{name_lower}_edit_modal.html",    _generate_edit_modal_template(app, name, verbose)),
-        "detail": (f"{name_lower}_detail.html",        _generate_detail_template(app, name, verbose)),
-        "delete": (f"{name_lower}_delete_modal.html",  _generate_delete_template(app, name, verbose)),
+        "list": (f"{name_lower}_list.html", _generate_list_template(app, name, verbose, style)),
+        "create": (
+            f"{name_lower}_create_modal.html",
+            _generate_create_modal_template(app, name, verbose),
+        ),
+        "edit": (
+            f"{name_lower}_edit_modal.html",
+            _generate_edit_modal_template(app, name, verbose),
+        ),
+        "detail": (f"{name_lower}_detail.html", _generate_detail_template(app, name, verbose)),
+        "delete": (
+            f"{name_lower}_delete_modal.html",
+            _generate_delete_template(app, name, verbose),
+        ),
     }
 
     written_templates = set()
@@ -988,7 +1009,7 @@ def run_new_crud(args):
         if os.path.exists(tpl_path):
             print(f"  [WARNING] Template '{tpl_file}' sudah ada, dilewati.")
         else:
-            with open(tpl_path, 'w', encoding='utf-8') as f:
+            with open(tpl_path, "w", encoding="utf-8") as f:
                 f.write(tpl_content)
             print(f"  [OK] Template: templates/apps/{app}/{tpl_file}")
         written_templates.add(tpl_file)
@@ -999,7 +1020,9 @@ def run_new_crud(args):
 
     print()
     print(f"  [OK] CRUD '{class_name}' selesai.")
-    print(f"  [INFO] Pastikan model {class_name} sudah ada. Jika belum: rdp new model {name_lower} -a {app}")
+    print(
+        f"  [INFO] Pastikan model {class_name} sudah ada. Jika belum: rdp new model {name_lower} -a {app}"
+    )
 
 
 def run_new_page(args):
@@ -1017,7 +1040,9 @@ def run_new_page(args):
     DIPANGGIL DARI: main()
     """
     if not args:
-        print("[ERROR] Penggunaan: rdp new page <tipe|custom <nama>> -a <app> [--model <Model>] [--style table|card|simple]")
+        print(
+            "[ERROR] Penggunaan: rdp new page <tipe|custom <nama>> -a <app> [--model <Model>] [--style table|card|simple]"
+        )
         sys.exit(1)
 
     page_type = args[0].lower()
@@ -1056,7 +1081,7 @@ def run_new_page(args):
 
 </c-layout.app>
 """
-        with open(page_path, 'w', encoding='utf-8') as f:
+        with open(page_path, "w", encoding="utf-8") as f:
             f.write(page_content)
         print(f"  [OK] Page custom '{custom_name}' dibuat di {page_path}")
         return
@@ -1100,11 +1125,20 @@ def run_new_page(args):
     os.makedirs(tpl_dir, exist_ok=True)
 
     tpl_map = {
-        "list":   (f"{name_lower}_list.html",          _generate_list_template(app, name, verbose, style)),
-        "create": (f"{name_lower}_create_modal.html",  _generate_create_modal_template(app, name, verbose)),
-        "edit":   (f"{name_lower}_edit_modal.html",    _generate_edit_modal_template(app, name, verbose)),
-        "detail": (f"{name_lower}_detail.html",        _generate_detail_template(app, name, verbose)),
-        "delete": (f"{name_lower}_delete_modal.html",  _generate_delete_template(app, name, verbose)),
+        "list": (f"{name_lower}_list.html", _generate_list_template(app, name, verbose, style)),
+        "create": (
+            f"{name_lower}_create_modal.html",
+            _generate_create_modal_template(app, name, verbose),
+        ),
+        "edit": (
+            f"{name_lower}_edit_modal.html",
+            _generate_edit_modal_template(app, name, verbose),
+        ),
+        "detail": (f"{name_lower}_detail.html", _generate_detail_template(app, name, verbose)),
+        "delete": (
+            f"{name_lower}_delete_modal.html",
+            _generate_delete_template(app, name, verbose),
+        ),
     }
 
     tpl_file, tpl_content = tpl_map[page_type]
@@ -1112,7 +1146,7 @@ def run_new_page(args):
     if os.path.exists(tpl_path):
         print(f"  [WARNING] Template '{tpl_file}' sudah ada, dilewati.")
     else:
-        with open(tpl_path, 'w', encoding='utf-8') as f:
+        with open(tpl_path, "w", encoding="utf-8") as f:
             f.write(tpl_content)
         print(f"  [OK] Template: templates/apps/{app}/{tpl_file}")
 
@@ -1121,10 +1155,13 @@ def run_new_page(args):
 
 def run_make(args):
     """Wizard interaktif untuk berbagai generator."""
-    from .app import run_new_app, run_new_api
+    from .app import run_new_api, run_new_app
     from .code import (
-        run_new_component, run_new_model, run_new_task,
-        run_new_service, run_new_test,
+        run_new_component,
+        run_new_model,
+        run_new_service,
+        run_new_task,
+        run_new_test,
     )
 
     print("=" * 60)

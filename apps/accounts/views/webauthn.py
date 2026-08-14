@@ -1,17 +1,17 @@
 import json
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
-from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import login
 
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.views.decorators.http import require_http_methods
+
+from apps.accounts.models import PasskeyCredential
 from apps.accounts.services.webauthn_service import (
+    generate_authentication_challenge,
     generate_registration_challenge,
     verify_and_save_registration,
-    generate_authentication_challenge,
     verify_authentication,
 )
-from apps.accounts.models import PasskeyCredential
 
 
 @require_http_methods(["POST"])
@@ -37,9 +37,9 @@ def register_verify(request):
     try:
         data = json.loads(request.body)
         device_name = data.pop("device_name", "Passkey Device")
-        
-        passkey = verify_and_save_registration(request, request.user, data, device_name)
-        
+
+        verify_and_save_registration(request, request.user, data, device_name)
+
         # Kembalikan response untuk HTMX agar refresh list perangkat
         response = HttpResponse()
         response["HX-Trigger"] = "passkeyRegistered"
@@ -69,12 +69,12 @@ def login_verify(request):
     try:
         data = json.loads(request.body)
         user = verify_authentication(request, data)
-        
+
         if not user.is_active:
             return HttpResponseBadRequest("Akun tidak aktif.")
-            
+
         login(request, user)
-        
+
         # Trigger redirect via HTMX
         response = HttpResponse()
         response["HX-Redirect"] = "/dashboard/"
@@ -92,7 +92,7 @@ def delete_passkey(request, pk):
     try:
         passkey = PasskeyCredential.objects.get(pk=pk, user=request.user)
         passkey.delete()
-        
+
         response = HttpResponse()
         response["HX-Trigger"] = "passkeyDeleted"
         return response

@@ -2,9 +2,8 @@
 # US-024: CLI rdp — operasi upgrade (cli, packages, monitor, ai, plugin)
 
 import subprocess
-import sys
 
-from ..utils import _fetch_latest_version, _parse_version, __version__
+from ..utils import __version__, _fetch_latest_version, _parse_version
 
 
 def run_upgrade(args):
@@ -60,6 +59,7 @@ def run_upgrade_cli(args):
 def run_monitor(args):
     """Menampilkan status monitoring sistem dasar."""
     import shutil as _shutil
+
     print("=" * 60)
     print("  RDP Monitor (Status Sistem)")
     print("=" * 60)
@@ -67,7 +67,9 @@ def run_monitor(args):
     print(f"Disk Total : {total // (2**30)} GiB")
     print(f"Disk Used  : {used // (2**30)} GiB")
     print(f"Disk Free  : {free // (2**30)} GiB")
-    print("\n[INFO] Untuk monitoring yang lebih lengkap, jalankan utilitas seperti 'htop' atau 'glances'.")
+    print(
+        "\n[INFO] Untuk monitoring yang lebih lengkap, jalankan utilitas seperti 'htop' atau 'glances'."
+    )
 
 
 def run_ai(args):
@@ -79,7 +81,9 @@ def run_ai(args):
         prompt = " ".join(args)
         print(f"\nPrompt: '{prompt}'\n")
     print("🤖 [COMING SOON] Modul RDP AI sedang dalam tahap pengembangan.")
-    print("Nantinya, Anda cukup memberikan prompt dan CLI akan merancang struktur direktori, model, view, hingga HTMX secara ajaib!")
+    print(
+        "Nantinya, Anda cukup memberikan prompt dan CLI akan merancang struktur direktori, model, view, hingga HTMX secara ajaib!"
+    )
 
 
 def run_plugin(args):
@@ -91,4 +95,6 @@ def run_plugin(args):
         plugin_name = args[1] if len(args) > 1 else "<nama-plugin>"
         print(f"📦 Menginstal plugin '{plugin_name}'...")
     print("\n[COMING SOON] Ekosistem plugin RDP sedang dirancang.")
-    print("Anda akan segera bisa menambahkan fungsionalitas kompleks seperti 'blog', 'ecommerce', atau 'auditlog' hanya dengan satu perintah.")
+    print(
+        "Anda akan segera bisa menambahkan fungsionalitas kompleks seperti 'blog', 'ecommerce', atau 'auditlog' hanya dengan satu perintah."
+    )

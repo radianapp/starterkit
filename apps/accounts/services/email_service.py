@@ -91,11 +91,12 @@ def send_verification_email(user, request=None) -> bool:
     """
     token = generate_verification_token(user)
     path = reverse("accounts:verify_email", kwargs={"token": token})
-    
+
     if request:
         verify_url = request.build_absolute_uri(path)
     else:
         from django.conf import settings
+
         # Pastikan pengaturan base url tersedia di settings atau fallback
         base_url = getattr(settings, "SITE_URL", "http://localhost:8000")
         verify_url = f"{base_url.rstrip('/')}{path}"

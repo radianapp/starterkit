@@ -99,6 +99,104 @@ rdp -h
 
 ---
 
+### `rdp make-crud-codemap <app_label> <ModelName>`
+
+Men-generate dokumen terpadu **Code Map**, **User Guide**, **FAQ**, dan **Help/Troubleshooting** secara otomatis untuk entity CRUD, serta mengupdate `docs/codemap/INDEX.md`.
+
+```bash
+rdp make-crud-codemap inventory Produk
+```
+
+---
+
+### `rdp codemap`
+
+Men-scan ulang seluruh file event di `docs/codemap/` dan meng-generate/update **Master Table of Contents (`docs/codemap/INDEX.md`)**.
+
+```bash
+rdp codemap
+```
+
+---
+
+### `rdp generate-erd` / `rdp erd`
+
+Menganalisis skema database berbasis Django Models dan menghasilkan dokumen ERD format Markdown lengkap dengan diagram Mermaid (`erDiagram`).
+
+**Penggunaan:**
+```bash
+# Hasilkan dokumen ERD default ke docs/architecture/database.md
+rdp generate-erd
+
+# Filter aplikasi tertentu
+rdp generate-erd --apps inventory,accounts
+
+# Cetak langsung ke stdout terminal
+rdp generate-erd --to-stdout
+
+# Custom path output file
+rdp generate-erd --output docs/erd-internal.md
+```
+
+**Opsi:**
+- `--output` / `-o` : Path file Markdown tujuan (Default: `docs/architecture/database.md`)
+- `--apps` / `-a` : Daftar nama app dipisahkan koma (contoh: `inventory,accounts`)
+- `--exclude-apps` / `-e` : App yang dikecualikan
+- `--to-stdout` : Cetak ke terminal tanpa menyimpan file
+- `--title` : Judul kustom dokumen ERD
+
+---
+
+## Deteksi Proyek RDP & Kompatibilitas Proyek Existing
+
+### 1. Sistem Signature Manifest (`rdp.json`) & Hierarki Fallback
+Untuk memastikan deteksi proyek bersifat deterministik sekaligus menjaga **kompatibilitas penuh antar versi (backward compatibility)**, RDP CLI menggunakan sistem pembacaan signature berjenjang (*multi-tier fallback hierarchy*):
+
+1. **Prioritas 1 — File Manifest Resmi (`rdp.json`)**:
+   File signature di root proyek yang menyimpan metadata, versi skema, dan konfigurasi path modular:
+   ```json
+   {
+     "$schema": "https://cdn.radian.web.id/schemas/rdp-manifest-v1.json",
+     "project_type": "rdp-starter-kit",
+     "schema_version": 1,
+     "framework_version": "0.5.0",
+     "config": {
+       "apps_dir": "apps",
+       "settings_file": "config/settings/base.py",
+       "urls_file": "config/urls.py"
+     }
+   }
+   ```
+2. **Prioritas 2 — In-Tree Metadata di `pyproject.toml` (`[tool.rdp]`)**:
+   Jika `rdp.json` tidak ada, CLI memeriksa blok `[tool.rdp]` di file `pyproject.toml`.
+3. **Prioritas 3 — Fallback Heuristik Legacy (Proyek Versi v0.1 s/d v0.4.7)**:
+   Jika kedua file signature di atas tidak ada, CLI tetap mengenali proyek lama dengan memeriksa keberadaan folder `apps/` dan `config/version.json` / `config/settings/base.py`.
+
+Jika tidak ada satupun signature atau struktur yang cocok, CLI akan menandai direktori sebagai proyek non-RDP dan menampilkan panduan.
+
+
+---
+
+### 2. Apakah Proyek Django Existing (Non-RDP) Bisa Menggunakan RDP CLI?
+**Bisa**, terbagi menjadi dua level fungsionalitas:
+- **Perintah Django Wrapper (100% Kompatibel)**:
+  Perintah seperti `rdp runserver` (atau `rdp r`), `rdp migrate`, `rdp makemigrations`, `rdp shell`, `rdp lint`, dan `rdp doctor` dapat langsung digunakan pada proyek Django standar mana pun selama memiliki file `manage.py`.
+- **Perintah Generator & Scaffolding (Butuh Penyesuaian Struktur)**:
+  Perintah seperti `rdp new app`, `rdp new crud`, `rdp new component`, `rdp new api`, dan `rdp make` membutuhkan proyek existing mengadopsi struktur konvensi RDP.
+
+---
+
+### 3. Potensi Konflik pada Proyek Existing Non-RDP & Cara Menghindarinya
+
+| Area Potensi Konflik | Penyebab Konflik | Solusi & Cara Menghindari |
+|---|---|---|
+| **Lokasi Direktori App** | Django standar meletakkan app di root level (`./my_app`), sedangkan RDP di `./apps/my_app`. | Buat folder `apps/` dan letakkan aplikasi di dalamnya, atau tambahkan `sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))`. |
+| **Injeksi Settings Otomatis** | RDP menginjeksi app baru ke list `LOCAL_APPS` di `config/settings/base.py`. | Buat struktur `config/settings/base.py` atau daftarkan app secara manual jika menggunakan `settings.py` standar. |
+| **Template Engine (Django-Cotton)** | Generator RDP menghasilkan tag `<c-layout.app>` dan `<c-rdp.*>`. Jika `django_cotton` belum terpasang, Django template standar akan error. | Pasang package `django-cotton` via `uv add django-cotton` dan tambahkan ke `INSTALLED_APPS`. |
+| **User Model & Auth Mixins** | RDP mengasumsikan `AUTH_USER_MODEL = "accounts.User"` untuk fitur profile & tenant. | Sesuaikan inheritance model atau gunakan default Django model dengan membatasi pemakaian fitur multi-tenant starterkit. |
+
+---
+
 ## Memperbarui CLI
 
 Untuk mendapatkan versi terbaru dari CLI:
@@ -117,7 +215,9 @@ uv tool upgrade rdp-starter-kit
 | `git: command not found` | Instal Git dari [git-scm.com](https://git-scm.com) |
 | Error koneksi saat `rdp new` | Periksa koneksi internet Anda; repositori GitHub harus bisa diakses |
 | Direktori sudah ada | Hapus folder target terlebih dahulu atau pilih nama proyek yang berbeda |
+| `Direktori 'apps' tidak ditemukan` | Anda menjalankan perintah generator di luar proyek RDP. Pastikan berada di root direktori proyek. |
 
 ---
 
 *Dokumentasi ini berlaku untuk RDP CLI v0.2.0+*
+

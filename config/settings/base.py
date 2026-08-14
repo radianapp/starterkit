@@ -17,6 +17,7 @@ import logging
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
 
 # ⚙️ KONFIGURASI: Load .env file
@@ -63,6 +64,11 @@ RDP_DEBUG_OVERLAY = env_var("RDP_DEBUG_OVERLAY", str(DEBUG)).lower() in ("true",
 RDP_UI_VERSION = env_var("RDP_UI_VERSION", "v1.0")
 RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")
 RDP_APP_ACCENT = env_var("RDP_APP_ACCENT", "navy")
+RDP_MULTI_TENANCY_ENABLED = env_var("RDP_MULTI_TENANCY_ENABLED", "False").lower() in (
+    "true",
+    "1",
+    "yes",
+)
 
 # ⚙️ KONFIGURASI: Framework & App Versions
 FRAMEWORK_VERSION = env_var("FRAMEWORK_VERSION", "0.3.0")
@@ -75,7 +81,7 @@ LOCAL_APP_VERSION_DESC = ""
 
 if _version_file.exists():
     try:
-        with open(_version_file, "r") as f:
+        with open(_version_file) as f:
             _v_data = json.load(f)
             LOCAL_APP_VERSION = _v_data.get("version", LOCAL_APP_VERSION)
             LOCAL_APP_VERSION_DATE = _v_data.get("updated_at", "")
@@ -206,6 +212,10 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "storages",
     "simple_history",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 LOCAL_APPS = [
@@ -213,6 +223,7 @@ LOCAL_APPS = [
     "apps.accounts.apps.AccountsConfig",
     "apps.dashboard.apps.DashboardConfig",
     "apps.inventory.apps.InventoryConfig",
+    "apps.tenants.apps.TenantsConfig",
     "apps.test_app.apps.TestAppConfig",
 ]
 
@@ -226,6 +237,7 @@ AUTH_USER_MODEL = "accounts.User"
 AUTHENTICATION_BACKENDS = [
     "apps.accounts.backends.EmailOrUsernameBackend",
     "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # ⚙️ KONFIGURASI: US-012 — Jazzmin admin theme
@@ -346,7 +358,29 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
 
+# ⚙️ KONFIGURASI: Django-Allauth (SSO)
+SITE_ID = 1
+ACCOUNT_EMAIL_VERIFICATION = "none"  # RDP menggunakan logic verifikasi kustom
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": env_var("GOOGLE_CLIENT_ID", ""),
+            "secret": env_var("GOOGLE_CLIENT_SECRET", ""),
+            "key": "",
+        },
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE_ENABLED": True,
+    }
+}
+
 MIDDLEWARE = [
+    "apps.core.middleware.TraceMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Static files
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -354,6 +388,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Multi-Tenancy Middleware (bypasses if RDP_MULTI_TENANCY_ENABLED=False)
+    "apps.tenants.middleware.tenant_middleware.TenantMiddleware",
     # US-008: Enforce email verification jika REQUIRE_EMAIL_VERIFICATION=True
     "apps.core.middleware.EmailVerificationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -361,11 +397,10 @@ MIDDLEWARE = [
     "apps.accounts.middleware.ForceChangePasswordMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # KEPUTUSAN TEKNIS: Map Django message tags 'error' ke 'danger' agar sesuai dengan standar CSS alert
-from django.contrib.messages import constants as messages
-
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }

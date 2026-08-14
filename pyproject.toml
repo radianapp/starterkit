@@ -1,6 +1,6 @@
 [project]
 name = "rdp-starter-kit"
-version = "0.4.7"
+version = "0.5.0"
 description = "Production-ready Django starter template for Radian Data Platform (RDP)"
 requires-python = ">=3.11"
 license = "MIT"
@@ -22,6 +22,7 @@ dependencies = [
     "django-storages[s3]>=1.14.0",
     "django-simple-history>=3.12.0",
     "webauthn>=3.0.0",
+    "django-allauth[socialaccount]>=65.18.0",
 ]
 
 [project.scripts]
@@ -91,7 +92,7 @@ exclude = [
     ".pytest_cache",
     ".ruff_cache",
     "scripts/app_template",
-    "scripts/rdp_new.py",
+    "scripts/xrdp_new.py",
 ]
 
 [tool.ruff.lint]
@@ -109,6 +110,21 @@ select = [
 ignore = [
     "E501",   # Line too long
     "B008",   # Do not perform function calls in argument defaults
+    "C901",   # McCabe complexity (CLI command functions naturally have high branching)
+    "RUF001", # Unicode character in strings (e.g. Indonesian docstrings, dashes, arrows)
+    "RUF002", # Unicode character in docstrings
+    "RUF003", # Unicode character in comments
+    "RUF012", # Mutable class attributes (Django Model/Form/Admin attributes like list_display, fields)
+    "RUF013", # PEP 484 implicit Optional
+    "F405",   # Undefined name from star import (Django dev/prod settings inheritance)
+    "A001",   # Shadowing builtins (Django models/views frequently use `id`, `type`, `format`)
+    "A002",
+    "A003",
+    "B904",   # Exception chaining (raise ... from err)
+    "C401",   # Set comprehension vs generator
+    "W291",   # Trailing whitespace
+    "W293",   # Blank line contains whitespace
+    "E402",   # Module level import not at top of file
 ]
 
 [tool.ruff.lint.isort]
@@ -121,6 +137,15 @@ include = ["scripts*", "config*", "apps*"]
 [tool.setuptools.package-data]
 "*" = ["*.py", "**/*.py"]
 
+[tool.rdp]
+project_type = "rdp-starter-kit"
+schema_version = 1
+framework_version = "0.5.0"
+apps_dir = "apps"
+settings_file = "config/settings/base.py"
+urls_file = "config/urls.py"
+
 [build-system]
 requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
+

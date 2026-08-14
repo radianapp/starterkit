@@ -193,4 +193,3 @@ class TestBasicViews:
         assert is_app_installed("apps.accounts")
         assert is_app_installed("apps.dashboard")
         assert not is_app_installed("apps.non_existent_app")
-

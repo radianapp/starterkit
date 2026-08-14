@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+
 from apps.accounts.models.passkey import PasskeyCredential
 
 
@@ -10,7 +11,7 @@ class TestWebAuthnRoutes:
         # Should be POST only
         response = client.get(url)
         assert response.status_code == 405
-        
+
         response = client.post(url)
         assert response.status_code == 200
         data = response.json()
@@ -41,10 +42,10 @@ class TestWebAuthnRoutes:
             name="My Device",
             credential_id="base64urlid",
             public_key="base64urlpk",
-            sign_count=0
+            sign_count=0,
         )
         assert PasskeyCredential.objects.count() == 1
-        
+
         url = reverse("accounts:webauthn_delete_passkey", args=[passkey.id])
         response = client.delete(url)
         assert response.status_code == 200

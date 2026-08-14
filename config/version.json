@@ -1,6 +1,6 @@
 {
-  "description": "Fitur Bulk Upload dan WebAuthn",
-  "version": "0.4.7",
+  "description": "Multi-Tenancy, Observability & Telemetry, ERD Generator, Security Auditor, dan Docker Production Setup",
+  "version": "0.5.0",
   "updated_by": "System",
-  "updated_at": "2026-08-03T09:45:00+07:00"
+  "updated_at": "2026-08-14T18:55:00+07:00"
 }

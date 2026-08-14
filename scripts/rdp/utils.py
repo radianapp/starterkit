@@ -13,9 +13,10 @@ import urllib.request
 
 try:
     from importlib.metadata import version as _pkg_version
+
     __version__ = _pkg_version("rdp-starter-kit")
 except Exception:
-    __version__ = "0.4.0"  # fallback saat run dari source tanpa install
+    __version__ = "0.5.0"  # fallback saat run dari source tanpa install
 
 TEMPLATE_REPO_URL = "https://github.com/radianapp/starterkit.git"
 _PYPROJECT_RAW_URL = "https://raw.githubusercontent.com/radianapp/starterkit/main/pyproject.toml"
@@ -67,7 +68,7 @@ def check_for_updates() -> None:
     """
     now = time.time()
     try:
-        with open(_CHECK_STAMP, "r") as f:
+        with open(_CHECK_STAMP) as f:
             last_check = float(f.read().strip())
     except (OSError, ValueError):
         last_check = 0
@@ -107,6 +108,93 @@ def get_cli_source_info() -> tuple[str, str]:
     return "GLOBAL", os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def get_project_manifest(root_dir: str = ".") -> dict | None:
+    """
+    Membaca signature & konfigurasi proyek RDP dengan kompatibilitas multi-versi (fallback berlapis):
+      1. Berkas signature terdedikasi `rdp.json` di root proyek.
+      2. Section in-tree `[tool.rdp]` di dalam `pyproject.toml`.
+      3. Fallback heuristik versi terdahulu: `config/version.json` + keberadaan folder `apps/`.
+
+    Mengembalikan dictionary konfigurasi manifest atau None jika bukan proyek RDP.
+    """
+    import json
+
+    # 1. Prioritas 1: Berkas manifest resmi rdp.json
+    manifest_path = os.path.join(root_dir, "rdp.json")
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, encoding="utf-8") as f:
+                data = json.load(f)
+                data["_source"] = "rdp.json"
+                return data
+        except Exception:
+            pass
+
+    # 2. Prioritas 2: Metadata in-tree [tool.rdp] di pyproject.toml
+    pyproject_path = os.path.join(root_dir, "pyproject.toml")
+    if os.path.exists(pyproject_path):
+        try:
+            with open(pyproject_path, encoding="utf-8") as f:
+                content = f.read()
+            if "[tool.rdp]" in content:
+                match = re.search(r"\[tool\.rdp\](.*?)(?:\n\[|$)", content, re.DOTALL)
+                if match:
+                    section = match.group(1)
+                    cfg = {
+                        "project_type": "rdp-starter-kit",
+                        "schema_version": 1,
+                        "config": {},
+                    }
+                    for line in section.splitlines():
+                        if "=" in line and not line.strip().startswith("#"):
+                            k, v = line.split("=", 1)
+                            clean_k = k.strip()
+                            clean_v = v.strip().strip('"').strip("'")
+                            if clean_k in ("apps_dir", "settings_file", "urls_file"):
+                                cfg["config"][clean_k] = clean_v
+                            else:
+                                cfg[clean_k] = clean_v
+                    cfg["_source"] = "pyproject.toml"
+                    return cfg
+        except Exception:
+            pass
+
+    # 3. Prioritas 3 (Kompatibilitas Mundur): Heuristik Proyek RDP Versi Lama (v0.1 - v0.4.7)
+    has_apps = os.path.exists(os.path.join(root_dir, "apps"))
+    version_file = os.path.join(root_dir, "config", "version.json")
+    if has_apps and (
+        os.path.exists(version_file)
+        or os.path.exists(os.path.join(root_dir, "config", "settings", "base.py"))
+    ):
+        framework_ver = "0.4.0"
+        if os.path.exists(version_file):
+            try:
+                with open(version_file, encoding="utf-8") as f:
+                    framework_ver = json.load(f).get("version", "0.4.0")
+            except Exception:
+                pass
+        return {
+            "project_type": "rdp-starter-kit",
+            "schema_version": 1,
+            "framework_version": framework_ver,
+            "config": {
+                "apps_dir": "apps",
+                "settings_file": "config/settings/base.py",
+                "urls_file": "config/urls.py",
+                "templates_dir": "templates",
+                "cotton_dir": "templates/cotton/rdp",
+            },
+            "_source": "legacy_heuristics",
+        }
+
+    return None
+
+
+def is_rdp_project(root_dir: str = ".") -> bool:
+    """Memeriksa apakah direktori target merupakan proyek berbasis RDP."""
+    return get_project_manifest(root_dir) is not None
+
+
 def print_banner():
     """Tampilkan banner selamat datang beserta indikator mode CLI."""
     mode, path = get_cli_source_info()
@@ -115,17 +203,16 @@ def print_banner():
     print(f"      v{__version__}  [{mode}]")
     print("=" * 60)
     if mode == "LOCAL DEV":
-        print(f"  [MODE LOKAL DEV] Memakai modul & generator dari RDP_TEMPLATE_PATH:")
+        print("  [MODE LOKAL DEV] Memakai modul & generator dari RDP_TEMPLATE_PATH:")
         print(f"  -> {path}")
         print("=" * 60)
     elif mode == "LOCAL PROJ":
-        print(f"  [MODE LOKAL PROYEK] Memakai modul & generator dari proyek ini:")
+        print("  [MODE LOKAL PROYEK] Memakai modul & generator dari proyek ini:")
         print(f"  -> {path}")
         print("=" * 60)
     else:
-        print(f"  [MODE GLOBAL] Memakai paket rdp terinstal global di environment.")
+        print("  [MODE GLOBAL] Memakai paket rdp terinstal global di environment.")
         print("=" * 60)
-
 
 
 def print_help():
@@ -135,7 +222,7 @@ def print_help():
     DIPANGGIL DARI: main() jika argumen --help atau tidak ada sub-perintah
     """
     print_banner()
-    print(f"""
+    print("""
 PENGGUNAAN:
   rdp remove app <nama_app>   Hapus aplikasi Django + templates + url + sidebar (konfirmasi berlapis)
   rdp new <nama_proyek>       Membuat proyek baru dari template RDP
@@ -249,6 +336,7 @@ def check_git_available() -> bool:
 def on_rm_error(func, path, exc_info):
     """Error handler untuk shutil.rmtree untuk file read-only / locked di Windows."""
     import time
+
     try:
         os.chmod(path, stat.S_IWRITE)
         func(path)
@@ -258,7 +346,6 @@ def on_rm_error(func, path, exc_info):
             func(path)
         except Exception:
             pass
-
 
 
 def clone_template(target_dir: str, source_path: str | None = None) -> bool:
@@ -318,17 +405,18 @@ def clone_template(target_dir: str, source_path: str | None = None) -> bool:
     return True
 
 
-
 def show_diff(file_current, file_new):
     """Menampilkan perbedaan (diff) antara dua file."""
     try:
-        with open(file_current, 'r', encoding='utf-8', errors='ignore') as f1, \
-             open(file_new, 'r', encoding='utf-8', errors='ignore') as f2:
+        with (
+            open(file_current, encoding="utf-8", errors="ignore") as f1,
+            open(file_new, encoding="utf-8", errors="ignore") as f2,
+        ):
             diff = difflib.unified_diff(
                 f1.readlines(),
                 f2.readlines(),
-                fromfile='Current',
-                tofile='New Template',
+                fromfile="Current",
+                tofile="New Template",
             )
             for line in diff:
                 sys.stdout.write(line)
@@ -339,10 +427,14 @@ def show_diff(file_current, file_new):
 def prompt_overwrite(current_file, new_file, rel_path) -> bool:
     """Menampilkan prompt interaktif untuk file yang berbeda."""
     while True:
-        choice = input(f"\n[UPDATE] File {rel_path} berbeda. Overwrite? [y/N/d (diff)]: ").strip().lower()
-        if choice == 'y':
+        choice = (
+            input(f"\n[UPDATE] File {rel_path} berbeda. Overwrite? [y/N/d (diff)]: ")
+            .strip()
+            .lower()
+        )
+        if choice == "y":
             return True
-        elif choice == 'd':
+        elif choice == "d":
             show_diff(current_file, new_file)
         else:
             return False
@@ -351,7 +443,7 @@ def prompt_overwrite(current_file, new_file, rel_path) -> bool:
 def run_django_cmd(cmd, args):
     """Menjalankan perintah Django (manage.py) via uv."""
     try:
-        subprocess.run(['uv', 'run', 'python', 'manage.py', cmd] + args, check=True)
+        subprocess.run(["uv", "run", "python", "manage.py", cmd, *args], check=True)
     except subprocess.CalledProcessError:
         sys.exit(1)
     except FileNotFoundError:
@@ -385,12 +477,14 @@ def get_app_from_args(args):
             app = name
         elif os.path.exists("apps"):
             available_apps = [
-                d for d in os.listdir("apps")
-                if os.path.isdir(os.path.join("apps", d)) and not d.startswith("__") and not d.startswith(".")
+                d
+                for d in os.listdir("apps")
+                if os.path.isdir(os.path.join("apps", d))
+                and not d.startswith("__")
+                and not d.startswith(".")
             ]
             custom_apps = [a for a in available_apps if a not in ("core", "accounts")]
             if len(custom_apps) == 1:
                 app = custom_apps[0]
 
     return name, app
-

@@ -1,0 +1,36 @@
+{# Cotton Component: <c-rdp.tenant_switcher> #}
+{# US: US-027 — Tenant Switcher UI Component #}
+{% if request.is_multi_tenancy_enabled %}
+<div class="rdp-tenant-switcher" x-data="{ open: false }">
+    <button type="button" 
+            class="rdp-tenant-switcher__btn" 
+            @click="open = !open" 
+            @click.outside="open = false">
+        <span class="rdp-tenant-switcher__icon">🏢</span>
+        <span class="rdp-tenant-switcher__name">
+            {% if request.tenant %}
+                {{ request.tenant.name }}
+            {% else %}
+                Pilih Organisasi
+            {% endif %}
+        </span>
+        <span class="rdp-tenant-switcher__arrow">▾</span>
+    </button>
+
+    <div class="rdp-tenant-switcher__dropdown" x-show="open" x-cloak>
+        <div class="rdp-tenant-switcher__header">Organisasi Anda</div>
+        {% for membership in request.user.organization_memberships.all %}
+            <form method="post" action="{% url 'tenants:switch' %}">
+                {% csrf_token %}
+                <input type="hidden" name="tenant_id" value="{{ membership.organization.id }}">
+                <button type="submit" class="rdp-tenant-switcher__item {% if request.tenant.id == membership.organization.id %}is-active{% endif %}">
+                    <span class="rdp-tenant-switcher__item-name">{{ membership.organization.name }}</span>
+                    <span class="rdp-tenant-switcher__item-role">{{ membership.get_role_display }}</span>
+                </button>
+            </form>
+        {% empty %}
+            <div class="rdp-tenant-switcher__empty">Belum ada organisasi</div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

@@ -1,7 +1,6 @@
-import json
-from pathlib import Path
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
+
 
 class Command(BaseCommand):
     help = "Menampilkan versi aktif aplikasi saat ini (App Version)"
@@ -18,4 +17,8 @@ class Command(BaseCommand):
         if description:
             self.stdout.write(f"Keterangan     : {description}")
         self.stdout.write(self.style.MIGRATE_HEADING("---"))
-        self.stdout.write(self.style.WARNING("Gunakan perintah .\\bin\\app-version.ps1 atau ./bin/app-version.sh untuk menaikkan versi."))
+        self.stdout.write(
+            self.style.WARNING(
+                "Gunakan perintah .\\bin\\app-version.ps1 atau ./bin/app-version.sh untuk menaikkan versi."
+            )
+        )

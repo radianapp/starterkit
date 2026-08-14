@@ -11,13 +11,13 @@ ALUR:
   3. Export di __all__ untuk explicit API
 """
 
+from .passkey import PasskeyCredential
 from .profile import UserProfile
 from .user import User, UserManager
-from .passkey import PasskeyCredential
 
 __all__ = [
+    "PasskeyCredential",
     "User",
     "UserManager",
     "UserProfile",
-    "PasskeyCredential",
 ]

@@ -54,3 +54,39 @@ class EmailVerificationMiddleware:
             return redirect("accounts:verify_required")
 
         return self.get_response(request)
+
+
+import threading
+import uuid
+
+_trace_context = threading.local()
+
+
+def get_current_trace_id() -> str | None:
+    """Mengambil trace_id dari konteks thread saat ini."""
+    return getattr(_trace_context, "trace_id", None)
+
+
+def set_current_trace_id(trace_id: str) -> None:
+    """Mengatur trace_id untuk konteks thread saat ini."""
+    _trace_context.trace_id = trace_id
+
+
+class TraceMiddleware:
+    """
+    Inject Correlation ID (trace_id) ke setiap HTTP request untuk kebutuhan
+    reverse engineering, observability, dan debug tracing.
+    US: US-014 — Telemetry & Logging Terstruktur
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        trace_id = request.headers.get("X-Trace-ID", str(uuid.uuid4()))
+        set_current_trace_id(trace_id)
+        request.trace_id = trace_id
+
+        response = self.get_response(request)
+        response["X-Trace-ID"] = trace_id
+        return response

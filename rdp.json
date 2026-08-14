@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.radian.web.id/schemas/rdp-manifest-v1.json",
+  "project_type": "rdp-starter-kit",
+  "schema_version": 1,
+  "framework_version": "0.5.0",
+  "name": "rdp-starter-kit",
+  "config": {
+    "apps_dir": "apps",
+    "settings_module": "config.settings.dev",
+    "settings_file": "config/settings/base.py",
+    "urls_file": "config/urls.py",
+    "templates_dir": "templates",
+    "cotton_dir": "templates/cotton/rdp"
+  },
+  "features": [
+    "auth",
+    "tenants",
+    "cotton",
+    "htmx",
+    "pico-rdp-ui",
+    "celery",
+    "webauthn"
+  ]
+}

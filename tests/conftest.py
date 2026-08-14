@@ -88,3 +88,11 @@ def override_email_domains(settings):
     TUJUAN: Disable ALLOWED_EMAIL_DOMAINS restriction globally for tests.
     """
     settings.ALLOWED_EMAIL_DOMAINS = []
+
+
+@pytest.fixture(autouse=True)
+def override_sso_settings(settings):
+    """
+    TUJUAN: Disable ENABLE_GOOGLE_AUTH for tests to prevent allauth DB hits in templates.
+    """
+    settings.ENABLE_GOOGLE_AUTH = False

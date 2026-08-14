@@ -21,11 +21,23 @@ def debug_settings(request):
         "APP_VERSION_BY": getattr(settings, "LOCAL_APP_VERSION_BY", "System"),
         "APP_VERSION_DESC": getattr(settings, "LOCAL_APP_VERSION_DESC", ""),
         "RDP_APP_THEME": getattr(settings, "RDP_APP_THEME", "default"),
-        "RDP_THEME_LIST": getattr(settings, "RDP_THEME_LIST", [
-            "default", "light", "dark", "midnight",
-            "forest", "ocean", "nord", "dracula",
-            "terminal", "corporate", "github",
-        ]),
+        "RDP_THEME_LIST": getattr(
+            settings,
+            "RDP_THEME_LIST",
+            [
+                "default",
+                "light",
+                "dark",
+                "midnight",
+                "forest",
+                "ocean",
+                "nord",
+                "dracula",
+                "terminal",
+                "corporate",
+                "github",
+            ],
+        ),
         "TURNSTILE_ENABLED": getattr(settings, "TURNSTILE_ENABLED", False),
         "TURNSTILE_SITE_KEY": getattr(settings, "TURNSTILE_SITE_KEY", ""),
     }

@@ -19,13 +19,29 @@ Security headers dikonfigurasi via Django built-in settings:
 from .base import *  # noqa: F403
 
 DEBUG = False
-ALLOWED_HOSTS = env_var("ALLOWED_HOSTS", "localhost").split(",")  # noqa: F405
+ALLOWED_HOSTS = env_var("ALLOWED_HOSTS", "localhost").split(",")
 
 # ⚙️ KONFIGURASI: HTTPS redirect + cookie security
 # Referensi: https://docs.djangoproject.com/en/stable/ref/settings/#security
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = env_var("SECURE_SSL_REDIRECT", "True").lower() in ("true", "1", "yes")
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# ⚙️ KONFIGURASI: CSRF Trusted Origins (Wajib untuk Django 4/5 di balik HTTPS reverse proxy)
+_csrf_origins_raw = env_var("CSRF_TRUSTED_ORIGINS", "")
+if _csrf_origins_raw:
+    CSRF_TRUSTED_ORIGINS = [
+        origin.strip() for origin in _csrf_origins_raw.split(",") if origin.strip()
+    ]
+else:
+    # Auto-generate dari ALLOWED_HOSTS jika tidak diisi eksplisit (kecuali wildcard/localhost)
+    CSRF_TRUSTED_ORIGINS = [
+        f"https://{host.strip()}"
+        for host in ALLOWED_HOSTS
+        if host.strip() and host.strip() not in ("*", "localhost", "127.0.0.1")
+    ]
+
 
 # ⚙️ KONFIGURASI: HTTP Strict Transport Security (HSTS)
 # KEPUTUSAN TEKNIS: 1 tahun + includeSubDomains + preload
@@ -67,14 +83,14 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ⚙️ KONFIGURASI: Disable debug toolbar
-if "debug_toolbar" in INSTALLED_APPS:  # noqa: F405
-    INSTALLED_APPS.remove("debug_toolbar")  # noqa: F405
-if "debug_toolbar.middleware.DebugToolbarMiddleware" in MIDDLEWARE:  # noqa: F405
-    MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")  # noqa: F405
+if "debug_toolbar" in INSTALLED_APPS:
+    INSTALLED_APPS.remove("debug_toolbar")
+if "debug_toolbar.middleware.DebugToolbarMiddleware" in MIDDLEWARE:
+    MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 # Log level di production — hanya ERROR dan WARNING
-LOGGING["loggers"]["django"]["level"] = "WARNING"  # noqa: F405
-LOGGING["loggers"]["apps"]["level"] = "WARNING"  # noqa: F405
-LOGGING["handlers"]["console"]["level"] = "WARNING"  # noqa: F405
+LOGGING["loggers"]["django"]["level"] = "WARNING"
+LOGGING["loggers"]["apps"]["level"] = "WARNING"
+LOGGING["handlers"]["console"]["level"] = "WARNING"
 
 print("[OK] Production settings loaded (DEBUG=False, security headers active)")

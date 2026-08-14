@@ -29,3 +29,36 @@ A: Ini adalah fitur keamanan dari `ForceChangePasswordMiddleware`. Pengguna baru
 
 **Q: Apakah semua kolom tambahan (misalnya departemen atau jabatan) dari CSV akan disimpan?**
 A: Ya. Semua kolom yang tidak standar pada `User` akan disimpan secara otomatis ke dalam kolom JSON `extra_data` di profil pengguna.
+
+**Q: Mengapa AI/LLM lain kadang menilai proyek ini memiliki banyak sintaks/tag yang rusak?**
+A: Banyak LLM hanya dilatih pada Django klasik dengan sintaks `{% block %}` dan berasumsi bahwa tag seperti `<c-rdp.button>` atau `<c-layout.base>` adalah tag HTML yang tidak valid. RDP Starter Kit menggunakan `django-cotton` sebagai framework komponen modern, di mana tag `<c-...>` dikompilasi secara otomatis oleh engine Cotton.
+
+**Q: Mengapa pengujian form HTMX menghasilkan status HTTP 422? Apakah itu bug?**
+A: Bukan. Mengembalikan status HTTP 422 (Unprocessable Entity) saat terjadi kegagalan validasi form adalah standar arsitektur HTMX. Status ini memberitahu HTMX agar menukar potongan HTML pesan error tanpa melakukan reload halaman penuh.
+
+**Q: Bagaimana cara termudah menginstal project ini sebagai service di server Linux VPS?**
+A: Anda cukup menjalankan skrip `./scripts/install_service.sh` atau via menu `./bin/deploy.sh` (pilih Opsi 6). Skrip akan otomatis mengonfigurasi Gunicorn systemd service, Nginx reverse proxy, dan SSL gratis dari Let's Encrypt / Certbot.
+
+**Q: Bagaimana cara memperbarui kode di server production tanpa repot?**
+A: Gunakan skrip `./scripts/deploy_prod.sh <nama_service>` atau via menu `./bin/deploy.sh` (pilih Opsi 7). Skrip ini otomatis menjalankan `git pull`, `uv sync --no-dev`, `python manage.py migrate`, `collectstatic`, dan me-restart Gunicorn daemon.
+
+**Q: Apakah sertifikat SSL Let's Encrypt akan otomatis diperpanjang (auto-renew)?**
+A: Ya. Certbot secara otomatis mendaftarkan timer systemd (`certbot.timer`) saat instalasi yang memeriksa dan memperpanjang masa berlaku sertifikat SSL setiap 60 hari.
+
+**Q: Apakah Docker Compose standar dan layak untuk digunakan di server Production?**
+A: **Ya, sangat standar dan banyak digunakan di industri** untuk deployment skala single-server/VPS. Docker Compose di production memberikan keunggulan isolasi proses, konsistensi lingkungan (dev ↔ prod), dan kemudahan migrasi server. Namun, pastikan menggunakan konfigurasi khusus production (`docker-compose.prod.yml`) yang menggunakan image immutable (bukan bind-mount source code), WSGI server (Gunicorn), `DEBUG=False`, restart policy (`restart: unless-stopped`), dan reverse proxy Nginx untuk melayani static/media files.
+
+**Q: Apakah aplikasi Django Monolith bisa dideploy ke Kubernetes (K8s)? Bagaimana dengan databasenya?**
+A: **Bisa 100% dan sangat lazim.** Perusahaan raksasa seperti Instagram dan Sentry menjalankan Django monolith di Kubernetes. Caranya adalah memecah proses dari image yang sama menjadi Pod Web (stateless autoscaling) dan Pod Celery Worker/Beat. Database PostgreSQL dan media uploads (S3) **wajib berada di luar Pod (Managed Services)** agar data tidak hilang saat Pod berganti node. Migrasi dijalankan sekali per deployment menggunakan Kubernetes `Job`.
+
+**Q: Bagaimana RDP CLI mengenali bahwa suatu project adalah project RDP? Apakah bisa digunakan pada project Django lama (existing)?**
+A: RDP CLI menggunakan sistem signature bertingkat: pertama membaca file manifest `rdp.json`, kedua memeriksa `[tool.rdp]` di `pyproject.toml`, dan ketiga fallback ke struktur folder `apps/` & `config/version.json` (untuk proyek versi lama). Perintah pintasan dasar (`rdp runserver`, `rdp migrate`, `rdp shell`) dapat berjalan di project Django standar mana pun. Namun, perintah generator (`rdp new app`, `rdp new crud`, `rdp make`) mengasumsikan konvensi RDP (struktur package per fungsi dan pustaka `django-cotton`).
+
+**Q: Mengapa proyek RDP menggunakan file signature `rdp.json` daripada sekadar menebak struktur folder?**
+A: Menggunakan file signature `rdp.json` (mirip `angular.json` atau `next.config.js`) memberikan kepastian deterministik tanpa menebak struktur, menyimpan versi skema framework yang digunakan, memungkinkan kustomisasi path (`apps_dir`, `settings_file`), dan tetap menjaga kompatibilitas mundur (*backward compatibility*) penuh dengan proyek RDP versi terdahulu melalui mekanisme fallback otomatis.
+
+
+
+
+
+

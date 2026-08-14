@@ -1,9 +1,9 @@
 from django import template
-from django.contrib.auth.models import Group
 
 register = template.Library()
 
-@register.filter(name='has_group')
+
+@register.filter(name="has_group")
 def has_group(user, group_name):
     """
     Check if the user belongs to a specific group.
@@ -13,5 +13,5 @@ def has_group(user, group_name):
         return False
     if user.is_superuser:
         return True
-        
+
     return user.groups.filter(name=group_name).exists()

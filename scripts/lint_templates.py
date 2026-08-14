@@ -111,7 +111,7 @@ def check_css_file(filepath):
     return violations
 
 
-def main():  # noqa: C901
+def main():
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     templates_dir = os.path.join(root_dir, "templates")
     css_dir = os.path.join(root_dir, "static", "css")

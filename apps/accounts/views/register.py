@@ -89,6 +89,7 @@ def register_wizard(request):
     # KEPUTUSAN TEKNIS: Jika registrasi dinonaktifkan di .env, redirect ke login
     if not getattr(settings, "ENABLE_USER_REGISTRATION", True):
         from django.contrib import messages
+
         messages.error(request, "Pendaftaran akun baru saat ini ditutup.")
         return redirect("accounts:login")
 

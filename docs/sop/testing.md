@@ -31,3 +31,9 @@ uv run pytest
 uv run pytest --cov=apps -v
 ```
 Jika ada tes yang gagal, perbaiki masalah tersebut terlebih dahulu sebelum melanjutkan proses development atau pembuatan Pull Request.
+
+---
+
+## 5. Referensi Tambahan
+- Untuk panduan lengkap audit bug, false-positive detection, dan protokol diagnosa multi-lapis, lihat [Bug Audit & Quality Assurance](file:///docs/testing/bug-audit-and-quality-assurance.md).
+
