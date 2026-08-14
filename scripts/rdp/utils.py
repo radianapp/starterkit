@@ -258,6 +258,8 @@ PENGGUNAAN:
   rdp plugin install <nama>   (Visi) Sistem manajemen plugin
   rdp build-demo              Membuat demo lengkap (app inventory beserta isinya)
   rdp update                  Memperbarui proyek saat ini dengan versi template terbaru
+  rdp info                    Menampilkan informasi proyek RDP dan versinya
+  rdp init                    Mengonversi proyek Django lama menjadi proyek RDP Starter Kit
   rdp runserver (atau r)      Menjalankan Django dev server (uv run manage.py runserver)
   rdp migrate (atau m)        Menjalankan migrasi database (uv run manage.py migrate)
   rdp makemigrations (atau mm) Membuat file migrasi baru (uv run manage.py makemigrations)
@@ -271,14 +273,18 @@ CONTOH:
   rdp new portal-analytic
   rdp new app products
   rdp new crud produk -a inventory
-  rdp new page list -a inventory --model Produk
-  rdp r
-  rdp update
+  rdp info
+  rdp init
 
 PRASYARAT:
   - Berada di dalam direktori proyek RDP untuk perintah runserver, migrate, dll.
   - Git (https://git-scm.com) harus terinstal
   - Koneksi internet untuk mengunduh template dari GitHub (rdp new)
+
+MIGRASI PROYEK LAMA:
+  Untuk mengintegrasikan proyek Django lama (atau yang tidak di-generate via RDP) 
+  agar bisa menggunakan generator RDP, jalankan perintah: rdp init
+  Perintah ini akan membuat penanda 'rdp.json' di root proyek Anda.
 """)
 
 

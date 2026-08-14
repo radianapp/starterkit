@@ -694,3 +694,56 @@ def run_update(args):
     print(
         "Pastikan untuk mengecek perubahan, menjalankan `uv sync`, dan `python manage.py migrate` jika diperlukan."
     )
+import os
+import json
+from ..utils import get_project_manifest, is_rdp_project
+
+def run_info(args: list[str]):
+    """Menampilkan informasi apakah proyek ini dikenali sebagai proyek RDP."""
+    manifest = get_project_manifest()
+    if manifest:
+        print("\n[OK] Proyek ini dikenali sebagai Proyek RDP Starter Kit.")
+        print("-" * 40)
+        print(f"  Tipe Proyek  : {manifest.get('project_type', 'rdp-starter-kit')}")
+        
+        # Ambil versi dari manifest, atau fallback ke baca pyproject.toml / config/version.json
+        version = manifest.get("framework_version", "Tidak diketahui")
+        print(f"  Versi RDP    : {version}")
+        print(f"  Terdeteksi via: {manifest.get('_source', 'Unknown')}")
+        print("-" * 40)
+    else:
+        print("\n[INFO] Proyek ini BUKAN proyek RDP Starter Kit atau belum diinisialisasi.")
+        print("  Untuk mengubah proyek Django biasa menjadi RDP, jalankan: rdp init\n")
+
+def run_init(args: list[str]):
+    """Menginisialisasi proyek Django yang sudah ada menjadi proyek RDP."""
+    if is_rdp_project():
+        print("\n[INFO] Proyek ini sudah merupakan proyek RDP Starter Kit.")
+        return
+
+    print("\nMenginisialisasi proyek RDP Starter Kit...")
+    
+    # Deteksi apps_dir (default "apps")
+    apps_dir = "apps"
+    if not os.path.exists("apps"):
+        print("  [WARNING] Folder 'apps' tidak ditemukan. Pastikan Anda berada di root proyek Django.")
+    
+    # Coba tambahkan rdp.json sebagai marker proyek
+    manifest = {
+        "project_type": "rdp-starter-kit",
+        "schema_version": 1,
+        "framework_version": "0.6.0",
+        "config": {
+            "apps_dir": apps_dir,
+            "settings_file": "config/settings/base.py",
+            "urls_file": "config/urls.py"
+        }
+    }
+    
+    try:
+        with open("rdp.json", "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=4)
+        print("\n[OK] File rdp.json berhasil dibuat!")
+        print("Sekarang Anda dapat menggunakan perintah generator RDP (seperti `rdp new app`, `rdp new crud`, dll) di proyek ini.")
+    except Exception as e:
+        print(f"\n[ERROR] Gagal membuat rdp.json: {e}")

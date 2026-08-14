@@ -82,7 +82,7 @@ from scripts.rdp.ops.build import (
 )
 
 # ── Operasi project ──────────────────────────────────────────────────────────
-from scripts.rdp.ops.project import run_new, run_update
+from scripts.rdp.ops.project import run_new, run_update, run_info, run_init
 
 # ── Operasi upgrade ───────────────────────────────────────────────────────────
 from scripts.rdp.ops.upgrade import run_ai, run_monitor, run_plugin, run_upgrade, run_upgrade_cli
@@ -191,6 +191,10 @@ def main():
         run_django_cmd("generate_erd", args[1:])
     elif args[0] == "update":
         run_update(args[1:])
+    elif args[0] == "info":
+        run_info(args[1:])
+    elif args[0] == "init":
+        run_init(args[1:])
     elif args[0] in ("runserver", "r"):
         run_django_cmd("runserver", args[1:])
     elif args[0] in ("migrate", "m"):
