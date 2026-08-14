@@ -1,6 +1,6 @@
 [project]
 name = "rdp-starter-kit"
-version = "0.6.0"
+version = "0.6.1"
 description = "Production-ready Django starter template for Radian Data Platform (RDP)"
 requires-python = ">=3.11"
 license = "MIT"
@@ -148,7 +148,7 @@ include = ["scripts*", "config*", "apps*"]
 [tool.rdp]
 project_type = "rdp-starter-kit"
 schema_version = 1
-framework_version = "0.6.0"
+framework_version = "0.6.1"
 apps_dir = "apps"
 settings_file = "config/settings/base.py"
 urls_file = "config/urls.py"
