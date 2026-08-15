@@ -61,6 +61,23 @@ services:
       - db
       - redis
 
+  # 3.5. Flower (Celery Monitoring)
+  flower:
+    build:
+      context: .
+      target: runtime
+    restart: unless-stopped
+    command: celery -A config flower
+    env_file: .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - db
+      - celery_worker
+
   # 4. Database PostgreSQL
   db:
     image: postgres:16-alpine

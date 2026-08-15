@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RDP Project Manifest Schema",
+  "description": "JSON Schema untuk memvalidasi berkas konfigurasi rdp.json pada proyek Radian Data Platform (RDP)",
+  "type": "object",
+  "required": ["project_type", "schema_version", "framework_version", "config"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "project_type": {
+      "type": "string",
+      "enum": ["rdp-starter-kit"],
+      "description": "Tipe proyek RDP, misalnya rdp-starter-kit"
+    },
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Versi skema dari berkas manifest ini"
+    },
+    "framework_version": {
+      "type": "string",
+      "description": "Versi framework RDP Starter Kit yang digunakan"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nama proyek RDP"
+    },
+    "config": {
+      "type": "object",
+      "required": ["apps_dir", "settings_file", "urls_file"],
+      "properties": {
+        "apps_dir": {
+          "type": "string",
+          "default": "apps",
+          "description": "Direktori tempat menyimpan aplikasi Django kustom"
+        },
+        "settings_module": {
+          "type": "string",
+          "default": "config.settings.dev",
+          "description": "Module path untuk Django settings"
+        },
+        "settings_file": {
+          "type": "string",
+          "default": "config/settings/base.py",
+          "description": "Lokasi file konfigurasi dasar Django"
+        },
+        "urls_file": {
+          "type": "string",
+          "default": "config/urls.py",
+          "description": "Lokasi file konfigurasi URL Django root"
+        },
+        "templates_dir": {
+          "type": "string",
+          "default": "templates",
+          "description": "Direktori templates global proyek"
+        },
+        "cotton_dir": {
+          "type": "string",
+          "default": "templates/cotton/rdp",
+          "description": "Direktori penyimpanan komponen Django-Cotton RDP"
+        }
+      },
+      "additionalProperties": false
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "auth",
+          "tenants",
+          "cotton",
+          "htmx",
+          "pico-rdp-ui",
+          "celery",
+          "webauthn",
+          "audit-security",
+          "telemetry",
+          "erd"
+        ]
+      },
+      "description": "Fitur-fitur opsional atau modul bawaan RDP yang aktif di proyek"
+    }
+  },
+  "additionalProperties": false
+}

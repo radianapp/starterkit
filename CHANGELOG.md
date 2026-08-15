@@ -9,6 +9,15 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.6.2] — 2026-08-15
+
+### Fixed
+- **US-011 (UI Component):** Memperbaiki bug layering (z-index) pada komponen modal (`.rdp-modal-backdrop`) yang sebelumnya tertimpa oleh sidebar karena z-index backdrop lebih rendah dari sidebar.
+
+### Changed
+- **CLI rdp new**: Mengosongkan berkas `STATUS.md` (serta `Status.md` jika ada) secara otomatis saat melakukan bootstrap proyek baru agar proyek baru dimulai dengan status kosong.
+- **CLI rdp new**: Menghapus direktori template opsional (`templates/apps/inventory`, `templates/apps/test_app`, dan `templates/inventory`) secara otomatis jika demo pages dinonaktifkan.
+
 ## [0.5.0] — 2026-08-14
 
 ### Added

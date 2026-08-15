@@ -2308,7 +2308,7 @@ h6 { font-size: var(--rdp-size-h6); font-weight: var(--rdp-weight-semibold); tex
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-  z-index: 50;
+  z-index: var(--rdp-z-modal);
   display: flex;
   align-items: center;
   justify-content: center;

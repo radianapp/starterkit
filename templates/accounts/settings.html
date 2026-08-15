@@ -66,6 +66,41 @@
                         </div>
                     </div>
 
+                    <!-- Bagian: Notifikasi -->
+                    <div id="notifikasi" class="settings-card" style="margin-top: 24px;">
+                        <h3 style="font-size:15px; font-weight:600; margin-bottom:16px">Notifikasi</h3>
+
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px">
+                            <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                                <input type="checkbox" name="notify_email" checked disabled>
+                                <span>Kirim Notifikasi via Email</span>
+                            </label>
+                            <span style="font-size:12px; color:var(--rdp-text-muted); margin-left:22px;">Terima pembaruan penting dan ringkasan aktivitas melalui email. (Segera hadir)</span>
+                        </div>
+                    </div>
+
+                    <!-- Bagian: Bahasa & Wilayah -->
+                    <div id="bahasa" class="settings-card" style="margin-top: 24px; margin-bottom: 24px;">
+                        <h3 style="font-size:15px; font-weight:600; margin-bottom:16px">Bahasa & Wilayah</h3>
+
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:20px">
+                            <label style="font-size:13px; font-weight:600">Bahasa</label>
+                            <select name="language" class="rdp-input" style="max-width:300px" disabled>
+                                <option value="id" selected>Bahasa Indonesia</option>
+                                <option value="en">English (US)</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display:flex; flex-direction:column; gap:6px">
+                            <label style="font-size:13px; font-weight:600">Zona Waktu</label>
+                            <select name="timezone" class="rdp-input" style="max-width:300px" disabled>
+                                <option value="Asia/Jakarta" selected>(UTC+07:00) Waktu Indonesia Barat (WIB)</option>
+                                <option value="Asia/Makassar">(UTC+08:00) Waktu Indonesia Tengah (WITA)</option>
+                                <option value="Asia/Jayapura">(UTC+09:00) Waktu Indonesia Timur (WIT)</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div style="display:flex; justify-content:flex-end">
                         <button type="submit" class="rdp-btn rdp-btn--primary">Simpan Pengaturan</button>
                     </div>

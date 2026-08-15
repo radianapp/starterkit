@@ -24,7 +24,7 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                     {% url 'dashboard:index' as dash_url %}{% url 'home' as home_url %}
                     <div class="rdp-sidebar__brand-wrapper" style="padding: 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--rdp-border);">
                         <a href="{{ dash_url|default:home_url|default:'/' }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--rdp-text);">
-                            <span style="width: 28px; height: 28px; border-radius: 6px; background: var(--rdp-primary, #15654E); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px;">P</span>
+                            <span style="width: 28px; height: 28px; border-radius: 6px; background: var(--rdp-primary, #15654E); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px;">{{ navbar_brand|default:APP_BRAND_SHORT|default:'ProductOS'|slice:':1'|upper }}</span>
                             <span style="font-weight: 700; font-size: 16px; letter-spacing: -0.01em; color: var(--rdp-text);">{{ navbar_brand|default:APP_BRAND_SHORT|default:'ProductOS' }}</span>
                         </a>
                     </div>
@@ -138,7 +138,6 @@ TUJUAN: Shell utama aplikasi internal dengan topbar, sidebar warm neutral, main 
                             <button title="Notifikasi" @click="open = !open"
                                     class="rdp-btn rdp-btn--ghost rdp-btn--icon rdp-btn--sm" style="width: 34px; height: 34px; position: relative; color: var(--rdp-text);">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
-                                <span style="position: absolute; top: 1px; right: 1px; min-width: 15px; height: 15px; border-radius: 8px; background: var(--rdp-danger, #B3382D); color: #fff; font-size: 9.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px; box-sizing: border-box;">3</span>
                             </button>
                             <div x-show="open" x-cloak class="app-navbar-dropdown" style="min-width: 300px; padding: 0; right: 0; left: auto;">
                                 <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--rdp-border);">

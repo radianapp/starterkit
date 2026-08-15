@@ -7,12 +7,12 @@ TUJUAN: Override production settings dengan setup yang cocok untuk development l
 
 from .base import *  # noqa: F403
 
-RDP_DEBUG_OVERLAY = env_var("RDP_DEBUG_OVERLAY", "True").lower() in ("true", "1", "yes")
+RDP_DEBUG_OVERLAY = env.bool("RDP_DEBUG_OVERLAY", default=True)
 
 # KEPUTUSAN TEKNIS: RDP_UI_SELF_HOST dibaca dari .env, tidak di-hardcode
 # ALASAN: dev perlu bisa test CDN (False) maupun local (True) sesuai kebutuhan
 # ALTERNATIF: hardcode True hanya saat develop rdp-ui framework itu sendiri
-RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")
+RDP_UI_SELF_HOST = env.bool("RDP_UI_SELF_HOST", default=False)
 
 DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]

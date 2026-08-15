@@ -6,6 +6,7 @@
 .claude/
 .github/
 test-project-*
+test_output*
 
 # Python
 __pycache__/

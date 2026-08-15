@@ -19,17 +19,17 @@ Security headers dikonfigurasi via Django built-in settings:
 from .base import *  # noqa: F403
 
 DEBUG = False
-ALLOWED_HOSTS = env_var("ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost"])
 
 # ⚙️ KONFIGURASI: HTTPS redirect + cookie security
 # Referensi: https://docs.djangoproject.com/en/stable/ref/settings/#security
-SECURE_SSL_REDIRECT = env_var("SECURE_SSL_REDIRECT", "True").lower() in ("true", "1", "yes")
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=True)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ⚙️ KONFIGURASI: CSRF Trusted Origins (Wajib untuk Django 4/5 di balik HTTPS reverse proxy)
-_csrf_origins_raw = env_var("CSRF_TRUSTED_ORIGINS", "")
+_csrf_origins_raw = env("CSRF_TRUSTED_ORIGINS", default="")
 if _csrf_origins_raw:
     CSRF_TRUSTED_ORIGINS = [
         origin.strip() for origin in _csrf_origins_raw.split(",") if origin.strip()
@@ -94,3 +94,33 @@ LOGGING["loggers"]["apps"]["level"] = "WARNING"
 LOGGING["handlers"]["console"]["level"] = "WARNING"
 
 print("[OK] Production settings loaded (DEBUG=False, security headers active)")
+
+# ⚙️ KONFIGURASI: Sentry (Error Tracking)
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+
+SENTRY_DSN = env("SENTRY_DSN", default="")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[
+            DjangoIntegration(),
+            CeleryIntegration(),
+            RedisIntegration(),
+        ],
+        traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=1.0),
+        send_default_pii=True,
+    )
+
+# ⚙️ KONFIGURASI: Content Security Policy (CSP)
+if "csp.middleware.CSPMiddleware" not in MIDDLEWARE:
+    MIDDLEWARE.append("csp.middleware.CSPMiddleware")
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "cdn.radian.web.id", "fonts.googleapis.com")
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "cdn.radian.web.id", "unpkg.com", "challenges.cloudflare.com")
+CSP_FONT_SRC = ("'self'", "fonts.gstatic.com", "cdn.radian.web.id", "data:")
+CSP_IMG_SRC = ("'self'", "data:", "cdn.radian.web.id")
+CSP_FRAME_SRC = ("'self'", "challenges.cloudflare.com")

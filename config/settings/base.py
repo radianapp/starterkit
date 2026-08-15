@@ -18,33 +18,10 @@ import os
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
-from dotenv import load_dotenv
+import environ
 
 # ⚙️ KONFIGURASI: Load .env file
-# Lokasi: root project directory (sejajar manage.py)
-load_dotenv()
-
-
-def env_var(key: str, default=None, required=False):
-    """
-    TUJUAN: Baca variabel environment dengan validation dan error message yang jelas.
-
-    ALUR:
-      1. Ambil nilai dari environment
-      2. Jika tidak ada dan required=True, raise ValueError dengan nama variabel
-      3. Jika tidak ada dan ada default, return default
-      4. Return nilai yang ada
-
-    DIPANGGIL DARI: config/settings/base.py
-    DEPENDENSI: os.environ
-    """
-    value = os.environ.get(key, default)
-    if value is None and required:
-        raise ValueError(
-            f"❌ Environment variable '{key}' is required but not found in .env or environment. "
-            f"Please add it to .env file."
-        )
-    return value
+env = environ.Env()
 
 
 # ⚙️ KONFIGURASI: Build paths di dalam project
@@ -53,25 +30,30 @@ APPS_DIR = BASE_DIR / "apps"
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
+# Read .env file
+_env_file = BASE_DIR / '.env'
+if _env_file.exists():
+    environ.Env.read_env(_env_file)
+
 # ⚙️ KONFIGURASI: Django security dan environment
-SECRET_KEY = env_var("SECRET_KEY", required=True)
-DEBUG = env_var("DEBUG", "False").lower() in ("true", "1", "yes")
-ALLOWED_HOSTS = env_var("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-ENVIRONMENT = env_var("ENVIRONMENT", "development")
-RDP_DEBUG_OVERLAY = env_var("RDP_DEBUG_OVERLAY", str(DEBUG)).lower() in ("true", "1", "yes")
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env.bool("DEBUG", default=False)
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost,127.0.0.1"])
+ENVIRONMENT = env("ENVIRONMENT", default="development")
+RDP_DEBUG_OVERLAY = env.bool("RDP_DEBUG_OVERLAY", default=DEBUG)
 
 # ⚙️ KONFIGURASI: RDP-UI Version and Self-Host
-RDP_UI_VERSION = env_var("RDP_UI_VERSION", "v1.0")
-RDP_UI_SELF_HOST = env_var("RDP_UI_SELF_HOST", "False").lower() in ("true", "1", "yes")
-RDP_APP_ACCENT = env_var("RDP_APP_ACCENT", "navy")
-RDP_MULTI_TENANCY_ENABLED = env_var("RDP_MULTI_TENANCY_ENABLED", "False").lower() in (
+RDP_UI_VERSION = env("RDP_UI_VERSION", default="v1.0")
+RDP_UI_SELF_HOST = env.bool("RDP_UI_SELF_HOST", default=False)
+RDP_APP_ACCENT = env("RDP_APP_ACCENT", default="navy")
+RDP_MULTI_TENANCY_ENABLED = env("RDP_MULTI_TENANCY_ENABLED", default="False").lower() in (
     "true",
     "1",
     "yes",
 )
 
 # ⚙️ KONFIGURASI: Framework & App Versions
-FRAMEWORK_VERSION = env_var("FRAMEWORK_VERSION", "0.3.0")
+FRAMEWORK_VERSION = env("FRAMEWORK_VERSION", default="0.3.0")
 
 _version_file = BASE_DIR / "config" / "version.json"
 LOCAL_APP_VERSION = "1.0.0"
@@ -92,106 +74,52 @@ if _version_file.exists():
 
 
 # ⚙️ KONFIGURASI: White label — brand bisa dikustom via .env
-SITE_NAME = env_var("SITE_NAME", "RDP Starter Kit")
-COMPANY_NAME = env_var("COMPANY_NAME", "Radian Data Platform")
-APP_BRAND_SHORT = env_var("APP_BRAND_SHORT", "RDP")
-COPYRIGHT_YEAR = env_var("COPYRIGHT_YEAR", "2026")
+SITE_NAME = env("SITE_NAME", default="RDP Starter Kit")
+COMPANY_NAME = env("COMPANY_NAME", default="Radian Data Platform")
+APP_BRAND_SHORT = env("APP_BRAND_SHORT", default="RDP")
+COPYRIGHT_YEAR = env("COPYRIGHT_YEAR", default="2026")
 
 # ⚙️ KONFIGURASI: Database
 DEFAULT_DB_ENGINE = "django.db.backends.sqlite3" if DEBUG else "django.db.backends.postgresql"
-DATABASE_URL = env_var(
-    "DATABASE_URL",
-    "sqlite:///db.sqlite3" if DEBUG else None,
-    required=not DEBUG,
-)
-
-# KEPUTUSAN TEKNIS: Parse DATABASE_URL untuk Django database config
-# ALASAN: DATABASE_URL lebih mudah di-manage di environment daripada DATABASES dict terpisah
-# ALTERNATIF: Bisa pakai dj-database-url library untuk parsing yang lebih robust
-if DATABASE_URL.startswith("sqlite"):
-    db_path = DATABASE_URL.replace("sqlite:///", "")
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / (db_path or "db.sqlite3"),
-        }
-    }
-else:
-    # PostgreSQL format: postgresql://user:password@host:port/dbname
-    import re
-
-    match = re.match(
-        r"postgresql://(?:(\w+):(\w+)@)?([a-z0-9.-]+):(\d+)/([a-z0-9_-]+)",
-        DATABASE_URL,
-    )
-    if not match:
-        raise ValueError(
-            "❌ Invalid DATABASE_URL format. Expected: "
-            "postgresql://user:password@host:port/dbname or sqlite:///path/to/db.sqlite3"
-        )
-    user, password, host, port, dbname = match.groups()
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": dbname,
-            "USER": user or "postgres",
-            "PASSWORD": password or "",
-            "HOST": host,
-            "PORT": port or "5432",
-            "CONN_MAX_AGE": 600,  # Persistent connection pool
-        }
-    }
+DATABASES = {
+    "default": env.db("DATABASE_URL", default="sqlite:///" + str(BASE_DIR / "db.sqlite3"))
+}
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=600)
 
 # ⚙️ KONFIGURASI: Cache backend
-CACHE_URL = env_var("CACHE_URL", "locmem://")
-# KEPUTUSAN TEKNIS: Gunakan locmem:// default untuk development
-# ALASAN: Tidak perlu install Redis untuk development awal
-# ALTERNATIF: redis://localhost:6379/0 untuk production
-if CACHE_URL.startswith("redis"):
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": CACHE_URL,
-            "OPTIONS": {
-                "CLIENT_CLASS": "redis.StrictRedis",
-            },
-            "KEY_PREFIX": "rdp_starter",
-            "TIMEOUT": 300,
-        }
-    }
-else:  # locmem://
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            "LOCATION": "rdp-starter-locmem",
-            "OPTIONS": {
-                "MAX_ENTRIES": 1000,
-            },
-            "TIMEOUT": 300,
-        }
-    }
+CACHES = {
+    "default": env.cache("CACHE_URL", default="locmemcache://rdp-starter-locmem")
+}
+
 
 # ⚙️ KONFIGURASI: Email backend
-EMAIL_BACKEND = env_var("EMAIL_BACKEND", "console")
-EMAIL_HOST = env_var("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(env_var("EMAIL_PORT", "587"))
-EMAIL_USE_TLS = env_var("EMAIL_USE_TLS", "True").lower() in ("true", "1", "yes")
-EMAIL_HOST_USER = env_var("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = env_var("EMAIL_HOST_PASSWORD", "")
-DEFAULT_FROM_EMAIL = env_var("DEFAULT_FROM_EMAIL", "noreply@radianapp.com")
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@radianapp.com")
 
-# KEPUTUSAN TEKNIS: Support 3 email backend dengan env variable
-# ALASAN: Console untuk dev, Mailpit untuk test HTML, SMTP untuk production
-# ALTERNATIF: Hardcode ke 1 backend saja (kurang flexible)
-if EMAIL_BACKEND == "smtp":
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# KEPUTUSAN TEKNIS: Integrasi django-anymail
+ANYMAIL_PROVIDER = env("ANYMAIL_PROVIDER", default="")
+if ANYMAIL_PROVIDER:
+    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend" if ANYMAIL_PROVIDER == "mailgun" else f"anymail.backends.{ANYMAIL_PROVIDER}.EmailBackend"
+    ANYMAIL = {
+        "MAILGUN_API_KEY": env("MAILGUN_API_KEY", default=""),
+        "MAILGUN_SENDER_DOMAIN": env("MAILGUN_SENDER_DOMAIN", default=""),
+        "SENDGRID_API_KEY": env("SENDGRID_API_KEY", default=""),
+        "RESEND_API_KEY": env("RESEND_API_KEY", default=""),
+    }
 elif EMAIL_BACKEND == "mailpit":
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = "localhost"
     EMAIL_PORT = 1025
     EMAIL_USE_TLS = False
-else:  # console
+elif EMAIL_BACKEND == "console":
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+elif EMAIL_BACKEND == "smtp":
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # Application definition
 DJANGO_APPS = [
@@ -212,6 +140,8 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "storages",
     "simple_history",
+    "anymail",
+    "django_celery_beat",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -324,24 +254,24 @@ JAZZMIN_UI_TWEAKS = {
 # Format JSON: [{"key":"org","label":"Organisasi","type":"text","required":true}]
 # Tipe field: text, email, select (butuh "choices": [...]), textarea
 # Default kosong = wizard hanya email + password
-REGISTRATION_STEPS = json.loads(env_var("REGISTRATION_STEPS", "[]"))
+REGISTRATION_STEPS = json.loads(env("REGISTRATION_STEPS", default="[]"))
 
 # ⚙️ KONFIGURASI: US-008 — Wajib verifikasi email sebelum akses penuh
 # False = user bisa langsung akses semua fitur walau belum verify
 # True  = user diarahkan ke halaman "cek email" jika belum verify
-REQUIRE_EMAIL_VERIFICATION = env_var("REQUIRE_EMAIL_VERIFICATION", "False").lower() == "true"
+REQUIRE_EMAIL_VERIFICATION = env("REQUIRE_EMAIL_VERIFICATION", default="False").lower() == "true"
 
 # ⚙️ KONFIGURASI: Auth & Registration Features
-ENABLE_USER_REGISTRATION = env_var("ENABLE_USER_REGISTRATION", "True").lower() in (
+ENABLE_USER_REGISTRATION = env("ENABLE_USER_REGISTRATION", default="True").lower() in (
     "true",
     "1",
     "yes",
 )
-ENABLE_GOOGLE_AUTH = env_var("ENABLE_GOOGLE_AUTH", "False").lower() in ("true", "1", "yes")
+ENABLE_GOOGLE_AUTH = env.bool("ENABLE_GOOGLE_AUTH", default=False)
 
 # ⚙️ KONFIGURASI: Domain Whitelist untuk Registrasi
 # Kosongkan list untuk mengizinkan semua domain
-_allowed_domains_env = env_var("ALLOWED_EMAIL_DOMAINS", "")
+_allowed_domains_env = env("ALLOWED_EMAIL_DOMAINS", default="")
 ALLOWED_EMAIL_DOMAINS = [
     domain.strip().lower() for domain in _allowed_domains_env.split(",") if domain.strip()
 ]
@@ -351,7 +281,7 @@ ALLOWED_EMAIL_DOMAINS = [
 ACCOUNT_ADAPTER = "apps.accounts.adapters.DomainRestrictAdapter"
 
 # ⚙️ KONFIGURASI: Audit Trail
-ENABLE_AUDIT_TRAIL = env_var("ENABLE_AUDIT_TRAIL", "True").lower() in ("true", "1", "yes")
+ENABLE_AUDIT_TRAIL = env.bool("ENABLE_AUDIT_TRAIL", default=True)
 
 # ⚙️ KONFIGURASI: Auth URL — @login_required redirect ke sini
 LOGIN_URL = "/accounts/login/"
@@ -364,8 +294,8 @@ ACCOUNT_EMAIL_VERIFICATION = "none"  # RDP menggunakan logic verifikasi kustom
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
-            "client_id": env_var("GOOGLE_CLIENT_ID", ""),
-            "secret": env_var("GOOGLE_CLIENT_SECRET", ""),
+            "client_id": env("GOOGLE_CLIENT_ID", default=""),
+            "secret": env("GOOGLE_CLIENT_SECRET", default=""),
             "key": "",
         },
         "SCOPE": [
@@ -521,7 +451,7 @@ LOGGING = {
 }
 
 # ⚙️ KONFIGURASI: CORS
-cors_origins = env_var("CORS_ALLOWED_ORIGINS", "")
+cors_origins = env("CORS_ALLOWED_ORIGINS", default="")
 CORS_ALLOWED_ORIGINS = [o.strip() for o in cors_origins.split(",") if o.strip()]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -554,8 +484,8 @@ SPECTACULAR_SETTINGS = {
 
 # ⚙️ KONFIGURASI: Celery
 # KEPUTUSAN TEKNIS: Redis sebagai broker dan result backend.
-CELERY_BROKER_URL = env_var("CELERY_BROKER_URL", "redis://localhost:6379/1")
-CELERY_RESULT_BACKEND = env_var("CELERY_RESULT_BACKEND", "redis://localhost:6379/2")
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/1")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="redis://localhost:6379/2")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
@@ -567,25 +497,21 @@ COTTON_COMPONENTS_DIR = "templates/cotton"
 logger = logging.getLogger(__name__)
 
 # ⚙️ KONFIGURASI: Cloud Storage (S3 / MinIO)
-USE_S3 = env_var("USE_S3", "False").lower() in ("true", "1", "yes")
+USE_S3 = env.bool("USE_S3", default=False)
 if USE_S3:
     # Konfigurasi django-storages
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_ACCESS_KEY_ID = env_var("AWS_ACCESS_KEY_ID", "")
-    AWS_SECRET_ACCESS_KEY = env_var("AWS_SECRET_ACCESS_KEY", "")
-    AWS_STORAGE_BUCKET_NAME = env_var("AWS_STORAGE_BUCKET_NAME", "")
-    AWS_S3_ENDPOINT_URL = env_var("AWS_S3_ENDPOINT_URL", None)  # Untuk MinIO/R2
-    AWS_S3_REGION_NAME = env_var("AWS_S3_REGION_NAME", None)
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default="")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default="")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME", default="")
+    AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL", default=None)  # Untuk MinIO/R2
+    AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default=None)
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    AWS_S3_VERIFY = env_var("AWS_S3_VERIFY", "True").lower() in (
-        "true",
-        "1",
-        "yes",
-    )  # Set False jika pakai MinIO localhost tanpa SSL
+    AWS_S3_VERIFY = env.bool("AWS_S3_VERIFY", default=True)  # Set False jika pakai MinIO localhost tanpa SSL
 
 # ⚙️ KONFIGURASI: Cloudflare Turnstile (CAPTCHA)
-TURNSTILE_ENABLED = env_var("TURNSTILE_ENABLED", "False").lower() in ("true", "1", "yes")
+TURNSTILE_ENABLED = env.bool("TURNSTILE_ENABLED", default=False)
 # Default keys provided are dummy keys for testing that always pass
-TURNSTILE_SITE_KEY = env_var("TURNSTILE_SITE_KEY", "1x00000000000000000000AA")
-TURNSTILE_SECRET_KEY = env_var("TURNSTILE_SECRET_KEY", "1x0000000000000000000000000000000AA")
+TURNSTILE_SITE_KEY = env("TURNSTILE_SITE_KEY", default="1x00000000000000000000AA")
+TURNSTILE_SECRET_KEY = env("TURNSTILE_SECRET_KEY", default="1x0000000000000000000000000000000AA")

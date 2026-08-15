@@ -323,6 +323,34 @@ Proyek ini memiliki **komponen Cotton kustom** yang sudah dibuat dan terdokument
 
 ---
 
+## Penggunaan RDP CLI (Wajib)
+
+AI Assistant **wajib** selalu memprioritaskan RDP CLI (`uv run rdp <perintah>` atau `rdp <perintah>`) untuk tugas-tugas development, generator kode, manajemen database, dan menjalankan server. Hindari memanggil `python manage.py` secara langsung kecuali diperintahkan sebaliknya.
+
+**PENTING: Menangani Perintah Interaktif & Parameter**
+Banyak perintah RDP CLI (terutama kelompok `rdp new`) bersifat interaktif dan akan meminta input tambahan. AI Assistant harus mampu beradaptasi:
+1. **Pahami Prompt Interaktif**: Saat menjalankan perintah seperti `uv run rdp new app <nama-app>`, CLI akan menanyakan beberapa opsi (misalnya: apakah membuat template halaman list/detail/form, otomatisasi models/views, dsb). 
+2. **Kirim Input secara Dinamis**: Jika menjalankan CLI yang memicu prompt, baca pertanyaannya dan berikan input yang sesuai konteks pembuatan (bisa menggunakan *tool* interaktif terminal atau `send_input`).
+3. **Gunakan Parameter/Flags**: Jika RDP CLI mendukung penyertaan parameter/flag secara langsung (contoh fiktif: `--with-dashboard` atau `--no-input`), gunakan flag tersebut untuk mempercepat alur dan menghindari blocking prompt.
+
+Daftar perintah RDP CLI utama:
+
+| Tujuan | Perintah RDP CLI | Perintah Django Setara |
+|---|---|---|
+| Menjalankan Dev Server | `uv run rdp runserver` atau `uv run rdp r` | `python manage.py runserver` |
+| Membuat Migrasi Database | `uv run rdp makemigrations` atau `uv run rdp mm` | `python manage.py makemigrations` |
+| Menjalankan Migrasi Database | `uv run rdp migrate` atau `uv run rdp m` | `python manage.py migrate` |
+| Membuat Superuser | `uv run rdp createsuperuser` atau `uv run rdp csu` | `python manage.py createsuperuser` |
+| Membuka Shell Django | `uv run rdp shell` atau `uv run rdp s` | `python manage.py shell` |
+| Linter & Format Kode | `uv run rdp lint` | `ruff check . && ruff format .` |
+| Membuat Aplikasi Django Baru | `uv run rdp new app <nama-app>` | - |
+| Membuat API Baru | `uv run rdp new api <nama-app>` | - |
+| Membuat CRUD Baru | `uv run rdp new crud <app> <model>` | - |
+| Membuat Komponen Cotton Baru | `uv run rdp new component <nama-komponen>` | - |
+| Membuat Dokumen ERD Baru | `uv run rdp erd` atau `uv run rdp generate-erd` | `python manage.py generate_erd` |
+
+---
+
 ## Hal yang Wajib
 - Selalu menggunakan sintak Django-Cotton <c-layout.base with title="Halaman depan">, jangan menggunakan {% %}
 - Selalu memisahkan inline-css ke file stylesheet (css). Misal aplikasi dashboard/, simpan di css/dashboard.css atau menurut fungsi/class yang sedang dikerjakan, misalnya pass CRUD css/dashboard-crud.css.

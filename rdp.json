@@ -1,8 +1,8 @@
 {
-  "$schema": "https://ui.radian.web.id/schemas/rdp-manifest-v1.json",
+  "$schema": "https://starterkit.radian.web.id/schemas/rdp-manifest-v1.json",
   "project_type": "rdp-starter-kit",
   "schema_version": 1,
-  "framework_version": "0.5.0",
+  "framework_version": "0.6.1",
   "name": "rdp-starter-kit",
   "config": {
     "apps_dir": "apps",

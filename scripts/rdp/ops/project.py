@@ -732,7 +732,7 @@ def run_init(args: list[str]):
     manifest = {
         "project_type": "rdp-starter-kit",
         "schema_version": 1,
-        "framework_version": "0.6.0",
+        "framework_version": "0.6.2",
         "config": {
             "apps_dir": apps_dir,
             "settings_file": "config/settings/base.py",
