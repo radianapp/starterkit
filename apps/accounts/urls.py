@@ -38,6 +38,11 @@ urlpatterns = [
     # US-009: Edit profil & avatar
     path("profile/", views.profile_view, name="profile"),
     path("profile/avatar/", views.avatar_upload_view, name="avatar_upload"),
+    # US-043: Two-Factor Authentication (2FA TOTP)
+    path("2fa/setup/", views.totp_setup_view, name="2fa_setup"),
+    path("2fa/backup-codes/", views.totp_backup_codes_view, name="2fa_backup_codes"),
+    path("2fa/disable/", views.totp_disable_view, name="2fa_disable"),
+    path("2fa/verify/", views.totp_verify_login_view, name="2fa_verify"),
     # Settings Global
     path("settings/", views.SettingsView.as_view(), name="settings"),
     # Manajemen Pengguna (SuperAdmin)

@@ -1,0 +1,39 @@
+{# US-043: Partial Form Setup 2FA #}
+<form method="post" action="{% url 'accounts:2fa_setup' %}" id="totp-setup-form" hx-post="{% url 'accounts:2fa_setup' %}" hx-target="#totp-setup-container" hx-swap="outerHTML">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div style="margin-bottom: 14px;">
+            {% for error in form.non_field_errors %}
+                <c-rdp.alert variant="danger">{{ error }}</c-rdp.alert>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label for="{{ form.token.id_for_label }}" style="font-size: 13.5px; font-weight: 600;">
+            {{ form.token.label }}
+        </label>
+        
+        {{ form.token }}
+
+        {% if form.token.errors %}
+            <span style="color: var(--rdp-danger, #e53e3e); font-size: 12px; margin-top: 2px;">
+                {{ form.token.errors.0 }}
+            </span>
+        {% else %}
+            <small style="color: var(--rdp-text-muted); font-size: 11.5px;">
+                {{ form.token.help_text }}
+            </small>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button type="submit" class="settings-btn settings-btn--primary" style="flex: 1;">
+            Verifikasi & Aktifkan 2FA
+        </button>
+        <a href="{% url 'accounts:profile' %}" class="settings-btn" style="text-decoration: none; text-align: center; background: var(--rdp-surface-sunken); color: var(--rdp-text);">
+            Batal
+        </a>
+    </div>
+</form>

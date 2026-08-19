@@ -1,0 +1,73 @@
+{# US-043: Backup / Recovery Codes 2FA #}
+{% load static %}
+<c-layout.app title="Kode Cadangan (Recovery Codes) 2FA">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <main class="settings-content" style="margin: 0 auto; max-width: 620px; width: 100%;">
+        <h1 class="auth-box__title" style="font-size: 22px; margin-bottom: 4px;">Simpan Kode Cadangan Anda</h1>
+        <p class="auth-box__subtitle" style="margin-bottom: 20px;">Simpan kode pemulihan ini di tempat yang aman. Kode ini hanya ditampilkan <strong>satu kali ini saja</strong>.</p>
+
+        <c-rdp.alert variant="warning" style="margin-bottom: 20px;">
+            <strong>Penting:</strong> Jika Anda kehilangan akses ke aplikasi Google Authenticator, Anda dapat menggunakan salah satu dari kode cadangan di bawah ini untuk masuk ke akun Anda. Setiap kode hanya dapat digunakan satu kali.
+        </c-rdp.alert>
+
+        <div class="settings-card">
+            <div style="background: var(--rdp-surface-sunken); padding: 18px; border-radius: 8px; border: 1px solid var(--rdp-border); margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;" id="backup-codes-grid">
+                    {% for code in backup_codes %}
+                        <div style="font-family: monospace; font-size: 15px; font-weight: 700; color: var(--rdp-text); padding: 8px 12px; background: var(--rdp-surface); border: 1px solid var(--rdp-border); border-radius: 6px; text-align: center; letter-spacing: 1px;">
+                            {{ code }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px;">
+                <button type="button" class="settings-btn" style="flex: 1; min-width: 140px;" onclick="copyAllCodes()">
+                    📋 Salin Semua Kode
+                </button>
+                <button type="button" class="settings-btn" style="flex: 1; min-width: 140px;" onclick="downloadCodes()">
+                    💾 Unduh sebagai .TXT
+                </button>
+            </div>
+
+            <a href="{% url 'accounts:profile' %}" class="settings-btn settings-btn--primary" style="display: block; text-decoration: none; text-align: center; width: 100%;">
+                Saya Sudah Menyimpan Kode Ini &rarr; Lanjutkan
+            </a>
+        </div>
+    </main>
+
+    <script>
+        const backupCodesList = [
+            {% for code in backup_codes %}"{{ code }}",{% endfor %}
+        ];
+
+        function copyAllCodes() {
+            const text = "KODE CADANGAN 2FA (RDP):\n" + backupCodesList.join("\n");
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Semua kode cadangan berhasil disalin ke clipboard!");
+            });
+        }
+
+        function downloadCodes() {
+            const text = "=== KODE CADANGAN 2FA (RECOVERY CODES) ===\n" +
+                         "Akun: {{ request.user.email }}\n" +
+                         "Tanggal Dibuat: " + new Date().toLocaleString() + "\n\n" +
+                         "Gunakan kode di bawah ini jika kehilangan akses ke Google Authenticator:\n" +
+                         backupCodesList.join("\n") + "\n\n" +
+                         "* Simpan file ini di tempat yang aman. Setiap kode hanya bisa digunakan sekali.\n";
+            
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "rdp-2fa-backup-codes.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</c-layout.app>

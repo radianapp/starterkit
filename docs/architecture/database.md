@@ -4,8 +4,8 @@
 
 ## 📌 Ringkasan Skema
 
-- **Total Aplikasi**: 5 (`accounts, core, dashboard, inventory, tenants`)
-- **Total Model/Tabel**: 13
+- **Total Aplikasi**: 6 (`accounts, core, dashboard, django_celery_beat, inventory, tenants`)
+- **Total Model/Tabel**: 21
 
 ## 📐 Diagram ERD (Mermaid)
 
@@ -19,6 +19,21 @@ erDiagram
         string status  "Status"
         decimal amount  "Jumlah/Nilai"
         datetime created_at  "Dibuat Pada"
+    }
+
+    ClockedSchedule {
+        bigint id PK "ID"
+        datetime clocked_time
+    }
+
+    CrontabSchedule {
+        bigint id PK "ID"
+        string minute
+        string hour
+        string day_of_month
+        string month_of_year
+        string day_of_week
+        string timezone
     }
 
     ExecutionTraceLog {
@@ -77,6 +92,12 @@ erDiagram
         bigint history_user_id FK "history user"
     }
 
+    IntervalSchedule {
+        bigint id PK "ID"
+        int every
+        string period
+    }
+
     Kategori {
         bigint id PK "ID"
         string nama  "nama"
@@ -117,6 +138,37 @@ erDiagram
         string nama  "nama"
     }
 
+    PeriodicTask {
+        bigint id PK "ID"
+        string name
+        string task  "Task Name"
+        bigint interval_id FK
+        bigint crontab_id FK
+        bigint solar_id FK
+        bigint clocked_id FK
+        text args
+        text kwargs
+        string queue
+        string exchange
+        string routing_key
+        text headers
+        int priority
+        datetime expires
+        int expire_seconds
+        bool one_off
+        datetime start_time
+        bool enabled
+        datetime last_run_at
+        int total_run_count
+        datetime date_changed
+        text description
+    }
+
+    PeriodicTasks {
+        int ident PK "ident"
+        datetime last_update  "last update"
+    }
+
     Produk {
         bigint id PK "ID"
         string nama  "nama"
@@ -131,6 +183,13 @@ erDiagram
         datetime updated_at  "updated at"
     }
 
+    SolarSchedule {
+        bigint id PK "ID"
+        string event
+        decimal latitude
+        decimal longitude
+    }
+
     SystemUpdate {
         bigint id PK "ID"
         string version  "version"
@@ -138,6 +197,24 @@ erDiagram
         text description  "description"
         string update_type  "update type"
         datetime release_date  "release date"
+    }
+
+    TOTPBackupCode {
+        bigint id PK "ID"
+        bigint device_id FK
+        string code_hash
+        bool is_used
+        datetime used_at
+        datetime created_at
+    }
+
+    TOTPDevice {
+        bigint id PK "ID"
+        bigint user_id FK
+        string secret_key
+        bool is_confirmed
+        datetime created_at
+        datetime last_used_at
     }
 
     User {
@@ -167,10 +244,16 @@ erDiagram
         datetime updated_at
     }
 
+    IntervalSchedule ||--o{ PeriodicTask : "interval"
+    CrontabSchedule ||--o{ PeriodicTask : "crontab"
+    SolarSchedule ||--o{ PeriodicTask : "solar"
+    ClockedSchedule ||--o{ PeriodicTask : "clocked"
     User ||--o{ ExecutionTraceLog : "user"
     User ||--o{ PasskeyCredential : "user"
     User ||--o{ HistoricalUser : "history_user"
     User ||--|| UserProfile : "user"
+    User ||--|| TOTPDevice : "user"
+    TOTPDevice ||--o{ TOTPBackupCode : "device"
     User ||--o{ Activity : "user"
     Kategori ||--o{ HistoricalProduk : "kategori"
     Pemasok ||--o{ HistoricalProduk : "pemasok"
@@ -224,6 +307,30 @@ _Menyimpan public key dan metadata perangkat (sidik jari/kamera) untuk login Web
 | `sign_count` | `PositiveIntegerField` | - | Tidak | `0` | sign count |
 | `created_at` | `DateTimeField` | - | Tidak | - | created at |
 | `last_used_at` | `DateTimeField` | - | Ya | - | last used at |
+
+#### Model: `TOTPBackupCode` (`accounts_totpbackupcode`)
+_Menyimpan recovery / backup code sekali pakai jika pengguna kehilangan akses ke aplikasi authenticator._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `BigAutoField` | **PK** | Tidak | - | ID |
+| `device_id` | `ForeignKey` | **FK** | Tidak | - | TOTP device (Relasi ke `TOTPDevice`) |
+| `code_hash` | `CharField` | - | Tidak | - | Hashed backup code untuk verifikasi sekali pakai |
+| `is_used` | `BooleanField` | - | Tidak | `False` | Status apakah kode pemulihan ini sudah digunakan |
+| `used_at` | `DateTimeField` | - | Ya | - | Waktu saat kode cadangan digunakan |
+| `created_at` | `DateTimeField` | - | Tidak | - | created at |
+
+#### Model: `TOTPDevice` (`accounts_totpdevice`)
+_Menyimpan secret key Base32 untuk TOTP (Google Authenticator) per user._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `BigAutoField` | **PK** | Tidak | - | ID |
+| `user_id` | `OneToOneField` | **FK** | Tidak | - | pengguna (Relasi ke `User`) |
+| `secret_key` | `CharField` | - | Tidak | - | Base32 encoded secret key untuk TOTP generation |
+| `is_confirmed` | `BooleanField` | - | Tidak | `False` | Apakah perangkat sudah berhasil diverifikasi dengan token pertama |
+| `created_at` | `DateTimeField` | - | Tidak | - | created at |
+| `last_used_at` | `DateTimeField` | - | Ya | - | Timestamp penggunaan token terakhir untuk mencegah replay attack |
 
 #### Model: `User` (`accounts_user`)
 _TUJUAN: Custom User model untuk RDP dengan email verification dan timestamps._
@@ -305,6 +412,85 @@ _Model untuk menyimpan log pembaruan sistem (Changelog / Deploy Log)._
 | `description` | `TextField` | - | Tidak | - | description |
 | `update_type` | `CharField` | - | Tidak | `feature` | update type |
 | `release_date` | `DateTimeField` | - | Tidak | - | release date |
+
+### Domain App: `django_celery_beat`
+
+#### Model: `ClockedSchedule` (`django_celery_beat_clockedschedule`)
+_clocked schedule._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `AutoField` | **PK** | Tidak | - | ID |
+| `clocked_time` | `DateTimeField` | - | Tidak | - | Run the task at clocked time |
+
+#### Model: `CrontabSchedule` (`django_celery_beat_crontabschedule`)
+_Timezone Aware Crontab-like schedule._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `AutoField` | **PK** | Tidak | - | ID |
+| `minute` | `CharField` | - | Tidak | `*` | Cron Minutes to Run. Use "*" for "all". (Example: "0,30") |
+| `hour` | `CharField` | - | Tidak | `*` | Cron Hours to Run. Use "*" for "all". (Example: "8,20") |
+| `day_of_month` | `CharField` | - | Tidak | `*` | Cron Days Of The Month to Run. Use "*" for "all". (Example: "1,15") |
+| `month_of_year` | `CharField` | - | Tidak | `*` | Cron Months (1-12) Of The Year to Run. Use "*" for "all". (Example: "1,12") |
+| `day_of_week` | `CharField` | - | Tidak | `*` | Cron Days Of The Week to Run. Use "*" for "all", Sunday is 0 or 7, Monday is 1. (Example: "0,5") |
+| `timezone` | `CharField` | - | Tidak | `crontab_schedule_celery_timezone` | Timezone to Run the Cron Schedule on. Default is UTC. |
+
+#### Model: `IntervalSchedule` (`django_celery_beat_intervalschedule`)
+_Schedule executing on a regular interval._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `AutoField` | **PK** | Tidak | - | ID |
+| `every` | `IntegerField` | - | Tidak | - | Number of interval periods to wait before running the task again |
+| `period` | `CharField` | - | Tidak | - | The type of period between task runs (Example: days) |
+
+#### Model: `PeriodicTask` (`django_celery_beat_periodictask`)
+_Model representing a periodic task._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `AutoField` | **PK** | Tidak | - | ID |
+| `name` | `CharField` | - | Tidak | - | Short Description For This Task |
+| `task` | `CharField` | - | Tidak | - | The Name of the Celery Task that Should be Run.  (Example: "proj.tasks.import_contacts") |
+| `interval_id` | `ForeignKey` | **FK** | Ya | - | Interval Schedule to run the task on.  Set only one schedule type, leave the others null. (Relasi ke `IntervalSchedule`) |
+| `crontab_id` | `ForeignKey` | **FK** | Ya | - | Crontab Schedule to run the task on.  Set only one schedule type, leave the others null. (Relasi ke `CrontabSchedule`) |
+| `solar_id` | `ForeignKey` | **FK** | Ya | - | Solar Schedule to run the task on.  Set only one schedule type, leave the others null. (Relasi ke `SolarSchedule`) |
+| `clocked_id` | `ForeignKey` | **FK** | Ya | - | Clocked Schedule to run the task on.  Set only one schedule type, leave the others null. (Relasi ke `ClockedSchedule`) |
+| `args` | `TextField` | - | Tidak | `[]` | JSON encoded positional arguments (Example: ["arg1", "arg2"]) |
+| `kwargs` | `TextField` | - | Tidak | `{}` | JSON encoded keyword arguments (Example: {"argument": "value"}) |
+| `queue` | `CharField` | - | Ya | `None` | Queue defined in CELERY_TASK_QUEUES. Leave None for default queuing. |
+| `exchange` | `CharField` | - | Ya | `None` | Override Exchange for low-level AMQP routing |
+| `routing_key` | `CharField` | - | Ya | `None` | Override Routing Key for low-level AMQP routing |
+| `headers` | `TextField` | - | Tidak | `{}` | JSON encoded message headers for the AMQP message. |
+| `priority` | `PositiveIntegerField` | - | Ya | `None` | Priority Number between 0 and 255. Supported by: RabbitMQ, Redis (priority reversed, 0 is highest). |
+| `expires` | `DateTimeField` | - | Ya | - | Datetime after which the schedule will no longer trigger the task to run |
+| `expire_seconds` | `PositiveIntegerField` | - | Ya | - | Timedelta with seconds which the schedule will no longer trigger the task to run |
+| `one_off` | `BooleanField` | - | Tidak | `False` | If True, the schedule will only run the task a single time |
+| `start_time` | `DateTimeField` | - | Ya | - | Datetime when the schedule should begin triggering the task to run |
+| `enabled` | `BooleanField` | - | Tidak | `True` | Set to False to disable the schedule |
+| `last_run_at` | `DateTimeField` | - | Ya | - | Datetime that the schedule last triggered the task to run. Reset to None if enabled is set to False. |
+| `total_run_count` | `PositiveIntegerField` | - | Tidak | `0` | Running count of how many times the schedule has triggered the task |
+| `date_changed` | `DateTimeField` | - | Tidak | - | Datetime that this PeriodicTask was last modified |
+| `description` | `TextField` | - | Tidak | - | Detailed description about the details of this Periodic Task |
+
+#### Model: `PeriodicTasks` (`django_celery_beat_periodictasks`)
+_Helper table for tracking updates to periodic tasks._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `ident` | `SmallIntegerField` | **PK** | Tidak | `1` | ident |
+| `last_update` | `DateTimeField` | - | Tidak | - | last update |
+
+#### Model: `SolarSchedule` (`django_celery_beat_solarschedule`)
+_Schedule following astronomical patterns._
+
+| Kolom / Field | Tipe Data | Key | Nullable | Default | Deskripsi / Help Text |
+|---|---|---|---|---|---|
+| `id` | `AutoField` | **PK** | Tidak | - | ID |
+| `event` | `CharField` | - | Tidak | - | The type of solar event when the job should run |
+| `latitude` | `DecimalField` | - | Tidak | - | Run the task when the event happens at this latitude |
+| `longitude` | `DecimalField` | - | Tidak | - | Run the task when the event happens at this longitude |
 
 ### Domain App: `inventory`
 
@@ -393,10 +579,16 @@ _Relasi keanggotaan User dalam Organization._
 
 | Model Asal | Tipe Relasi | Model Target | Nama Field |
 |---|---|---|---|
+| `PeriodicTask` | Foreign Key (`||--o{`) | `IntervalSchedule` | `interval` |
+| `PeriodicTask` | Foreign Key (`||--o{`) | `CrontabSchedule` | `crontab` |
+| `PeriodicTask` | Foreign Key (`||--o{`) | `SolarSchedule` | `solar` |
+| `PeriodicTask` | Foreign Key (`||--o{`) | `ClockedSchedule` | `clocked` |
 | `ExecutionTraceLog` | Foreign Key (`||--o{`) | `User` | `user` |
 | `PasskeyCredential` | Foreign Key (`||--o{`) | `User` | `user` |
 | `HistoricalUser` | Foreign Key (`||--o{`) | `User` | `history_user` |
 | `UserProfile` | One-to-One (`||--||`) | `User` | `user` |
+| `TOTPDevice` | One-to-One (`||--||`) | `User` | `user` |
+| `TOTPBackupCode` | Foreign Key (`||--o{`) | `TOTPDevice` | `device` |
 | `Activity` | Foreign Key (`||--o{`) | `User` | `user` |
 | `HistoricalProduk` | Foreign Key (`||--o{`) | `Kategori` | `kategori` |
 | `HistoricalProduk` | Foreign Key (`||--o{`) | `Pemasok` | `pemasok` |

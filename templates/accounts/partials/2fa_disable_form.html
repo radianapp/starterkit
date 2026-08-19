@@ -1,0 +1,39 @@
+{# US-043: Partial Form Disable 2FA #}
+<form method="post" action="{% url 'accounts:2fa_disable' %}" id="totp-disable-form" hx-post="{% url 'accounts:2fa_disable' %}" hx-target="#totp-disable-container" hx-swap="outerHTML">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div style="margin-bottom: 14px;">
+            {% for error in form.non_field_errors %}
+                <c-rdp.alert variant="danger">{{ error }}</c-rdp.alert>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+        <label for="{{ form.password.id_for_label }}" style="font-size: 13.5px; font-weight: 600;">
+            {{ form.password.label }}
+        </label>
+        
+        {{ form.password }}
+
+        {% if form.password.errors %}
+            <span style="color: var(--rdp-danger, #e53e3e); font-size: 12px; margin-top: 2px;">
+                {{ form.password.errors.0 }}
+            </span>
+        {% else %}
+            <small style="color: var(--rdp-text-muted); font-size: 11.5px;">
+                {{ form.password.help_text }}
+            </small>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button type="submit" class="settings-btn settings-btn--danger" style="flex: 1;">
+            Konfirmasi Nonaktifkan 2FA
+        </button>
+        <a href="{% url 'accounts:profile' %}" class="settings-btn" style="text-decoration: none; text-align: center; background: var(--rdp-surface-sunken); color: var(--rdp-text);">
+            Batal
+        </a>
+    </div>
+</form>

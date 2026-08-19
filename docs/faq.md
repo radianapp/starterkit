@@ -57,6 +57,13 @@ A: RDP CLI menggunakan sistem signature bertingkat: pertama membaca file manifes
 **Q: Mengapa proyek RDP menggunakan file signature `rdp.json` daripada sekadar menebak struktur folder?**
 A: Menggunakan file signature `rdp.json` (mirip `angular.json` atau `next.config.js`) memberikan kepastian deterministik tanpa menebak struktur, menyimpan versi skema framework yang digunakan, memungkinkan kustomisasi path (`apps_dir`, `settings_file`), dan tetap menjaga kompatibilitas mundur (*backward compatibility*) penuh dengan proyek RDP versi terdahulu melalui mekanisme fallback otomatis.
 
+**Q: Apa yang harus dilakukan jika pengguna kehilangan akses ke aplikasi Google Authenticator?**
+A: Pengguna dapat memasukkan salah satu dari 8 **Kode Cadangan (Recovery Codes)** pada form verifikasi 2FA saat login. Jika seluruh kode cadangan habis atau hilang, Superadmin dapat menonaktifkan 2FA untuk akun pengguna tersebut secara manual melalui Django Admin (`/admin/`).
+
+**Q: Bagaimana cara mematikan fitur 2FA secara global untuk seluruh aplikasi?**
+A: Set variabel `ENABLE_2FA=False` di file `.env` server Anda. Sistem akan otomatis menyembunyikan opsi setup 2FA di halaman Profil dan membypass langkah verifikasi 2FA pada alur login.
+
+
 
 
 

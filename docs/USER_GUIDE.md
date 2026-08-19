@@ -222,3 +222,31 @@ Fitur Bulk Upload memungkinkan Superadmin untuk menambahkan banyak pengguna seka
 ### 2. Mengirim Ulang Email Undangan (Resend Invite)
 Jika pengguna belum login atau mengaktifkan akunnya dari email invitasi, admin dapat mengirim ulang email tersebut:
 - Di tabel Manajemen User, klik tombol **Resend Invite** pada baris pengguna yang statusnya *Pending* atau belum login sama sekali.
+
+## Two-Factor Authentication (2FA / Google Authenticator)
+
+RDP Starter Kit mendukung Two-Factor Authentication (2FA) berbasis TOTP (RFC 6238) yang kompatibel dengan **Google Authenticator**, **Microsoft Authenticator**, **Authy**, dan aplikasi penyimpan kata sandi seperti **1Password** / **Bitwarden**.
+
+### 1. Mengaktifkan 2FA (Pengguna)
+1. Masuk ke halaman **Profil** (`/accounts/profile/`).
+2. Cari kartu **Two-Factor Authentication (Google Authenticator)**.
+3. Klik tombol **Aktifkan Two-Factor Authentication**.
+4. Buka aplikasi authenticator di ponsel Anda, lalu pindai **QR Code** yang ditampilkan di layar (atau salin kunci rahasia manual jika kamera tidak dapat memindai).
+5. Masukkan 6 digit kode token yang muncul di aplikasi authenticator, lalu klik **Verifikasi & Aktifkan 2FA**.
+6. Simpan **8 Kode Cadangan (Recovery Codes)** yang muncul dengan mengklik **Salin Semua Kode** atau **Unduh sebagai .TXT**. Kode ini penting jika Anda kehilangan akses ke ponsel Anda.
+
+### 2. Alur Masuk (Login) dengan 2FA
+1. Masukkan Email dan Password di halaman login (`/accounts/login/`).
+2. Sistem akan mengarahkan Anda ke langkah verifikasi 2FA (`/accounts/2fa/verify/`).
+3. Masukkan 6 digit kode dari aplikasi authenticator (atau salah satu kode cadangan) dan klik **Verifikasi & Masuk**.
+
+### 3. Menonaktifkan 2FA
+1. Buka halaman **Profil** (`/accounts/profile/`).
+2. Pada kartu 2FA, klik tombol **Nonaktifkan 2FA**.
+3. Masukkan kata sandi akun Anda untuk konfirmasi.
+
+### 4. Konfigurasi Lingkungan (`.env`)
+Administrator dapat mengontrol ketersediaan 2FA melalui environment variables:
+- `ENABLE_2FA=True/False` (Default: `True`): Menyalakan atau mematikan modul 2FA di seluruh sistem.
+- `REQUIRE_2FA=True/False` (Default: `False`): Mewajibkan seluruh pengguna mengaktifkan 2FA.
+

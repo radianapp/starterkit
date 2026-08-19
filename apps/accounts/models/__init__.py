@@ -13,10 +13,13 @@ ALUR:
 
 from .passkey import PasskeyCredential
 from .profile import UserProfile
+from .totp import TOTPBackupCode, TOTPDevice
 from .user import User, UserManager
 
 __all__ = [
     "PasskeyCredential",
+    "TOTPBackupCode",
+    "TOTPDevice",
     "User",
     "UserManager",
     "UserProfile",

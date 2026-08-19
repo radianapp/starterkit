@@ -1,0 +1,27 @@
+{# US-043: Nonaktifkan Two-Factor Authentication #}
+{% load static %}
+<c-layout.app title="Nonaktifkan Two-Factor Authentication">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <main class="settings-content" style="margin: 0 auto; max-width: 520px; width: 100%;">
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'accounts:profile' %}" style="font-size: 13px; color: var(--rdp-text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                &larr; Kembali ke Profil
+            </a>
+        </div>
+
+        <h1 class="auth-box__title" style="font-size: 22px; margin-bottom: 4px;">Nonaktifkan 2FA</h1>
+        <p class="auth-box__subtitle" style="margin-bottom: 24px;">Menonaktifkan 2FA akan membuat akun Anda kurang terlindungi.</p>
+
+        <c-rdp.alert variant="warning" style="margin-bottom: 20px;">
+            <strong>Peringatan:</strong> Setelah 2FA dinonaktifkan, akun Anda hanya akan dilindungi oleh email dan kata sandi. Semua kode cadangan sebelumnya akan dihapus secara permanen.
+        </c-rdp.alert>
+
+        <div class="settings-card" id="totp-disable-container">
+            <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Konfirmasi Kata Sandi</h3>
+            {% include "accounts/partials/2fa_disable_form.html" %}
+        </div>
+    </main>
+</c-layout.app>

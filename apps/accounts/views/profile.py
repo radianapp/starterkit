@@ -82,6 +82,17 @@ def profile_view(request):
 
     passkeys = user.passkeys.all()
 
+    from apps.accounts.services.totp_service import is_2fa_enabled, user_has_2fa
+
+    has_2fa = user_has_2fa(user)
+    enable_2fa = is_2fa_enabled()
+    totp_device = getattr(user, "totp_device", None)
+    backup_codes_count = (
+        totp_device.backup_codes.filter(is_used=False).count()
+        if totp_device and totp_device.is_confirmed
+        else 0
+    )
+
     return render(
         request,
         "accounts/profile.html",
@@ -90,6 +101,9 @@ def profile_view(request):
             "avatar_form": avatar_form,
             "profile": profile,
             "passkeys": passkeys,
+            "has_2fa": has_2fa,
+            "enable_2fa": enable_2fa,
+            "backup_codes_count": backup_codes_count,
             "page_title": "Edit Profil",
         },
     )

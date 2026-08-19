@@ -21,6 +21,7 @@ DEPENDENSI: apps.accounts.forms.login.LoginForm
 """
 
 from django.contrib.auth import login, logout
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 
@@ -68,6 +69,24 @@ def user_login(request):
             return render(request, template, ctx, status=422)
 
         user = form.get_user()
+
+        # KEPUTUSAN TEKNIS: Cek apakah user mengaktifkan 2FA (TOTP)
+        # Jika aktif, tangguhkan login penuh dan redirect ke halaman verifikasi 2FA
+        from django.urls import reverse
+
+        from apps.accounts.services.totp_service import user_has_2fa
+
+        if user_has_2fa(user):
+            request.session["pre_2fa_user_id"] = user.pk
+            request.session["pre_2fa_remember_me"] = bool(form.cleaned_data.get("remember_me"))
+            request.session["pre_2fa_next"] = next_url
+            verify_url = reverse("accounts:2fa_verify")
+
+            if is_htmx:
+                response = HttpResponse()
+                response["HX-Redirect"] = verify_url
+                return response
+            return redirect("accounts:2fa_verify")
 
         # KEPUTUSAN TEKNIS: Session expire saat browser tutup jika remember_me=False
         # ALASAN: Keamanan — tidak meninggalkan session aktif di shared computer

@@ -40,6 +40,50 @@
             </div>
         </div>
 
+        <!-- Two-Factor Authentication (2FA / Google Authenticator) -->
+        {% if enable_2fa %}
+        <div class="settings-card" style="margin-top: 18px;" id="totp-section">
+            <div class="settings-card__title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>Two-Factor Authentication (Google Authenticator)</span>
+                {% if has_2fa %}
+                    <span style="font-size: 11.5px; font-weight: 600; color: #38a169; background: rgba(56, 161, 105, 0.1); padding: 3px 8px; border-radius: 6px;">
+                        ✓ Aktif
+                    </span>
+                {% else %}
+                    <span style="font-size: 11.5px; font-weight: 600; color: var(--rdp-text-muted); background: var(--rdp-surface-sunken); padding: 3px 8px; border-radius: 6px;">
+                        Belum Aktif
+                    </span>
+                {% endif %}
+            </div>
+
+            <div style="margin-top: 12px;">
+                {% if has_2fa %}
+                    <p style="font-size: 13px; color: var(--rdp-text-muted); line-height: 1.5; margin-bottom: 14px;">
+                        Akun Anda dilindungi dengan verifikasi dua langkah (TOTP). Anda memerlukan 6 digit kode dari aplikasi autentikator setiap kali masuk.
+                        {% if backup_codes_count > 0 %}
+                            <br><span style="font-size: 12px; color: var(--rdp-primary);">Tersisa {{ backup_codes_count }} kode cadangan aktif.</span>
+                        {% endif %}
+                    </p>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="{% url 'accounts:2fa_setup' %}" class="settings-btn" style="text-decoration: none; padding: 6px 14px; font-size: 12.5px;">
+                            Setup Ulang Perangkat
+                        </a>
+                        <a href="{% url 'accounts:2fa_disable' %}" class="settings-btn settings-btn--danger" style="text-decoration: none; padding: 6px 14px; font-size: 12.5px;">
+                            Nonaktifkan 2FA
+                        </a>
+                    </div>
+                {% else %}
+                    <p style="font-size: 13px; color: var(--rdp-text-muted); line-height: 1.5; margin-bottom: 14px;">
+                        Amankan akun Anda dengan menambahkan lapisan perlindungan ekstra menggunakan Google Authenticator, Authy, atau aplikasi TOTP lainnya.
+                    </p>
+                    <a href="{% url 'accounts:2fa_setup' %}" class="settings-btn settings-btn--primary" style="text-decoration: none; display: inline-block; padding: 6px 14px; font-size: 12.5px;">
+                        Aktifkan Two-Factor Authentication
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
         <!-- webauthn / passkeys -->
         <div class="settings-card" style="margin-top: 18px;" id="passkeys-section" hx-get="{% url 'accounts:profile' %}" hx-select="#passkeys-section" hx-trigger="passkeyRegistered from:body, passkeyDeleted from:body">
             <div class="settings-card__title" style="display: flex; justify-content: space-between; align-items: center;">

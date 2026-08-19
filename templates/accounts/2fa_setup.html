@@ -1,0 +1,60 @@
+{# US-043: Setup Two-Factor Authentication #}
+{% load static %}
+<c-layout.app title="Setup Two-Factor Authentication">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <main class="settings-content" style="margin: 0 auto; max-width: 620px; width: 100%;">
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'accounts:profile' %}" style="font-size: 13px; color: var(--rdp-text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                &larr; Kembali ke Profil
+            </a>
+        </div>
+
+        <h1 class="auth-box__title" style="font-size: 22px; margin-bottom: 4px;">Setup Google Authenticator (2FA)</h1>
+        <p class="auth-box__subtitle" style="margin-bottom: 24px;">Tingkatkan keamanan akun Anda dengan verifikasi dua langkah (TOTP).</p>
+
+        {% if messages %}
+            <div style="margin-bottom: 18px;">
+            {% for message in messages %}
+                <c-rdp.alert variant="{{ message.tags }}">{{ message }}</c-rdp.alert>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="settings-card" id="totp-setup-container">
+            <div style="margin-bottom: 20px;">
+                <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Langkah 1: Pindai QR Code</h3>
+                <p style="font-size: 13px; color: var(--rdp-text-muted); line-height: 1.5; margin-bottom: 14px;">
+                    Buka aplikasi autentikator di ponsel Anda (seperti <strong>Google Authenticator</strong>, <strong>Microsoft Authenticator</strong>, atau <strong>Authy</strong>), lalu pindai kode QR di bawah ini:
+                </p>
+
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; padding: 16px; border-radius: 10px; border: 1px solid var(--rdp-border); width: fit-content; margin: 0 auto 16px;">
+                    <img src="{{ qr_data_uri }}" alt="2FA QR Code" style="width: 180px; height: 180px; display: block;" />
+                </div>
+
+                <div style="background: var(--rdp-surface-sunken); padding: 12px; border-radius: 8px; border: 1px solid var(--rdp-border);">
+                    <div style="font-size: 12px; color: var(--rdp-text-muted); margin-bottom: 4px;">Tidak dapat memindai QR code? Masukkan kunci rahasia ini secara manual:</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                        <code style="font-family: monospace; font-size: 14px; font-weight: 600; letter-spacing: 1px; color: var(--rdp-primary);">{{ secret_key }}</code>
+                        <button type="button" class="settings-btn" style="padding: 4px 10px; font-size: 12px;" onclick="navigator.clipboard.writeText('{{ secret_key }}'); alert('Kunci rahasia berhasil disalin!');">
+                            Salin
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--rdp-border); margin: 24px 0;" />
+
+            <div>
+                <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Langkah 2: Masukkan Kode Verifikasi</h3>
+                <p style="font-size: 13px; color: var(--rdp-text-muted); line-height: 1.5; margin-bottom: 14px;">
+                    Masukkan 6 digit kode yang tampil di aplikasi authenticator untuk mengonfirmasi bahwa penyiapan berhasil:
+                </p>
+
+                {% include "accounts/partials/2fa_setup_form.html" %}
+            </div>
+        </div>
+    </main>
+</c-layout.app>

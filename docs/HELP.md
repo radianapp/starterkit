@@ -59,6 +59,15 @@ uv run manage.py migrate
 uv run python manage.py collectstatic --no-input
 ```
 
+## Kode 2FA Selalu Ditolak (Error "Kode verifikasi salah atau sudah kadaluarsa")
+
+**Masalah**: Pengguna memasukkan 6 digit kode dari Google Authenticator yang tampak benar, tetapi selalu ditolak dengan status 422.
+**Solusi**:
+1. **Time Drift (Perbedaan Waktu Jam)**: Algoritma TOTP bergantung pada waktu UTC yang presisi (jendela 30 detik). Pastikan jam pada smartphone dan jam pada server tersinkronisasi otomatis (Network Time Protocol / NTP).
+2. Di aplikasi Google Authenticator (Android): Buka **Settings -> Time correction for codes -> Sync now**.
+3. Jika tetap gagal, gunakan **Kode Cadangan (Recovery Code)** untuk masuk sementara waktu dan lakukan setup ulang 2FA di profil.
+
+
 ## Nginx Mengembalikan "502 Bad Gateway" di Production
 
 **Masalah**: Browser menampilkan error 502 Bad Gateway setelah deploy ke server Linux.

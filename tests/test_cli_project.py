@@ -1,5 +1,3 @@
-import os
-import shutil
 from scripts.rdp.ops.project import reset_project_scaffolding
 
 
@@ -62,7 +60,7 @@ def test_cleanup_optional_features_removes_templates(tmp_path):
 
     templates_dir = tmp_path / "templates"
     templates_dir.mkdir()
-    
+
     apps_tmpl_dir = templates_dir / "apps"
     apps_tmpl_dir.mkdir()
     (apps_tmpl_dir / "inventory").mkdir()
@@ -77,7 +75,7 @@ def test_cleanup_optional_features_removes_templates(tmp_path):
         has_landing=True,
         has_auth=True,
         has_dashboard=True,
-        has_demo_pages=False
+        has_demo_pages=False,
     )
 
     # Verifikasi folder apps dihapus

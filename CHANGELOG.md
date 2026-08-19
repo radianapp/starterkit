@@ -9,6 +9,18 @@ dan project ini mengikuti [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-08-19
+
+### Added
+- **US-043 (Two-Factor Authentication / 2FA TOTP)**: 
+  - Model `TOTPDevice` dan `TOTPBackupCode` (dengan hashing code cadangan via `make_password`).
+  - Service layer `apps/accounts/services/totp_service.py` untuk generate secret Base32, QR Code data URI (PNG Base64), verifikasi token OTP (RFC 6238 via `pyotp`), dan konsumsi backup codes sekali pakai.
+  - Alur login dua langkah (2-step login flow) di `apps/accounts/views/login.py` & `two_factor.py` (`/accounts/2fa/verify/`).
+  - Halaman penyiapan 2FA (`/accounts/2fa/setup/`), tampilan simpan kode pemulihan (`/accounts/2fa/backup-codes/`), dan penonaktifan 2FA (`/accounts/2fa/disable/`).
+  - Integrasi kartu status 2FA di halaman Profil (`/accounts/profile/`).
+  - Konfigurasi environment via `.env` (`ENABLE_2FA=True/False` & `REQUIRE_2FA=False/True`).
+  - Unit test suite lengkap (`tests/test_accounts_2fa.py`) dengan 12 test cases yang mencakup service, alur login, backup codes, dan env toggle.
+
 ## [0.6.2] — 2026-08-15
 
 ### Fixed

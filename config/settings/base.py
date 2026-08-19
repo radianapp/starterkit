@@ -14,11 +14,10 @@ ALUR:
 
 import json
 import logging
-import os
 from pathlib import Path
 
-from django.contrib.messages import constants as messages
 import environ
+from django.contrib.messages import constants as messages
 
 # ⚙️ KONFIGURASI: Load .env file
 env = environ.Env()
@@ -31,7 +30,7 @@ LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
 # Read .env file
-_env_file = BASE_DIR / '.env'
+_env_file = BASE_DIR / ".env"
 if _env_file.exists():
     environ.Env.read_env(_env_file)
 
@@ -53,7 +52,7 @@ RDP_MULTI_TENANCY_ENABLED = env("RDP_MULTI_TENANCY_ENABLED", default="False").lo
 )
 
 # ⚙️ KONFIGURASI: Framework & App Versions
-FRAMEWORK_VERSION = env("FRAMEWORK_VERSION", default="0.3.0")
+FRAMEWORK_VERSION = env("FRAMEWORK_VERSION", default="0.7.0")
 
 _version_file = BASE_DIR / "config" / "version.json"
 LOCAL_APP_VERSION = "1.0.0"
@@ -81,15 +80,11 @@ COPYRIGHT_YEAR = env("COPYRIGHT_YEAR", default="2026")
 
 # ⚙️ KONFIGURASI: Database
 DEFAULT_DB_ENGINE = "django.db.backends.sqlite3" if DEBUG else "django.db.backends.postgresql"
-DATABASES = {
-    "default": env.db("DATABASE_URL", default="sqlite:///" + str(BASE_DIR / "db.sqlite3"))
-}
+DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///" + str(BASE_DIR / "db.sqlite3"))}
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=600)
 
 # ⚙️ KONFIGURASI: Cache backend
-CACHES = {
-    "default": env.cache("CACHE_URL", default="locmemcache://rdp-starter-locmem")
-}
+CACHES = {"default": env.cache("CACHE_URL", default="locmemcache://rdp-starter-locmem")}
 
 
 # ⚙️ KONFIGURASI: Email backend
@@ -104,7 +99,11 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@radianapp.com")
 # KEPUTUSAN TEKNIS: Integrasi django-anymail
 ANYMAIL_PROVIDER = env("ANYMAIL_PROVIDER", default="")
 if ANYMAIL_PROVIDER:
-    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend" if ANYMAIL_PROVIDER == "mailgun" else f"anymail.backends.{ANYMAIL_PROVIDER}.EmailBackend"
+    EMAIL_BACKEND = (
+        "anymail.backends.mailgun.EmailBackend"
+        if ANYMAIL_PROVIDER == "mailgun"
+        else f"anymail.backends.{ANYMAIL_PROVIDER}.EmailBackend"
+    )
     ANYMAIL = {
         "MAILGUN_API_KEY": env("MAILGUN_API_KEY", default=""),
         "MAILGUN_SENDER_DOMAIN": env("MAILGUN_SENDER_DOMAIN", default=""),
@@ -268,9 +267,10 @@ ENABLE_USER_REGISTRATION = env("ENABLE_USER_REGISTRATION", default="True").lower
     "yes",
 )
 ENABLE_GOOGLE_AUTH = env.bool("ENABLE_GOOGLE_AUTH", default=False)
+ENABLE_2FA = env.bool("ENABLE_2FA", default=True)
+REQUIRE_2FA = env.bool("REQUIRE_2FA", default=False)
 
 # ⚙️ KONFIGURASI: Domain Whitelist untuk Registrasi
-# Kosongkan list untuk mengizinkan semua domain
 _allowed_domains_env = env("ALLOWED_EMAIL_DOMAINS", default="")
 ALLOWED_EMAIL_DOMAINS = [
     domain.strip().lower() for domain in _allowed_domains_env.split(",") if domain.strip()
@@ -508,7 +508,9 @@ if USE_S3:
     AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default=None)
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
-    AWS_S3_VERIFY = env.bool("AWS_S3_VERIFY", default=True)  # Set False jika pakai MinIO localhost tanpa SSL
+    AWS_S3_VERIFY = env.bool(
+        "AWS_S3_VERIFY", default=True
+    )  # Set False jika pakai MinIO localhost tanpa SSL
 
 # ⚙️ KONFIGURASI: Cloudflare Turnstile (CAPTCHA)
 TURNSTILE_ENABLED = env.bool("TURNSTILE_ENABLED", default=False)

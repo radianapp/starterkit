@@ -82,7 +82,7 @@ from scripts.rdp.ops.build import (
 )
 
 # ── Operasi project ──────────────────────────────────────────────────────────
-from scripts.rdp.ops.project import run_new, run_update, run_info, run_init
+from scripts.rdp.ops.project import run_info, run_init, run_new, run_update
 
 # ── Operasi upgrade ───────────────────────────────────────────────────────────
 from scripts.rdp.ops.upgrade import run_ai, run_monitor, run_plugin, run_upgrade, run_upgrade_cli

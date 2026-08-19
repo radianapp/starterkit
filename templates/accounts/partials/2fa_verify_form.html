@@ -1,0 +1,34 @@
+{# US-043: Partial Form Verifikasi 2FA Login #}
+<form method="post" action="{% url 'accounts:2fa_verify' %}" id="totp-verify-form" hx-post="{% url 'accounts:2fa_verify' %}" hx-target="#totp-verify-container" hx-swap="outerHTML">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div style="margin-bottom: 14px;">
+            {% for error in form.non_field_errors %}
+                <c-rdp.alert variant="danger">{{ error }}</c-rdp.alert>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px;">
+        <label for="{{ form.code.id_for_label }}" style="font-size: 13px; font-weight: 600; text-align: left;">
+            {{ form.code.label }}
+        </label>
+        
+        {{ form.code }}
+
+        {% if form.code.errors %}
+            <span style="color: var(--rdp-danger, #e53e3e); font-size: 12px; margin-top: 2px; text-align: left;">
+                {{ form.code.errors.0 }}
+            </span>
+        {% else %}
+            <small style="color: var(--rdp-text-muted); font-size: 11.5px; text-align: left;">
+                {{ form.code.help_text }}
+            </small>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="auth-btn-primary" style="width: 100%; justify-content: center; height: 42px; font-size: 14px;">
+        Verifikasi & Masuk
+    </button>
+</form>

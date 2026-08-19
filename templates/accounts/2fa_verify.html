@@ -1,0 +1,41 @@
+{# US-043: Halaman Verifikasi 2FA saat Login #}
+{% load static %}
+<c-layout.blank title="Verifikasi Dua Langkah">
+    <c-slot name="head">
+        <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    </c-slot>
+
+    <div class="auth-layout">
+        <div class="auth-box">
+            <div class="auth-box__inner">
+                <a href="{% url 'home' %}" class="auth-brand" style="text-decoration: none; color: inherit;">
+                    <span class="auth-brand__icon">{{ APP_BRAND_SHORT|default:"A"|slice:":1" }}</span>
+                    <span class="auth-brand__text">{{ SITE_NAME|default:"Acme Ops" }}</span>
+                </a>
+                
+                <h1 class="auth-box__title" style="font-size: 20px;">Verifikasi Dua Langkah</h1>
+                <p class="auth-box__subtitle">
+                    Masukkan kode dari aplikasi <strong>Google Authenticator</strong> untuk akun <span style="color: var(--rdp-text); font-weight: 600;">{{ user_email }}</span>.
+                </p>
+
+                {% if messages %}
+                    <div style="margin-bottom: 16px;">
+                    {% for message in messages %}
+                        <c-rdp.alert variant="{{ message.tags }}">{{ message }}</c-rdp.alert>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div id="totp-verify-container">
+                    {% include "accounts/partials/2fa_verify_form.html" %}
+                </div>
+
+                <div class="auth-box__alt-link" style="margin-top: 24px; border-top: 1px solid var(--rdp-border); padding-top: 16px;">
+                    <a href="{% url 'accounts:login' %}" style="font-size: 13px; color: var(--rdp-text-muted);">
+                        &larr; Batalkan dan kembali ke login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</c-layout.blank>

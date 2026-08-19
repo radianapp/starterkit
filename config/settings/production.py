@@ -97,8 +97,8 @@ print("[OK] Production settings loaded (DEBUG=False, security headers active)")
 
 # ⚙️ KONFIGURASI: Sentry (Error Tracking)
 import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
 SENTRY_DSN = env("SENTRY_DSN", default="")
@@ -120,7 +120,13 @@ if "csp.middleware.CSPMiddleware" not in MIDDLEWARE:
 
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "cdn.radian.web.id", "fonts.googleapis.com")
-CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "cdn.radian.web.id", "unpkg.com", "challenges.cloudflare.com")
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "cdn.radian.web.id",
+    "unpkg.com",
+    "challenges.cloudflare.com",
+)
 CSP_FONT_SRC = ("'self'", "fonts.gstatic.com", "cdn.radian.web.id", "data:")
 CSP_IMG_SRC = ("'self'", "data:", "cdn.radian.web.id")
 CSP_FRAME_SRC = ("'self'", "challenges.cloudflare.com")

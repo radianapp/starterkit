@@ -7,6 +7,12 @@ from .password import ForcePasswordChangeView
 from .profile import avatar_upload_view, profile_view
 from .register import register_wizard
 from .settings import SettingsView
+from .two_factor import (
+    totp_backup_codes_view,
+    totp_disable_view,
+    totp_setup_view,
+    totp_verify_login_view,
+)
 from .users import (
     resend_invite_email,
     user_add,
@@ -38,6 +44,10 @@ __all__ = [
     "register_wizard",
     "resend_invite_email",
     "resend_verification_view",
+    "totp_backup_codes_view",
+    "totp_disable_view",
+    "totp_setup_view",
+    "totp_verify_login_view",
     "user_add",
     "user_bulk_upload",
     "user_edit",
