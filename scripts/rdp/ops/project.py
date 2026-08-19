@@ -123,20 +123,27 @@ def reset_project_scaffolding(target_dir: str, proj_name: str, proj_desc: str):
     changelog_path = os.path.join(target_dir, "CHANGELOG.md")
     with open(changelog_path, "w", encoding="utf-8") as f:
         f.write(
-            f"# Changelog\\n\\nAll notable changes to {proj_name} will be documented in this file.\\n\\n## [Unreleased]\\n"
+            f"# Changelog\n\nAll notable changes to {proj_name} will be documented in this file.\n\n## [Unreleased]\n"
         )
 
     # 4. Reset README.md
     readme_path = os.path.join(target_dir, "README.md")
     with open(readme_path, "w", encoding="utf-8") as f:
-        f.write(f"# {proj_name}\\n\\n{proj_desc}\\n")
+        f.write(f"# {proj_name}\n\n{proj_desc}\n")
 
-    # 5. Hapus blok [project.scripts] dari pyproject.toml
+    # 5. Reset STATUS.md dan Status.md jika ada
+    for status_filename in ["STATUS.md", "Status.md"]:
+        status_path = os.path.join(target_dir, status_filename)
+        if os.path.exists(status_path):
+            with open(status_path, "w", encoding="utf-8") as f:
+                f.write("")
+
+    # 6. Hapus blok [project.scripts] dari pyproject.toml
     pyproject_path = os.path.join(target_dir, "pyproject.toml")
     if os.path.exists(pyproject_path):
         with open(pyproject_path, encoding="utf-8") as f:
             content = f.read()
-        content = re.sub(r"\[project\.scripts\]\\n.*?(\\n\[)", r"\\1", content, flags=re.DOTALL)
+        content = re.sub(r"\[project\.scripts\]\n.*?(?=\n\[|\Z)", "", content, flags=re.DOTALL)
         with open(pyproject_path, "w", encoding="utf-8") as f:
             f.write(content)
 
@@ -344,6 +351,15 @@ def cleanup_optional_features(
             app_p = os.path.join(target_dir, "apps", demo_app)
             if os.path.exists(app_p):
                 shutil.rmtree(app_p, onerror=on_rm_error)
+
+        # Hapus demo templates (apps/inventory, apps/test_app, inventory)
+        for demo_tmpl in [
+            os.path.join(target_dir, "templates", "apps", "inventory"),
+            os.path.join(target_dir, "templates", "apps", "test_app"),
+            os.path.join(target_dir, "templates", "inventory"),
+        ]:
+            if os.path.exists(demo_tmpl):
+                shutil.rmtree(demo_tmpl, onerror=on_rm_error)
 
         for demo_view_file in ["htmx_examples.py", "starter.py"]:
             v_p = os.path.join(target_dir, "apps", "core", "views", demo_view_file)
